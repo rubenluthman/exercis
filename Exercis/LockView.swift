@@ -14,7 +14,7 @@ struct LockView: View {
             VStack(spacing: 0) {
                 Spacer()
 
-                Text("TRÄNING")
+                Text("EXERCIS")
                     .font(.jost(.black, size: 38))
                     .kerning(6)
                     .foregroundColor(.black)

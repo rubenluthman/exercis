@@ -1,4 +1,4 @@
-# TrainingApp – Claude Code Context
+# Exercis – Claude Code Context
 
 Privat iOS-app för att logga styrketräning och konditionsträning. En användare.
 
@@ -17,7 +17,7 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 
 ## Filstruktur
 
-Alla filer ligger platt i `Träning/`-mappen.
+Alla filer ligger platt i `Exercis/`-mappen.
 
 ```
 TrainingApp.swift     ← @main TrainingApp + RootView + AppScreen
@@ -60,7 +60,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 
 | Vikt        | Används till                                      |
 |-------------|---------------------------------------------------|
-| Black 900   | "TRÄNING" på LockView och HomeView                |
+| Black 900   | "EXERCIS" på LockView och HomeView                |
 | Bold 700    | Sidrubriker (17pt, kerning 2)                     |
 | SemiBold 600| Knappar, accentetiketter, stora siffror (34pt)    |
 | Medium 500  | Kolumnrubriker, sekundär text (10pt, kerning 1.5) |
@@ -163,13 +163,13 @@ LockView → (Face ID) → HomeView → StrengthView
 - Observera: swipe-back sparar INTE draft (bypass av ←-logiken) — känd begränsning
 
 ### LockView (accentfärg: homeAccent)
-- "TRÄNING" Jost Black 900, centrerat vertikalt med Spacer
+- "EXERCIS" Jost Black 900, centrerat vertikalt med Spacer
 - `VStack(spacing: 12)` med `padding(.top, 30)` — matchar HomeView exakt
 - LOGGA IN-knapp (fylld, homeAccent) + två `Color.clear.frame(height: 50)` som platshållare
 - `auth.authenticate()` triggas i `.onAppear` (auto Face ID) och via LOGGA IN-knapp (retry)
 
 ### HomeView (accentfärg: homeAccent)
-- "TRÄNING" (Jost Black 900) + tre knappar i `VStack(spacing: 12)`, `padding(.horizontal, 24)`, `padding(.top, 30)`
+- "EXERCIS" (Jost Black 900) + tre knappar i `VStack(spacing: 12)`, `padding(.horizontal, 24)`, `padding(.top, 30)`
 - **STYRKA** (fylld, homeAccent) — om draft: **FORTSÄTT STYRKA** + × för att kassera
 - **KONDITION** (fylld, workoutAccent) — om draft: **FORTSÄTT KONDITION** + × för att kassera
 - **HISTORIK** (konturknapp, historyAccent)
@@ -267,7 +267,7 @@ LockView → (Face ID) → HomeView → StrengthView
 
 ## Viktiga SwiftData-noter
 
-- `ModelContainer` konfigureras i `TrainingApp.swift` (CloudKit ej aktiverat)
+- `ModelContainer` konfigureras i `ExercisApp.swift` (CloudKit ej aktiverat)
 - Alla relationer har `deleteRule: .cascade`
 - Sortering i HistoryView: nyast först
 - Inga explicita schema-migrationer definierade — fungerar om nya `@Model`-fält ges default-värden. Vid framtida namnbyten/borttag av fält krävs `VersionedSchema` + `SchemaMigrationPlan`.

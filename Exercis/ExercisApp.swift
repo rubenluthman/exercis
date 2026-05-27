@@ -2,14 +2,13 @@ import SwiftUI
 import SwiftData
 
 enum AppScreen: String, Hashable {
-    case home
     case workout
     case cardio
     case history
 }
 
 @main
-struct TrainingApp: App {
+struct ExercisApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -42,9 +41,7 @@ struct RootView: View {
                             HistoryView()
                                 .toolbar(.hidden, for: .navigationBar)
                                 .enableSwipeBack()
-                        case .home:
-                            EmptyView()
-                        }
+}
                     }
             }
         }
