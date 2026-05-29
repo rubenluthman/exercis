@@ -47,11 +47,11 @@ Enda plats för färger, typsnitt, knappstillar och gemensamma UI-komponenter.
 
 ### Färger
 ```swift
-Color.homeAccent    // #B04848  dämpad röd    (LockView, HomeView, StrengthView)
-Color.workoutAccent // #4A8050  sagegreen     (CardioView / kondition)
-Color.historyAccent // #4878B0  cornflowerblå (HistoryView, HistoryCard, CardioCard, alla chart sheets)
-Color.appBackground // Color.white
-Color.appDivider    // Color(white: 0.82) — används av ThinDivider (0.5 pt)
+Color.homeAccent    // #B04848 ljust / #D06868 mörkt  — dämpad röd    (LockView, HomeView, StrengthView)
+Color.workoutAccent // #4A8050 ljust / #5EAA66 mörkt  — sagegreen     (CardioView / kondition)
+Color.historyAccent // #4878B0 ljust / #6A9FD4 mörkt  — cornflowerblå (HistoryView, HistoryCard, CardioCard, alla chart sheets)
+Color.appBackground // Color(.systemBackground) — adaptiv (vit i ljust läge, mörk i mörkt läge)
+Color.appDivider    // Color(.separator) — används av ThinDivider (0.5 pt)
 ```
 
 ### Typsnitt: Jost (enda typsnitt)
@@ -71,6 +71,18 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 - `FilledButtonStyle(accent:)` — fylld, vit text, höjd 50pt, `clipShape(RoundedRectangle(cornerRadius: 4))`
 - `OutlineButtonStyle(accent:)` — kontur i accentfärg, höjd 50pt
 
+### Dynamic Type
+`Font.jost()` använder `Font.custom(_:size:relativeTo:)` med en storleksbaserad `TextStyle` som referens — Jost skalar automatiskt med användarens textstorleksinställning i iOS.
+
+### Haptic feedback
+| Händelse | Typ |
+|----------|-----|
+| Pass sparat (KLAR/HOPPA ÖVER/drag-dismiss) | `.success` notification |
+| Pass raderat | `.warning` notification |
+| Long press ÖKA-badge | `.impact(.medium)` |
+| NÄSTA fältnavigering (styrka) | `.selection` |
+| Expand/collapse sektion eller månad | `.selection` |
+
 ### Navigationsbrygga
 `enableSwipeBack()` — View-extension som via UIKit-bridge återaktiverar `interactivePopGestureRecognizer` (behövs eftersom `.toolbar(.hidden, for: .navigationBar)` inaktiverar swipe-back i iOS 17).
 
@@ -78,7 +90,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 
 ## Design-regler
 
-- Vit bakgrund, svart bastext
+- Systemanpassad bakgrund (`Color(.systemBackground)`), primär text (`.primary`) — anpassar sig till mörkt läge automatiskt
 - Accentfärgen är det **enda** färginslaget – används på rubriker, övningsnamn, knappar och detaljer
 - Inga emojis, inga ikoner utöver SF Symbols (chevron, xmark)
 - Versaliserade etiketter med spärr (letter spacing)
@@ -307,6 +319,6 @@ Vikt och tid lagras som råtal utan enhet — `Double` för kg, `Double` för mi
 5. `NSHealthShareUsageDescription` och `NSHealthUpdateUsageDescription` i Info.plist
 6. CloudKit ej aktiverat (kräver betalt Apple Developer-konto)
 7. Jost är **enda** typsnitt – inga system fonts
-8. Accentfärg är **enda** färginslaget utöver vitt/svart
+8. Accentfärg är **enda** färginslaget utöver systemfärger (`.primary`, `.secondary`, `Color(.systemBackground)`)
 9. Vikt lagras alltid som `Double`
 10. All UI-text på svenska (utom övningsnamn på engelska)

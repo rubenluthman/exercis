@@ -9,15 +9,13 @@ struct LockView: View {
 
     var body: some View {
         ZStack {
-            Color.appBackground.ignoresSafeArea()
-
             VStack(spacing: 0) {
                 Spacer()
 
                 Text("EXERCIS")
                     .font(.jost(.black, size: 38))
                     .kerning(6)
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
 
                 VStack(spacing: 12) {
                     Button("LOGGA IN") {

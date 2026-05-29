@@ -32,6 +32,7 @@ struct StrengthView: View {
     @State private var startTime = Date()
     @State private var isDirty = false
     @State private var showEffortPicker = false
+    @State private var effortDragOffset: CGFloat = 0
     @FocusState private var activeField: WorkoutField?
 
     private var nextField: WorkoutField? {
@@ -54,8 +55,6 @@ struct StrengthView: View {
 
     var body: some View {
         ZStack {
-            Color.appBackground.ignoresSafeArea()
-
             ScrollView {
                 VStack(spacing: 0) {
                     headerRow
@@ -67,6 +66,7 @@ struct StrengthView: View {
                             exerciseIndex: i,
                             isCollapsed: collapsedExercises.contains(i),
                             onToggleCollapse: {
+                                UISelectionFeedbackGenerator().selectionChanged()
                                 activeField = nil
                                 withAnimation(.easeInOut(duration: 0.22)) {
                                     if collapsedExercises.contains(i) {
@@ -90,11 +90,16 @@ struct StrengthView: View {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
                     .transition(.opacity)
+                    .onTapGesture {
+                        UINotificationFeedbackGenerator().notificationOccurred(.success)
+                        saveSession(effortScore: nil)
+                        dismiss()
+                    }
                 VStack {
                     Spacer()
                     VStack(spacing: 0) {
                         Capsule()
-                            .fill(Color(white: 0.75))
+                            .fill(Color(.tertiarySystemFill))
                             .frame(width: 36, height: 4)
                             .padding(.top, 8)
                             .padding(.bottom, 4)
@@ -105,6 +110,25 @@ struct StrengthView: View {
                     }
                     .background(Color.appBackground)
                     .clipShape(UnevenRoundedRectangle(topLeadingRadius: 16, topTrailingRadius: 16))
+                    .offset(y: max(0, effortDragOffset))
+                    .animation(.interactiveSpring(), value: effortDragOffset)
+                    .gesture(
+                        DragGesture(minimumDistance: 0)
+                            .onChanged { value in
+                                var t = Transaction()
+                                t.disablesAnimations = true
+                                withTransaction(t) { effortDragOffset = value.translation.height }
+                            }
+                            .onEnded { value in
+                                if value.translation.height > 100 {
+                                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                                    saveSession(effortScore: nil)
+                                    dismiss()
+                                } else {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) { effortDragOffset = 0 }
+                                }
+                            }
+                    )
                 }
                 .ignoresSafeArea(edges: .bottom)
                 .transition(.move(edge: .bottom))
@@ -114,9 +138,12 @@ struct StrengthView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("NÄSTA") { activeField = nextField }
+                Button("NÄSTA") {
+                    UISelectionFeedbackGenerator().selectionChanged()
+                    activeField = nextField
+                }
                     .font(.jost(.semibold, size: 13))
-                    .foregroundColor(nextField != nil ? Color.homeAccent : Color(white: 0.7))
+                    .foregroundColor(nextField != nil ? Color.homeAccent : Color(.tertiaryLabel))
                     .disabled(nextField == nil)
                 Button("KLAR") { activeField = nil }
                     .font(.jost(.semibold, size: 13))
@@ -138,11 +165,11 @@ struct StrengthView: View {
             Text("STYRKETRÄNING")
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
 
             Text(Date().formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
                 .font(.jost(.regular, size: 13))
-                .foregroundColor(Color(white: 0.45))
+                .foregroundColor(Color(.secondaryLabel))
 
             Spacer()
 
@@ -150,8 +177,8 @@ struct StrengthView: View {
                 saveDraftAndReturn()
             }
             .font(.jost(.regular, size: 22))
-            .foregroundColor(Color(white: 0.5))
-            .frame(width: 90, alignment: .trailing)
+            .foregroundColor(Color(.secondaryLabel))
+            .frame(width: 90, height: 44, alignment: .trailing)
             .accessibilityLabel("Tillbaka")
         }
         .padding(.horizontal, 24)
@@ -316,7 +343,7 @@ struct EffortPickerSheet: View {
             Text("HUR JOBBIGT VAR PASSET?")
                 .font(.jost(.regular, size: 11))
                 .kerning(1.5)
-                .foregroundColor(Color(white: 0.5))
+                .foregroundColor(Color(.secondaryLabel))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 16)
 
@@ -332,7 +359,8 @@ struct EffortPickerSheet: View {
 
             ThinDivider()
 
-            Button("SPARA") {
+            Button("KLAR") {
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
                 onSelect(selectedScore)
             }
             .buttonStyle(FilledButtonStyle(accent: accent))
@@ -340,15 +368,16 @@ struct EffortPickerSheet: View {
             .padding(.top, 16)
 
             Button("HOPPA ÖVER") {
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
                 onSelect(nil)
             }
             .font(.jost(.regular, size: 12))
             .kerning(1.5)
-            .foregroundColor(Color(white: 0.5))
+            .foregroundColor(Color(.secondaryLabel))
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
         }
-        .background(Color.appBackground)
+        .background(.regularMaterial)
     }
 }
 

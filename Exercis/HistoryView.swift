@@ -137,8 +137,6 @@ struct HistoryView: View {
 
     var body: some View {
         ZStack {
-            Color.appBackground.ignoresSafeArea()
-
             VStack(spacing: 0) {
                 headerRow
                 ThinDivider().padding(.top, 8)
@@ -168,6 +166,7 @@ struct HistoryView: View {
         )) {
             Button("Ta bort", role: .destructive) {
                 guard let entry = entryToDelete else { return }
+                UINotificationFeedbackGenerator().notificationOccurred(.warning)
                 deleteEntry(entry)
                 entryToDelete = nil
             }
@@ -191,6 +190,7 @@ struct HistoryView: View {
     @ViewBuilder
     private func monthHeader(_ group: MonthGroup, isCollapsed: Bool) -> some View {
         Button {
+            UISelectionFeedbackGenerator().selectionChanged()
             withAnimation(.easeInOut(duration: 0.22)) {
                 if collapsedMonths.contains(group.id) {
                     collapsedMonths.remove(group.id)
@@ -210,7 +210,7 @@ struct HistoryView: View {
                 if isCollapsed {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(Color(white: 0.4))
+                        .foregroundColor(Color(.secondaryLabel))
                 } else {
                     HStack(spacing: 10) {
                         if group.workoutCount > 0 {
@@ -222,7 +222,7 @@ struct HistoryView: View {
                     }
                     .font(.jost(.regular, size: 11))
                     .kerning(1)
-                    .foregroundColor(Color(white: 0.5))
+                    .foregroundColor(Color(.secondaryLabel))
                 }
             }
             .padding(.horizontal, 24)
@@ -237,6 +237,7 @@ struct HistoryView: View {
     private func entryView(_ entry: HistoryEntry) -> some View {
         let isExpanded = expandedIDs.contains(entry.id)
         let toggle = {
+            UISelectionFeedbackGenerator().selectionChanged()
             withAnimation(.easeInOut(duration: 0.22)) {
                 if isExpanded { expandedIDs.remove(entry.id) }
                 else { expandedIDs.insert(entry.id) }
@@ -266,14 +267,14 @@ struct HistoryView: View {
             Text("HISTORIK")
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
 
             Spacer()
 
             Button("←") { dismiss() }
                 .font(.jost(.regular, size: 22))
-                .foregroundColor(Color(white: 0.5))
-                .frame(width: 90, alignment: .trailing)
+                .foregroundColor(Color(.secondaryLabel))
+                .frame(width: 90, height: 44, alignment: .trailing)
                 .accessibilityLabel("Tillbaka")
         }
         .padding(.horizontal, 24)
@@ -322,7 +323,7 @@ struct HistoryView: View {
             Spacer()
             Text("Inga sparade pass ännu.")
                 .font(.jost(.regular, size: 14))
-                .foregroundColor(Color(white: 0.3))
+                .foregroundColor(Color(.secondaryLabel))
             Spacer()
         }
     }

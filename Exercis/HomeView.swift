@@ -28,15 +28,13 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            Color.appBackground.ignoresSafeArea()
-
             VStack(spacing: 0) {
                 Spacer()
 
                 Text("EXERCIS")
                     .font(.jost(.black, size: 38))
                     .kerning(6)
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
 
                 VStack(spacing: 12) {
                     if hasDraft {
@@ -105,7 +103,7 @@ struct HomeView: View {
                     } ?? " ")
                         .font(.jost(.regular, size: 12))
                         .kerning(1)
-                        .foregroundColor(Color(white: 0.5))
+                        .foregroundColor(Color(.secondaryLabel))
                         .padding(.top, 24)
                         .opacity(lastSessionDate != nil ? 1 : 0)
                 }

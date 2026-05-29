@@ -26,22 +26,22 @@ struct CardioCard: View {
                     HStack(spacing: 8) {
                         Text(dateText)
                             .font(.jost(.bold, size: 14))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                         Text(timeText)
                             .font(.jost(.regular, size: 14))
-                            .foregroundColor(Color(white: 0.5))
+                            .foregroundColor(Color(.secondaryLabel))
                     }
                     Spacer()
                     if !isExpanded {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(Color(white: 0.4))
+                            .foregroundColor(Color(.secondaryLabel))
                             .padding(.trailing, 4)
                     }
                     Button(action: onDelete) {
                         Image(systemName: "xmark")
                             .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(Color(white: 0.3))
+                            .foregroundColor(Color(.secondaryLabel))
                             .padding(.vertical, 10)
                             .padding(.leading, 10)
                     }
@@ -84,11 +84,11 @@ struct CardioCard: View {
             HStack(spacing: 12) {
                 Text("\(formatWeight(session.durationMinutes)) min")
                     .font(.jost(.regular, size: 14))
-                    .foregroundColor(Color(white: 0.45))
+                    .foregroundColor(Color(.secondaryLabel))
                 if let km = session.distanceKm, km > 0 {
                     Text("\(formatWeight(km)) km")
                         .font(.jost(.regular, size: 14))
-                        .foregroundColor(Color(white: 0.45))
+                        .foregroundColor(Color(.secondaryLabel))
                 }
             }
 
@@ -97,7 +97,7 @@ struct CardioCard: View {
                     Text("ANSTRÄNGNING")
                         .font(.jost(.medium, size: 10))
                         .kerning(1.5)
-                        .foregroundColor(Color(white: 0.5))
+                        .foregroundColor(Color(.secondaryLabel))
                     Text("\(score)/10")
                         .font(.jost(.semibold, size: 10))
                         .kerning(1.5)

@@ -4,11 +4,23 @@ import UIKit
 // MARK: - Colors
 
 extension Color {
-    static let homeAccent    = Color(hex: "#B04848")
-    static let workoutAccent = Color(hex: "#4A8050")
-    static let historyAccent = Color(hex: "#4878B0")
-    static let appBackground = Color.white
-    static let appDivider    = Color(white: 0.82)
+    static let homeAccent = Color(UIColor { t in
+        t.userInterfaceStyle == .dark
+            ? UIColor(red: 208/255, green: 104/255, blue: 104/255, alpha: 1) // #D06868
+            : UIColor(red: 176/255, green: 72/255,  blue: 72/255,  alpha: 1) // #B04848
+    })
+    static let workoutAccent = Color(UIColor { t in
+        t.userInterfaceStyle == .dark
+            ? UIColor(red: 94/255,  green: 170/255, blue: 102/255, alpha: 1) // #5EAA66
+            : UIColor(red: 74/255,  green: 128/255, blue: 80/255,  alpha: 1) // #4A8050
+    })
+    static let historyAccent = Color(UIColor { t in
+        t.userInterfaceStyle == .dark
+            ? UIColor(red: 106/255, green: 159/255, blue: 212/255, alpha: 1) // #6A9FD4
+            : UIColor(red: 72/255,  green: 120/255, blue: 176/255, alpha: 1) // #4878B0
+    })
+    static let appBackground = Color(.systemBackground)
+    static let appDivider    = Color(.separator)
 }
 
 extension Color {
@@ -47,7 +59,16 @@ extension Font {
         case .medium:   name = "Jost-Medium"
         default:        name = "Jost-Regular"
         }
-        return .custom(name, size: size)
+        let style: TextStyle
+        switch size {
+        case ..<12:  style = .caption2
+        case ..<15:  style = .caption
+        case ..<18:  style = .body
+        case ..<24:  style = .headline
+        case ..<32:  style = .title2
+        default:     style = .largeTitle
+        }
+        return .custom(name, size: size, relativeTo: style)
     }
 }
 

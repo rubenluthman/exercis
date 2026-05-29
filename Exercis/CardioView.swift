@@ -27,6 +27,7 @@ struct CardioView: View {
     @State private var longPressFired: Set<CardioType> = []
     @State private var showEffortPicker = false
     @State private var lastEffortScore = 5
+    @State private var effortDragOffset: CGFloat = 0
     @FocusState private var focusedField: CardioField?
 
     private var nextCardioField: CardioField? {
@@ -62,19 +63,26 @@ struct CardioView: View {
                 }
 
                 Spacer()
-
-                klarBar
             }
 
             if showEffortPicker {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
                     .transition(.opacity)
-                VStack {
+                    .onTapGesture {
+                        UINotificationFeedbackGenerator().notificationOccurred(.success)
+                        saveSession(effortScore: nil)
+                        dismiss()
+                    }
+                VStack(spacing: 0) {
                     Spacer()
+                    Button("KLAR", action: handleKlar)
+                        .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 12)
                     VStack(spacing: 0) {
                         Capsule()
-                            .fill(Color(white: 0.75))
+                            .fill(Color(.tertiarySystemFill))
                             .frame(width: 36, height: 4)
                             .padding(.top, 8)
                             .padding(.bottom, 4)
@@ -86,25 +94,52 @@ struct CardioView: View {
                     .background(Color.appBackground)
                     .clipShape(UnevenRoundedRectangle(topLeadingRadius: 16, topTrailingRadius: 16))
                 }
+                .offset(y: max(0, effortDragOffset))
+                .animation(.interactiveSpring(), value: effortDragOffset)
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            var t = Transaction()
+                            t.disablesAnimations = true
+                            withTransaction(t) { effortDragOffset = value.translation.height }
+                        }
+                        .onEnded { value in
+                            if value.translation.height > 100 {
+                                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                                saveSession(effortScore: nil)
+                                dismiss()
+                            } else {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) { effortDragOffset = 0 }
+                            }
+                        }
+                )
                 .ignoresSafeArea(edges: .bottom)
                 .transition(.move(edge: .bottom))
+            }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if !showEffortPicker {
+                klarBar
+                    .opacity(focusedField != nil ? 0 : 1)
+                    .animation(.linear(duration: 0), value: focusedField)
             }
         }
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
-                Button("KLAR") { focusedField = nil }
-                    .font(.jost(.semibold, size: 13))
-                    .foregroundColor(Color.workoutAccent)
-                Spacer()
                 Button("NÄSTA") {
+                    UISelectionFeedbackGenerator().selectionChanged()
                     if case .duration(let type) = focusedField {
                         focusedField = .distance(type)
                     }
                 }
                 .font(.jost(.semibold, size: 13))
-                .foregroundColor(nextCardioField != nil ? Color.workoutAccent : Color(white: 0.7))
+                .foregroundColor(nextCardioField != nil ? Color.workoutAccent : Color(.tertiaryLabel))
                 .disabled(nextCardioField == nil)
+                Spacer()
+                Button("KLAR") { focusedField = nil }
+                    .font(.jost(.semibold, size: 13))
+                    .foregroundColor(Color.workoutAccent)
             }
         }
         .onAppear {
@@ -152,11 +187,11 @@ struct CardioView: View {
             Text("KONDITION")
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
 
             Text(Date().formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
                 .font(.jost(.regular, size: 13))
-                .foregroundColor(Color(white: 0.45))
+                .foregroundColor(Color(.secondaryLabel))
 
             Spacer()
 
@@ -178,8 +213,8 @@ struct CardioView: View {
                 dismiss()
             }
             .font(.jost(.regular, size: 22))
-            .foregroundColor(Color(white: 0.5))
-            .frame(width: 90, alignment: .trailing)
+            .foregroundColor(Color(.secondaryLabel))
+            .frame(width: 90, height: 44, alignment: .trailing)
             .accessibilityLabel("Tillbaka")
         }
         .padding(.horizontal, 24)
@@ -196,6 +231,7 @@ struct CardioView: View {
                     longPressFired.remove(type)
                     return
                 }
+                UISelectionFeedbackGenerator().selectionChanged()
                 focusedField = nil
                 withAnimation(.easeInOut(duration: 0.22)) {
                     if isExpanded {
@@ -211,7 +247,7 @@ struct CardioView: View {
                     Text(type.rawValue)
                         .font(.jost(.semibold, size: 12))
                         .kerning(1.5)
-                        .foregroundColor(isExpanded ? Color.workoutAccent : Color(white: 0.45))
+                        .foregroundColor(isExpanded ? Color.workoutAccent : Color(.secondaryLabel))
                     Text("ÖKA")
                         .font(.jost(.medium, size: 9))
                         .kerning(1.5)
@@ -227,7 +263,7 @@ struct CardioView: View {
                     if !isExpanded {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(Color(white: 0.4))
+                            .foregroundColor(Color(.secondaryLabel))
                     }
                 }
                 .padding(.horizontal, 24)
@@ -241,7 +277,7 @@ struct CardioView: View {
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
                     TextField("", text: durationBinding(for: type))
                         .font(.jost(.semibold, size: 34))
-                        .foregroundColor(.black)
+                        .foregroundColor(.primary)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.leading)
                         .focused($focusedField, equals: .duration(type))
@@ -250,7 +286,7 @@ struct CardioView: View {
                             if (durations[type.rawValue] ?? "").isEmpty && focusedField != .duration(type) {
                                 Text("–")
                                     .font(.jost(.semibold, size: 34))
-                                    .foregroundColor(Color(white: 0.75))
+                                    .foregroundColor(Color(.tertiaryLabel))
                                     .allowsHitTesting(false)
                             }
                         }
@@ -258,13 +294,13 @@ struct CardioView: View {
                     Text("MIN")
                         .font(.jost(.medium, size: 10))
                         .kerning(1.5)
-                        .foregroundColor(Color(white: 0.5))
+                        .foregroundColor(Color(.secondaryLabel))
 
                     Spacer()
 
                     TextField("", text: distanceBinding(for: type))
                         .font(.jost(.semibold, size: 34))
-                        .foregroundColor(.black)
+                        .foregroundColor(.primary)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.center)
                         .focused($focusedField, equals: .distance(type))
@@ -273,7 +309,7 @@ struct CardioView: View {
                             if (distances[type.rawValue] ?? "").isEmpty && focusedField != .distance(type) {
                                 Text("–")
                                     .font(.jost(.semibold, size: 34))
-                                    .foregroundColor(Color(white: 0.75))
+                                    .foregroundColor(Color(.tertiaryLabel))
                                     .allowsHitTesting(false)
                             }
                         }
@@ -281,7 +317,7 @@ struct CardioView: View {
                     Text("KM")
                         .font(.jost(.medium, size: 10))
                         .kerning(1.5)
-                        .foregroundColor(Color(white: 0.5))
+                        .foregroundColor(Color(.secondaryLabel))
                         .padding(.leading, 6)
 
                     Spacer()
@@ -294,6 +330,7 @@ struct CardioView: View {
         .animation(.easeInOut(duration: 0.22), value: isExpanded)
         .simultaneousGesture(
             LongPressGesture(minimumDuration: 0.5).onEnded { _ in
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 longPressFired.insert(type)
                 var t = Transaction()
                 t.disablesAnimations = true
@@ -309,22 +346,24 @@ struct CardioView: View {
         )
     }
 
-    private var klarBar: some View {
-        Button("KLAR") {
-            guard let type = expandedType,
-                  let dur = Double((durations[type.rawValue] ?? "").replacingOccurrences(of: ",", with: ".")),
-                  dur > 0 else {
-                dismiss()
-                return
-            }
-            focusedField = nil
-            let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
-            lastEffortScore = saved > 0 ? saved : 5
-            showEffortPicker = true
+    private func handleKlar() {
+        guard let type = expandedType,
+              let dur = Double((durations[type.rawValue] ?? "").replacingOccurrences(of: ",", with: ".")),
+              dur > 0 else {
+            dismiss()
+            return
         }
-        .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
-        .padding(.horizontal, 24)
-        .padding(.vertical, 16)
+        focusedField = nil
+        let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
+        lastEffortScore = saved > 0 ? saved : 5
+        showEffortPicker = true
+    }
+
+    private var klarBar: some View {
+        Button("KLAR", action: handleKlar)
+            .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
+            .padding(.horizontal, 24)
+            .padding(.vertical, 16)
     }
 
     // MARK: Logic

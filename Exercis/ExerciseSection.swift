@@ -41,11 +41,11 @@ struct ExerciseSection: View {
                 if isCollapsed {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(Color(white: 0.4))
+                        .foregroundColor(Color(.secondaryLabel))
                 } else {
                     Text(form.def.repRange)
                         .font(.jost(.regular, size: 12))
-                        .foregroundColor(Color(white: 0.5))
+                        .foregroundColor(Color(.secondaryLabel))
                         .frame(width: 90, alignment: .trailing)
                 }
             }
@@ -64,7 +64,7 @@ struct ExerciseSection: View {
                 }
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
-                .foregroundColor(Color(white: 0.5))
+                .foregroundColor(Color(.secondaryLabel))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 6)
 
@@ -92,6 +92,7 @@ struct ExerciseSection: View {
         .onTapGesture { onToggleCollapse() }
         .simultaneousGesture(
             LongPressGesture(minimumDuration: 0.5).onEnded { _ in
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 var t = Transaction()
                 t.disablesAnimations = true
                 withTransaction(t) {
@@ -111,12 +112,12 @@ struct ExerciseSection: View {
         HStack(spacing: 0) {
             Text("\(index + 1)")
                 .font(.jost(.semibold, size: 34))
-                .foregroundColor(Color(white: 0.6))
+                .foregroundColor(Color(.secondaryLabel))
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             TextField("", text: $form.sets[index].weight)
                 .font(.jost(.semibold, size: 34))
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.leading)
                 .focused($activeField, equals: .weight(exercise: exerciseIndex, set: index))
@@ -125,14 +126,14 @@ struct ExerciseSection: View {
                     if form.sets[index].weight.isEmpty && activeField != .weight(exercise: exerciseIndex, set: index) {
                         Text("–")
                             .font(.jost(.semibold, size: 34))
-                            .foregroundColor(Color(white: 0.75))
+                            .foregroundColor(Color(.tertiaryLabel))
                             .allowsHitTesting(false)
                     }
                 }
 
             TextField("", text: $form.sets[index].reps)
                 .font(.jost(.semibold, size: 34))
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
                 .keyboardType(.numberPad)
                 .multilineTextAlignment(.trailing)
                 .focused($activeField, equals: .reps(exercise: exerciseIndex, set: index))
@@ -141,7 +142,7 @@ struct ExerciseSection: View {
                     if form.sets[index].reps.isEmpty && activeField != .reps(exercise: exerciseIndex, set: index) {
                         Text("–")
                             .font(.jost(.semibold, size: 34))
-                            .foregroundColor(Color(white: 0.75))
+                            .foregroundColor(Color(.tertiaryLabel))
                             .allowsHitTesting(false)
                     }
                 }
