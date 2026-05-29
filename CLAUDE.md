@@ -81,7 +81,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 | Pass sparat (KLAR/HOPPA ÖVER/drag-dismiss) | `.success` notification |
 | Pass raderat | `.warning` notification |
 | Long press ÖKA-badge | `.impact(.medium)` |
-| NÄSTA fältnavigering (styrka) | `.selection` |
+| NÄSTA fältnavigering (styrka + kondition) | `.selection` |
 | Expand/collapse sektion eller månad | `.selection` |
 
 ### Navigationsbrygga
