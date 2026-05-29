@@ -97,7 +97,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 - Tunna **0.5 pt avdelare** via `ThinDivider`
 - All text i UI:t ska vara på **svenska** — undantag: övningsnamnen (Barbell Back Squat etc.) som är på engelska
 - Datum formateras alltid med `Locale(identifier: "sv_SE")`
-- KLAR-knapp: fylld i accentfärg, längst ner i vyn (ej flytande)
+- KLAR-knapp: fylld i accentfärg, längst ner i vyn — undantag: i CardioView flödar den ovanför effort-sheeten
 - Tillbaka-knapp: bara "←" utan text, font regular 22pt, `.frame(width: 90, alignment: .trailing)`
 - Horizontal padding: **24pt** genomgående på alla rader
 
@@ -215,8 +215,9 @@ LockView → (Face ID) → HomeView → StrengthView
 - Öppet/stängt läge sparas i `@AppStorage("lastCardioType")` (tom sträng = ingen öppen)
 - Varje typ minns sin senaste *sparade* duration i UserDefaults (`cardioSavedDuration_{TYPE}`) — laddas vid öppning
 - **Draft**: ← sparar aktiv typs värde (om ifyllt) till `cardioDraftType`/`cardioDraftMinutes`. Återladdas via FORTSÄTT KONDITION. Övriga typers in-session-värden (ej sparade) går förlorade vid ← — de återhämtas från `cardioSavedDuration_*` från senaste slutförda session.
-- **Tangentbordsverktygsfält**: KLAR (vänster) + NÄSTA (höger, går från MIN till KM), båda i workoutAccent
-- KLAR visar effort-picker (samma ZStack-overlay som StrengthView, workoutAccent) om duration är ifylld, annars dismiss direkt. Minns senaste ansträngning per typ i `cardioEffortScore_{TYPE}`.
+- **Tangentbordsverktygsfält**: KLAR (vänster, stänger tangentbord) + NÄSTA (höger, går från MIN till KM), båda i workoutAccent
+- Ovanför effort-sheet flödar en separat KLAR-knapp (fylld, workoutAccent) — ligger ovanpå sheet-containern, synlig utan att öppna sheeten
+- KLAR visar effort-picker-overlay om duration är ifylld, annars dismiss direkt. Minns senaste ansträngning per typ i `cardioEffortScore_{TYPE}`.
 - KLAR sparar `CardioSession` (inkl. `effortScore`), sparar duration/distans/ansträngning till UserDefaults, loggar till HealthKit
 
 ### HistoryView (accentfärg: historyAccent)
@@ -276,6 +277,7 @@ LockView → (Face ID) → HomeView → StrengthView
 | `cardioSavedDuration_{TYPE}` | String | UserDefaults | Senast sparad duration per kardioform |
 | `cardioSavedDistance_{TYPE}` | String | UserDefaults | Senast sparad distans per kardioform |
 | `cardioEffortScore_{TYPE}` | Int | UserDefaults | Senast sparad ansträngning per kardioform (startvärde i picker) |
+| `workoutEffortScore` | Int | UserDefaults | Senast sparad ansträngning för styrkepass (startvärde i picker) |
 | `increaseExercises` | [String] | UserDefaults | Övningsnamn med aktiv ÖKA-badge (styrka) |
 | `increaseCardioTypes` | [String] | UserDefaults | Kardioformer med aktiv ÖKA-badge |
 | `exerciseNameMigrationVersion` | Int | UserDefaults | Version för körd namnmigration (bumpa vid övningsändringar) |

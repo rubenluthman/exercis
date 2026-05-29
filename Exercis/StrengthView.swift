@@ -32,6 +32,7 @@ struct StrengthView: View {
     @State private var startTime = Date()
     @State private var isDirty = false
     @State private var showEffortPicker = false
+    @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @FocusState private var activeField: WorkoutField?
 
@@ -103,7 +104,8 @@ struct StrengthView: View {
                             .frame(width: 36, height: 4)
                             .padding(.top, 8)
                             .padding(.bottom, 4)
-                        EffortPickerSheet(accent: .homeAccent) { score in
+                        EffortPickerSheet(accent: .homeAccent, initialScore: lastEffortScore) { score in
+                            if let score { UserDefaults.standard.set(score, forKey: "workoutEffortScore") }
                             saveSession(effortScore: score)
                             dismiss()
                         }
@@ -190,6 +192,8 @@ struct StrengthView: View {
             let hasAnyData = exerciseForms.contains { $0.sets.contains { !$0.weight.isEmpty || !$0.reps.isEmpty } }
             if hasAnyData {
                 activeField = nil
+                let saved = UserDefaults.standard.integer(forKey: "workoutEffortScore")
+                lastEffortScore = saved > 0 ? saved : 5
                 showEffortPicker = true
             } else {
                 dismiss()
@@ -377,7 +381,6 @@ struct EffortPickerSheet: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
         }
-        .background(.regularMaterial)
     }
 }
 

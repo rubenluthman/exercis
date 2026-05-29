@@ -5,8 +5,10 @@ struct VideoSheet: View {
     let def: ExerciseDef
 
     var body: some View {
-        SafariView(url: URL(string: def.videoURL)!)
-            .ignoresSafeArea()
+        if let url = URL(string: def.videoURL) {
+            SafariView(url: url)
+                .ignoresSafeArea()
+        }
     }
 }
 
