@@ -21,7 +21,7 @@ import SwiftData
 
     let s2 = WorkoutSession(date: day(-9))
     ctx.insert(s2)
-    let log2 = ExerciseLog(name: "Romanian Deadlift (RDL)", orderIndex: 0)
+    let log2 = ExerciseLog(name: "Romanian Deadlift", orderIndex: 0)
     log2.session = s2; ctx.insert(log2)
     for (i, (w, r)) in [(80.0, 8), (80.0, 7), (80.0, 7)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log2; ctx.insert(s)

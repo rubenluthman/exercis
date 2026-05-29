@@ -123,13 +123,15 @@ extension UserDefaults {
 struct ExerciseDef {
     let name: String
     let displayName: String
+    let shortName: String?
     let repRange: String
     let videoURL: String
     var aliases: [String] = []
 
-    init(name: String, displayName: String? = nil, repRange: String, videoURL: String, aliases: [String] = []) {
+    init(name: String, displayName: String? = nil, shortName: String? = nil, repRange: String, videoURL: String, aliases: [String] = []) {
         self.name = name
         self.displayName = displayName ?? name
+        self.shortName = shortName
         self.repRange = repRange
         self.videoURL = videoURL
         self.aliases = aliases
@@ -142,13 +144,14 @@ struct ExerciseDef {
                     aliases: ["Safety Bar Squat"]),
         ExerciseDef(name: "Neutral-Grip Incline Dumbbell Bench Press",
                     displayName: "Incline Dumbbell Bench Press",
+                    shortName: "Incline Bench Press",
                     repRange: "6–10 REPS",
                     videoURL: "https://www.youtube.com/watch?v=8nNi8jbbUPE",
                     aliases: ["Incline DB Bench Press"]),
-        ExerciseDef(name: "Romanian Deadlift (RDL)",
+        ExerciseDef(name: "Romanian Deadlift",
                     repRange: "6–8 REPS",
                     videoURL: "https://www.youtube.com/watch?v=-m45n1_x32E",
-                    aliases: ["Romanian Deadlift"]),
+                    aliases: ["Romanian Deadlift (RDL)"]),
         ExerciseDef(name: "Seated Cable Row",
                     repRange: "8–12 REPS",
                     videoURL: "https://www.muscleandstrength.com/exercises/seated-row.html"),
@@ -168,7 +171,7 @@ struct ExerciseDef {
     }
 
     // Bump this each time exercises change and update migrateExerciseNames accordingly.
-    static let migrationVersion = 3
+    static let migrationVersion = 4
 }
 
 func migrateExerciseNames(context: ModelContext) {
@@ -194,6 +197,14 @@ func migrateExerciseNames(context: ModelContext) {
         let logs = (try? context.fetch(FetchDescriptor<ExerciseLog>())) ?? []
         for log in logs where log.name == "Chest-Supported Row" {
             context.delete(log)
+        }
+        try? context.save()
+    }
+
+    if current < 4 {
+        let logs = (try? context.fetch(FetchDescriptor<ExerciseLog>())) ?? []
+        for log in logs where log.name == "Romanian Deadlift (RDL)" {
+            log.name = "Romanian Deadlift"
         }
         try? context.save()
     }

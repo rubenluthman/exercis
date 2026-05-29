@@ -154,8 +154,8 @@ Exakt dessa fem, i denna ordning, definierade i `ExerciseDef.all`:
 | Kanoniskt namn | Visningsnamn | Rep-intervall | Video |
 |----------------|-------------|--------------|-------|
 | Barbell Back Squat | Barbell Back Squat | 5–8 REPS | YouTube R2dMsNhN3DE |
-| Neutral-Grip Incline Dumbbell Bench Press | Incline Dumbbell Bench Press | 6–10 REPS | YouTube 8nNi8jbbUPE |
-| Romanian Deadlift (RDL) | Romanian Deadlift (RDL) | 6–8 REPS | YouTube -m45n1_x32E |
+| Neutral-Grip Incline Dumbbell Bench Press | Incline Dumbbell Bench Press (shortName: Incline Bench Press i ExerciseSection) | 6–10 REPS | YouTube 8nNi8jbbUPE |
+| Romanian Deadlift | Romanian Deadlift | 6–8 REPS | YouTube -m45n1_x32E |
 | Seated Cable Row | Seated Cable Row | 8–12 REPS | muscleandstrength.com/exercises/seated-row.html |
 | Neutral-Grip Lat Pulldown | Lat Pulldown | 8–12 REPS | YouTube iKrKgWR9wbY |
 

@@ -18,7 +18,7 @@ struct ExerciseSection: View {
         VStack(spacing: 0) {
 
             HStack(alignment: .firstTextBaseline) {
-                Button(form.def.displayName.uppercased()) {
+                Button((form.def.shortName ?? form.def.displayName).uppercased()) {
                     showVideo = true
                 }
                 .buttonStyle(.plain)
