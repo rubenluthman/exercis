@@ -33,9 +33,10 @@ CardioView.swift      ← logga konditionspass (accordion med CROSSTRAINER/CYKEL
 HistoryView.swift     ← historiklista (blandar styrka och kondition, HistoryEntry-enum)
 HistoryCard.swift     ← expanderbart kort för styrkepass (övningsnamn klickbara → ExerciseChartSheet)
 CardioCard.swift      ← expanderbart kort för konditionspass (typ klickbar → CardioChartSheet)
-ExerciseChartSheet.swift  ← e1RM-progression per övning (Swift Charts, öppnas från HistoryCard)
-CardioChartSheet.swift    ← durationsprogression per kardioform (Swift Charts, öppnas från CardioCard)
-EffortChartSheet.swift    ← ansträngningsprogression över styrkepass (Swift Charts, öppnas från HistoryCard)
+ExerciseChartSheet.swift      ← e1RM-progression per övning (Swift Charts, öppnas från HistoryCard)
+CardioChartSheet.swift        ← durationsprogression per kardioform (Swift Charts, öppnas från CardioCard)
+EffortChartSheet.swift        ← ansträngningsprogression över styrkepass (Swift Charts, öppnas från HistoryCard)
+CardioEffortChartSheet.swift  ← ansträngningsprogression per kardioform (Swift Charts, öppnas från CardioCard)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
 ```
 
@@ -182,7 +183,7 @@ LockView → (Face ID) → HomeView → StrengthView
 - Navigation via `NavigationStack` + `NavigationLink(value: AppScreen)` — ingen skärmposition sparas mellan app-starter (alltid LockView vid ny start)
 - Swipe-back aktivt på alla tre undersidor via `enableSwipeBack()`
 - **KLAR** sparar och returnerar till HomeView; **←** returnerar utan att spara (men sparar draft om data finns)
-- Observera: swipe-back sparar INTE draft (bypass av ←-logiken) — känd begränsning
+- **Swipe-back** beter sig identiskt med ← — sparar draft via `onDisappear` → `saveDraftIfNeeded()` (skippar om `didCompleteSession = true`)
 
 ### LockView (accentfärg: homeAccent)
 - "EXERCIS" Jost Black 900, centrerat vertikalt med Spacer
@@ -239,7 +240,8 @@ LockView → (Face ID) → HomeView → StrengthView
 - Statistikrad per sheet:
   - ExerciseChartSheet: BÄSTA · SENASTE · PASS (enhet: kg, beräknat som e1RM via Epley: `vikt × (1 + reps/30)`)
   - CardioChartSheet: LÄNGST · SENASTE · PASS (enhet: min/km); toggle TID/DISTANS om distansdata finns
-  - EffortChartSheet: LÄTTAST · SENASTE · TUFFAST (enhet: /10, visas i grå 14pt); öppnas från ansträngningsraden i HistoryCard
+  - EffortChartSheet: LÄTTAST · SENASTE · TUFFAST (enhet: /10, visas i grå 14pt); öppnas från ansträngningsraden i HistoryCard (styrkepass)
+  - CardioEffortChartSheet: LÄTTAST · SENASTE · TUFFAST per kardioform; öppnas från ansträngningsraden i CardioCard
 - Tomt tillstånd om < 2 datapunkter
 
 ---

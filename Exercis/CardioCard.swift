@@ -18,6 +18,7 @@ struct CardioCard: View {
     let onTap: () -> Void
     let onDelete: () -> Void
     @State private var chartType: IdentifiableString? = nil
+    @State private var showEffortChart = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -69,6 +70,10 @@ struct CardioCard: View {
             CardioChartSheet(cardioType: item.id)
                 .presentationDetents([.medium, .large])
         }
+        .sheet(isPresented: $showEffortChart) {
+            CardioEffortChartSheet(cardioType: session.cardioType)
+                .presentationDetents([.medium, .large])
+        }
     }
 
     private var expandedContent: some View {
@@ -93,16 +98,21 @@ struct CardioCard: View {
             }
 
             if let score = session.effortScore {
-                HStack(spacing: 4) {
-                    Text("ANSTRÄNGNING")
-                        .font(.jost(.medium, size: 10))
-                        .kerning(1.5)
-                        .foregroundColor(Color(.secondaryLabel))
-                    Text("\(score)/10")
-                        .font(.jost(.semibold, size: 10))
-                        .kerning(1.5)
-                        .foregroundColor(Color.historyAccent)
+                Button {
+                    showEffortChart = true
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("ANSTRÄNGNING")
+                            .font(.jost(.medium, size: 10))
+                            .kerning(1.5)
+                            .foregroundColor(Color(.secondaryLabel))
+                        Text("\(score)/10")
+                            .font(.jost(.semibold, size: 10))
+                            .kerning(1.5)
+                            .foregroundColor(Color.historyAccent)
+                    }
                 }
+                .buttonStyle(.plain)
                 .padding(.top, 2)
             }
         }

@@ -34,6 +34,7 @@ struct StrengthView: View {
     @State private var showEffortPicker = false
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
+    @State private var didCompleteSession = false
     @FocusState private var activeField: WorkoutField?
 
     private var nextField: WorkoutField? {
@@ -158,6 +159,9 @@ struct StrengthView: View {
             initialized = true
             Task { await HealthKitManager.shared.requestAuthorization() }
         }
+        .onDisappear {
+            saveDraftIfNeeded()
+        }
     }
 
     // MARK: Sub-views
@@ -244,9 +248,9 @@ struct StrengthView: View {
         }
     }
 
-    private func saveDraftAndReturn() {
+    private func saveDraftIfNeeded() {
+        guard !didCompleteSession else { return }
         let hasAnyData = exerciseForms.contains { $0.sets.contains { !$0.weight.isEmpty || !$0.reps.isEmpty } }
-
         if (isDirty || hasDraft) && hasAnyData {
             let draft = WorkoutDraft(
                 exercises: exerciseForms.map { form in
@@ -266,7 +270,10 @@ struct StrengthView: View {
             UserDefaults.standard.saveDraft(nil)
             hasDraft = false
         }
+    }
 
+    private func saveDraftAndReturn() {
+        saveDraftIfNeeded()
         dismiss()
     }
 
@@ -274,6 +281,7 @@ struct StrengthView: View {
         let hasAnyData = exerciseForms.contains { $0.sets.contains { !$0.weight.isEmpty || !$0.reps.isEmpty } }
         guard hasAnyData else { return }
 
+        didCompleteSession = true
         let session = WorkoutSession(date: Date())
         context.insert(session)
 

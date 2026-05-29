@@ -28,6 +28,7 @@ struct CardioView: View {
     @State private var showEffortPicker = false
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
+    @State private var didCompleteSession = false
     @FocusState private var focusedField: CardioField?
 
     private var nextCardioField: CardioField? {
@@ -178,6 +179,9 @@ struct CardioView: View {
             }
             Task { await HealthKitManager.shared.requestAuthorization() }
         }
+        .onDisappear {
+            saveDraftIfNeeded()
+        }
     }
 
     // MARK: Sub-views
@@ -196,20 +200,7 @@ struct CardioView: View {
             Spacer()
 
             Button("←") {
-                if let type = expandedType {
-                    let current = durations[type.rawValue] ?? ""
-                    if !current.isEmpty {
-                        UserDefaults.standard.set(type.rawValue, forKey: "cardioDraftType")
-                        UserDefaults.standard.set(current, forKey: "cardioDraftMinutes")
-                        let distStr = distances[type.rawValue] ?? ""
-                        if !distStr.isEmpty {
-                            UserDefaults.standard.set(distStr, forKey: "cardioDraftDistance")
-                        } else {
-                            UserDefaults.standard.removeObject(forKey: "cardioDraftDistance")
-                        }
-                        hasCardioDraft = true
-                    }
-                }
+                saveDraftIfNeeded()
                 dismiss()
             }
             .font(.jost(.regular, size: 22))
@@ -368,10 +359,27 @@ struct CardioView: View {
 
     // MARK: Logic
 
+    private func saveDraftIfNeeded() {
+        guard !didCompleteSession else { return }
+        guard let type = expandedType else { return }
+        let current = durations[type.rawValue] ?? ""
+        guard !current.isEmpty else { return }
+        UserDefaults.standard.set(type.rawValue, forKey: "cardioDraftType")
+        UserDefaults.standard.set(current, forKey: "cardioDraftMinutes")
+        let distStr = distances[type.rawValue] ?? ""
+        if !distStr.isEmpty {
+            UserDefaults.standard.set(distStr, forKey: "cardioDraftDistance")
+        } else {
+            UserDefaults.standard.removeObject(forKey: "cardioDraftDistance")
+        }
+        hasCardioDraft = true
+    }
+
     private func saveSession(effortScore: Int? = nil) {
         guard let type = expandedType else { return }
         let currentDuration = durations[type.rawValue] ?? ""
         guard let minutes = Double(currentDuration.replacingOccurrences(of: ",", with: ".")), minutes > 0 else { return }
+        didCompleteSession = true
 
         let distanceStr = distances[type.rawValue] ?? ""
         let distanceKm = distanceStr.isEmpty ? nil : Double(distanceStr.replacingOccurrences(of: ",", with: "."))
