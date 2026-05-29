@@ -41,7 +41,7 @@ struct RootView: View {
                             HistoryView()
                                 .toolbar(.hidden, for: .navigationBar)
                                 .enableSwipeBack()
-}
+                        }
                     }
             }
         }

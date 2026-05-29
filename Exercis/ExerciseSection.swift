@@ -17,9 +17,8 @@ struct ExerciseSection: View {
     var body: some View {
         VStack(spacing: 0) {
 
-            // Övningsnamn + rep-intervall / chevron
             HStack(alignment: .firstTextBaseline) {
-                Button(form.def.name.uppercased()) {
+                Button(form.def.displayName.uppercased()) {
                     showVideo = true
                 }
                 .buttonStyle(.plain)
@@ -55,7 +54,6 @@ struct ExerciseSection: View {
             .padding(.bottom, isCollapsed ? 14 : 16)
 
             if !isCollapsed {
-                // Kolumnrubriker
                 HStack(spacing: 0) {
                     Text("SET")
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -70,7 +68,6 @@ struct ExerciseSection: View {
                 .padding(.horizontal, 24)
                 .padding(.bottom, 6)
 
-                // Setrader
                 ForEach(Array(form.sets.indices), id: \.self) { i in
                     setRow(index: i)
                 }

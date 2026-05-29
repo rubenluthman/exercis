@@ -13,6 +13,7 @@ import SwiftData
 }
 
 struct HomeView: View {
+    @Environment(\.modelContext) private var context
     @AppStorage("hasDraft") private var hasDraft = false
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
     @State private var showDiscardWorkoutAlert = false
@@ -38,7 +39,6 @@ struct HomeView: View {
                     .foregroundColor(.black)
 
                 VStack(spacing: 12) {
-                    // Styrka
                     if hasDraft {
                         ZStack {
                             NavigationLink(value: AppScreen.workout) {
@@ -55,6 +55,7 @@ struct HomeView: View {
                                         .frame(height: 50)
                                         .padding(.trailing, 16)
                                 }
+                                .accessibilityLabel("Kasta utkast")
                             }
                         }
                     } else {
@@ -64,7 +65,6 @@ struct HomeView: View {
                         .buttonStyle(FilledButtonStyle(accent: Color.homeAccent))
                     }
 
-                    // Kondition
                     if hasCardioDraft {
                         ZStack {
                             NavigationLink(value: AppScreen.cardio) {
@@ -81,6 +81,7 @@ struct HomeView: View {
                                         .frame(height: 50)
                                         .padding(.trailing, 16)
                                 }
+                                .accessibilityLabel("Kasta utkast")
                             }
                         }
                     } else {
@@ -98,18 +99,22 @@ struct HomeView: View {
                 .padding(.horizontal, 24)
                 .padding(.top, 30)
 
-                Text(lastSessionDate.map {
-                    $0.formatted(.dateTime.weekday(.abbreviated).day().month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
-                } ?? " ")
-                    .font(.jost(.regular, size: 12))
-                    .kerning(1)
-                    .foregroundColor(Color(white: 0.5))
-                    .padding(.top, 24)
-                    .opacity(lastSessionDate != nil ? 1 : 0)
+                NavigationLink(value: AppScreen.history) {
+                    Text(lastSessionDate.map {
+                        $0.formatted(.dateTime.weekday(.abbreviated).day().month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
+                    } ?? " ")
+                        .font(.jost(.regular, size: 12))
+                        .kerning(1)
+                        .foregroundColor(Color(white: 0.5))
+                        .padding(.top, 24)
+                        .opacity(lastSessionDate != nil ? 1 : 0)
+                }
+                .disabled(lastSessionDate == nil)
 
                 Spacer()
             }
         }
+        .onAppear { migrateExerciseNames(context: context) }
         .alert("Ta bort påbörjat pass?", isPresented: $showDiscardWorkoutAlert) {
             Button("Ta bort", role: .destructive) { discardWorkoutDraft() }
             Button("Avbryt", role: .cancel) {}

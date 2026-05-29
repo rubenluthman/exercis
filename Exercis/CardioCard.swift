@@ -46,6 +46,7 @@ struct CardioCard: View {
                             .padding(.leading, 10)
                     }
                     .contentShape(Rectangle())
+                    .accessibilityLabel("Ta bort pass")
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 12)
@@ -89,6 +90,20 @@ struct CardioCard: View {
                         .font(.jost(.regular, size: 14))
                         .foregroundColor(Color(white: 0.45))
                 }
+            }
+
+            if let score = session.effortScore {
+                HStack(spacing: 4) {
+                    Text("ANSTRÄNGNING")
+                        .font(.jost(.medium, size: 10))
+                        .kerning(1.5)
+                        .foregroundColor(Color(white: 0.5))
+                    Text("\(score)/10")
+                        .font(.jost(.semibold, size: 10))
+                        .kerning(1.5)
+                        .foregroundColor(Color.historyAccent)
+                }
+                .padding(.top, 2)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

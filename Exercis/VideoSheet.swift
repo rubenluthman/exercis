@@ -5,7 +5,7 @@ struct VideoSheet: View {
     let def: ExerciseDef
 
     var body: some View {
-        SafariView(url: URL(string: "https://www.youtube.com/watch?v=\(def.youtubeID)")!)
+        SafariView(url: URL(string: def.videoURL)!)
             .ignoresSafeArea()
     }
 }

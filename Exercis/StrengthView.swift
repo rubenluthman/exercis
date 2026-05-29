@@ -98,7 +98,7 @@ struct StrengthView: View {
                             .frame(width: 36, height: 4)
                             .padding(.top, 8)
                             .padding(.bottom, 4)
-                        EffortPickerSheet { score in
+                        EffortPickerSheet(accent: .homeAccent) { score in
                             saveSession(effortScore: score)
                             dismiss()
                         }
@@ -152,6 +152,7 @@ struct StrengthView: View {
             .font(.jost(.regular, size: 22))
             .foregroundColor(Color(white: 0.5))
             .frame(width: 90, alignment: .trailing)
+            .accessibilityLabel("Tillbaka")
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)
@@ -194,21 +195,15 @@ struct StrengthView: View {
 
         startTime = Date()
         exerciseForms = ExerciseDef.all.map { def in
-            var sets: [SetFormData] = []
+            var sets: [SetFormData] = [SetFormData(), SetFormData(), SetFormData()]
 
             if let session,
-               let log = session.exerciseLogs.first(where: { $0.name == def.name }) {
-                sets = log.sets
-                    .sorted { $0.setNumber < $1.setNumber }
-                    .map { s in
-                        SetFormData(
-                            weight: s.weight > 0 ? formatWeight(s.weight) : "",
-                            reps:   s.reps > 0   ? "\(s.reps)"           : ""
-                        )
-                    }
+               let log = session.exerciseLogs.first(where: { $0.name == def.name }),
+               let bestSet = log.sets.filter({ $0.weight > 0 }).max(by: { $0.weight < $1.weight }) {
+                let w = formatWeight(bestSet.weight)
+                let r = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
+                sets = [SetFormData(weight: w, reps: r), SetFormData(weight: w, reps: r), SetFormData(weight: w, reps: r)]
             }
-
-            if sets.isEmpty { sets = [SetFormData(), SetFormData(), SetFormData()] }
 
             let increase = UserDefaults.standard.increaseNames().contains(def.name)
             let prevMax = session?.exerciseLogs
@@ -297,16 +292,23 @@ struct StrengthView: View {
     }
 }
 
-private struct EffortPickerSheet: View {
+struct EffortPickerSheet: View {
+    let accent: Color
     let onSelect: (Int?) -> Void
-    @State private var selectedScore = 5
+    @State private var selectedScore: Int
+
+    init(accent: Color, initialScore: Int = 5, onSelect: @escaping (Int?) -> Void) {
+        self.accent = accent
+        self.onSelect = onSelect
+        self._selectedScore = State(initialValue: initialScore)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("ANSTRÄNGNING")
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
-                .foregroundColor(Color.homeAccent)
+                .foregroundColor(accent)
                 .padding(.horizontal, 24)
                 .padding(.top, 24)
                 .padding(.bottom, 6)
@@ -333,7 +335,7 @@ private struct EffortPickerSheet: View {
             Button("SPARA") {
                 onSelect(selectedScore)
             }
-            .buttonStyle(FilledButtonStyle(accent: Color.homeAccent))
+            .buttonStyle(FilledButtonStyle(accent: accent))
             .padding(.horizontal, 24)
             .padding(.top, 16)
 
@@ -357,7 +359,7 @@ private struct EffortPickerSheet: View {
 
     let session = WorkoutSession(date: Calendar.current.date(byAdding: .day, value: -7, to: Date())!)
     ctx.insert(session)
-    let log = ExerciseLog(name: "Safety Bar Squat", orderIndex: 0)
+    let log = ExerciseLog(name: "Barbell Back Squat", orderIndex: 0)
     log.session = session
     ctx.insert(log)
     for (i, (w, r)) in [(90.0, 7), (90.0, 6), (87.5, 6)].enumerated() {

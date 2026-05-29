@@ -20,7 +20,7 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 Alla filer ligger platt i `Exercis/`-mappen.
 
 ```
-TrainingApp.swift     ← @main TrainingApp + RootView + AppScreen
+ExercisApp.swift      ← @main ExercisApp + RootView + AppScreen
 AuthManager.swift     ← AuthManager (Face ID/lösenkod)
 Models.swift          ← SwiftData-modeller (WorkoutSession, CardioSession, ExerciseDef, WorkoutDraft, CardioType)
 Theme.swift           ← färger, typsnitt, knappstillar, ThinDivider, enableSwipeBack, formatWeight/parseWeight
@@ -28,14 +28,15 @@ HomeView.swift        ← startsida med tre knappar
 LockView.swift        ← inloggningsskärm
 StrengthView.swift    ← logga styrketräningspass (SetFormData, ExerciseFormData, nextField-logik)
 ExerciseSection.swift ← övningssektion med sets/reps + WorkoutField-enum + UserDefaults-extension
-VideoSheet.swift      ← YouTube-embed i sheet vid klick på övningsnamn
+VideoSheet.swift      ← video/webb i SFSafariViewController vid klick på övningsnamn
 CardioView.swift      ← logga konditionspass (accordion med CROSSTRAINER/CYKEL/RODDMASKIN)
 HistoryView.swift     ← historiklista (blandar styrka och kondition, HistoryEntry-enum)
 HistoryCard.swift     ← expanderbart kort för styrkepass (övningsnamn klickbara → ExerciseChartSheet)
 CardioCard.swift      ← expanderbart kort för konditionspass (typ klickbar → CardioChartSheet)
-ExerciseChartSheet.swift ← graf över viktprogression per övning (Swift Charts, öppnas från HistoryCard)
-CardioChartSheet.swift   ← graf över durationsprogresssion per kardioform (Swift Charts, öppnas från CardioCard)
-HealthKitManager.swift← sparar HKWorkout till Apple Health
+ExerciseChartSheet.swift  ← e1RM-progression per övning (Swift Charts, öppnas från HistoryCard)
+CardioChartSheet.swift    ← durationsprogression per kardioform (Swift Charts, öppnas från CardioCard)
+EffortChartSheet.swift    ← ansträngningsprogression över styrkepass (Swift Charts, öppnas från HistoryCard)
+HealthKitManager.swift    ← sparar HKWorkout till Apple Health
 ```
 
 ---
@@ -82,7 +83,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 - Inga emojis, inga ikoner utöver SF Symbols (chevron, xmark)
 - Versaliserade etiketter med spärr (letter spacing)
 - Tunna **0.5 pt avdelare** via `ThinDivider`
-- All text i UI:t ska vara på **svenska** — undantag: övningsnamnen (Safety Bar Squat etc.) som är på engelska
+- All text i UI:t ska vara på **svenska** — undantag: övningsnamnen (Barbell Back Squat etc.) som är på engelska
 - Datum formateras alltid med `Locale(identifier: "sv_SE")`
 - KLAR-knapp: fylld i accentfärg, längst ner i vyn (ej flytande)
 - Tillbaka-knapp: bara "←" utan text, font regular 22pt, `.frame(width: 90, alignment: .trailing)`
@@ -108,7 +109,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 }
 @Model class CardioSession {
     var id: UUID; var date: Date; var durationMinutes: Double
-    var cardioType: String; var healthKitID: UUID?; var distanceKm: Double?
+    var cardioType: String; var healthKitID: UUID?; var distanceKm: Double?; var effortScore: Int?
 }
 ```
 
@@ -137,15 +138,24 @@ Lagras som `String` i `CardioSession` för att undvika migrationsproblem.
 
 Exakt dessa fem, i denna ordning, definierade i `ExerciseDef.all`:
 
-| Övning | Rep-intervall | YouTube-ID |
-|--------|--------------|------------|
-| Safety Bar Squat | 5–8 REPS | OuvfDyf28eU |
-| Romanian Deadlift | 6–8 REPS | -m45n1_x32E |
-| Incline DB Bench Press (full: Neutral-Grip Incline DB Bench Press) | 6–10 REPS | 8nNi8jbbUPE |
-| Chest-Supported Row | 8–10 REPS | oKNjFM1bxAs |
-| Lat Pulldown (full: Neutral-Grip Lat Pulldown) | 8–12 REPS | iKrKgWR9wbY |
+| Kanoniskt namn | Visningsnamn | Rep-intervall | Video |
+|----------------|-------------|--------------|-------|
+| Barbell Back Squat | Barbell Back Squat | 5–8 REPS | YouTube R2dMsNhN3DE |
+| Neutral-Grip Incline Dumbbell Bench Press | Incline Dumbbell Bench Press | 6–10 REPS | YouTube 8nNi8jbbUPE |
+| Romanian Deadlift (RDL) | Romanian Deadlift (RDL) | 6–8 REPS | YouTube -m45n1_x32E |
+| Seated Cable Row | Seated Cable Row | 8–12 REPS | muscleandstrength.com/exercises/seated-row.html |
+| Neutral-Grip Lat Pulldown | Lat Pulldown | 8–12 REPS | YouTube iKrKgWR9wbY |
 
-Övningsnamnet i StrengthView är en **klickbar rubrik** (Button) som öppnar YouTube-video i sheet (`.presentationDetents([.medium, .large])`). I HistoryView är namnen klickbara och öppnar `ExerciseChartSheet` (viktprogression).
+`ExerciseDef` har tre namnfält: `name` (lagras i SwiftData, används som nyckel), `displayName` (visas i UI), `aliases` (gamla namn som migreras vid app-start). Byt aldrig `name` utan att lägga gamla värdet i `aliases` och bumpa `migrationVersion`.
+
+**Pensionering av övning** — när en övning byts ut och gammal data ska bevaras i historik:
+1. Flytta definitionen från `all` till `retired` (ingen migration, ingen radering)
+2. Lägg till den nya övningen i `all`
+3. Gammal data visas korrekt i HistoryCard och ExerciseChartSheet via `ExerciseDef.find(name:)` som söker i båda listorna
+
+**Aktiv radering** (som Chest-Supported Row) är ett separat spår — kräver explicit delete-steg i `migrateExerciseNames`.
+
+Övningsnamnet i StrengthView är en **klickbar rubrik** (Button) som öppnar videon i SFSafariViewController. I HistoryView är namnen klickbara och öppnar `ExerciseChartSheet` (e1RM-progression via Epley-formeln).
 
 ---
 
@@ -173,12 +183,12 @@ LockView → (Face ID) → HomeView → StrengthView
 - **STYRKA** (fylld, homeAccent) — om draft: **FORTSÄTT STYRKA** + × för att kassera
 - **KONDITION** (fylld, workoutAccent) — om draft: **FORTSÄTT KONDITION** + × för att kassera
 - **HISTORIK** (konturknapp, historyAccent)
-- Senaste passens datum visas under HISTORIK (nyast av styrka/kondition, svensk locale)
+- Senaste passens datum visas under HISTORIK (nyast av styrka/kondition, svensk locale) — klickbart, navigerar till HistoryView
 - Kassera-alert: separata `.alert()` för styrka respektive kondition (destructive button)
 
 ### StrengthView — Styrketräning (accentfärg: homeAccent)
 - Header: "STYRKETRÄNING" 17pt bold, kerning 2 + förkortat datum 13pt + "←" 90pt trailing
-- Formuläret **förifyller automatiskt** från senaste sessionens data; tom vid allra första passet
+- Formuläret **förifyller automatiskt** med tyngsta setets vikt och reps (samma värde på alla tre set) från senaste sessionen; tomt vid allra första passet
 - Alltid 3 set per övning
 - Kolumnrubriker: **SET, KG, REPS** — layout: SET=maxWidth leading, KG=80pt leading, REPS=120pt trailing
 - **Ihopfällbara sektioner**: tryck var som helst på sektionen (ej namn-länk eller textfält) för att fälla ihop/ut. Chevron visas vid ihopfällt läge, rep-intervall vid utfällt. Startar alltid utfällt vid nytt pass.
@@ -193,7 +203,9 @@ LockView → (Face ID) → HomeView → StrengthView
 - Öppet/stängt läge sparas i `@AppStorage("lastCardioType")` (tom sträng = ingen öppen)
 - Varje typ minns sin senaste *sparade* duration i UserDefaults (`cardioSavedDuration_{TYPE}`) — laddas vid öppning
 - **Draft**: ← sparar aktiv typs värde (om ifyllt) till `cardioDraftType`/`cardioDraftMinutes`. Återladdas via FORTSÄTT KONDITION. Övriga typers in-session-värden (ej sparade) går förlorade vid ← — de återhämtas från `cardioSavedDuration_*` från senaste slutförda session.
-- KLAR sparar `CardioSession`, sparar duration till `cardioSavedDuration_{TYPE}`, loggar till HealthKit
+- **Tangentbordsverktygsfält**: KLAR (vänster) + NÄSTA (höger, går från MIN till KM), båda i workoutAccent
+- KLAR visar effort-picker (samma ZStack-overlay som StrengthView, workoutAccent) om duration är ifylld, annars dismiss direkt. Minns senaste ansträngning per typ i `cardioEffortScore_{TYPE}`.
+- KLAR sparar `CardioSession` (inkl. `effortScore`), sparar duration/distans/ansträngning till UserDefaults, loggar till HealthKit
 
 ### HistoryView (accentfärg: historyAccent)
 - Header: "HISTORIK" 17pt bold + "←" 90pt trailing
@@ -205,14 +217,14 @@ LockView → (Face ID) → HomeView → StrengthView
 - Styrkeövningar visas i historyAccent; konditionstyp visas i **historyAccent** (inte workoutAccent — allt i historikläget är blått)
 - **Klickbara namn**: övningsnamn i HistoryCard öppnar `ExerciseChartSheet`; kardiotyp i CardioCard öppnar `CardioChartSheet`
 
-### ExerciseChartSheet / CardioChartSheet / EffortChartSheet (accentfärg: historyAccent / homeAccent)
+### ExerciseChartSheet / CardioChartSheet / EffortChartSheet (accentfärg: historyAccent)
 - Öppnas som `.sheet` med `.presentationDetents([.medium, .large])` från HistoryCard/CardioCard
 - Hämtar all data via `@Query` (ärver modelContainer från miljön)
 - Linjediagram (Swift Charts) med punktmarkeringar i accentfärg
 - X-axeln visar månadsförkortning; om data spänner över flera år visas även tvåsiffrigt år (t.ex. "JAN\n25")
 - Svenska månadsförkortningar — punkter i förkortningarna strimmas bort
 - Statistikrad per sheet:
-  - ExerciseChartSheet: BÄSTA · SENASTE · PASS (enhet: kg)
+  - ExerciseChartSheet: BÄSTA · SENASTE · PASS (enhet: kg, beräknat som e1RM via Epley: `vikt × (1 + reps/30)`)
   - CardioChartSheet: LÄNGST · SENASTE · PASS (enhet: min/km); toggle TID/DISTANS om distansdata finns
   - EffortChartSheet: LÄTTAST · SENASTE · TUFFAST (enhet: /10, visas i grå 14pt); öppnas från ansträngningsraden i HistoryCard
 - Tomt tillstånd om < 2 datapunkter
@@ -234,7 +246,7 @@ LockView → (Face ID) → HomeView → StrengthView
 - Alla anrop guards med `HKHealthStore.isHealthDataAvailable()` — no-op på simulator
 - `healthKitID: UUID?` sparas på session-objektet för att möjliggöra radering
 - Kalorier beräknas via MET × kroppsvikt (läses från HealthKit, fallback 75 kg) × tid i timmar
-- **iOS 18+**: ansträngningspoäng sparas som `HKQuantityType(.workoutEffortScore)` via `store.relateWorkoutEffortSample(_:with:activity:)` efter att workout är klar
+- **iOS 18+**: ansträngningspoäng sparas som `HKQuantityType(.workoutEffortScore)` via `store.relateWorkoutEffortSample(_:with:activity:)` — gäller både styrke- och konditionspass
 
 ---
 
@@ -251,8 +263,10 @@ LockView → (Face ID) → HomeView → StrengthView
 | `cardioDraftDistance` | String | UserDefaults | Distans (km) för konditions-draft |
 | `cardioSavedDuration_{TYPE}` | String | UserDefaults | Senast sparad duration per kardioform |
 | `cardioSavedDistance_{TYPE}` | String | UserDefaults | Senast sparad distans per kardioform |
+| `cardioEffortScore_{TYPE}` | Int | UserDefaults | Senast sparad ansträngning per kardioform (startvärde i picker) |
 | `increaseExercises` | [String] | UserDefaults | Övningsnamn med aktiv ÖKA-badge (styrka) |
 | `increaseCardioTypes` | [String] | UserDefaults | Kardioformer med aktiv ÖKA-badge |
+| `exerciseNameMigrationVersion` | Int | UserDefaults | Version för körd namnmigration (bumpa vid övningsändringar) |
 
 ---
 
@@ -277,9 +291,9 @@ LockView → (Face ID) → HomeView → StrengthView
 
 ## Enhetflexibilitet (framtidssäkring)
 
-Vikt och tid lagras som råtal utan enhet — `Double` för kg, `Int` för minuter. Enheter antas i UI:t (alltid "KG" resp. "MIN"). Om appen framöver ska stödja lbs eller timmar/sekunder:
+Vikt och tid lagras som råtal utan enhet — `Double` för kg, `Double` för minuter. Enheter antas i UI:t (alltid "KG" resp. "MIN"). Om appen framöver ska stödja lbs eller timmar/sekunder:
 - Lagra en `unit`-sträng bredvid värdet, eller konvertera vid presentation
-- Bryt inte befintliga SwiftData-fält (`weight: Double`, `durationMinutes: Int`) — lägg till nya fält med default-värden för att undvika migration
+- Bryt inte befintliga SwiftData-fält (`weight: Double`, `durationMinutes: Double`) — lägg till nya fält med default-värden för att undvika migration
 - `formatWeight` i Theme.swift är den enda formateringsplatsen för vikt — enhetsbyte görs där
 
 ---

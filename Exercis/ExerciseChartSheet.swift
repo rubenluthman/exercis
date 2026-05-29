@@ -15,14 +15,14 @@ import Charts
     ]
     for (offset, weight) in weights {
         let s = WorkoutSession(date: day(offset)); ctx.insert(s)
-        let log = ExerciseLog(name: "Safety Bar Squat", orderIndex: 0); log.session = s; ctx.insert(log)
+        let log = ExerciseLog(name: "Barbell Back Squat", orderIndex: 0); log.session = s; ctx.insert(log)
         for i in 1...3 {
             let set = SetLog(setNumber: i, weight: weight - Double(i - 1) * 2.5, reps: 6)
             set.exerciseLog = log; ctx.insert(set)
         }
     }
 
-    return ExerciseChartSheet(exerciseName: "Safety Bar Squat")
+    return ExerciseChartSheet(exerciseName: "Barbell Back Squat")
         .modelContainer(container)
 }
 
@@ -33,22 +33,27 @@ struct ExerciseChartSheet: View {
     private struct DataPoint: Identifiable {
         let id = UUID()
         let date: Date
-        let maxWeight: Double
+        let e1RM: Double
+    }
+
+    private func epley(weight: Double, reps: Int) -> Double {
+        guard reps > 0, weight > 0 else { return 0 }
+        return weight * (1 + Double(reps) / 30)
     }
 
     private var dataPoints: [DataPoint] {
         allSessions.compactMap { session in
             guard let log = session.exerciseLogs.first(where: { $0.name == exerciseName }) else { return nil }
-            let max = log.sets.map(\.weight).filter { $0 > 0 }.max() ?? 0
-            guard max > 0 else { return nil }
-            return DataPoint(date: session.date, maxWeight: max)
+            let best = log.sets.map { epley(weight: $0.weight, reps: $0.reps) }.max() ?? 0
+            guard best > 0 else { return nil }
+            return DataPoint(date: session.date, e1RM: best)
         }
     }
 
-    private var bestWeight: Double  { dataPoints.map(\.maxWeight).max() ?? 0 }
-    private var lastWeight: Double  { dataPoints.last?.maxWeight ?? 0 }
-    private var yMin: Double        { (dataPoints.map(\.maxWeight).min() ?? 0) * 0.95 }
-    private var yMax: Double        { bestWeight * 1.05 }
+    private var bestE1RM: Double { dataPoints.map(\.e1RM).max() ?? 0 }
+    private var lastE1RM: Double { dataPoints.last?.e1RM ?? 0 }
+    private var yMin: Double     { (dataPoints.map(\.e1RM).min() ?? 0) * 0.95 }
+    private var yMax: Double     { bestE1RM * 1.05 }
 
     private var spansMultipleYears: Bool {
         guard let first = dataPoints.first?.date, let last = dataPoints.last?.date else { return false }
@@ -57,7 +62,7 @@ struct ExerciseChartSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(exerciseName.uppercased())
+            Text((ExerciseDef.find(name: exerciseName)?.displayName ?? exerciseName).uppercased())
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
                 .foregroundColor(Color.historyAccent)
@@ -76,13 +81,13 @@ struct ExerciseChartSheet: View {
                 Chart(dataPoints) { point in
                     LineMark(
                         x: .value("Datum", point.date),
-                        y: .value("KG", point.maxWeight)
+                        y: .value("KG", point.e1RM)
                     )
                     .foregroundStyle(Color.historyAccent)
 
                     PointMark(
                         x: .value("Datum", point.date),
-                        y: .value("KG", point.maxWeight)
+                        y: .value("KG", point.e1RM)
                     )
                     .foregroundStyle(Color.historyAccent)
                     .symbolSize(30)
@@ -128,8 +133,8 @@ struct ExerciseChartSheet: View {
                     .padding(.top, 20)
 
                 HStack(alignment: .top, spacing: 0) {
-                    statBlock(label: "BÄSTA", value: formatWeight(bestWeight), unit: "kg", alignment: .leading)
-                    statBlock(label: "SENASTE", value: formatWeight(lastWeight), unit: "kg", alignment: .center)
+                    statBlock(label: "BÄSTA", value: formatWeight(bestE1RM), unit: "kg", alignment: .leading)
+                    statBlock(label: "SENASTE", value: formatWeight(lastE1RM), unit: "kg", alignment: .center)
                     statBlock(label: "PASS", value: "\(dataPoints.count)", alignment: .trailing)
                 }
                 .padding(.horizontal, 24)

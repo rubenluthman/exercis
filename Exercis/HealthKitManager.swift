@@ -21,7 +21,7 @@ struct HealthKitManager {
         try? await store.requestAuthorization(toShare: shareTypes, read: readTypes)
     }
 
-    func saveCardioWorkout(start: Date, end: Date, type: CardioType, distanceKm: Double?) async -> UUID? {
+    func saveCardioWorkout(start: Date, end: Date, type: CardioType, distanceKm: Double?, effortScore: Int? = nil) async -> UUID? {
         guard isAvailable else { return nil }
         let config = HKWorkoutConfiguration()
         var met = 0.0
@@ -38,6 +38,9 @@ struct HealthKitManager {
         }
         try? await builder.endCollection(at: end)
         guard let workout = try? await builder.finishWorkout() else { return nil }
+        if #available(iOS 18.0, *), let score = effortScore {
+            await attachEffortScore(score, to: workout, start: start, end: end)
+        }
         return workout.uuid
     }
 

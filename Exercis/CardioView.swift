@@ -25,7 +25,14 @@ struct CardioView: View {
     @State private var distances: [String: String] = [:]
     @State private var increaseTypes: Set<String> = []
     @State private var longPressFired: Set<CardioType> = []
+    @State private var showEffortPicker = false
+    @State private var lastEffortScore = 5
     @FocusState private var focusedField: CardioField?
+
+    private var nextCardioField: CardioField? {
+        guard case .duration(let type) = focusedField else { return nil }
+        return .distance(type)
+    }
 
     private func durationBinding(for type: CardioType) -> Binding<String> {
         Binding(
@@ -58,13 +65,46 @@ struct CardioView: View {
 
                 klarBar
             }
+
+            if showEffortPicker {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                VStack {
+                    Spacer()
+                    VStack(spacing: 0) {
+                        Capsule()
+                            .fill(Color(white: 0.75))
+                            .frame(width: 36, height: 4)
+                            .padding(.top, 8)
+                            .padding(.bottom, 4)
+                        EffortPickerSheet(accent: .workoutAccent, initialScore: lastEffortScore) { score in
+                            saveSession(effortScore: score)
+                            dismiss()
+                        }
+                    }
+                    .background(Color.appBackground)
+                    .clipShape(UnevenRoundedRectangle(topLeadingRadius: 16, topTrailingRadius: 16))
+                }
+                .ignoresSafeArea(edges: .bottom)
+                .transition(.move(edge: .bottom))
+            }
         }
+        .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
                 Button("KLAR") { focusedField = nil }
                     .font(.jost(.semibold, size: 13))
                     .foregroundColor(Color.workoutAccent)
+                Spacer()
+                Button("NÄSTA") {
+                    if case .duration(let type) = focusedField {
+                        focusedField = .distance(type)
+                    }
+                }
+                .font(.jost(.semibold, size: 13))
+                .foregroundColor(nextCardioField != nil ? Color.workoutAccent : Color(white: 0.7))
+                .disabled(nextCardioField == nil)
             }
         }
         .onAppear {
@@ -140,6 +180,7 @@ struct CardioView: View {
             .font(.jost(.regular, size: 22))
             .foregroundColor(Color(white: 0.5))
             .frame(width: 90, alignment: .trailing)
+            .accessibilityLabel("Tillbaka")
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)
@@ -270,8 +311,16 @@ struct CardioView: View {
 
     private var klarBar: some View {
         Button("KLAR") {
-            saveSession()
-            dismiss()
+            guard let type = expandedType,
+                  let dur = Double((durations[type.rawValue] ?? "").replacingOccurrences(of: ",", with: ".")),
+                  dur > 0 else {
+                dismiss()
+                return
+            }
+            focusedField = nil
+            let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
+            lastEffortScore = saved > 0 ? saved : 5
+            showEffortPicker = true
         }
         .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
         .padding(.horizontal, 24)
@@ -280,7 +329,7 @@ struct CardioView: View {
 
     // MARK: Logic
 
-    private func saveSession() {
+    private func saveSession(effortScore: Int? = nil) {
         guard let type = expandedType else { return }
         let currentDuration = durations[type.rawValue] ?? ""
         guard let minutes = Double(currentDuration.replacingOccurrences(of: ",", with: ".")), minutes > 0 else { return }
@@ -301,19 +350,24 @@ struct CardioView: View {
             UserDefaults.standard.removeObject(forKey: "cardioSavedDistance_\(type.rawValue)")
         }
 
+        if let score = effortScore {
+            UserDefaults.standard.set(score, forKey: "cardioEffortScore_\(type.rawValue)")
+        }
+
         if minutes > previousDuration && increaseTypes.contains(type.rawValue) {
             increaseTypes.remove(type.rawValue)
             UserDefaults.standard.setCardioIncrease(type, false)
         }
 
         let session = CardioSession(date: Date(), durationMinutes: minutes, cardioType: type.rawValue, distanceKm: distanceKm)
+        session.effortScore = effortScore
         context.insert(session)
         try? context.save()
 
         let end = Date()
         let start = end.addingTimeInterval(-minutes * 60)
         Task { @MainActor in
-            let uuid = await HealthKitManager.shared.saveCardioWorkout(start: start, end: end, type: type, distanceKm: distanceKm)
+            let uuid = await HealthKitManager.shared.saveCardioWorkout(start: start, end: end, type: type, distanceKm: distanceKm, effortScore: effortScore)
             session.healthKitID = uuid
             try? context.save()
         }

@@ -63,6 +63,7 @@ final class CardioSession {
     var healthKitID: UUID? = nil
     var cardioType: String = CardioType.crosstrainer.rawValue
     var distanceKm: Double? = nil
+    var effortScore: Int? = nil
 
     init(date: Date = Date(), durationMinutes: Double, cardioType: String = CardioType.crosstrainer.rawValue, distanceKm: Double? = nil) {
         self.date = date
@@ -121,14 +122,81 @@ extension UserDefaults {
 
 struct ExerciseDef {
     let name: String
+    let displayName: String
     let repRange: String
-    let youtubeID: String
+    let videoURL: String
+    var aliases: [String] = []
+
+    init(name: String, displayName: String? = nil, repRange: String, videoURL: String, aliases: [String] = []) {
+        self.name = name
+        self.displayName = displayName ?? name
+        self.repRange = repRange
+        self.videoURL = videoURL
+        self.aliases = aliases
+    }
 
     static let all: [ExerciseDef] = [
-        ExerciseDef(name: "Safety Bar Squat",                    repRange: "5–8 REPS",  youtubeID: "OuvfDyf28eU"),
-        ExerciseDef(name: "Romanian Deadlift",                   repRange: "6–8 REPS",  youtubeID: "-m45n1_x32E"),
-        ExerciseDef(name: "Incline DB Bench Press", repRange: "6–10 REPS", youtubeID: "8nNi8jbbUPE"),
-        ExerciseDef(name: "Chest-Supported Row",    repRange: "8–10 REPS", youtubeID: "oKNjFM1bxAs"),
-        ExerciseDef(name: "Lat Pulldown",           repRange: "8–12 REPS", youtubeID: "iKrKgWR9wbY"),
+        ExerciseDef(name: "Barbell Back Squat",
+                    repRange: "5–8 REPS",
+                    videoURL: "https://www.youtube.com/watch?v=R2dMsNhN3DE",
+                    aliases: ["Safety Bar Squat"]),
+        ExerciseDef(name: "Neutral-Grip Incline Dumbbell Bench Press",
+                    displayName: "Incline Dumbbell Bench Press",
+                    repRange: "6–10 REPS",
+                    videoURL: "https://www.youtube.com/watch?v=8nNi8jbbUPE",
+                    aliases: ["Incline DB Bench Press"]),
+        ExerciseDef(name: "Romanian Deadlift (RDL)",
+                    repRange: "6–8 REPS",
+                    videoURL: "https://www.youtube.com/watch?v=-m45n1_x32E",
+                    aliases: ["Romanian Deadlift"]),
+        ExerciseDef(name: "Seated Cable Row",
+                    repRange: "8–12 REPS",
+                    videoURL: "https://www.muscleandstrength.com/exercises/seated-row.html"),
+        ExerciseDef(name: "Neutral-Grip Lat Pulldown",
+                    displayName: "Lat Pulldown",
+                    repRange: "8–12 REPS",
+                    videoURL: "https://www.youtube.com/watch?v=iKrKgWR9wbY",
+                    aliases: ["Lat Pulldown"]),
     ]
+
+    // Pensionerade övningar — tas bort från `all` men data bevaras i historik.
+    // Lägg till här när en övning byts ut mot en ny.
+    static let retired: [ExerciseDef] = []
+
+    static func find(name: String) -> ExerciseDef? {
+        all.first(where: { $0.name == name }) ?? retired.first(where: { $0.name == name })
+    }
+
+    // Bump this each time exercises change and update migrateExerciseNames accordingly.
+    static let migrationVersion = 3
+}
+
+func migrateExerciseNames(context: ModelContext) {
+    let key = "exerciseNameMigrationVersion"
+    var current = UserDefaults.standard.integer(forKey: key)
+    guard current < ExerciseDef.migrationVersion else { return }
+
+    if current < 2 {
+        let aliasMap = Dictionary(uniqueKeysWithValues:
+            ExerciseDef.all.flatMap { def in def.aliases.map { ($0, def.name) } }
+        )
+        if !aliasMap.isEmpty {
+            let logs = (try? context.fetch(FetchDescriptor<ExerciseLog>())) ?? []
+            for log in logs {
+                if let newName = aliasMap[log.name] { log.name = newName }
+            }
+            try? context.save()
+        }
+        current = 2
+    }
+
+    if current < 3 {
+        let logs = (try? context.fetch(FetchDescriptor<ExerciseLog>())) ?? []
+        for log in logs where log.name == "Chest-Supported Row" {
+            context.delete(log)
+        }
+        try? context.save()
+    }
+
+    UserDefaults.standard.set(ExerciseDef.migrationVersion, forKey: key)
 }

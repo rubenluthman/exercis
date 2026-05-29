@@ -17,7 +17,7 @@ final class AuthManager: ObservableObject {
 
         context.evaluatePolicy(
             .deviceOwnerAuthentication,
-            localizedReason: "Lås upp Exercis"
+            localizedReason: String(localized: "Lås upp Exercis")
         ) { success, _ in
             DispatchQueue.main.async {
                 if success { self.isAuthenticated = true }

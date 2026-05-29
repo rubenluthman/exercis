@@ -11,7 +11,7 @@ import SwiftData
     // Maj — 3 styrka, 1 kondition
     let s1 = WorkoutSession(date: day(-2))
     ctx.insert(s1)
-    let log1 = ExerciseLog(name: "Safety Bar Squat", orderIndex: 0)
+    let log1 = ExerciseLog(name: "Barbell Back Squat", orderIndex: 0)
     log1.session = s1; ctx.insert(log1)
     for (i, (w, r)) in [(90.0, 7), (90.0, 6), (90.0, 6)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log1; ctx.insert(s)
@@ -21,7 +21,7 @@ import SwiftData
 
     let s2 = WorkoutSession(date: day(-9))
     ctx.insert(s2)
-    let log2 = ExerciseLog(name: "Romanian Deadlift", orderIndex: 0)
+    let log2 = ExerciseLog(name: "Romanian Deadlift (RDL)", orderIndex: 0)
     log2.session = s2; ctx.insert(log2)
     for (i, (w, r)) in [(80.0, 8), (80.0, 7), (80.0, 7)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log2; ctx.insert(s)
@@ -33,7 +33,7 @@ import SwiftData
     // April — 2 styrka, 2 kondition
     let s4 = WorkoutSession(date: day(-32))
     ctx.insert(s4)
-    let log4 = ExerciseLog(name: "Chest-Supported Row", orderIndex: 0)
+    let log4 = ExerciseLog(name: "Seated Cable Row", orderIndex: 0)
     log4.session = s4; ctx.insert(log4)
     for (i, (w, r)) in [(60.0, 10), (60.0, 9), (60.0, 9)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log4; ctx.insert(s)
@@ -49,7 +49,7 @@ import SwiftData
     // Mars — 1 styrka, 1 kondition
     let s6 = WorkoutSession(date: day(-62))
     ctx.insert(s6)
-    let log6 = ExerciseLog(name: "Lat Pulldown", orderIndex: 0)
+    let log6 = ExerciseLog(name: "Neutral-Grip Lat Pulldown", orderIndex: 0)
     log6.session = s6; ctx.insert(log6)
     for (i, (w, r)) in [(55.0, 12), (55.0, 11), (55.0, 10)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log6; ctx.insert(s)
@@ -60,7 +60,7 @@ import SwiftData
     // December 2025 — 1 styrka, 1 kondition
     let s7 = WorkoutSession(date: day(-155))
     ctx.insert(s7)
-    let log7 = ExerciseLog(name: "Safety Bar Squat", orderIndex: 0)
+    let log7 = ExerciseLog(name: "Barbell Back Squat", orderIndex: 0)
     log7.session = s7; ctx.insert(log7)
     for (i, (w, r)) in [(85.0, 7), (85.0, 6), (85.0, 6)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log7; ctx.insert(s)
@@ -274,6 +274,7 @@ struct HistoryView: View {
                 .font(.jost(.regular, size: 22))
                 .foregroundColor(Color(white: 0.5))
                 .frame(width: 90, alignment: .trailing)
+                .accessibilityLabel("Tillbaka")
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)
@@ -300,9 +301,15 @@ struct HistoryView: View {
                     } else {
                         UserDefaults.standard.removeObject(forKey: "cardioSavedDistance_\(session.cardioType)")
                     }
+                    if let score = next.effortScore {
+                        UserDefaults.standard.set(score, forKey: "cardioEffortScore_\(session.cardioType)")
+                    } else {
+                        UserDefaults.standard.removeObject(forKey: "cardioEffortScore_\(session.cardioType)")
+                    }
                 } else {
                     UserDefaults.standard.removeObject(forKey: "cardioSavedDuration_\(session.cardioType)")
                     UserDefaults.standard.removeObject(forKey: "cardioSavedDistance_\(session.cardioType)")
+                    UserDefaults.standard.removeObject(forKey: "cardioEffortScore_\(session.cardioType)")
                 }
             }
             context.delete(session)

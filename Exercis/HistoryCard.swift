@@ -27,7 +27,6 @@ struct HistoryCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Sammanfattningsrad
             Button(action: onTap) {
                 HStack {
                     HStack(spacing: 8) {
@@ -53,6 +52,7 @@ struct HistoryCard: View {
                             .padding(.leading, 10)
                     }
                     .contentShape(Rectangle())
+                    .accessibilityLabel("Ta bort pass")
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 12)
@@ -118,8 +118,9 @@ struct HistoryCard: View {
 
     @ViewBuilder
     private func exerciseBlock(_ exercise: ExerciseLog) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Button(exercise.name.uppercased()) {
+        VStack(alignment: .leading, spacing: 2) {
+            let displayName = ExerciseDef.find(name: exercise.name)?.displayName ?? exercise.name
+            Button(displayName.uppercased()) {
                 chartExercise = IdentifiableString(id: exercise.name)
             }
             .buttonStyle(.plain)
@@ -135,7 +136,7 @@ struct HistoryCard: View {
             }
         }
         .padding(.horizontal, 24)
-        .padding(.top, 2)
+        .padding(.top, 4)
     }
 
     // MARK: - Helpers
