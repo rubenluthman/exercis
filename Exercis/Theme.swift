@@ -132,6 +132,15 @@ extension View {
     func enableSwipeBack() -> some View {
         background(PopGestureEnabler())
     }
+
+    @ViewBuilder
+    func softScrollEdge() -> some View {
+        if #available(iOS 26, *) {
+            self.scrollEdgeEffectStyle(.soft)
+        } else {
+            self
+        }
+    }
 }
 
 // MARK: - Weight Formatting

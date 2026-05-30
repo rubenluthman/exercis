@@ -85,6 +85,7 @@ struct StrengthView: View {
                     }
                 }
             }
+            .softScrollEdge()
 
             if showEffortPicker {
                 Color.black.opacity(0.3)
