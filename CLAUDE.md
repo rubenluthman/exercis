@@ -75,8 +75,8 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 ### Dynamic Type
 `Font.jost()` använder `Font.custom(_:size:relativeTo:)` med en storleksbaserad `TextStyle` som referens — Jost skalar automatiskt med användarens textstorleksinställning i iOS.
 
-### Scroll edge fade (iOS 26)
-`View.softScrollEdge()` i Theme.swift — lägger till `.scrollEdgeEffectStyle(.soft, for: .all)` på iOS 26+, no-op på äldre. Appliceras på alla `ScrollView` i appen (StrengthView, HistoryView).
+### Scroll edge fade
+`View.softScrollEdge()` i Theme.swift — applicerar en 44pt gradient-mask längs toppen av ScrollView (clear→black). Fungerar på iOS 17+. Appliceras på alla `ScrollView` i appen (StrengthView, HistoryView). Masken påverkar endast rendering, inte hit-testing.
 
 ### Haptic feedback
 | Händelse | Typ |

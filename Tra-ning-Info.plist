@@ -7,7 +7,7 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>Används för att låsa upp appen.</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Appen läser inte hälsodata.</string>
+	<string>Appen läser din kroppsvikt från Hälsa för att beräkna kaloriförbrukning vid sparade pass.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Appen sparar dina styrketränings- och konditionspass i Hälsa.</string>
 	<key>UIAppFonts</key>
