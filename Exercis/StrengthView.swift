@@ -57,35 +57,44 @@ struct StrengthView: View {
 
     var body: some View {
         ZStack {
-            ScrollView {
-                VStack(spacing: 0) {
-                    headerRow
-                    ThinDivider().padding(.top, 8)
+            VStack(spacing: 0) {
+                headerRow
+                ThinDivider().padding(.top, 8)
 
-                    ForEach(exerciseForms.indices, id: \.self) { i in
-                        ExerciseSection(
-                            form: $exerciseForms[i],
-                            exerciseIndex: i,
-                            isCollapsed: collapsedExercises.contains(i),
-                            onToggleCollapse: {
-                                UISelectionFeedbackGenerator().selectionChanged()
-                                activeField = nil
-                                withAnimation(.easeInOut(duration: 0.22)) {
-                                    if collapsedExercises.contains(i) {
-                                        collapsedExercises.remove(i)
-                                    } else {
-                                        collapsedExercises.insert(i)
+                ScrollView {
+                    VStack(spacing: 0) {
+                        ForEach(exerciseForms.indices, id: \.self) { i in
+                            ExerciseSection(
+                                form: $exerciseForms[i],
+                                exerciseIndex: i,
+                                isCollapsed: collapsedExercises.contains(i),
+                                onToggleCollapse: {
+                                    UISelectionFeedbackGenerator().selectionChanged()
+                                    activeField = nil
+                                    withAnimation(.easeInOut(duration: 0.22)) {
+                                        if collapsedExercises.contains(i) {
+                                            collapsedExercises.remove(i)
+                                        } else {
+                                            collapsedExercises.insert(i)
+                                        }
                                     }
-                                }
-                            },
-                            activeField: $activeField,
-                            onEdit: { isDirty = true }
-                        )
-                        ThinDivider()
+                                },
+                                activeField: $activeField,
+                                onEdit: { isDirty = true }
+                            )
+                            ThinDivider()
+                        }
+                    }
+                }
+                .softScrollEdge()
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    if !showEffortPicker {
+                        klarBar
+                            .opacity(activeField != nil ? 0 : 1)
+                            .animation(.linear(duration: 0), value: activeField)
                     }
                 }
             }
-            .softScrollEdge()
 
             if showEffortPicker {
                 Color.black.opacity(0.3)
@@ -134,13 +143,6 @@ struct StrengthView: View {
                 )
                 .ignoresSafeArea(edges: .bottom)
                 .transition(.move(edge: .bottom))
-            }
-        }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if !showEffortPicker {
-                klarBar
-                    .opacity(activeField != nil ? 0 : 1)
-                    .animation(.linear(duration: 0), value: activeField)
             }
         }
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
