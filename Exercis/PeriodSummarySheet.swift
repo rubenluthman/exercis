@@ -167,14 +167,14 @@ struct PeriodSummarySheet: View {
         .padding(.horizontal, 24)
     }
 
-    // Month view: stats centered between title and dot row
+    // Month view: stats then dots, both at top
     private var monthContent: some View {
         VStack(spacing: 0) {
-            Spacer()
             statsRow
-            Spacer()
+                .padding(.bottom, 20)
             ThinDivider()
             dotRow
+            Spacer()
         }
     }
 
@@ -220,7 +220,6 @@ struct PeriodSummarySheet: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             Spacer()
         } else {
-            Spacer()
             ThinDivider()
 
             HStack(spacing: 12) {
@@ -228,8 +227,8 @@ struct PeriodSummarySheet: View {
                 legendDot(color: .workoutAccent, label: "KONDITION")
             }
             .padding(.horizontal, 24)
-            .padding(.top, 14)
-            .padding(.bottom, 4)
+            .padding(.top, 16)
+            .padding(.bottom, 8)
 
             Chart(barData) { entry in
                 BarMark(
@@ -262,11 +261,9 @@ struct PeriodSummarySheet: View {
                     }
                 }
             }
-            .frame(height: 160)
+            .frame(maxHeight: .infinity)
             .padding(.horizontal, 24)
-            .padding(.top, 8)
-
-            Spacer()
+            .padding(.bottom, 24)
         }
     }
 
