@@ -133,13 +133,14 @@ extension View {
         background(PopGestureEnabler())
     }
 
-    @ViewBuilder
     func softScrollEdge() -> some View {
-        if #available(iOS 26, *) {
-            self.scrollEdgeEffectStyle(.soft, for: .all)
-        } else {
-            self
-        }
+        self.mask(
+            VStack(spacing: 0) {
+                LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: .bottom)
+                    .frame(height: 44)
+                Color.black
+            }
+        )
     }
 }
 
