@@ -122,10 +122,13 @@ struct HistoryView: View {
     }
 
     private var historyRows: [HistoryRow] {
+        let uniqueYears = Set(groupedEntries.map(\.year))
+        let showYears = uniqueYears.count > 1
+
         var rows: [HistoryRow] = []
         var lastYear: Int? = nil
         for group in groupedEntries {
-            if group.year != lastYear {
+            if showYears && group.year != lastYear {
                 rows.append(.year(group.year))
                 lastYear = group.year
             }
