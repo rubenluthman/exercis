@@ -157,6 +157,7 @@ struct HistoryView: View {
                                     case .month(let group):
                                         let isCollapsed = collapsedMonths.contains(group.id)
                                         monthHeader(group, isCollapsed: isCollapsed)
+                                            .id("month-\(group.id)")
                                         if !isCollapsed {
                                             ForEach(group.entries) { entry in
                                                 entryView(entry)
