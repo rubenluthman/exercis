@@ -113,7 +113,7 @@ extension View {
         self.mask(
             VStack(spacing: 0) {
                 LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: .bottom)
-                    .frame(height: 44)
+                    .frame(height: 20)
                 Color.black
             }
         )
