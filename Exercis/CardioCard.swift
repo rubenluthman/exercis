@@ -77,6 +77,25 @@ struct CardioCard: View {
 
     private var expandedContent: some View {
         VStack(alignment: .leading, spacing: 4) {
+            if let score = session.effortScore {
+                Button {
+                    showEffortChart = true
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("ANSTRÄNGNING")
+                            .font(.jost(.medium, size: 10))
+                            .kerning(1.5)
+                            .foregroundColor(Color(.secondaryLabel))
+                        Text("\(score)/10")
+                            .font(.jost(.semibold, size: 10))
+                            .kerning(1.5)
+                            .foregroundColor(Color.historyAccent)
+                    }
+                }
+                .buttonStyle(.plain)
+                .padding(.bottom, 2)
+            }
+
             Button(session.cardioType) {
                 chartType = IdentifiableString(id: session.cardioType)
             }
@@ -94,25 +113,6 @@ struct CardioCard: View {
                         .font(.jost(.regular, size: 14))
                         .foregroundColor(Color(.secondaryLabel))
                 }
-            }
-
-            if let score = session.effortScore {
-                Button {
-                    showEffortChart = true
-                } label: {
-                    HStack(spacing: 4) {
-                        Text("ANSTRÄNGNING")
-                            .font(.jost(.medium, size: 10))
-                            .kerning(1.5)
-                            .foregroundColor(Color(.secondaryLabel))
-                        Text("\(score)/10")
-                            .font(.jost(.semibold, size: 10))
-                            .kerning(1.5)
-                            .foregroundColor(Color.historyAccent)
-                    }
-                }
-                .buttonStyle(.plain)
-                .padding(.top, 2)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
