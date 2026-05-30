@@ -214,17 +214,19 @@ LockView → (Face ID) → HomeView → StrengthView
 - **ÖKA-badge**: håll inne (500ms long press) på sektion för att toggla — indikerar vikthöjning nästa pass. Rensas automatiskt om tyngre vikt skrivs in. Sparas i UserDefaults.
 - **Tangentbordsverktygsfält**: NÄSTA (navigerar weight→reps→nästa övning) + KLAR, båda i homeAccent. NÄSTA är inaktivt på sista fältet.
 - **Draft**: ← sparar till UserDefaults (WorkoutDraft inkl. ihopfällningsläge). Återladdas via FORTSÄTT STYRKA. Rensas vid KLAR eller om alla fält är tomma.
+- Datum-texten i headern är klickbar → öppnar `SessionTimePicker` för att sätta anpassat datum/start/slut. Standard: start = när StrengthView öppnades, slut = nu.
 
 ### CardioView — Konditionsträning (accentfärg: workoutAccent)
 - Header: "KONDITION" 17pt bold, kerning 2 + datum 13pt + "←" 90pt trailing
 - **Accordion med 4 typer**: CROSSTRAINER / CYKEL / RODDMASKIN / VANDRING — separerade av ThinDivider
-- VANDRING har två tidsfält (H + MIN) istället för ett MIN-fält. Duration sparas som totalt antal minuter i SwiftData och UserDefaults. Visas som "3 h 45 min" i CardioCard.
+- VANDRING har två tidsfält (H + MIN) istället för ett MIN-fält. Duration sparas som totalt antal minuter i SwiftData och UserDefaults. Visas som "3 h 45 min" i CardioCard. NÄSTA navigerar H → MIN → KM.
 - Tryck på en rad för att öppna den; tryck igen för att stänga (ingen behöver vara öppen)
 - Öppet/stängt läge sparas i `@AppStorage("lastCardioType")` (tom sträng = ingen öppen)
 - Varje typ minns sin senaste *sparade* duration i UserDefaults (`cardioSavedDuration_{TYPE}`) — laddas vid öppning
-- **Draft**: ← sparar aktiv typs värde (om ifyllt) till `cardioDraftType`/`cardioDraftMinutes`. Återladdas via FORTSÄTT KONDITION. Övriga typers in-session-värden (ej sparade) går förlorade vid ← — de återhämtas från `cardioSavedDuration_*` från senaste slutförda session.
-- **Tangentbordsverktygsfält**: NÄSTA (vänster, går från MIN till KM) + KLAR (höger, stänger tangentbord), båda i workoutAccent
+- **Draft**: ← sparar aktiv typs värde (om ifyllt) till `cardioDraftType`/`cardioDraftMinutes`/`cardioDraftHours`. Återladdas via FORTSÄTT KONDITION. Övriga typers in-session-värden (ej sparade) går förlorade vid ← — de återhämtas från `cardioSavedDuration_*` från senaste slutförda session.
+- **Tangentbordsverktygsfält**: NÄSTA (vänster) + KLAR (höger), båda i workoutAccent. NÄSTA navigerar MIN → KM (eller H → MIN → KM för VANDRING).
 - KLAR visar effort-picker-overlay om duration är ifylld, annars dismiss direkt. Minns senaste ansträngning per typ i `cardioEffortScore_{TYPE}`.
+- Datum-texten i headern är klickbar → öppnar `SessionTimePicker` för att sätta anpassat datum/start/slut. Påverkar `session.startDate`, `session.date` och HealthKit-intervallet. Standard: start = slut − duration, slut = nu.
 - KLAR sparar `CardioSession` (inkl. `effortScore`), sparar duration/distans/ansträngning till UserDefaults, loggar till HealthKit
 
 ### HistoryView (accentfärg: historyAccent)
