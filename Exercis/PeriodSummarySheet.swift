@@ -123,6 +123,28 @@ struct PeriodSummarySheet: View {
 
     // MARK: - Body
 
+    // MARK: - Month dot helpers
+
+    private var daysInMonth: Int {
+        guard let month = period.month else { return 0 }
+        var comps = DateComponents()
+        comps.year = period.year; comps.month = month
+        guard let date = cal.date(from: comps),
+              let range = cal.range(of: .day, in: .month, for: date)
+        else { return 30 }
+        return range.count
+    }
+
+    private var workoutDays: Set<Int> {
+        Set(workouts.map { cal.component(.day, from: $0.date) })
+    }
+
+    private var cardioDays: Set<Int> {
+        Set(cardio.map { cal.component(.day, from: $0.date) })
+    }
+
+    // MARK: - Body
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(title)
@@ -133,75 +155,128 @@ struct PeriodSummarySheet: View {
                 .padding(.top, 24)
                 .padding(.bottom, 20)
 
-            HStack(alignment: .top, spacing: 0) {
-                statBlock(label: "STYRKA",    value: "\(workouts.count)",                                        alignment: .leading)
-                statBlock(label: "VOLYM",     value: volumeText.0, unit: volumeText.1,                          alignment: .center)
-                statBlock(label: "KONDITION", value: "\(cardio.count)",                                          alignment: .center)
-                statBlock(label: "TID",       value: totalMinutes > 0 ? formatWeight(totalMinutes) : "—",
-                          unit: totalMinutes > 0 ? "min" : nil,                                                  alignment: .trailing)
-            }
-            .padding(.horizontal, 24)
-
-            if barData.isEmpty {
-                Spacer()
-                Text("Inga pass under perioden.")
-                    .font(.jost(.regular, size: 14))
-                    .foregroundColor(Color(.secondaryLabel))
-                    .frame(maxWidth: .infinity, alignment: .center)
-                Spacer()
+            if period.month != nil {
+                monthContent
             } else {
-                Spacer()
-
-                ThinDivider()
-
-                HStack(spacing: 12) {
-                    legendDot(color: .homeAccent,    label: "STYRKA")
-                    legendDot(color: .workoutAccent, label: "KONDITION")
-                }
-                .padding(.horizontal, 24)
-                .padding(.top, 14)
-                .padding(.bottom, 4)
-
-                Chart(barData) { entry in
-                    BarMark(
-                        x: .value("Period", entry.label),
-                        y: .value("Pass",   entry.count)
-                    )
-                    .foregroundStyle(entry.isStrength ? Color.homeAccent : Color.workoutAccent)
-                }
-                .chartXScale(domain: domainLabels)
-                .chartXAxis {
-                    AxisMarks(values: domainLabels) { value in
-                        AxisValueLabel {
-                            if let s = value.as(String.self) {
-                                Text(s)
-                                    .font(.jost(.regular, size: 10))
-                                    .foregroundColor(Color(.secondaryLabel))
-                            }
-                        }
-                    }
-                }
-                .chartYAxis {
-                    AxisMarks(position: .leading, values: .automatic(desiredCount: 4)) { value in
-                        AxisGridLine().foregroundStyle(Color.appDivider)
-                        AxisValueLabel {
-                            if let v = value.as(Int.self) {
-                                Text("\(v)")
-                                    .font(.jost(.regular, size: 10))
-                                    .foregroundColor(Color(.secondaryLabel))
-                            }
-                        }
-                    }
-                }
-                .frame(height: 160)
-                .padding(.horizontal, 24)
-                .padding(.top, 8)
-
-                Spacer()
+                yearContent
             }
         }
         .background(Color.appBackground)
         .presentationDragIndicator(.visible)
+    }
+
+    private var statsRow: some View {
+        HStack(alignment: .top, spacing: 0) {
+            statBlock(label: "STYRKA",    value: "\(workouts.count)",                               alignment: .leading)
+            statBlock(label: "VOLYM",     value: volumeText.0, unit: volumeText.1,                  alignment: .center)
+            statBlock(label: "KONDITION", value: "\(cardio.count)",                                  alignment: .center)
+            statBlock(label: "TID",       value: totalMinutes > 0 ? formatWeight(totalMinutes) : "—",
+                      unit: totalMinutes > 0 ? "min" : nil,                                          alignment: .trailing)
+        }
+        .padding(.horizontal, 24)
+    }
+
+    // Month view: stats centered between title and dot row
+    private var monthContent: some View {
+        VStack(spacing: 0) {
+            Spacer()
+            statsRow
+            Spacer()
+            ThinDivider()
+            dotRow
+        }
+    }
+
+    private var dotRow: some View {
+        HStack(spacing: 0) {
+            ForEach(1...max(1, daysInMonth), id: \.self) { day in
+                dotCircle(
+                    strength: workoutDays.contains(day),
+                    cardio:   cardioDays.contains(day)
+                )
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 20)
+    }
+
+    @ViewBuilder
+    private func dotCircle(strength: Bool, cardio: Bool) -> some View {
+        if strength && cardio {
+            Circle()
+                .fill(LinearGradient(colors: [.homeAccent, .workoutAccent], startPoint: .leading, endPoint: .trailing))
+                .frame(width: 9, height: 9)
+        } else if strength {
+            Circle().fill(Color.homeAccent).frame(width: 9, height: 9)
+        } else if cardio {
+            Circle().fill(Color.workoutAccent).frame(width: 9, height: 9)
+        } else {
+            Circle().fill(Color(.tertiarySystemFill)).frame(width: 9, height: 9)
+        }
+    }
+
+    // Year view: stats at top, bars below
+    @ViewBuilder
+    private var yearContent: some View {
+        statsRow
+
+        if barData.isEmpty {
+            Spacer()
+            Text("Inga pass under perioden.")
+                .font(.jost(.regular, size: 14))
+                .foregroundColor(Color(.secondaryLabel))
+                .frame(maxWidth: .infinity, alignment: .center)
+            Spacer()
+        } else {
+            Spacer()
+            ThinDivider()
+
+            HStack(spacing: 12) {
+                legendDot(color: .homeAccent,    label: "STYRKA")
+                legendDot(color: .workoutAccent, label: "KONDITION")
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 14)
+            .padding(.bottom, 4)
+
+            Chart(barData) { entry in
+                BarMark(
+                    x: .value("Period", entry.label),
+                    y: .value("Pass",   entry.count)
+                )
+                .foregroundStyle(entry.isStrength ? Color.homeAccent : Color.workoutAccent)
+            }
+            .chartXScale(domain: domainLabels)
+            .chartXAxis {
+                AxisMarks(values: domainLabels) { value in
+                    AxisValueLabel {
+                        if let s = value.as(String.self) {
+                            Text(s)
+                                .font(.jost(.regular, size: 10))
+                                .foregroundColor(Color(.secondaryLabel))
+                        }
+                    }
+                }
+            }
+            .chartYAxis {
+                AxisMarks(position: .leading, values: .automatic(desiredCount: 4)) { value in
+                    AxisGridLine().foregroundStyle(Color.appDivider)
+                    AxisValueLabel {
+                        if let v = value.as(Int.self) {
+                            Text("\(v)")
+                                .font(.jost(.regular, size: 10))
+                                .foregroundColor(Color(.secondaryLabel))
+                        }
+                    }
+                }
+            }
+            .frame(height: 160)
+            .padding(.horizontal, 24)
+            .padding(.top, 8)
+
+            Spacer()
+        }
     }
 
     @ViewBuilder
