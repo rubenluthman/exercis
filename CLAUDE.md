@@ -38,6 +38,7 @@ CardioChartSheet.swift        ← durationsprogression per kardioform (Swift Cha
 EffortChartSheet.swift        ← ansträngningsprogression över styrkepass (Swift Charts, öppnas från HistoryCard)
 CardioEffortChartSheet.swift  ← ansträngningsprogression per kardioform (Swift Charts, öppnas från CardioCard)
 PeriodSummarySheet.swift      ← periodsammanfattning månads/årsvy (Swift Charts, öppnas från HistoryView)
+SessionTimePicker.swift   ← delad sheet för att redigera start/slut-tid (öppnas via datum-text i header)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
 ```
 
@@ -114,7 +115,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 
 ```swift
 @Model class WorkoutSession {
-    var id: UUID; var date: Date; var healthKitID: UUID?; var effortScore: Int?
+    var id: UUID; var date: Date; var startDate: Date; var healthKitID: UUID?; var effortScore: Int?
     @Relationship(deleteRule: .cascade) var exerciseLogs: [ExerciseLog]
 }
 @Model class ExerciseLog {
@@ -125,7 +126,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
     var setNumber: Int; var weight: Double; var reps: Int; var exerciseLog: ExerciseLog?
 }
 @Model class CardioSession {
-    var id: UUID; var date: Date; var durationMinutes: Double
+    var id: UUID; var date: Date; var startDate: Date; var durationMinutes: Double
     var cardioType: String; var healthKitID: UUID?; var distanceKm: Double?; var effortScore: Int?
 }
 ```

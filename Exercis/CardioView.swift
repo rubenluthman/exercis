@@ -218,7 +218,6 @@ struct CardioView: View {
                 .foregroundColor(.primary)
 
             Button {
-                editedEnd = Date()
                 showTimePicker = true
             } label: {
                 Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())

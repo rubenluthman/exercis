@@ -48,7 +48,10 @@ struct SessionTimePicker: View {
 
             ThinDivider()
 
-            Button("KLAR") { dismiss() }
+            Button("KLAR") {
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                dismiss()
+            }
                 .buttonStyle(FilledButtonStyle(accent: accent))
                 .padding(.horizontal, 24)
                 .padding(.top, 16)
