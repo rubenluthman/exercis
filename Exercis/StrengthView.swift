@@ -240,7 +240,8 @@ struct StrengthView: View {
 
             if let session,
                let log = session.exerciseLogs.first(where: { $0.name == def.name }),
-               let bestSet = log.sets.filter({ $0.weight > 0 }).max(by: { $0.weight < $1.weight }) {
+               let maxWeight = log.sets.filter({ $0.weight > 0 }).map(\.weight).max(),
+               let bestSet = log.sets.filter({ $0.weight == maxWeight }).max(by: { $0.reps < $1.reps }) {
                 let w = formatWeight(bestSet.weight)
                 let r = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
                 sets = [SetFormData(weight: w, reps: r), SetFormData(weight: w, reps: r), SetFormData(weight: w, reps: r)]
