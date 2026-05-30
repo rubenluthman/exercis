@@ -159,9 +159,9 @@ struct PeriodSummarySheet: View {
 
     private var statsRow: some View {
         HStack(alignment: .top, spacing: 0) {
-            statBlock(label: "STYRKA",    value: "\(workouts.count)",                               alignment: .leading)
+            statBlock(label: "STYRKA",    value: workouts.count > 0 ? "\(workouts.count)" : "—",    alignment: .leading)
             statBlock(label: "VOLYM",     value: volumeText.0, unit: volumeText.1,                  alignment: .leading)
-            statBlock(label: "KONDITION", value: "\(cardio.count)",                                  alignment: .trailing)
+            statBlock(label: "KONDITION", value: cardio.count > 0 ? "\(cardio.count)" : "—",        alignment: .trailing)
             statBlock(label: "TID",       value: totalMinutes > 0 ? formatWeight(totalMinutes) : "—",
                       unit: totalMinutes > 0 ? " min" : nil,                                         alignment: .trailing)
         }
