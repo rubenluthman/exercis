@@ -203,7 +203,7 @@ struct HistoryView: View {
             UISelectionFeedbackGenerator().selectionChanged()
             summaryPeriod = SummaryPeriod(year: year, month: nil)
         } label: {
-            Text("\(year)")
+            Text(verbatim: String(year))
                 .font(.jost(.medium, size: 11))
                 .kerning(2)
                 .foregroundColor(Color(.tertiaryLabel))
