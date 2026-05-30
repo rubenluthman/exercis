@@ -180,7 +180,6 @@ struct HistoryView: View {
         }
         .sheet(item: $summaryPeriod) { period in
             PeriodSummarySheet(period: period)
-                .presentationDetents([.medium, .large])
         }
         .onAppear {
             if expandedIDs.isEmpty && collapsedMonths.isEmpty {

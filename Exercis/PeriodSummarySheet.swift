@@ -154,6 +154,7 @@ struct PeriodSummarySheet: View {
         }
         .background(Color.appBackground)
         .presentationDragIndicator(.visible)
+        .presentationDetents(period.month != nil ? [.height(280), .large] : [.medium, .large])
     }
 
     private var statsRow: some View {
