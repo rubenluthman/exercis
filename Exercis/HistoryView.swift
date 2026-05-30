@@ -248,7 +248,7 @@ struct HistoryView: View {
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)
-        .padding(.bottom, 6)
+        .padding(.bottom, 2)
         .contentShape(Rectangle())
         .onTapGesture {
             UISelectionFeedbackGenerator().selectionChanged()

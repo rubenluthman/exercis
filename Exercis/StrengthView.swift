@@ -366,9 +366,7 @@ struct EffortPickerSheet: View {
 
             Picker("", selection: $selectedScore) {
                 ForEach(1...10, id: \.self) { n in
-                    Text("\(n)")
-                        .font(.jost(.semibold, size: 34))
-                        .tag(n)
+                    Text("\(n)").tag(n)
                 }
             }
             .pickerStyle(.wheel)

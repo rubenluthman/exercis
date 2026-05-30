@@ -54,8 +54,8 @@ struct HistoryCard: View {
                     .accessibilityLabel("Ta bort pass")
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 12)
-                .padding(.bottom, isExpanded ? 8 : 12)
+                .padding(.top, 8)
+                .padding(.bottom, isExpanded ? 4 : 12)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
@@ -102,8 +102,8 @@ struct HistoryCard: View {
                 }
                 .buttonStyle(.plain)
                 .padding(.horizontal, 24)
-                .padding(.top, 2)
-                .padding(.bottom, 6)
+                .padding(.top, 0)
+                .padding(.bottom, 4)
             }
             let sorted = session.exerciseLogs.sorted { $0.orderIndex < $1.orderIndex }
             ForEach(sorted) { exercise in
