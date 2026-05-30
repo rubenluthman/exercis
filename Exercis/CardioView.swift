@@ -75,10 +75,14 @@ struct CardioView: View {
                     }
                 VStack(spacing: 0) {
                     Spacer()
-                    Button("KLAR", action: handleKlar)
-                        .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 12)
+                    Button("KLAR") {
+                        UINotificationFeedbackGenerator().notificationOccurred(.success)
+                        saveSession(effortScore: lastEffortScore)
+                        dismiss()
+                    }
+                    .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 12)
                     VStack(spacing: 0) {
                         Capsule()
                             .fill(Color(.tertiarySystemFill))
