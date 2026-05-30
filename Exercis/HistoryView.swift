@@ -169,7 +169,9 @@ struct HistoryView: View {
                         .softScrollEdge()
                         .onAppear {
                             if !hasMultipleYears, let firstMonth = groupedEntries.first {
-                                proxy.scrollTo("month-\(firstMonth.id)", anchor: .top)
+                                DispatchQueue.main.async {
+                                    proxy.scrollTo("month-\(firstMonth.id)", anchor: .top)
+                                }
                             }
                         }
                     }

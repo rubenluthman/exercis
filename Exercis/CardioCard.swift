@@ -37,14 +37,13 @@ struct CardioCard: View {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .medium))
                             .foregroundColor(Color(.secondaryLabel))
-                            .padding(.trailing, 4)
                     }
                     Button(action: onDelete) {
                         Image(systemName: "xmark")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(Color(.secondaryLabel))
                     }
-                    .frame(width: 44, height: 44)
+                    .frame(width: 44, height: 44, alignment: .trailing)
                     .contentShape(Rectangle())
                     .accessibilityLabel("Ta bort pass")
                 }
