@@ -83,16 +83,12 @@ struct StrengthView: View {
                         )
                         ThinDivider()
                     }
+
+                    klarBar
+                        .opacity(showEffortPicker ? 0 : 1)
                 }
             }
             .softScrollEdge()
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                if !showEffortPicker {
-                    klarBar
-                        .opacity(activeField != nil ? 0 : 1)
-                        .animation(.linear(duration: 0), value: activeField)
-                }
-            }
 
             if showEffortPicker {
                 Color.black.opacity(0.3)
