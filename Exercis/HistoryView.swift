@@ -121,15 +121,12 @@ struct HistoryView: View {
             .sorted { ($0.year, $0.month) > ($1.year, $1.month) }
     }
 
-    private var hasMultipleYears: Bool {
-        Set(groupedEntries.map(\.year)).count > 1
-    }
-
     private var historyRows: [HistoryRow] {
+        let showYears = Set(groupedEntries.map(\.year)).count > 1
         var rows: [HistoryRow] = []
         var lastYear: Int? = nil
         for group in groupedEntries {
-            if group.year != lastYear {
+            if showYears && group.year != lastYear {
                 rows.append(.year(group.year))
                 lastYear = group.year
             }
@@ -147,35 +144,25 @@ struct HistoryView: View {
                 if entries.isEmpty {
                     emptyState
                 } else {
-                    ScrollViewReader { proxy in
-                        ScrollView {
-                            LazyVStack(spacing: 0) {
-                                ForEach(historyRows) { row in
-                                    switch row {
-                                    case .year(let year):
-                                        yearHeader(year)
-                                    case .month(let group):
-                                        let isCollapsed = collapsedMonths.contains(group.id)
-                                        monthHeader(group, isCollapsed: isCollapsed)
-                                            .id("month-\(group.id)")
-                                        if !isCollapsed {
-                                            ForEach(group.entries) { entry in
-                                                entryView(entry)
-                                            }
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
+                            ForEach(historyRows) { row in
+                                switch row {
+                                case .year(let year):
+                                    yearHeader(year)
+                                case .month(let group):
+                                    let isCollapsed = collapsedMonths.contains(group.id)
+                                    monthHeader(group, isCollapsed: isCollapsed)
+                                    if !isCollapsed {
+                                        ForEach(group.entries) { entry in
+                                            entryView(entry)
                                         }
                                     }
                                 }
                             }
                         }
-                        .softScrollEdge()
-                        .onAppear {
-                            if !hasMultipleYears, let firstMonth = groupedEntries.first {
-                                DispatchQueue.main.async {
-                                    proxy.scrollTo("month-\(firstMonth.id)", anchor: .top)
-                                }
-                            }
-                        }
                     }
+                    .softScrollEdge()
                 }
             }
         }
