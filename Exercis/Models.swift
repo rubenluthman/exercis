@@ -7,6 +7,7 @@ import SwiftData
 final class WorkoutSession {
     var id: UUID = UUID()
     var date: Date = Date()
+    var startDate: Date = Date()
     var healthKitID: UUID? = nil
     var effortScore: Int? = nil
 
@@ -60,14 +61,16 @@ enum CardioType: String, Codable, CaseIterable {
 final class CardioSession {
     var id: UUID = UUID()
     var date: Date = Date()
+    var startDate: Date = Date()
     var durationMinutes: Double = 0
     var healthKitID: UUID? = nil
     var cardioType: String = CardioType.crosstrainer.rawValue
     var distanceKm: Double? = nil
     var effortScore: Int? = nil
 
-    init(date: Date = Date(), durationMinutes: Double, cardioType: String = CardioType.crosstrainer.rawValue, distanceKm: Double? = nil) {
+    init(date: Date = Date(), startDate: Date? = nil, durationMinutes: Double, cardioType: String = CardioType.crosstrainer.rawValue, distanceKm: Double? = nil) {
         self.date = date
+        self.startDate = startDate ?? date.addingTimeInterval(-durationMinutes * 60)
         self.durationMinutes = durationMinutes
         self.cardioType = cardioType
         self.distanceKm = distanceKm

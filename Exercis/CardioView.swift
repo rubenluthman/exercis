@@ -28,6 +28,9 @@ struct CardioView: View {
     @State private var increaseTypes: Set<String> = []
     @State private var longPressFired: Set<CardioType> = []
     @State private var showEffortPicker = false
+    @State private var showTimePicker = false
+    @State private var editedStart: Date = Date()
+    @State private var editedEnd: Date = Date()
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
@@ -131,6 +134,9 @@ struct CardioView: View {
                     .animation(.linear(duration: 0), value: focusedField)
             }
         }
+        .sheet(isPresented: $showTimePicker) {
+            SessionTimePicker(start: $editedStart, end: $editedEnd, accent: .workoutAccent)
+        }
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -193,6 +199,8 @@ struct CardioView: View {
                     expandedType = CardioType(rawValue: storedType)
                 }
             }
+            editedEnd = Date()
+            editedStart = Date()
             Task { await HealthKitManager.shared.requestAuthorization() }
         }
         .onDisappear {
@@ -209,9 +217,15 @@ struct CardioView: View {
                 .kerning(2)
                 .foregroundColor(.primary)
 
-            Text(Date().formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
-                .font(.jost(.regular, size: 13))
-                .foregroundColor(Color(.secondaryLabel))
+            Button {
+                editedEnd = Date()
+                showTimePicker = true
+            } label: {
+                Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
+                    .font(.jost(.regular, size: 13))
+                    .foregroundColor(Color(.secondaryLabel))
+            }
+            .buttonStyle(.plain)
 
             Spacer()
 
@@ -458,13 +472,13 @@ struct CardioView: View {
             UserDefaults.standard.setCardioIncrease(type, false)
         }
 
-        let session = CardioSession(date: Date(), durationMinutes: minutes, cardioType: type.rawValue, distanceKm: distanceKm)
+        let end = editedEnd > editedStart ? editedEnd : Date()
+        let start = editedStart < end ? editedStart : end.addingTimeInterval(-minutes * 60)
+        let session = CardioSession(date: end, startDate: start, durationMinutes: minutes, cardioType: type.rawValue, distanceKm: distanceKm)
         session.effortScore = effortScore
         context.insert(session)
         try? context.save()
 
-        let end = Date()
-        let start = end.addingTimeInterval(-minutes * 60)
         Task { @MainActor in
             let uuid = await HealthKitManager.shared.saveCardioWorkout(start: start, end: end, type: type, distanceKm: distanceKm, effortScore: effortScore)
             session.healthKitID = uuid

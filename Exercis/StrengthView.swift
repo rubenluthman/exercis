@@ -32,6 +32,9 @@ struct StrengthView: View {
     @State private var startTime = Date()
     @State private var isDirty = false
     @State private var showEffortPicker = false
+    @State private var showTimePicker = false
+    @State private var editedStart: Date = Date()
+    @State private var editedEnd: Date = Date()
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
@@ -155,9 +158,14 @@ struct StrengthView: View {
                     .foregroundColor(Color.homeAccent)
             }
         }
+        .sheet(isPresented: $showTimePicker) {
+            SessionTimePicker(start: $editedStart, end: $editedEnd, accent: .homeAccent)
+        }
         .onAppear {
             guard !initialized else { return }
             buildForms(from: sessions.first)
+            editedStart = startTime
+            editedEnd = Date()
             initialized = true
             Task { await HealthKitManager.shared.requestAuthorization() }
         }
@@ -175,9 +183,15 @@ struct StrengthView: View {
                 .kerning(2)
                 .foregroundColor(.primary)
 
-            Text(Date().formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
-                .font(.jost(.regular, size: 13))
-                .foregroundColor(Color(.secondaryLabel))
+            Button {
+                editedEnd = Date()
+                showTimePicker = true
+            } label: {
+                Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
+                    .font(.jost(.regular, size: 13))
+                    .foregroundColor(Color(.secondaryLabel))
+            }
+            .buttonStyle(.plain)
 
             Spacer()
 
@@ -285,7 +299,9 @@ struct StrengthView: View {
         guard hasAnyData else { return }
 
         didCompleteSession = true
-        let session = WorkoutSession(date: Date())
+        let end = editedEnd > editedStart ? editedEnd : Date()
+        let session = WorkoutSession(date: end)
+        session.startDate = editedStart
         context.insert(session)
 
         for (i, form) in exerciseForms.enumerated() {
@@ -323,8 +339,8 @@ struct StrengthView: View {
         UserDefaults.standard.saveDraft(nil)
         hasDraft = false
 
-        let capturedStart = startTime
-        let capturedEnd = Date()
+        let capturedStart = editedStart
+        let capturedEnd = end
         let capturedSession = session
         Task { @MainActor in
             let uuid = await HealthKitManager.shared.saveWorkout(start: capturedStart, end: capturedEnd, effortScore: effortScore)
