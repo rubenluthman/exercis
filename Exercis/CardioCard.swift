@@ -93,7 +93,6 @@ struct CardioCard: View {
                     }
                 }
                 .buttonStyle(.plain)
-                .padding(.bottom, 2)
             }
 
             Button(session.cardioType) {
