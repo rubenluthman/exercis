@@ -52,8 +52,6 @@ struct CardioView: View {
 
     var body: some View {
         ZStack {
-            Color.appBackground.ignoresSafeArea()
-
             VStack(spacing: 0) {
                 headerRow
                 ThinDivider().padding(.top, 8)

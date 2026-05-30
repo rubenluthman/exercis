@@ -139,6 +139,8 @@ struct StrengthView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if !showEffortPicker {
                 klarBar
+                    .opacity(activeField != nil ? 0 : 1)
+                    .animation(.linear(duration: 0), value: activeField)
             }
         }
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
