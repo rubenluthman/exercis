@@ -198,7 +198,6 @@ struct HistoryView: View {
 
     // MARK: - Sub-views
 
-    @ViewBuilder
     private func yearHeader(_ year: Int) -> some View {
         Button {
             UISelectionFeedbackGenerator().selectionChanged()

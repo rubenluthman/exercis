@@ -245,7 +245,7 @@ LockView → (Face ID) → HomeView → StrengthView
   - CardioChartSheet: LÄNGST · SENASTE · PASS (enhet: min/km); toggle TID/DISTANS om distansdata finns
   - EffortChartSheet: LÄTTAST · SENASTE · TUFFAST (enhet: /10, visas i grå 14pt); öppnas från ansträngningsraden i HistoryCard (styrkepass)
   - CardioEffortChartSheet: LÄTTAST · SENASTE · TUFFAST per kardioform; öppnas från ansträngningsraden i CardioCard
-  - PeriodSummarySheet: STYRKA · KONDITION · TID · VOLYM + stapeldiagram per vecka (månadsvy) eller per månad (årsvy); öppnas från månadsnamn respektive årsrubrik i HistoryView. Staplar färglagda i homeAccent (styrka) och workoutAccent (kondition). Volym visas i kg (<1000) eller ton (≥1000).
+  - PeriodSummarySheet: STYRKA · VOLYM · KONDITION · TID + **månadsvy**: prickrad (en cirkel per dag, röd=styrka, grön=kondition, gradient=båda, grå=inget); **årsvy**: stapeldiagram per månad. Öppnas från månadsnamn respektive årsrubrik i HistoryView. Volym visas i kg (<1000) eller ton (≥1000).
 - Tomt tillstånd om < 2 datapunkter
 
 ---

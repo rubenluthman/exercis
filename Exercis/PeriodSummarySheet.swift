@@ -85,19 +85,12 @@ struct PeriodSummarySheet: View {
     }
 
     private func bucketIndex(_ date: Date) -> Int {
-        if period.month != nil {
-            let day = cal.component(.day, from: date)
-            return min((day - 1) / 7 + 1, 5)
-        }
-        return cal.component(.month, from: date)
+        cal.component(.month, from: date)
     }
 
-    private var bucketRange: ClosedRange<Int> {
-        period.month != nil ? 1...5 : 1...12
-    }
+    private var bucketRange: ClosedRange<Int> { 1...12 }
 
     private func bucketLabel(_ i: Int) -> String {
-        if period.month != nil { return "V\(i)" }
         var comps = DateComponents()
         comps.year = period.year; comps.month = i; comps.day = 1
         guard let date = cal.date(from: comps) else { return "" }
@@ -120,8 +113,6 @@ struct PeriodSummarySheet: View {
         }
         return "\(period.year)"
     }
-
-    // MARK: - Body
 
     // MARK: - Month dot helpers
 
