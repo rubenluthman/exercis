@@ -55,7 +55,7 @@ struct HistoryCard: View {
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 8)
-                .padding(.bottom, isExpanded ? 4 : 12)
+                .padding(.bottom, isExpanded ? 2 : 12)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)

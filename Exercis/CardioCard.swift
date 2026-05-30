@@ -49,8 +49,8 @@ struct CardioCard: View {
                     .accessibilityLabel("Ta bort pass")
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 12)
-                .padding(.bottom, isExpanded ? 8 : 12)
+                .padding(.top, 8)
+                .padding(.bottom, isExpanded ? 2 : 12)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
@@ -117,7 +117,7 @@ struct CardioCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 24)
-        .padding(.top, 2)
+        .padding(.top, 0)
         .padding(.bottom, 12)
         .transition(.opacity.combined(with: .move(edge: .top)))
     }
