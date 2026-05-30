@@ -169,19 +169,19 @@ struct CardioChartSheet: View {
 
     @ViewBuilder
     private func statBlock(label: String, value: String, unit: String? = nil, alignment: HorizontalAlignment = .leading) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: alignment, spacing: 4) {
             Text(label)
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
                 .foregroundColor(Color(.secondaryLabel))
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text(value)
                     .font(.jost(.semibold, size: 22))
                     .foregroundColor(.primary)
                 if let unit {
                     Text(unit)
-                        .font(.jost(.semibold, size: 22))
-                        .foregroundColor(.primary)
+                        .font(.jost(.semibold, size: 14))
+                        .foregroundColor(Color(.secondaryLabel))
                 }
             }
         }

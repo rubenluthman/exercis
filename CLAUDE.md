@@ -77,7 +77,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 `Font.jost()` använder `Font.custom(_:size:relativeTo:)` med en storleksbaserad `TextStyle` som referens — Jost skalar automatiskt med användarens textstorleksinställning i iOS.
 
 ### Scroll edge fade
-`View.softScrollEdge()` i Theme.swift — applicerar en 44pt gradient-mask längs toppen av ScrollView (clear→black). Fungerar på iOS 17+. Appliceras på alla `ScrollView` i appen (StrengthView, HistoryView). Masken påverkar endast rendering, inte hit-testing.
+`View.softScrollEdge()` i Theme.swift — applicerar en 20pt gradient-mask längs toppen av ScrollView (clear→black). Fungerar på iOS 17+. Appliceras på alla `ScrollView` i appen (StrengthView, HistoryView). Masken påverkar endast rendering, inte hit-testing.
 
 ### Haptic feedback
 | Händelse | Typ |
@@ -220,14 +220,14 @@ LockView → (Face ID) → HomeView → StrengthView
 - Öppet/stängt läge sparas i `@AppStorage("lastCardioType")` (tom sträng = ingen öppen)
 - Varje typ minns sin senaste *sparade* duration i UserDefaults (`cardioSavedDuration_{TYPE}`) — laddas vid öppning
 - **Draft**: ← sparar aktiv typs värde (om ifyllt) till `cardioDraftType`/`cardioDraftMinutes`. Återladdas via FORTSÄTT KONDITION. Övriga typers in-session-värden (ej sparade) går förlorade vid ← — de återhämtas från `cardioSavedDuration_*` från senaste slutförda session.
-- **Tangentbordsverktygsfält**: KLAR (vänster, stänger tangentbord) + NÄSTA (höger, går från MIN till KM), båda i workoutAccent
+- **Tangentbordsverktygsfält**: NÄSTA (vänster, går från MIN till KM) + KLAR (höger, stänger tangentbord), båda i workoutAccent
 - KLAR visar effort-picker-overlay om duration är ifylld, annars dismiss direkt. Minns senaste ansträngning per typ i `cardioEffortScore_{TYPE}`.
 - KLAR sparar `CardioSession` (inkl. `effortScore`), sparar duration/distans/ansträngning till UserDefaults, loggar till HealthKit
 
 ### HistoryView (accentfärg: historyAccent)
 - Header: "HISTORIK" 17pt bold + "←" 90pt trailing
 - `HistoryEntry`-enum (`.workout` / `.cardio`) blandar och sorterar nyast först
-- **Månadsgrupper** (`MonthGroup`): poster grupperas per år/månad, rubrik i historyAccent med antal styrka/kondition. Ihopfällbara — senaste månaden öppen, övriga stängda vid första öppning. Visas som "MÅNAD" inom aktuellt år, "MÅNAD ÅÅÅÅ" för äldre år.
+- **Månadsgrupper** (`MonthGroup`): poster grupperas per år/månad, rubrik i historyAccent med antal styrka/kondition. Ihopfällbara — senaste månaden öppen, övriga stängda vid första öppning. Årsrubrik (`HistoryRow.year`) visas bara om data spänner flera år — klickbar, öppnar årssammanfattning.
 - Varje rad utfällbar (HistoryCard / CardioCard) — senaste posten öppnas automatiskt
 - Radera via ×-knapp eller kontextmeny — visar `.alert("Ta bort pass?")` med destructive-knapp
 - Delete hanterar även HealthKit-borttagning via `HealthKitManager.deleteWorkout(uuid:)`
@@ -245,7 +245,7 @@ LockView → (Face ID) → HomeView → StrengthView
   - CardioChartSheet: LÄNGST · SENASTE · PASS (enhet: min/km); toggle TID/DISTANS om distansdata finns
   - EffortChartSheet: LÄTTAST · SENASTE · TUFFAST (enhet: /10, visas i grå 14pt); öppnas från ansträngningsraden i HistoryCard (styrkepass)
   - CardioEffortChartSheet: LÄTTAST · SENASTE · TUFFAST per kardioform; öppnas från ansträngningsraden i CardioCard
-  - PeriodSummarySheet: STYRKA · VOLYM · KONDITION · TID + **månadsvy**: prickrad (en cirkel per dag, röd=styrka, grön=kondition, gradient=båda, grå=inget); **årsvy**: stapeldiagram per månad. Öppnas från månadsnamn respektive årsrubrik i HistoryView. Volym visas i kg (<1000) eller ton (≥1000).
+  - PeriodSummarySheet: STYRKA · VOLYM · KONDITION · TID + **månadsvy**: prickrad (en cirkel per dag, röd=styrka, grön=kondition, gradient=båda, grå=inget); **årsvy**: stapeldiagram per månad. Öppnas från månadsnamn (detent `.height(280)`) respektive årsrubrik (detent `.medium`) i HistoryView. Volym visas i kg (<1000) eller ton (≥1000). Nollvärden visas som `—`.
 - Tomt tillstånd om < 2 datapunkter
 
 ---
