@@ -31,6 +31,7 @@ struct CardioView: View {
     @State private var showTimePicker = false
     @State private var editedStart: Date = Date()
     @State private var editedEnd: Date = Date()
+    @State private var hasCustomTime = false
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
@@ -134,7 +135,7 @@ struct CardioView: View {
                     .animation(.linear(duration: 0), value: focusedField)
             }
         }
-        .sheet(isPresented: $showTimePicker) {
+        .sheet(isPresented: $showTimePicker, onDismiss: { hasCustomTime = true }) {
             SessionTimePicker(start: $editedStart, end: $editedEnd, accent: .workoutAccent)
         }
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
@@ -471,8 +472,9 @@ struct CardioView: View {
             UserDefaults.standard.setCardioIncrease(type, false)
         }
 
-        let end = editedEnd > editedStart ? editedEnd : Date()
-        let start = editedStart < end ? editedStart : end.addingTimeInterval(-minutes * 60)
+        let end = hasCustomTime && editedEnd > editedStart ? editedEnd : Date()
+        let start = hasCustomTime ? (editedStart < end ? editedStart : end.addingTimeInterval(-minutes * 60))
+                                  : end.addingTimeInterval(-minutes * 60)
         let session = CardioSession(date: end, startDate: start, durationMinutes: minutes, cardioType: type.rawValue, distanceKm: distanceKm)
         session.effortScore = effortScore
         context.insert(session)
