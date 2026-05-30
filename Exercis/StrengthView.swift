@@ -83,8 +83,6 @@ struct StrengthView: View {
                         )
                         ThinDivider()
                     }
-
-                    klarBar
                 }
             }
 
@@ -97,7 +95,7 @@ struct StrengthView: View {
                         saveSession(effortScore: nil)
                         dismiss()
                     }
-                VStack {
+                VStack(spacing: 0) {
                     Spacer()
                     VStack(spacing: 0) {
                         Capsule()
@@ -113,28 +111,33 @@ struct StrengthView: View {
                     }
                     .background(Color.appBackground)
                     .clipShape(UnevenRoundedRectangle(topLeadingRadius: 16, topTrailingRadius: 16))
-                    .offset(y: max(0, effortDragOffset))
-                    .animation(.interactiveSpring(), value: effortDragOffset)
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { value in
-                                var t = Transaction()
-                                t.disablesAnimations = true
-                                withTransaction(t) { effortDragOffset = value.translation.height }
-                            }
-                            .onEnded { value in
-                                if value.translation.height > 100 {
-                                    UINotificationFeedbackGenerator().notificationOccurred(.success)
-                                    saveSession(effortScore: nil)
-                                    dismiss()
-                                } else {
-                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) { effortDragOffset = 0 }
-                                }
-                            }
-                    )
                 }
+                .offset(y: max(0, effortDragOffset))
+                .animation(.interactiveSpring(), value: effortDragOffset)
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            var t = Transaction()
+                            t.disablesAnimations = true
+                            withTransaction(t) { effortDragOffset = value.translation.height }
+                        }
+                        .onEnded { value in
+                            if value.translation.height > 100 {
+                                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                                saveSession(effortScore: nil)
+                                dismiss()
+                            } else {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) { effortDragOffset = 0 }
+                            }
+                        }
+                )
                 .ignoresSafeArea(edges: .bottom)
                 .transition(.move(edge: .bottom))
+            }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if !showEffortPicker {
+                klarBar
             }
         }
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
