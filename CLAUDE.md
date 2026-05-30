@@ -37,6 +37,7 @@ ExerciseChartSheet.swift      ← e1RM-progression per övning (Swift Charts, ö
 CardioChartSheet.swift        ← durationsprogression per kardioform (Swift Charts, öppnas från CardioCard)
 EffortChartSheet.swift        ← ansträngningsprogression över styrkepass (Swift Charts, öppnas från HistoryCard)
 CardioEffortChartSheet.swift  ← ansträngningsprogression per kardioform (Swift Charts, öppnas från CardioCard)
+PeriodSummarySheet.swift      ← periodsammanfattning månads/årsvy (Swift Charts, öppnas från HistoryView)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
 ```
 
@@ -245,6 +246,7 @@ LockView → (Face ID) → HomeView → StrengthView
   - CardioChartSheet: LÄNGST · SENASTE · PASS (enhet: min/km); toggle TID/DISTANS om distansdata finns
   - EffortChartSheet: LÄTTAST · SENASTE · TUFFAST (enhet: /10, visas i grå 14pt); öppnas från ansträngningsraden i HistoryCard (styrkepass)
   - CardioEffortChartSheet: LÄTTAST · SENASTE · TUFFAST per kardioform; öppnas från ansträngningsraden i CardioCard
+  - PeriodSummarySheet: STYRKA · KONDITION · TID · VOLYM + stapeldiagram per vecka (månadsvy) eller per månad (årsvy); öppnas från månadsnamn respektive årsrubrik i HistoryView. Staplar färglagda i homeAccent (styrka) och workoutAccent (kondition). Volym visas i kg (<1000) eller ton (≥1000).
 - Tomt tillstånd om < 2 datapunkter
 
 ---

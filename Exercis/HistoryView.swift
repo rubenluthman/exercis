@@ -8,64 +8,37 @@ import SwiftData
 
     func day(_ offset: Int) -> Date { Calendar.current.date(byAdding: .day, value: offset, to: Date())! }
 
-    // Maj — 3 styrka, 1 kondition
-    let s1 = WorkoutSession(date: day(-2))
-    ctx.insert(s1)
-    let log1 = ExerciseLog(name: "Barbell Back Squat", orderIndex: 0)
-    log1.session = s1; ctx.insert(log1)
+    let s1 = WorkoutSession(date: day(-2)); ctx.insert(s1)
+    let log1 = ExerciseLog(name: "Barbell Back Squat", orderIndex: 0); log1.session = s1; ctx.insert(log1)
     for (i, (w, r)) in [(90.0, 7), (90.0, 6), (90.0, 6)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log1; ctx.insert(s)
     }
-
     ctx.insert(CardioSession(date: day(-5), durationMinutes: 35, cardioType: "CROSSTRAINER"))
-
-    let s2 = WorkoutSession(date: day(-9))
-    ctx.insert(s2)
-    let log2 = ExerciseLog(name: "Romanian Deadlift", orderIndex: 0)
-    log2.session = s2; ctx.insert(log2)
+    let s2 = WorkoutSession(date: day(-9)); ctx.insert(s2)
+    let log2 = ExerciseLog(name: "Romanian Deadlift", orderIndex: 0); log2.session = s2; ctx.insert(log2)
     for (i, (w, r)) in [(80.0, 8), (80.0, 7), (80.0, 7)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log2; ctx.insert(s)
     }
-
-    let s3 = WorkoutSession(date: day(-14))
-    ctx.insert(s3)
-
-    // April — 2 styrka, 2 kondition
-    let s4 = WorkoutSession(date: day(-32))
-    ctx.insert(s4)
-    let log4 = ExerciseLog(name: "Seated Cable Row", orderIndex: 0)
-    log4.session = s4; ctx.insert(log4)
+    let s3 = WorkoutSession(date: day(-14)); ctx.insert(s3)
+    let s4 = WorkoutSession(date: day(-32)); ctx.insert(s4)
+    let log4 = ExerciseLog(name: "Seated Cable Row", orderIndex: 0); log4.session = s4; ctx.insert(log4)
     for (i, (w, r)) in [(60.0, 10), (60.0, 9), (60.0, 9)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log4; ctx.insert(s)
     }
-
     ctx.insert(CardioSession(date: day(-36), durationMinutes: 45, cardioType: "CYKEL"))
-
-    let s5 = WorkoutSession(date: day(-42))
-    ctx.insert(s5)
-
+    let s5 = WorkoutSession(date: day(-42)); ctx.insert(s5)
     ctx.insert(CardioSession(date: day(-47), durationMinutes: 30, cardioType: "RODDMASKIN"))
-
-    // Mars — 1 styrka, 1 kondition
-    let s6 = WorkoutSession(date: day(-62))
-    ctx.insert(s6)
-    let log6 = ExerciseLog(name: "Neutral-Grip Lat Pulldown", orderIndex: 0)
-    log6.session = s6; ctx.insert(log6)
+    let s6 = WorkoutSession(date: day(-62)); ctx.insert(s6)
+    let log6 = ExerciseLog(name: "Neutral-Grip Lat Pulldown", orderIndex: 0); log6.session = s6; ctx.insert(log6)
     for (i, (w, r)) in [(55.0, 12), (55.0, 11), (55.0, 10)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log6; ctx.insert(s)
     }
-
     ctx.insert(CardioSession(date: day(-70), durationMinutes: 40, cardioType: "CROSSTRAINER"))
-
-    // December 2025 — 1 styrka, 1 kondition
-    let s7 = WorkoutSession(date: day(-155))
-    ctx.insert(s7)
-    let log7 = ExerciseLog(name: "Barbell Back Squat", orderIndex: 0)
-    log7.session = s7; ctx.insert(log7)
+    let s7 = WorkoutSession(date: day(-155)); ctx.insert(s7)
+    let log7 = ExerciseLog(name: "Barbell Back Squat", orderIndex: 0); log7.session = s7; ctx.insert(log7)
     for (i, (w, r)) in [(85.0, 7), (85.0, 6), (85.0, 6)].enumerated() {
         let s = SetLog(setNumber: i + 1, weight: w, reps: r); s.exerciseLog = log7; ctx.insert(s)
     }
-
     ctx.insert(CardioSession(date: day(-163), durationMinutes: 30, cardioType: "CYKEL"))
 
     return NavigationStack { HistoryView().modelContainer(container) }
@@ -99,6 +72,18 @@ private struct MonthGroup: Identifiable {
     var cardioCount: Int  { entries.filter { if case .cardio  = $0 { return true }; return false }.count }
 }
 
+private enum HistoryRow: Identifiable {
+    case year(Int)
+    case month(MonthGroup)
+
+    var id: String {
+        switch self {
+        case .year(let y):  return "year-\(y)"
+        case .month(let g): return "month-\(g.id)"
+        }
+    }
+}
+
 struct HistoryView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
@@ -108,6 +93,7 @@ struct HistoryView: View {
     @State private var expandedIDs: Set<String> = []
     @State private var collapsedMonths: Set<String> = []
     @State private var entryToDelete: HistoryEntry? = nil
+    @State private var summaryPeriod: SummaryPeriod? = nil
 
     private var entries: [HistoryEntry] {
         let w = workoutSessions.map { HistoryEntry.workout($0) }
@@ -135,6 +121,19 @@ struct HistoryView: View {
             .sorted { ($0.year, $0.month) > ($1.year, $1.month) }
     }
 
+    private var historyRows: [HistoryRow] {
+        var rows: [HistoryRow] = []
+        var lastYear: Int? = nil
+        for group in groupedEntries {
+            if group.year != lastYear {
+                rows.append(.year(group.year))
+                lastYear = group.year
+            }
+            rows.append(.month(group))
+        }
+        return rows
+    }
+
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -146,12 +145,17 @@ struct HistoryView: View {
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 0) {
-                            ForEach(groupedEntries) { group in
-                                let isCollapsed = collapsedMonths.contains(group.id)
-                                monthHeader(group, isCollapsed: isCollapsed)
-                                if !isCollapsed {
-                                    ForEach(group.entries) { entry in
-                                        entryView(entry)
+                            ForEach(historyRows) { row in
+                                switch row {
+                                case .year(let year):
+                                    yearHeader(year)
+                                case .month(let group):
+                                    let isCollapsed = collapsedMonths.contains(group.id)
+                                    monthHeader(group, isCollapsed: isCollapsed)
+                                    if !isCollapsed {
+                                        ForEach(group.entries) { entry in
+                                            entryView(entry)
+                                        }
                                     }
                                 }
                             }
@@ -173,6 +177,10 @@ struct HistoryView: View {
             }
             Button("Avbryt", role: .cancel) { entryToDelete = nil }
         }
+        .sheet(item: $summaryPeriod) { period in
+            PeriodSummarySheet(period: period)
+                .presentationDetents([.medium, .large])
+        }
         .onAppear {
             if expandedIDs.isEmpty && collapsedMonths.isEmpty {
                 var t = Transaction()
@@ -188,9 +196,62 @@ struct HistoryView: View {
         }
     }
 
+    // MARK: - Sub-views
+
+    @ViewBuilder
+    private func yearHeader(_ year: Int) -> some View {
+        Button {
+            UISelectionFeedbackGenerator().selectionChanged()
+            summaryPeriod = SummaryPeriod(year: year, month: nil)
+        } label: {
+            Text("\(year)")
+                .font(.jost(.medium, size: 11))
+                .kerning(2)
+                .foregroundColor(Color(.tertiaryLabel))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+                .padding(.bottom, 2)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
     @ViewBuilder
     private func monthHeader(_ group: MonthGroup, isCollapsed: Bool) -> some View {
-        Button {
+        HStack(alignment: .firstTextBaseline) {
+            Button {
+                UISelectionFeedbackGenerator().selectionChanged()
+                summaryPeriod = SummaryPeriod(year: group.year, month: group.month)
+            } label: {
+                Text(monthName(year: group.year, month: group.month))
+                    .font(.jost(.bold, size: 13))
+                    .kerning(2)
+                    .foregroundColor(Color.historyAccent)
+            }
+            .buttonStyle(.plain)
+
+            Spacer()
+
+            if isCollapsed {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(Color(.secondaryLabel))
+            } else {
+                HStack(spacing: 10) {
+                    if group.workoutCount > 0 { Text("\(group.workoutCount) STYRKA") }
+                    if group.cardioCount > 0  { Text("\(group.cardioCount) KONDITION") }
+                }
+                .font(.jost(.regular, size: 11))
+                .kerning(1)
+                .foregroundColor(Color(.secondaryLabel))
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 20)
+        .padding(.bottom, 6)
+        .contentShape(Rectangle())
+        .onTapGesture {
             UISelectionFeedbackGenerator().selectionChanged()
             withAnimation(.easeInOut(duration: 0.22)) {
                 if collapsedMonths.contains(group.id) {
@@ -199,39 +260,7 @@ struct HistoryView: View {
                     collapsedMonths.insert(group.id)
                 }
             }
-        } label: {
-            HStack(alignment: .firstTextBaseline) {
-                Text(monthName(year: group.year, month: group.month))
-                    .font(.jost(.bold, size: 13))
-                    .kerning(2)
-                    .foregroundColor(Color.historyAccent)
-
-                Spacer()
-
-                if isCollapsed {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(Color(.secondaryLabel))
-                } else {
-                    HStack(spacing: 10) {
-                        if group.workoutCount > 0 {
-                            Text("\(group.workoutCount) STYRKA")
-                        }
-                        if group.cardioCount > 0 {
-                            Text("\(group.cardioCount) KONDITION")
-                        }
-                    }
-                    .font(.jost(.regular, size: 11))
-                    .kerning(1)
-                    .foregroundColor(Color(.secondaryLabel))
-                }
-            }
-            .padding(.horizontal, 24)
-            .padding(.top, 20)
-            .padding(.bottom, 6)
-            .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
     }
 
     @ViewBuilder
@@ -247,19 +276,9 @@ struct HistoryView: View {
 
         switch entry {
         case .workout(let session):
-            HistoryCard(
-                session: session,
-                isExpanded: isExpanded,
-                onTap: toggle,
-                onDelete: { entryToDelete = entry }
-            )
+            HistoryCard(session: session, isExpanded: isExpanded, onTap: toggle, onDelete: { entryToDelete = entry })
         case .cardio(let session):
-            CardioCard(
-                session: session,
-                isExpanded: isExpanded,
-                onTap: toggle,
-                onDelete: { entryToDelete = entry }
-            )
+            CardioCard(session: session, isExpanded: isExpanded, onTap: toggle, onDelete: { entryToDelete = entry })
         }
     }
 
@@ -281,6 +300,8 @@ struct HistoryView: View {
         .padding(.horizontal, 24)
         .padding(.top, 20)
     }
+
+    // MARK: - Logic
 
     private func deleteEntry(_ entry: HistoryEntry) {
         switch entry {
@@ -331,13 +352,8 @@ struct HistoryView: View {
 
     private func monthName(year: Int, month: Int) -> String {
         var comps = DateComponents()
-        comps.year = year
-        comps.month = month
-        comps.day = 1
+        comps.year = year; comps.month = month; comps.day = 1
         guard let date = Calendar.current.date(from: comps) else { return "" }
-        let sv = Locale(identifier: "sv_SE")
-        let currentYear = Calendar.current.component(.year, from: Date())
-        let name = date.formatted(.dateTime.month(.wide).locale(sv)).uppercased()
-        return year == currentYear ? name : "\(name) \(year)"
+        return date.formatted(.dateTime.month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
     }
 }
