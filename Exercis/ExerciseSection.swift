@@ -26,6 +26,7 @@ struct ExerciseSection: View {
                 .kerning(1.5)
                 .foregroundColor(Color.homeAccent)
                 .lineLimit(1)
+                .accessibilityHint("Öppnar instruktionsvideo")
                 Text("ÖKA")
                     .font(.jost(.medium, size: 9))
                     .kerning(1.5)

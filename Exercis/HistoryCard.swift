@@ -48,9 +48,8 @@ struct HistoryCard: View {
                         Image(systemName: "xmark")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(Color(.secondaryLabel))
-                            .padding(.vertical, 10)
-                            .padding(.leading, 10)
                     }
+                    .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
                     .accessibilityLabel("Ta bort pass")
                 }
