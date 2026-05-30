@@ -270,7 +270,7 @@ struct PeriodSummarySheet: View {
 
     @ViewBuilder
     private func statBlock(label: String, value: String, unit: String? = nil, alignment: HorizontalAlignment = .leading) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: alignment, spacing: 4) {
             Text(label)
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)

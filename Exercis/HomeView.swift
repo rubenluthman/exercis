@@ -27,90 +27,88 @@ struct HomeView: View {
     }
 
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                Spacer()
+        VStack(spacing: 0) {
+            Spacer()
 
-                Text("EXERCIS")
-                    .font(.jost(.black, size: 38))
-                    .kerning(6)
-                    .foregroundColor(.primary)
+            Text("EXERCIS")
+                .font(.jost(.black, size: 38))
+                .kerning(6)
+                .foregroundColor(.primary)
 
-                VStack(spacing: 12) {
-                    if hasDraft {
-                        ZStack {
-                            NavigationLink(value: AppScreen.workout) {
-                                Text("FORTSÄTT STYRKA")
-                            }
-                            .buttonStyle(FilledButtonStyle(accent: Color.homeAccent))
-
-                            HStack {
-                                Spacer()
-                                Button(action: { showDiscardWorkoutAlert = true }) {
-                                    Image(systemName: "xmark")
-                                        .font(.system(size: 11, weight: .semibold))
-                                        .foregroundColor(.white.opacity(0.7))
-                                        .frame(height: 50)
-                                        .padding(.trailing, 16)
-                                }
-                                .accessibilityLabel("Kasta utkast")
-                            }
-                        }
-                    } else {
+            VStack(spacing: 12) {
+                if hasDraft {
+                    ZStack {
                         NavigationLink(value: AppScreen.workout) {
-                            Text("STYRKA")
+                            Text("FORTSÄTT STYRKA")
                         }
                         .buttonStyle(FilledButtonStyle(accent: Color.homeAccent))
-                    }
 
-                    if hasCardioDraft {
-                        ZStack {
-                            NavigationLink(value: AppScreen.cardio) {
-                                Text("FORTSÄTT KONDITION")
+                        HStack {
+                            Spacer()
+                            Button(action: { showDiscardWorkoutAlert = true }) {
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundColor(.white.opacity(0.7))
+                                    .frame(height: 50)
+                                    .padding(.trailing, 16)
                             }
-                            .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
-
-                            HStack {
-                                Spacer()
-                                Button(action: { showDiscardCardioAlert = true }) {
-                                    Image(systemName: "xmark")
-                                        .font(.system(size: 11, weight: .semibold))
-                                        .foregroundColor(.white.opacity(0.7))
-                                        .frame(height: 50)
-                                        .padding(.trailing, 16)
-                                }
-                                .accessibilityLabel("Kasta utkast")
-                            }
+                            .accessibilityLabel("Kasta utkast")
                         }
-                    } else {
+                    }
+                } else {
+                    NavigationLink(value: AppScreen.workout) {
+                        Text("STYRKA")
+                    }
+                    .buttonStyle(FilledButtonStyle(accent: Color.homeAccent))
+                }
+
+                if hasCardioDraft {
+                    ZStack {
                         NavigationLink(value: AppScreen.cardio) {
-                            Text("KONDITION")
+                            Text("FORTSÄTT KONDITION")
                         }
                         .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
-                    }
 
-                    NavigationLink(value: AppScreen.history) {
-                        Text("HISTORIK")
+                        HStack {
+                            Spacer()
+                            Button(action: { showDiscardCardioAlert = true }) {
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundColor(.white.opacity(0.7))
+                                    .frame(height: 50)
+                                    .padding(.trailing, 16)
+                            }
+                            .accessibilityLabel("Kasta utkast")
+                        }
                     }
-                    .buttonStyle(OutlineButtonStyle(accent: Color.historyAccent))
+                } else {
+                    NavigationLink(value: AppScreen.cardio) {
+                        Text("KONDITION")
+                    }
+                    .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 30)
 
                 NavigationLink(value: AppScreen.history) {
-                    Text(lastSessionDate.map {
-                        $0.formatted(.dateTime.weekday(.abbreviated).day().month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
-                    } ?? " ")
-                        .font(.jost(.regular, size: 12))
-                        .kerning(1)
-                        .foregroundColor(Color(.secondaryLabel))
-                        .padding(.top, 24)
-                        .opacity(lastSessionDate != nil ? 1 : 0)
+                    Text("HISTORIK")
                 }
-                .disabled(lastSessionDate == nil)
-
-                Spacer()
+                .buttonStyle(OutlineButtonStyle(accent: Color.historyAccent))
             }
+            .padding(.horizontal, 24)
+            .padding(.top, 30)
+
+            NavigationLink(value: AppScreen.history) {
+                Text(lastSessionDate.map {
+                    $0.formatted(.dateTime.weekday(.abbreviated).day().month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
+                } ?? " ")
+                    .font(.jost(.regular, size: 12))
+                    .kerning(1)
+                    .foregroundColor(Color(.secondaryLabel))
+                    .padding(.top, 24)
+                    .opacity(lastSessionDate != nil ? 1 : 0)
+            }
+            .disabled(lastSessionDate == nil)
+
+            Spacer()
         }
         .onAppear { migrateExerciseNames(context: context) }
         .alert("Ta bort påbörjat pass?", isPresented: $showDiscardWorkoutAlert) {

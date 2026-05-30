@@ -122,9 +122,6 @@ struct CardioView: View {
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
-                Button("KLAR") { focusedField = nil }
-                    .font(.jost(.semibold, size: 13))
-                    .foregroundColor(Color.workoutAccent)
                 Spacer()
                 Button("NÄSTA") {
                     UISelectionFeedbackGenerator().selectionChanged()
@@ -135,6 +132,9 @@ struct CardioView: View {
                 .font(.jost(.semibold, size: 13))
                 .foregroundColor(nextCardioField != nil ? Color.workoutAccent : Color(.tertiaryLabel))
                 .disabled(nextCardioField == nil)
+                Button("KLAR") { focusedField = nil }
+                    .font(.jost(.semibold, size: 13))
+                    .foregroundColor(Color.workoutAccent)
             }
         }
         .onAppear {
