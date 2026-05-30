@@ -62,7 +62,6 @@ struct PeriodSummarySheet: View {
         let label: String
         let count: Int
         let isStrength: Bool
-        let sortIndex: Int
     }
 
     private var barData: [BarEntry] {
@@ -76,10 +75,10 @@ struct PeriodSummarySheet: View {
         for i in bucketRange {
             let lbl = bucketLabel(i)
             if let n = strength[i], n > 0 {
-                result.append(BarEntry(label: lbl, count: n, isStrength: true,  sortIndex: i))
+                result.append(BarEntry(label: lbl, count: n, isStrength: true))
             }
             if let n = cardioMap[i], n > 0 {
-                result.append(BarEntry(label: lbl, count: n, isStrength: false, sortIndex: i))
+                result.append(BarEntry(label: lbl, count: n, isStrength: false))
             }
         }
         return result

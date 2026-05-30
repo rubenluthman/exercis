@@ -102,7 +102,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 - Tunna **0.5 pt avdelare** via `ThinDivider`
 - All text i UI:t ska vara på **svenska** — undantag: övningsnamnen (Barbell Back Squat etc.) som är på engelska
 - Datum formateras alltid med `Locale(identifier: "sv_SE")`
-- KLAR-knapp: fylld i accentfärg, längst ner i vyn — undantag: i CardioView flödar den ovanför effort-sheeten
+- KLAR-knapp: fylld i accentfärg, längst ner i vyn (i safeAreaInset). Döljs när effort-picker öppnas.
 - Tillbaka-knapp: bara "←" utan text, font regular 22pt, `.frame(width: 90, alignment: .trailing)`
 - Horizontal padding: **24pt** genomgående på alla rader
 
@@ -221,7 +221,6 @@ LockView → (Face ID) → HomeView → StrengthView
 - Varje typ minns sin senaste *sparade* duration i UserDefaults (`cardioSavedDuration_{TYPE}`) — laddas vid öppning
 - **Draft**: ← sparar aktiv typs värde (om ifyllt) till `cardioDraftType`/`cardioDraftMinutes`. Återladdas via FORTSÄTT KONDITION. Övriga typers in-session-värden (ej sparade) går förlorade vid ← — de återhämtas från `cardioSavedDuration_*` från senaste slutförda session.
 - **Tangentbordsverktygsfält**: KLAR (vänster, stänger tangentbord) + NÄSTA (höger, går från MIN till KM), båda i workoutAccent
-- Ovanför effort-sheet flödar en separat KLAR-knapp (fylld, workoutAccent) — ligger ovanpå sheet-containern, synlig utan att öppna sheeten
 - KLAR visar effort-picker-overlay om duration är ifylld, annars dismiss direkt. Minns senaste ansträngning per typ i `cardioEffortScore_{TYPE}`.
 - KLAR sparar `CardioSession` (inkl. `effortScore`), sparar duration/distans/ansträngning till UserDefaults, loggar till HealthKit
 
