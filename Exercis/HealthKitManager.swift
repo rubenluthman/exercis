@@ -29,6 +29,7 @@ struct HealthKitManager {
         case .crosstrainer: config.activityType = .elliptical; met = 7.0
         case .cykel:        config.activityType = .cycling;    met = 8.0
         case .roddmaskin:   config.activityType = .rowing;     met = 7.5
+        case .hiking:       config.activityType = .hiking;     met = 5.5
         }
         let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: .local())
         try? await builder.beginCollection(at: start)
@@ -96,6 +97,7 @@ struct HealthKitManager {
         switch cardioType {
         case .cykel:        identifier = .distanceCycling
         case .crosstrainer: identifier = .distanceWalkingRunning
+        case .hiking:       identifier = .distanceWalkingRunning
         case .roddmaskin:   return
         }
         let type = HKQuantityType(identifier)

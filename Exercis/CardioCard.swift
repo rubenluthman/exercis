@@ -104,7 +104,7 @@ struct CardioCard: View {
             .foregroundColor(Color.historyAccent)
 
             HStack(spacing: 12) {
-                Text("\(formatWeight(session.durationMinutes)) min")
+                Text(durationText)
                     .font(.jost(.regular, size: 14))
                     .foregroundColor(Color(.secondaryLabel))
                 if let km = session.distanceKm, km > 0 {
@@ -119,6 +119,16 @@ struct CardioCard: View {
         .padding(.top, 0)
         .padding(.bottom, 12)
         .transition(.opacity.combined(with: .move(edge: .top)))
+    }
+
+    private var durationText: String {
+        let mins = session.durationMinutes
+        if session.cardioType == CardioType.hiking.rawValue && mins >= 60 {
+            let h = Int(mins) / 60
+            let m = Int(mins) % 60
+            return m > 0 ? "\(h) h \(m) min" : "\(h) h"
+        }
+        return "\(formatWeight(mins)) min"
     }
 
     private var dateText: String {

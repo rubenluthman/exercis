@@ -136,6 +136,7 @@ enum CardioType: String, Codable, CaseIterable {
     case crosstrainer = "CROSSTRAINER"
     case cykel        = "CYKEL"
     case roddmaskin   = "RODDMASKIN"
+    case hiking       = "VANDRING"
 }
 ```
 Lagras som `String` i `CardioSession` för att undvika migrationsproblem.
@@ -215,7 +216,8 @@ LockView → (Face ID) → HomeView → StrengthView
 
 ### CardioView — Konditionsträning (accentfärg: workoutAccent)
 - Header: "KONDITION" 17pt bold, kerning 2 + datum 13pt + "←" 90pt trailing
-- **Accordion med 3 typer**: CROSSTRAINER / CYKEL / RODDMASKIN — separerade av ThinDivider
+- **Accordion med 4 typer**: CROSSTRAINER / CYKEL / RODDMASKIN / VANDRING — separerade av ThinDivider
+- VANDRING har två tidsfält (H + MIN) istället för ett MIN-fält. Duration sparas som totalt antal minuter i SwiftData och UserDefaults. Visas som "3 h 45 min" i CardioCard.
 - Tryck på en rad för att öppna den; tryck igen för att stänga (ingen behöver vara öppen)
 - Öppet/stängt läge sparas i `@AppStorage("lastCardioType")` (tom sträng = ingen öppen)
 - Varje typ minns sin senaste *sparade* duration i UserDefaults (`cardioSavedDuration_{TYPE}`) — laddas vid öppning
@@ -280,6 +282,7 @@ LockView → (Face ID) → HomeView → StrengthView
 | `cardioDraftType` | String | UserDefaults | Typ för konditions-draft |
 | `cardioDraftMinutes` | String | UserDefaults | Minuter för konditions-draft |
 | `cardioDraftDistance` | String | UserDefaults | Distans (km) för konditions-draft |
+| `cardioDraftHours` | String | UserDefaults | Timmar för vandringsdraft (enbart VANDRING) |
 | `cardioSavedDuration_{TYPE}` | String | UserDefaults | Senast sparad duration per kardioform |
 | `cardioSavedDistance_{TYPE}` | String | UserDefaults | Senast sparad distans per kardioform |
 | `cardioEffortScore_{TYPE}` | Int | UserDefaults | Senast sparad ansträngning per kardioform (startvärde i picker) |

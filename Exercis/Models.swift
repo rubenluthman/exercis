@@ -53,6 +53,7 @@ enum CardioType: String, Codable, CaseIterable {
     case crosstrainer = "CROSSTRAINER"
     case cykel        = "CYKEL"
     case roddmaskin   = "RODDMASKIN"
+    case hiking       = "VANDRING"
 }
 
 @Model
