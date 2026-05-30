@@ -50,7 +50,7 @@ struct PeriodSummarySheet: View {
     private var volumeText: (String, String?) {
         guard totalVolume > 0 else { return ("—", nil) }
         if totalVolume >= 1000 {
-            return (formatWeight(totalVolume / 1000), "ton")
+            return (formatWeight(totalVolume / 1000), " ton")
         }
         return (formatWeight(totalVolume), "kg")
     }
@@ -159,8 +159,8 @@ struct PeriodSummarySheet: View {
     private var statsRow: some View {
         HStack(alignment: .top, spacing: 0) {
             statBlock(label: "STYRKA",    value: "\(workouts.count)",                               alignment: .leading)
-            statBlock(label: "VOLYM",     value: volumeText.0, unit: volumeText.1,                  alignment: .center)
-            statBlock(label: "KONDITION", value: "\(cardio.count)",                                  alignment: .center)
+            statBlock(label: "VOLYM",     value: volumeText.0, unit: volumeText.1,                  alignment: .trailing)
+            statBlock(label: "KONDITION", value: "\(cardio.count)",                                  alignment: .leading)
             statBlock(label: "TID",       value: totalMinutes > 0 ? formatWeight(totalMinutes) : "—",
                       unit: totalMinutes > 0 ? "min" : nil,                                          alignment: .trailing)
         }
