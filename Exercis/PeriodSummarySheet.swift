@@ -135,11 +135,11 @@ struct PeriodSummarySheet: View {
                 .padding(.bottom, 20)
 
             HStack(alignment: .top, spacing: 0) {
-                statBlock(label: "STYRKA",    value: "\(workouts.count)",                   alignment: .leading)
-                statBlock(label: "KONDITION", value: "\(cardio.count)",                     alignment: .center)
+                statBlock(label: "STYRKA",    value: "\(workouts.count)",                                        alignment: .leading)
+                statBlock(label: "VOLYM",     value: volumeText.0, unit: volumeText.1,                          alignment: .center)
+                statBlock(label: "KONDITION", value: "\(cardio.count)",                                          alignment: .center)
                 statBlock(label: "TID",       value: totalMinutes > 0 ? formatWeight(totalMinutes) : "—",
-                          unit: totalMinutes > 0 ? "min" : nil,                             alignment: .center)
-                statBlock(label: "VOLYM",     value: volumeText.0, unit: volumeText.1,      alignment: .trailing)
+                          unit: totalMinutes > 0 ? "min" : nil,                                                  alignment: .trailing)
             }
             .padding(.horizontal, 24)
 
@@ -151,7 +151,9 @@ struct PeriodSummarySheet: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 Spacer()
             } else {
-                ThinDivider().padding(.top, 20)
+                Spacer()
+
+                ThinDivider()
 
                 HStack(spacing: 12) {
                     legendDot(color: .homeAccent,    label: "STYRKA")
