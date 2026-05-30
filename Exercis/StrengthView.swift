@@ -35,6 +35,7 @@ struct StrengthView: View {
     @State private var showTimePicker = false
     @State private var editedStart: Date = Date()
     @State private var editedEnd: Date = Date()
+    @State private var hasCustomTime = false
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
@@ -158,7 +159,7 @@ struct StrengthView: View {
                     .foregroundColor(Color.homeAccent)
             }
         }
-        .sheet(isPresented: $showTimePicker) {
+        .sheet(isPresented: $showTimePicker, onDismiss: { hasCustomTime = true }) {
             SessionTimePicker(start: $editedStart, end: $editedEnd, accent: .homeAccent)
         }
         .onAppear {
@@ -298,9 +299,17 @@ struct StrengthView: View {
         guard hasAnyData else { return }
 
         didCompleteSession = true
-        let end = editedEnd > editedStart ? editedEnd : Date()
+        let end = hasCustomTime && editedEnd > editedStart ? editedEnd : Date()
+        let start: Date
+        if hasCustomTime {
+            start = editedStart < end ? editedStart : end.addingTimeInterval(-3600)
+        } else if end.timeIntervalSince(editedStart) > 3 * 3600 {
+            start = end.addingTimeInterval(-3600)
+        } else {
+            start = editedStart
+        }
         let session = WorkoutSession(date: end)
-        session.startDate = editedStart
+        session.startDate = start
         context.insert(session)
 
         for (i, form) in exerciseForms.enumerated() {
@@ -338,7 +347,7 @@ struct StrengthView: View {
         UserDefaults.standard.saveDraft(nil)
         hasDraft = false
 
-        let capturedStart = editedStart
+        let capturedStart = start
         let capturedEnd = end
         let capturedSession = session
         Task { @MainActor in
