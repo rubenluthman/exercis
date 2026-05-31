@@ -480,10 +480,12 @@ struct CardioView: View {
         context.insert(session)
         try? context.save()
 
-        Task { @MainActor in
-            let uuid = await HealthKitManager.shared.saveCardioWorkout(start: start, end: end, type: type, distanceKm: distanceKm, effortScore: effortScore)
-            session.healthKitID = uuid
-            try? context.save()
+        if UserDefaults.standard.bool(forKey: "healthKitSyncEnabled") {
+            Task { @MainActor in
+                let uuid = await HealthKitManager.shared.saveCardioWorkout(start: start, end: end, type: type, distanceKm: distanceKm, effortScore: effortScore)
+                session.healthKitID = uuid
+                try? context.save()
+            }
         }
     }
 }

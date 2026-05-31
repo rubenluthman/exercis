@@ -68,6 +68,7 @@ struct HealthKitManager {
 
     private func fetchBodyMass() async -> Double? {
         guard isAvailable else { return nil }
+        guard UserDefaults.standard.bool(forKey: "healthKitWeightEnabled") else { return nil }
         let type = HKQuantityType(.bodyMass)
         let sort = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
         return await withCheckedContinuation { continuation in

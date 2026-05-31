@@ -347,13 +347,15 @@ struct StrengthView: View {
         UserDefaults.standard.saveDraft(nil)
         hasDraft = false
 
-        let capturedStart = start
-        let capturedEnd = end
-        let capturedSession = session
-        Task { @MainActor in
-            let uuid = await HealthKitManager.shared.saveWorkout(start: capturedStart, end: capturedEnd, effortScore: effortScore)
-            capturedSession.healthKitID = uuid
-            try? context.save()
+        if UserDefaults.standard.bool(forKey: "healthKitSyncEnabled") {
+            let capturedStart = start
+            let capturedEnd = end
+            let capturedSession = session
+            Task { @MainActor in
+                let uuid = await HealthKitManager.shared.saveWorkout(start: capturedStart, end: capturedEnd, effortScore: effortScore)
+                capturedSession.healthKitID = uuid
+                try? context.save()
+            }
         }
     }
 }

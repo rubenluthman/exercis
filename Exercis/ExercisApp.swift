@@ -9,6 +9,14 @@ enum AppScreen: String, Hashable {
 
 @main
 struct ExercisApp: App {
+    init() {
+        UserDefaults.standard.register(defaults: [
+            "healthKitSyncEnabled":   true,
+            "healthKitWeightEnabled": true,
+            "lockEnabled":            true
+        ])
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -19,9 +27,10 @@ struct ExercisApp: App {
 
 struct RootView: View {
     @StateObject private var auth = AuthManager()
+    @AppStorage("lockEnabled") private var lockEnabled = true
 
     var body: some View {
-        if !auth.isAuthenticated {
+        if lockEnabled && !auth.isAuthenticated {
             LockView(auth: auth)
         } else {
             NavigationStack {

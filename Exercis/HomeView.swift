@@ -18,8 +18,48 @@ struct HomeView: View {
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
     @State private var showDiscardWorkoutAlert = false
     @State private var showDiscardCardioAlert = false
+    @State private var showProfile = false
+    @State private var showSettings = false
     @Query(sort: \WorkoutSession.date, order: .reverse) private var workoutSessions: [WorkoutSession]
     @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
+
+    @AppStorage("profileName") private var profileName = ""
+
+    private var profileInitials: String {
+        let parts = profileName.split(separator: " ")
+        return parts.prefix(2).compactMap { $0.first.map(String.init) }.joined().uppercased()
+    }
+
+    private var profileImageFromDisk: UIImage? {
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("profile.jpg")
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
+    }
+
+    @ViewBuilder
+    private var profileIcon: some View {
+        if let image = profileImageFromDisk {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 28, height: 28)
+                .clipShape(Circle())
+        } else if !profileInitials.isEmpty {
+            Circle()
+                .fill(Color(.secondarySystemFill))
+                .frame(width: 28, height: 28)
+                .overlay {
+                    Text(profileInitials)
+                        .font(.jost(.semibold, size: 11))
+                        .foregroundStyle(Color(.secondaryLabel))
+                }
+        } else {
+            Image(systemName: "person.crop.circle")
+                .font(.system(size: 24))
+                .foregroundStyle(Color(.secondaryLabel))
+        }
+    }
 
     private var lastSessionDate: Date? {
         let dates = ([workoutSessions.first?.date, cardioSessions.first?.date]).compactMap { $0 }
@@ -28,6 +68,33 @@ struct HomeView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            HStack {
+                Spacer()
+                Button {
+                    UISelectionFeedbackGenerator().selectionChanged()
+                    showProfile = true
+                } label: {
+                    profileIcon
+                        .frame(width: 44, height: 44)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Profil")
+
+                Button {
+                    UISelectionFeedbackGenerator().selectionChanged()
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Color(.secondaryLabel))
+                        .frame(width: 44, height: 44)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Inställningar")
+            }
+            .padding(.horizontal, 12)
+            .padding(.top, 8)
+
             Spacer()
 
             Text("EXERCIS")
@@ -96,7 +163,10 @@ struct HomeView: View {
             .padding(.horizontal, 24)
             .padding(.top, 30)
 
-            NavigationLink(value: AppScreen.history) {
+            Button {
+                UISelectionFeedbackGenerator().selectionChanged()
+                showProfile = true
+            } label: {
                 Text(lastSessionDate.map {
                     $0.formatted(.dateTime.weekday(.abbreviated).day().month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
                 } ?? " ")
@@ -106,9 +176,16 @@ struct HomeView: View {
                     .padding(.top, 24)
                     .opacity(lastSessionDate != nil ? 1 : 0)
             }
+            .buttonStyle(.plain)
             .disabled(lastSessionDate == nil)
 
             Spacer()
+        }
+        .sheet(isPresented: $showProfile) {
+            ProfileView()
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
         .onAppear { migrateExerciseNames(context: context) }
         .alert("Ta bort påbörjat pass?", isPresented: $showDiscardWorkoutAlert) {
