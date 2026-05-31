@@ -163,10 +163,7 @@ struct HomeView: View {
             .padding(.horizontal, 24)
             .padding(.top, 30)
 
-            Button {
-                UISelectionFeedbackGenerator().selectionChanged()
-                showProfile = true
-            } label: {
+            NavigationLink(value: AppScreen.history) {
                 Text(lastSessionDate.map {
                     $0.formatted(.dateTime.weekday(.abbreviated).day().month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
                 } ?? " ")
@@ -176,7 +173,6 @@ struct HomeView: View {
                     .padding(.top, 24)
                     .opacity(lastSessionDate != nil ? 1 : 0)
             }
-            .buttonStyle(.plain)
             .disabled(lastSessionDate == nil)
 
             Spacer()
