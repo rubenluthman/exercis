@@ -97,7 +97,6 @@ struct SettingsView: View {
                         }
                     }
                     .tint(Color.homeAccent)
-                    .disabled(!healthKitSyncEnabled)
                 } header: {
                     Text("Hälsa")
                 }
