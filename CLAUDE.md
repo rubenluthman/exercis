@@ -49,13 +49,36 @@ HealthKitManager.swift    ← sparar HKWorkout till Apple Health
 Enda plats för färger, typsnitt, knappstillar och gemensamma UI-komponenter.
 
 ### Färger
+
+Alla färger definieras i `Assets.xcassets` som named color sets med automatisk light/dark-variant. `Theme.swift` exponerar dem som `Color`-extensions.
+
+**Strukturella accentfärger** — aliases till palettrader:
 ```swift
-Color.homeAccent    // #B04848 ljust / #D06868 mörkt  — dämpad röd    (LockView, HomeView, StrengthView)
-Color.workoutAccent // #4A8050 ljust / #5EAA66 mörkt  — sagegreen     (CardioView / kondition)
-Color.historyAccent // #4878B0 ljust / #6A9FD4 mörkt  — cornflowerblå (HistoryView, HistoryCard, CardioCard, alla chart sheets)
-Color.appBackground // Color(.systemBackground) — adaptiv (vit i ljust läge, mörk i mörkt läge)
-Color.appDivider    // Color(.separator) — används av ThinDivider (0.5 pt)
+Color.homeAccent    // → paletteIntenseRed  light #B73B3F / dark #F97775
+Color.workoutAccent // → paletteGreen       light #23821F / dark #63BD5C
+Color.historyAccent // → paletteLightBlue   light #0078B8 / dark #00B3F7
+Color.appBackground // Color(.systemBackground)
+Color.appDivider    // Color(.separator)
 ```
+
+**Programfärgpalett** — OKLCH L=0.5325 C=0.160, 12 kulörer stegade 30°:
+```swift
+Color.paletteIntenseRed  // H=22.4°   light #B73B3F / dark #F97775
+Color.paletteOrange      // H=52.4°   light #B04900 / dark #F18435
+Color.paletteYellow      // H=82.4°   light #995F00 / dark #D59800
+Color.paletteLime        // H=112.4°  light #707400 / dark #A7AE00
+Color.paletteGreen       // H=142.4°  light #23821F / dark #63BD5C
+Color.paletteTeal        // H=172.4°  light #008862 / dark #00C49A
+Color.paletteCyan        // H=202.4°  light #008494 / dark #00C0D0
+Color.paletteLightBlue   // H=232.4°  light #0078B8 / dark #00B3F7
+Color.paletteDarkBlue    // H=262.4°  light #3767C8 / dark #6DA2FF
+Color.palettePurple      // H=292.4°  light #7155BF / dark #A98FFF
+Color.paletteMagenta     // H=322.4°  light #9646A2 / dark #D37FDF
+Color.palettePink        // H=352.4°  light #AE3B75 / dark #EE76AE
+```
+`Color.programPalette: [Color]` — array med alla 12, används i programväljaren.
+
+**WCAG-kontrast mot vit bakgrund (ljusläge):** alla ≥4.5:1 (AA) utom teal/cyan (4.4–4.5:1, AA-large — OK för knappar/rubriker, ej liten brödtext).
 
 ### Typsnitt: Jost (enda typsnitt)
 ```swift

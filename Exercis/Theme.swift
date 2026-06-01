@@ -4,23 +4,33 @@ import UIKit
 // MARK: - Colors
 
 extension Color {
-    static let homeAccent = Color(UIColor { t in
-        t.userInterfaceStyle == .dark
-            ? UIColor(red: 208/255, green: 104/255, blue: 104/255, alpha: 1) // #D06868
-            : UIColor(red: 176/255, green: 72/255,  blue: 72/255,  alpha: 1) // #B04848
-    })
-    static let workoutAccent = Color(UIColor { t in
-        t.userInterfaceStyle == .dark
-            ? UIColor(red: 94/255,  green: 170/255, blue: 102/255, alpha: 1) // #5EAA66
-            : UIColor(red: 74/255,  green: 128/255, blue: 80/255,  alpha: 1) // #4A8050
-    })
-    static let historyAccent = Color(UIColor { t in
-        t.userInterfaceStyle == .dark
-            ? UIColor(red: 106/255, green: 159/255, blue: 212/255, alpha: 1) // #6A9FD4
-            : UIColor(red: 72/255,  green: 120/255, blue: 176/255, alpha: 1) // #4878B0
-    })
+    // Structural accent colors — map to palette entries
+    static let homeAccent    = Color("paletteIntenseRed")  // light #B73B3F / dark #F97775
+    static let workoutAccent = Color("paletteGreen")       // light #23821F / dark #63BD5C
+    static let historyAccent = Color("paletteLightBlue")   // light #0078B8 / dark #00B3F7
     static let appBackground = Color(.systemBackground)
     static let appDivider    = Color(.separator)
+
+    // Program color palette (OKLCH L=0.5325 C=0.160, 12 hues × 30°)
+    // Light/dark variants defined in Assets.xcassets — automatic dark mode
+    static let paletteIntenseRed = Color("paletteIntenseRed") // H=22.4°
+    static let paletteOrange     = Color("paletteOrange")     // H=52.4°
+    static let paletteYellow     = Color("paletteYellow")     // H=82.4°
+    static let paletteLime       = Color("paletteLime")       // H=112.4°
+    static let paletteGreen      = Color("paletteGreen")      // H=142.4°
+    static let paletteTeal       = Color("paletteTeal")       // H=172.4°
+    static let paletteCyan       = Color("paletteCyan")       // H=202.4°
+    static let paletteLightBlue  = Color("paletteLightBlue")  // H=232.4°
+    static let paletteDarkBlue   = Color("paletteDarkBlue")   // H=262.4°
+    static let palettePurple     = Color("palettePurple")     // H=292.4°
+    static let paletteMagenta    = Color("paletteMagenta")    // H=322.4°
+    static let palettePink       = Color("palettePink")       // H=352.4°
+
+    static let programPalette: [Color] = [
+        .paletteIntenseRed, .paletteOrange, .paletteYellow, .paletteLime,
+        .paletteGreen, .paletteTeal, .paletteCyan, .paletteLightBlue,
+        .paletteDarkBlue, .palettePurple, .paletteMagenta, .palettePink
+    ]
 }
 
 // MARK: - Typography
