@@ -1,0 +1,378 @@
+[
+  {
+    "id": "crosstrainer",
+    "name": "Elliptical / Cross Trainer",
+    "displayName": "Crosstrainer",
+    "subcategory": "machine",
+    "hkActivityType": "elliptical",
+    "equipment": [
+      "elliptical_machine"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "hasaneyldrm",
+    "gifId": "2141",
+    "migratedFrom": "CROSSTRAINER"
+  },
+  {
+    "id": "cycling_stationary",
+    "name": "Stationary Bike",
+    "displayName": "Cykel",
+    "subcategory": "machine",
+    "hkActivityType": "cycling",
+    "equipment": [
+      "stationary_bike"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "hasaneyldrm",
+    "gifId": "2138",
+    "migratedFrom": "CYKEL"
+  },
+  {
+    "id": "rowing_machine",
+    "name": "Rowing Machine",
+    "displayName": "Roddmaskin",
+    "subcategory": "machine",
+    "hkActivityType": "rowing",
+    "equipment": [
+      "rowing_machine"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "needsSource",
+    "gifId": null,
+    "migratedFrom": "RODDMASKIN"
+  },
+  {
+    "id": "treadmill_run",
+    "name": "Treadmill (Running)",
+    "displayName": "Löpband",
+    "subcategory": "machine",
+    "hkActivityType": "running",
+    "equipment": [
+      "treadmill"
+    ],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "hasaneyldrm",
+    "gifId": "3666",
+    "migratedFrom": null
+  },
+  {
+    "id": "treadmill_walk",
+    "name": "Treadmill (Walking)",
+    "displayName": "Löpband (gång)",
+    "subcategory": "machine",
+    "hkActivityType": "walking",
+    "equipment": [
+      "treadmill"
+    ],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "hasaneyldrm",
+    "gifId": "3666",
+    "migratedFrom": null
+  },
+  {
+    "id": "stair_climber",
+    "name": "Stair Climber / Stepmill",
+    "displayName": "Trappmaskin",
+    "subcategory": "machine",
+    "hkActivityType": "stairClimbing",
+    "equipment": [
+      "stepmill_machine"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "hasaneyldrm",
+    "gifId": "2311",
+    "migratedFrom": null
+  },
+  {
+    "id": "ski_erg",
+    "name": "Ski Erg",
+    "displayName": "Stakmaskin",
+    "subcategory": "machine",
+    "hkActivityType": "rowing",
+    "equipment": [
+      "ski_erg"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "needsSource",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "assault_bike",
+    "name": "Assault Bike / Air Bike",
+    "displayName": "Assault Bike",
+    "subcategory": "machine",
+    "hkActivityType": "cycling",
+    "equipment": [
+      "assault_bike"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "needsSource",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "running",
+    "name": "Running",
+    "displayName": "Löpning",
+    "subcategory": "outdoor",
+    "hkActivityType": "running",
+    "equipment": [],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "walking",
+    "name": "Walking / Powerwalking",
+    "displayName": "Promenad",
+    "subcategory": "outdoor",
+    "hkActivityType": "walking",
+    "equipment": [],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "hiking",
+    "name": "Hiking",
+    "displayName": "Vandring",
+    "subcategory": "outdoor",
+    "hkActivityType": "hiking",
+    "equipment": [],
+    "hasDistance": true,
+    "hasElevation": true,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": "VANDRING"
+  },
+  {
+    "id": "road_cycling",
+    "name": "Road Cycling",
+    "displayName": "Landsvägscykling",
+    "subcategory": "outdoor",
+    "hkActivityType": "cycling",
+    "equipment": [
+      "bicycle"
+    ],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "mountain_biking",
+    "name": "Mountain Biking",
+    "displayName": "Terrängcykling",
+    "subcategory": "outdoor",
+    "hkActivityType": "cycling",
+    "equipment": [
+      "bicycle"
+    ],
+    "hasDistance": true,
+    "hasElevation": true,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "swimming",
+    "name": "Swimming",
+    "displayName": "Simning",
+    "subcategory": "outdoor",
+    "hkActivityType": "swimming",
+    "equipment": [],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "cross_country_skiing",
+    "name": "Cross-Country Skiing",
+    "displayName": "Längdskidåkning",
+    "subcategory": "nordic",
+    "hkActivityType": "crossCountrySkiing",
+    "equipment": [
+      "skis"
+    ],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "ice_skating",
+    "name": "Ice Skating",
+    "displayName": "Skridskoåkning",
+    "subcategory": "nordic",
+    "hkActivityType": "skating",
+    "equipment": [
+      "ice_skates"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null,
+    "notes": "Verifiera HKWorkoutActivityType.skating i Xcode"
+  },
+  {
+    "id": "kayaking",
+    "name": "Kayaking",
+    "displayName": "Kajak",
+    "subcategory": "water",
+    "hkActivityType": "paddlingSports",
+    "equipment": [
+      "kayak"
+    ],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "canoeing",
+    "name": "Canoeing",
+    "displayName": "Kanot",
+    "subcategory": "water",
+    "hkActivityType": "paddlingSports",
+    "equipment": [
+      "canoe"
+    ],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "climbing",
+    "name": "Climbing / Bouldering",
+    "displayName": "Klättring",
+    "subcategory": "other",
+    "hkActivityType": "climbing",
+    "equipment": [],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "boxing",
+    "name": "Boxing",
+    "displayName": "Boxning",
+    "subcategory": "other",
+    "hkActivityType": "boxing",
+    "equipment": [],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "battle_ropes",
+    "name": "Battle Ropes",
+    "displayName": "Battle Ropes",
+    "subcategory": "other",
+    "hkActivityType": "highIntensityIntervalTraining",
+    "equipment": [
+      "battle_ropes"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "sled",
+    "name": "Sled Push / Pull",
+    "displayName": "Släde",
+    "subcategory": "other",
+    "hkActivityType": "functionalStrengthTraining",
+    "equipment": [
+      "sled"
+    ],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "rucking",
+    "name": "Rucking",
+    "displayName": "Rucking",
+    "subcategory": "outdoor",
+    "hkActivityType": "hiking",
+    "equipment": [
+      "weighted_backpack"
+    ],
+    "hasDistance": true,
+    "hasElevation": false,
+    "gifSource": "none",
+    "gifId": null,
+    "migratedFrom": null
+  },
+  {
+    "id": "jump_rope",
+    "name": "Jump Rope",
+    "displayName": "Hopprep",
+    "subcategory": "calisthenics",
+    "hkActivityType": "jumpRope",
+    "equipment": [
+      "jump_rope"
+    ],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "hasaneyldrm",
+    "gifId": "2612",
+    "migratedFrom": null,
+    "notes": "Verifiera HKWorkoutActivityType.jumpRope i Xcode"
+  },
+  {
+    "id": "burpees",
+    "name": "Burpees",
+    "displayName": "Burpees",
+    "subcategory": "calisthenics",
+    "hkActivityType": "highIntensityIntervalTraining",
+    "equipment": [],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "hasaneyldrm",
+    "gifId": "1160",
+    "migratedFrom": null
+  },
+  {
+    "id": "mountain_climbers",
+    "name": "Mountain Climbers",
+    "displayName": "Mountain Climbers",
+    "subcategory": "calisthenics",
+    "hkActivityType": "highIntensityIntervalTraining",
+    "equipment": [],
+    "hasDistance": false,
+    "hasElevation": false,
+    "gifSource": "hasaneyldrm",
+    "gifId": "0630",
+    "migratedFrom": null
+  }
+]
