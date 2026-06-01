@@ -38,8 +38,8 @@ struct HealthKitManager {
         case .roadCycling, .mountainBiking: config.activityType = .cycling; met = 8.0
         case .swimming:           config.activityType = .swimming;   met = 7.0
         case .crossCountrySkiing: config.activityType = .crossCountrySkiing; met = 9.0
-        case .iceSkating:         config.activityType = .skating;    met = 7.0
-        case .kayaking, .canoeing: config.activityType = .paddlingSports; met = 5.0
+        case .iceSkating:          config.activityType = .iceSkating;  met = 7.0
+        case .kayaking, .canoeing: config.activityType = .rowing;       met = 5.0
         case .climbing:           config.activityType = .climbing;   met = 8.0
         case .boxing:             config.activityType = .boxing;     met = 9.0
         case .battleRopes:        config.activityType = .highIntensityIntervalTraining; met = 10.0
