@@ -43,6 +43,7 @@ struct OnboardingView: View {
                 .font(.jost(.black, size: 38))
                 .kerning(6)
                 .foregroundStyle(.primary)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 40)
 
             Text(step == 1
@@ -50,9 +51,12 @@ struct OnboardingView: View {
                  : "Vilka konditionsformer tränar du?")
                 .font(.jost(.regular, size: 15))
                 .foregroundStyle(Color(.secondaryLabel))
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 8)
                 .padding(.bottom, 24)
         }
+        .padding(.horizontal, 24)
     }
 
     // MARK: - Step 1: Programs
