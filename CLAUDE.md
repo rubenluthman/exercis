@@ -371,8 +371,9 @@ Bodyweight-programmet (5 övningar): Body Squats, Push Ups, Bodyweight Lunges, S
 
 ### Onboarding (2 steg)
 **Steg 1 — Träningsprogram:**
-- Grid med 7 programkort grupperade under versaliserade rubriker (HELKROPP / SPLIT / PUSH–PULL–LEGS / KROPPSVIKT)
-- Full Body och Bodyweight i full bredd, övriga i 2-kolumner; Push/Pull/Legs tre i rad
+- Grid med 7 programkort i tematiska grupper separerade av whitespace — inga gruppetikett-rubriker
+- Full Body ensam (full bredd) · Överkropp + Underkropp (2-kolumner) · Push + Pull + Legs (3-kolumner) · Bodyweight ensam (full bredd)
+- Alla kort samma storlek
 - Multi-select — tryck för att toggla
 - HOPPA ÖVER (textknapp) + FORTSÄTT → (fylld, inaktiv tills val gjorts)
 
