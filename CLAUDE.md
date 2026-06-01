@@ -398,6 +398,21 @@ enum GifSource: String, Codable {
 
 Bodyweight-programmet (5 övningar): Body Squats (`wger_body_squats`), Push Ups (`wger_push_ups`), Bodyweight Lunges (`wger_bodyweight_lunges`), Superman (`wger_superman`), Plank (`wger_plank`)
 
+### Navigation — TabView
+
+Ersätter nuvarande custom HomeView. Tre tabbar synliga i vila mellan pass:
+
+```
+│  💪 Styrka  │  ♥ Kondition  │  📊 Historik  │
+```
+
+- **Styrka** → `ProgramListView` med programkort. Tryck program → `StrengthView` som `.fullScreenCover` (tab-bar dold under aktivt pass). Draft visas som "FORTSÄTT [PROGRAMNAMN]" överst.
+- **Kondition** → kardio-typer (användarens personliga lista). Tryck typ → CardioView som `.fullScreenCover`.
+- **Historik** → som nu.
+- **Inställningar** → kugghjulsikon (`gear`, SF Symbol) i navigationsbaren, öppnar Settings/Profile som sheet.
+
+LockView ligger kvar som `.fullScreenCover` ovanpå TabView vid app-launch.
+
 ### Onboarding (2 steg)
 **Steg 1 — Träningsprogram:**
 - Grid med 7 programkort i tematiska grupper separerade av whitespace — inga gruppetikett-rubriker
