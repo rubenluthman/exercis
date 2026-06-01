@@ -1,12 +1,6 @@
 import SwiftUI
 import SwiftData
 
-enum AppScreen: String, Hashable {
-    case workout
-    case cardio
-    case history
-}
-
 @main
 struct ExercisApp: App {
     init() {
@@ -21,38 +15,63 @@ struct ExercisApp: App {
         WindowGroup {
             RootView()
         }
-        .modelContainer(for: [WorkoutSession.self, CardioSession.self])
+        .modelContainer(for: [WorkoutSession.self, CardioSession.self, WorkoutProgram.self])
     }
 }
+
+// MARK: - RootView
 
 struct RootView: View {
     @StateObject private var auth = AuthManager()
     @AppStorage("lockEnabled") private var lockEnabled = true
+    @AppStorage("onboardingCompleted") private var onboardingCompleted = false
 
     var body: some View {
         if lockEnabled && !auth.isAuthenticated {
             LockView(auth: auth)
+        } else if !onboardingCompleted {
+            OnboardingView()
         } else {
+            MainTabView()
+        }
+    }
+}
+
+// MARK: - MainTabView
+
+struct MainTabView: View {
+    @Environment(\.modelContext) private var context
+
+    var body: some View {
+        TabView {
             NavigationStack {
-                HomeView()
-                    .toolbar(.hidden, for: .navigationBar)
-                    .navigationDestination(for: AppScreen.self) { screen in
-                        switch screen {
-                        case .workout:
-                            StrengthView()
-                                .toolbar(.hidden, for: .navigationBar)
-                                .enableSwipeBack()
-                        case .cardio:
-                            CardioView()
-                                .toolbar(.hidden, for: .navigationBar)
-                                .enableSwipeBack()
-                        case .history:
-                            HistoryView()
-                                .toolbar(.hidden, for: .navigationBar)
-                                .enableSwipeBack()
-                        }
-                    }
+                ProgramListView()
             }
+            .tabItem {
+                Label("Styrka", systemImage: "dumbbell.fill")
+            }
+
+            NavigationStack {
+                CardioView()
+                    .toolbar(.hidden, for: .navigationBar)
+            }
+            .tabItem {
+                Label("Kondition", systemImage: "heart.fill")
+            }
+
+            NavigationStack {
+                HistoryView()
+                    .toolbar(.hidden, for: .navigationBar)
+                    .enableSwipeBack()
+            }
+            .tabItem {
+                Label("Historik", systemImage: "chart.line.uptrend.xyaxis")
+            }
+        }
+        .onAppear {
+            migrateExerciseNames(context: context)
+            migrateCardioTypes(context: context)
+            seedDefaultProgramsIfNeeded(context: context)
         }
     }
 }

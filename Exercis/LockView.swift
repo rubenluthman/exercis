@@ -6,6 +6,7 @@ import SwiftUI
 
 struct LockView: View {
     @ObservedObject var auth: AuthManager
+    @State private var authFailed = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -16,28 +17,30 @@ struct LockView: View {
                 .kerning(6)
                 .foregroundColor(.primary)
 
-            VStack(spacing: 12) {
-                Button("LOGGA IN") {
-                    auth.authenticate()
-                }
-                .buttonStyle(FilledButtonStyle(accent: Color.homeAccent))
-
-                Color.clear.frame(height: 50)
-                Color.clear.frame(height: 50)
-            }
-            .padding(.horizontal, 24)
-            .padding(.top, 30)
-
-            Text(" ")
-                .font(.jost(.regular, size: 12))
-                .kerning(1)
-                .padding(.top, 24)
-                .opacity(0)
-
             Spacer()
+
+            if authFailed {
+                Button {
+                    authFailed = false
+                    auth.authenticate()
+                } label: {
+                    Image(systemName: "faceid")
+                        .font(.system(size: 40))
+                        .foregroundStyle(Color(.secondaryLabel))
+                        .frame(width: 44, height: 44)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Logga in")
+                .padding(.bottom, 60)
+            } else {
+                Color.clear.frame(height: 44 + 60)
+            }
         }
         .onAppear {
             auth.authenticate()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .authFailed)) { _ in
+            authFailed = true
         }
     }
 }

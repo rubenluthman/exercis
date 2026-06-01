@@ -2,6 +2,10 @@ import Foundation
 import Combine
 import LocalAuthentication
 
+extension Notification.Name {
+    static let authFailed = Notification.Name("authFailed")
+}
+
 @MainActor
 final class AuthManager: ObservableObject {
     @Published var isAuthenticated = false
@@ -20,7 +24,11 @@ final class AuthManager: ObservableObject {
             localizedReason: String(localized: "Lås upp Exercis")
         ) { success, _ in
             DispatchQueue.main.async {
-                if success { self.isAuthenticated = true }
+                if success {
+                    self.isAuthenticated = true
+                } else {
+                    NotificationCenter.default.post(name: .authFailed, object: nil)
+                }
             }
         }
     }

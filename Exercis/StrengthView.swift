@@ -20,6 +20,7 @@ struct ExerciseFormData: Identifiable {
 // MARK: - StrengthView
 
 struct StrengthView: View {
+    let program: WorkoutProgram
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @Query(sort: [SortDescriptor(\WorkoutSession.date, order: .reverse)])
@@ -27,6 +28,8 @@ struct StrengthView: View {
 
     @AppStorage("hasDraft") private var hasDraft = false
     @State private var exerciseForms: [ExerciseFormData] = []
+
+    private var accent: Color { Color(program.colorName) }
     @State private var collapsedExercises: Set<Int> = []
     @State private var initialized = false
     @State private var startTime = Date()
@@ -71,6 +74,7 @@ struct StrengthView: View {
                             form: $exerciseForms[i],
                             exerciseIndex: i,
                             isCollapsed: collapsedExercises.contains(i),
+                            accent: accent,
                             onToggleCollapse: {
                                 UISelectionFeedbackGenerator().selectionChanged()
                                 activeField = nil
@@ -111,7 +115,7 @@ struct StrengthView: View {
                             .frame(width: 36, height: 4)
                             .padding(.top, 8)
                             .padding(.bottom, 4)
-                        EffortPickerSheet(accent: .homeAccent, initialScore: lastEffortScore) { score in
+                        EffortPickerSheet(accent: accent, initialScore: lastEffortScore) { score in
                             if let score { UserDefaults.standard.set(score, forKey: "workoutEffortScore") }
                             saveSession(effortScore: score)
                             dismiss()
@@ -152,15 +156,15 @@ struct StrengthView: View {
                     activeField = nextField
                 }
                     .font(.jost(.semibold, size: 13))
-                    .foregroundColor(nextField != nil ? Color.homeAccent : Color(.tertiaryLabel))
+                    .foregroundColor(nextField != nil ? accent : Color(.tertiaryLabel))
                     .disabled(nextField == nil)
                 Button("KLAR") { activeField = nil }
                     .font(.jost(.semibold, size: 13))
-                    .foregroundColor(Color.homeAccent)
+                    .foregroundColor(accent)
             }
         }
         .sheet(isPresented: $showTimePicker, onDismiss: { hasCustomTime = true }) {
-            SessionTimePicker(start: $editedStart, end: $editedEnd, accent: .homeAccent)
+            SessionTimePicker(start: $editedStart, end: $editedEnd, accent: accent)
         }
         .onAppear {
             guard !initialized else { return }
@@ -179,7 +183,7 @@ struct StrengthView: View {
 
     private var headerRow: some View {
         HStack(alignment: .firstTextBaseline) {
-            Text("STYRKETRÄNING")
+            Text(program.name.uppercased())
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
                 .foregroundColor(.primary)
@@ -219,7 +223,7 @@ struct StrengthView: View {
                 dismiss()
             }
         }
-        .buttonStyle(FilledButtonStyle(accent: Color.homeAccent))
+        .buttonStyle(FilledButtonStyle(accent: accent))
         .padding(.horizontal, 24)
         .padding(.vertical, 16)
     }
@@ -227,10 +231,16 @@ struct StrengthView: View {
     // MARK: Logic
 
     private func buildForms(from session: WorkoutSession?) {
-        if hasDraft, let draft = UserDefaults.standard.loadDraft() {
+        let defs = program.sortedExercises.compactMap { pe in
+            ExerciseDef.find(id: pe.exerciseId) ?? ExerciseDef.find(name: pe.exerciseName)
+        }
+        let setCount = program.sortedExercises.first?.setCount ?? 3
+
+        if hasDraft, let draft = UserDefaults.standard.loadDraft(),
+           draft.programId == program.id.uuidString {
             startTime = draft.startTime
             collapsedExercises = Set(draft.collapsedExercises)
-            exerciseForms = ExerciseDef.all.map { def in
+            exerciseForms = defs.map { def in
                 if let ex = draft.exercises.first(where: { $0.name == def.name }) {
                     return ExerciseFormData(
                         def: def,
@@ -239,14 +249,14 @@ struct StrengthView: View {
                         previousMaxWeight: ex.previousMaxWeight
                     )
                 }
-                return ExerciseFormData(def: def, sets: [SetFormData(), SetFormData(), SetFormData()])
+                return ExerciseFormData(def: def, sets: Array(repeating: SetFormData(), count: setCount))
             }
             return
         }
 
         startTime = Date()
-        exerciseForms = ExerciseDef.all.map { def in
-            var sets: [SetFormData] = [SetFormData(), SetFormData(), SetFormData()]
+        exerciseForms = defs.map { def in
+            var sets = Array(repeating: SetFormData(), count: setCount)
 
             if let session,
                let log = session.exerciseLogs.first(where: { $0.name == def.name }),
@@ -254,7 +264,7 @@ struct StrengthView: View {
                let bestSet = log.sets.filter({ $0.weight == maxWeight }).max(by: { $0.reps < $1.reps }) {
                 let w = formatWeight(bestSet.weight)
                 let r = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
-                sets = [SetFormData(weight: w, reps: r), SetFormData(weight: w, reps: r), SetFormData(weight: w, reps: r)]
+                sets = Array(repeating: SetFormData(weight: w, reps: r), count: setCount)
             }
 
             let increase = UserDefaults.standard.increaseNames().contains(def.name)
@@ -279,7 +289,8 @@ struct StrengthView: View {
                     )
                 },
                 startTime: startTime,
-                collapsedExercises: Array(collapsedExercises)
+                collapsedExercises: Array(collapsedExercises),
+                programId: program.id.uuidString
             )
             UserDefaults.standard.saveDraft(draft)
             hasDraft = true
@@ -310,6 +321,8 @@ struct StrengthView: View {
         }
         let session = WorkoutSession(date: end)
         session.startDate = start
+        session.programId = program.id
+        session.programName = program.name
         context.insert(session)
 
         for (i, form) in exerciseForms.enumerated() {
@@ -437,8 +450,11 @@ struct EffortPickerSheet: View {
         ctx.insert(s)
     }
 
-    return NavigationStack {
-        StrengthView()
-            .modelContainer(container)
-    }
+    let program = WorkoutProgram(name: "Push", colorName: "paletteIntenseRed")
+    program.exercises = [
+        ProgramExercise(exerciseId: "wger_bench_press", exerciseName: "Bench Press", sortIndex: 0)
+    ]
+    ctx.insert(program)
+    return StrengthView(program: program)
+        .modelContainer(container)
 }

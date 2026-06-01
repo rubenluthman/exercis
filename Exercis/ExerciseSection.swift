@@ -9,6 +9,7 @@ struct ExerciseSection: View {
     @Binding var form: ExerciseFormData
     var exerciseIndex: Int
     var isCollapsed: Bool
+    var accent: Color = .homeAccent
     var onToggleCollapse: () -> Void
     @FocusState.Binding var activeField: WorkoutField?
     var onEdit: () -> Void = {}
@@ -24,18 +25,18 @@ struct ExerciseSection: View {
                 .buttonStyle(.plain)
                 .font(.jost(.semibold, size: 12))
                 .kerning(1.5)
-                .foregroundColor(Color.homeAccent)
+                .foregroundColor(accent)
                 .lineLimit(1)
                 .accessibilityHint("Öppnar instruktionsvideo")
                 Text("ÖKA")
                     .font(.jost(.medium, size: 9))
                     .kerning(1.5)
-                    .foregroundColor(Color.homeAccent)
+                    .foregroundColor(accent)
                     .padding(.horizontal, 5)
                     .padding(.vertical, 2)
                     .overlay(
                         RoundedRectangle(cornerRadius: 2)
-                            .strokeBorder(Color.homeAccent, lineWidth: 0.5)
+                            .strokeBorder(accent, lineWidth: 0.5)
                     )
                     .opacity(form.shouldIncrease ? 1 : 0)
                 Spacer()

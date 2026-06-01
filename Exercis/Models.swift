@@ -10,6 +10,8 @@ final class WorkoutSession {
     var startDate: Date = Date()
     var healthKitID: UUID? = nil
     var effortScore: Int? = nil
+    var programId: UUID? = nil
+    var programName: String? = nil
 
     @Relationship(deleteRule: .cascade, inverse: \ExerciseLog.session)
     var exerciseLogs: [ExerciseLog] = []
@@ -23,6 +25,7 @@ final class WorkoutSession {
 final class ExerciseLog {
     var name: String = ""
     var orderIndex: Int = 0
+    var exerciseDefId: String? = nil
     var session: WorkoutSession?
 
     @Relationship(deleteRule: .cascade, inverse: \SetLog.exerciseLog)
@@ -51,10 +54,38 @@ final class SetLog {
 // MARK: - Cardio
 
 enum CardioType: String, Codable, CaseIterable {
-    case crosstrainer = "CROSSTRAINER"
-    case cykel        = "CYKEL"
-    case roddmaskin   = "RODDMASKIN"
-    case hiking       = "VANDRING"
+    // Maskiner
+    case crosstrainer        = "crosstrainer"
+    case cyclingStationary   = "cycling_stationary"
+    case rowingMachine       = "rowing_machine"
+    case treadmillRun        = "treadmill_run"
+    case treadmillWalk       = "treadmill_walk"
+    case stairClimber        = "stair_climber"
+    case skiErg              = "ski_erg"
+    case assaultBike         = "assault_bike"
+    // Utomhus
+    case running             = "running"
+    case walking             = "walking"
+    case hiking              = "hiking"
+    case roadCycling         = "road_cycling"
+    case mountainBiking      = "mountain_biking"
+    case swimming            = "swimming"
+    // Nordiska
+    case crossCountrySkiing  = "cross_country_skiing"
+    case iceSkating          = "ice_skating"
+    // Vatten
+    case kayaking            = "kayaking"
+    case canoeing            = "canoeing"
+    // Övrigt
+    case climbing            = "climbing"
+    case boxing              = "boxing"
+    case battleRopes         = "battle_ropes"
+    case sled                = "sled"
+    case rucking             = "rucking"
+    // Calisthenics cardio
+    case jumpRope            = "jump_rope"
+    case burpees             = "burpees"
+    case mountainClimbers    = "mountain_climbers"
 }
 
 @Model
@@ -67,13 +98,54 @@ final class CardioSession {
     var cardioType: String = CardioType.crosstrainer.rawValue
     var distanceKm: Double? = nil
     var effortScore: Int? = nil
+    var elevationGain: Double? = nil
 
-    init(date: Date = Date(), startDate: Date? = nil, durationMinutes: Double, cardioType: String = CardioType.crosstrainer.rawValue, distanceKm: Double? = nil) {
+    init(date: Date = Date(), startDate: Date? = nil, durationMinutes: Double,
+         cardioType: String = CardioType.crosstrainer.rawValue, distanceKm: Double? = nil) {
         self.date = date
         self.startDate = startDate ?? date.addingTimeInterval(-durationMinutes * 60)
         self.durationMinutes = durationMinutes
         self.cardioType = cardioType
         self.distanceKm = distanceKm
+    }
+}
+
+// MARK: - Programs
+
+@Model
+final class WorkoutProgram {
+    var id: UUID = UUID()
+    var name: String = ""
+    var colorName: String = "paletteIntenseRed"
+    var sortIndex: Int = 0
+
+    @Relationship(deleteRule: .cascade, inverse: \ProgramExercise.program)
+    var exercises: [ProgramExercise] = []
+
+    init(name: String, colorName: String, sortIndex: Int = 0) {
+        self.name = name
+        self.colorName = colorName
+        self.sortIndex = sortIndex
+    }
+
+    var sortedExercises: [ProgramExercise] {
+        exercises.sorted { $0.sortIndex < $1.sortIndex }
+    }
+}
+
+@Model
+final class ProgramExercise {
+    var exerciseId: String = ""
+    var exerciseName: String = ""
+    var sortIndex: Int = 0
+    var setCount: Int = 3
+    var program: WorkoutProgram?
+
+    init(exerciseId: String, exerciseName: String, sortIndex: Int, setCount: Int = 3) {
+        self.exerciseId = exerciseId
+        self.exerciseName = exerciseName
+        self.sortIndex = sortIndex
+        self.setCount = setCount
     }
 }
 
@@ -90,11 +162,14 @@ struct WorkoutDraft: Codable {
     var exercises: [ExerciseDraft]
     var startTime: Date
     var collapsedExercises: [Int]
+    var programId: String?
 
-    init(exercises: [ExerciseDraft], startTime: Date, collapsedExercises: [Int] = []) {
+    init(exercises: [ExerciseDraft], startTime: Date,
+         collapsedExercises: [Int] = [], programId: String? = nil) {
         self.exercises = exercises
         self.startTime = startTime
         self.collapsedExercises = collapsedExercises
+        self.programId = programId
     }
 
     init(from decoder: Decoder) throws {
@@ -102,6 +177,7 @@ struct WorkoutDraft: Codable {
         exercises = try c.decode([ExerciseDraft].self, forKey: .exercises)
         startTime = try c.decode(Date.self, forKey: .startTime)
         collapsedExercises = (try? c.decode([Int].self, forKey: .collapsedExercises)) ?? []
+        programId = try? c.decode(String.self, forKey: .programId)
     }
 }
 
@@ -122,61 +198,7 @@ extension UserDefaults {
     }
 }
 
-// MARK: - Exercise Definitions
-
-struct ExerciseDef {
-    let name: String
-    let displayName: String
-    let shortName: String?
-    let repRange: String
-    let videoURL: String
-    var aliases: [String] = []
-
-    init(name: String, displayName: String? = nil, shortName: String? = nil, repRange: String, videoURL: String, aliases: [String] = []) {
-        self.name = name
-        self.displayName = displayName ?? name
-        self.shortName = shortName
-        self.repRange = repRange
-        self.videoURL = videoURL
-        self.aliases = aliases
-    }
-
-    static let all: [ExerciseDef] = [
-        ExerciseDef(name: "Barbell Back Squat",
-                    repRange: "5–8 REPS",
-                    videoURL: "https://www.youtube.com/watch?v=R2dMsNhN3DE",
-                    aliases: ["Safety Bar Squat"]),
-        ExerciseDef(name: "Neutral-Grip Incline Dumbbell Bench Press",
-                    displayName: "Incline Dumbbell Bench Press",
-                    shortName: "Incline Bench Press",
-                    repRange: "6–10 REPS",
-                    videoURL: "https://www.youtube.com/watch?v=8nNi8jbbUPE",
-                    aliases: ["Incline DB Bench Press"]),
-        ExerciseDef(name: "Romanian Deadlift",
-                    repRange: "6–8 REPS",
-                    videoURL: "https://www.youtube.com/watch?v=-m45n1_x32E",
-                    aliases: ["Romanian Deadlift (RDL)"]),
-        ExerciseDef(name: "Seated Cable Row",
-                    repRange: "8–12 REPS",
-                    videoURL: "https://www.muscleandstrength.com/exercises/seated-row.html"),
-        ExerciseDef(name: "Neutral-Grip Lat Pulldown",
-                    displayName: "Lat Pulldown",
-                    repRange: "8–12 REPS",
-                    videoURL: "https://www.youtube.com/watch?v=iKrKgWR9wbY",
-                    aliases: ["Lat Pulldown"]),
-    ]
-
-    // Pensionerade övningar — tas bort från `all` men data bevaras i historik.
-    // Lägg till här när en övning byts ut mot en ny.
-    static let retired: [ExerciseDef] = []
-
-    static func find(name: String) -> ExerciseDef? {
-        all.first(where: { $0.name == name }) ?? retired.first(where: { $0.name == name })
-    }
-
-    // Bump this each time exercises change and update migrateExerciseNames accordingly.
-    static let migrationVersion = 4
-}
+// MARK: - Migration: exercise names
 
 func migrateExerciseNames(context: ModelContext) {
     let key = "exerciseNameMigrationVersion"
@@ -214,4 +236,99 @@ func migrateExerciseNames(context: ModelContext) {
     }
 
     UserDefaults.standard.set(ExerciseDef.migrationVersion, forKey: key)
+}
+
+// MARK: - Migration: CardioType raw values
+
+func migrateCardioTypes(context: ModelContext) {
+    let key = "cardioTypeMigrationVersion"
+    let current = UserDefaults.standard.integer(forKey: key)
+    guard current < 1 else { return }
+
+    let oldToNew: [String: String] = [
+        "CROSSTRAINER": "crosstrainer",
+        "CYKEL":        "cycling_stationary",
+        "RODDMASKIN":   "rowing_machine",
+        "VANDRING":     "hiking"
+    ]
+
+    let sessions = (try? context.fetch(FetchDescriptor<CardioSession>())) ?? []
+    for session in sessions {
+        if let newValue = oldToNew[session.cardioType] {
+            session.cardioType = newValue
+        }
+    }
+    try? context.save()
+
+    UserDefaults.standard.set(1, forKey: key)
+}
+
+// MARK: - Seeder: default programs
+
+func seedDefaultProgramsIfNeeded(context: ModelContext) {
+    let existing = (try? context.fetch(FetchDescriptor<WorkoutProgram>())) ?? []
+    guard existing.isEmpty else { return }
+
+    let defaults: [(name: String, color: String, exercises: [(id: String, name: String)])] = [
+        ("Full Body", "paletteIntenseRed", [
+            ("wger_squats",                   "Squats"),
+            ("wger_bench_press",              "Bench Press"),
+            ("wger_romanian_deadlift",        "Romanian Deadlift"),
+            ("wger_bent_over_rowing",         "Bent Over Rowing"),
+            ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells")
+        ]),
+        ("Överkropp", "paletteOrange", [
+            ("wger_bench_press",              "Bench Press"),
+            ("wger_bent_over_rowing",         "Bent Over Rowing"),
+            ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells"),
+            ("wger_pullups",                  "Pull-Ups"),
+            ("wger_lateral_raises",           "Lateral Raises")
+        ]),
+        ("Underkropp", "paletteYellow", [
+            ("wger_squats",                 "Squats"),
+            ("wger_romanian_deadlift",      "Romanian Deadlift"),
+            ("wger_leg_presses_wide",       "Leg Presses (Wide)"),
+            ("wger_leg_curls_laying",       "Leg Curls (Laying)"),
+            ("wger_standing_calf_raises",   "Standing Calf Raises")
+        ]),
+        ("Push", "paletteLime", [
+            ("wger_bench_press",                          "Bench Press"),
+            ("wger_incline_dumbbell_press",               "Incline Dumbbell Press"),
+            ("wger_shoulder_press_dumbbells",             "Shoulder Press, Dumbbells"),
+            ("wger_lateral_raises",                       "Lateral Raises"),
+            ("wger_triceps_extensions_on_cable_with_bar", "Triceps Extensions On Cable With Bar")
+        ]),
+        ("Pull", "paletteGreen", [
+            ("wger_deadlifts",                   "Deadlifts"),
+            ("wger_pullups",                     "Pull-Ups"),
+            ("wger_rowing_seated",               "Rowing, Seated"),
+            ("wger_lat_pull_down_straight_back", "Lat Pull Down (Straight Back)"),
+            ("wger_biceps_curls_with_dumbbell",  "Biceps Curls With Dumbbell")
+        ]),
+        ("Legs", "paletteTeal", [
+            ("wger_squats",             "Squats"),
+            ("wger_romanian_deadlift",  "Romanian Deadlift"),
+            ("wger_leg_presses_wide",   "Leg Presses (Wide)"),
+            ("wger_leg_extension",      "Leg Extension"),
+            ("wger_leg_curls_laying",   "Leg Curls (Laying)")
+        ]),
+        ("Bodyweight", "paletteCyan", [
+            ("wger_body_squats",         "Body Squats"),
+            ("wger_push_ups",            "Push Ups"),
+            ("wger_bodyweight_lunges",   "Bodyweight Lunges"),
+            ("wger_superman",            "Superman"),
+            ("wger_plank",               "Plank")
+        ])
+    ]
+
+    for (i, def) in defaults.enumerated() {
+        let program = WorkoutProgram(name: def.name, colorName: def.color, sortIndex: i)
+        context.insert(program)
+        for (j, ex) in def.exercises.enumerated() {
+            let pe = ProgramExercise(exerciseId: ex.id, exerciseName: ex.name, sortIndex: j)
+            pe.program = program
+            context.insert(pe)
+        }
+    }
+    try? context.save()
 }
