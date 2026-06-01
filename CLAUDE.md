@@ -80,6 +80,8 @@ Color.palettePink        // H=352.4°  light #AE3B75 / dark #EE76AE
 
 **WCAG-kontrast mot vit bakgrund (ljusläge):** alla ≥4.5:1 (AA) utom teal/cyan (4.4–4.5:1, AA-large — OK för knappar/rubriker, ej liten brödtext).
 
+**⚠️ Yellow och lime på vit bakgrund:** `paletteYellow` (H=82.4°) och `paletteLime` (H=112.4°) är perceptuellt balanserade mot övriga färger i OKLCH, men gul-gröna toner upplevs ofta som "smutsiga" eller nedtonade på vit bakgrund — en egenskap hos det mänskliga synssystemet, inte ett kontrastfel (båda klarar AA). Bör testas visuellt mot vit bakgrund innan de används som programfärger. Om de inte håller estetiskt: höj L något (t.ex. till 0.57) för just dessa två, eller välj bort dem från programpaletten.
+
 ### Typsnitt: Jost (enda typsnitt)
 ```swift
 Font.jost(_ weight: Font.Weight, size: CGFloat)
