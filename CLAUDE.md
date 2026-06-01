@@ -101,7 +101,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 - Inga emojis, inga ikoner utöver SF Symbols (chevron, xmark)
 - Versaliserade etiketter med spärr (letter spacing)
 - Tunna **0.5 pt avdelare** via `ThinDivider`
-- All text i UI:t ska vara på **svenska** — undantag: övningsnamnen (Barbell Back Squat etc.) som är på engelska
+- UI-text lokaliseras via iOS standard-lokaliseringssystem. **Engelska är basspråket** (alla strängar definieras på engelska). Svenska tillhandahålls via `.strings`-filer. SwiftUI `Text()` med strängliteraler lokaliserar automatiskt; övriga strängar använder `String(localized:)`.
 - Datum formateras alltid med `Locale(identifier: "sv_SE")`
 - KLAR-knapp: fylld i accentfärg, längst ner i vyn (i safeAreaInset). Döljs när effort-picker öppnas.
 - Tillbaka-knapp: bara "←" utan text, font regular 22pt, `.frame(width: 90, alignment: .trailing)`
@@ -191,11 +191,13 @@ LockView → (Face ID) → HomeView → StrengthView
 - **KLAR** sparar och returnerar till HomeView; **←** returnerar utan att spara (men sparar draft om data finns)
 - **Swipe-back** beter sig identiskt med ← — sparar draft via `onDisappear` → `saveDraftIfNeeded()` (skippar om `didCompleteSession = true`)
 
-### LockView (accentfärg: homeAccent)
+### LockView (ingen accentfärg)
 - "EXERCIS" Jost Black 900, centrerat vertikalt med Spacer
-- `VStack(spacing: 12)` med `padding(.top, 30)` — matchar HomeView exakt
-- LOGGA IN-knapp (fylld, homeAccent) + två `Color.clear.frame(height: 50)` som platshållare
-- `auth.authenticate()` triggas i `.onAppear` (auto Face ID) och via LOGGA IN-knapp (retry)
+- `faceid` SF Symbol (~40pt) som retry-knapp, `.secondary` färg — visas bara om Face ID misslyckades
+- `accessibilityLabel: "Logga in"` på retry-ikonen
+- Inga platshållare, inget färgat element — neutral skärm
+- `auth.authenticate()` triggas i `.onAppear` (auto Face ID) och via ikonen (retry)
+- **Obs:** befintlig implementation använder fylld homeAccent-knapp + två `Color.clear.frame(height: 50)` — ersätts vid nästa revision
 
 ### HomeView (accentfärg: homeAccent)
 - "EXERCIS" (Jost Black 900) + tre knappar i `VStack(spacing: 12)`, `padding(.horizontal, 24)`, `padding(.top, 30)`
@@ -324,6 +326,73 @@ Vikt och tid lagras som råtal utan enhet — `Double` för kg, `Double` för mi
 
 ---
 
+## Kommande expansion — beslutade designval
+
+### Färgsystem (program + strukturella skärmar)
+- **Strukturella skärmar** har fasta appfärger: LockView (neutral), HomeView (`homeAccent`), CardioView (`workoutAccent`), HistoryView (`historyAccent`), Settings/Profile (neutral, inga accenter)
+- **Träningsprogram** har användardefinierade färger (väljs ur kuraterad palett vid skapandet)
+- **StrengthView** under aktivt pass använder det aktiva programmets färg, inte `homeAccent`
+- Programkort på HomeView visas i respektive programs färg
+
+### GIF-system
+```swift
+enum GifSource: String, Codable {
+    case hasaneyldrm   // primär källa, icke-kommersiell
+    case exercisedb    // sekundär källa, icke-kommersiell
+    case needsSource   // borde ha GIF men ingen hittad än (roddmaskin, assault bike m.fl.)
+    case none          // behöver inte GIF (aktiviteter, inte rörelsemönster)
+}
+```
+- Övningsnamn med GIF visas i accentfärg (tryckbar) — utan GIF i `.primary`
+- Tryck → halvskärm med GIF
+- `ⓘ` (SF Symbol `info.circle`) i GIF-sheeten → expanderar till detaljer: primära muskler, sekundära muskler, beskrivningstext (Apple Photos-mönster)
+- GIF-mappning: `gif_mapping.md` i projektets rot (180 styrkeövningar, exact/strong/weak/none)
+- GIF-filer: `Exercis/Resources/GIFs/` (folder reference i Xcode, blå mappikon)
+
+### Träningsprogram — datamodell
+- `ExerciseDef`: statisk struct → SwiftData `@Model`
+- Ny modell `WorkoutProgram`: namn, färg, ordnad övningslista (`sortIndex: Int` på junction-entitet)
+- `ExerciseLog` får `exerciseDefId: String?`
+- Prefill per program (senaste vikt per program, inte globalt)
+- `programID` lagras på `WorkoutSession`
+
+### Standardprogram (7 st, alla med 5 övningar och 3 set som default)
+| # | Program | Grupp |
+|---|---------|-------|
+| 1 | Full Body | HELKROPP |
+| 2 | Överkropp | SPLIT |
+| 3 | Underkropp | SPLIT |
+| 4 | Push | PUSH–PULL–LEGS |
+| 5 | Pull | PUSH–PULL–LEGS |
+| 6 | Legs | PUSH–PULL–LEGS |
+| 7 | Bodyweight | KROPPSVIKT |
+
+Bodyweight-programmet (5 övningar): Body Squats, Push Ups, Bodyweight Lunges, Superman, Plank
+
+### Onboarding (2 steg)
+**Steg 1 — Träningsprogram:**
+- Grid med 7 programkort grupperade under versaliserade rubriker (HELKROPP / SPLIT / PUSH–PULL–LEGS / KROPPSVIKT)
+- Full Body och Bodyweight i full bredd, övriga i 2-kolumner; Push/Pull/Legs tre i rad
+- Multi-select — tryck för att toggla
+- HOPPA ÖVER (textknapp) + FORTSÄTT → (fylld, inaktiv tills val gjorts)
+
+**Steg 2 — Kondition:**
+- Checkboxar per kardioform, grupperade efter subcategory (MASKINER / UTOMHUS / NORDISKA etc.)
+- Bygger användarens personliga Kondition-lista
+- HOPPA ÖVER + KOM IGÅNG →
+
+Behörigheter (Face ID, HealthKit) begärs **inte** i onboarding — frågas kontextuellt vid första användning.
+
+### CardioType enum
+Se `cardio_types.json` — 26 typer med `id` (språkneutralt), `displayName`, `hkActivityType`, `gifSource`, `hasDistance`, `hasElevation`. Migration: `migratedFrom`-fältet per typ.
+
+### HealthKit — utökat
+- `HKWorkoutActivity` (iOS 17+): varje `ExerciseLog` → aktivitetssegment i workout
+- `HKQuantityType(.distanceHillAscent/.distanceHillDescent)` (iOS 16+) för vandring/löpning via `CMAltimeter`
+- `CardioSession` får `elevationGain: Double?`
+
+---
+
 ## Krav som inte får brytas
 
 1. Deployment target **iOS 17**
@@ -335,4 +404,4 @@ Vikt och tid lagras som råtal utan enhet — `Double` för kg, `Double` för mi
 7. Jost är **enda** typsnitt – inga system fonts
 8. Accentfärg är **enda** färginslaget utöver systemfärger (`.primary`, `.secondary`, `Color(.systemBackground)`)
 9. Vikt lagras alltid som `Double`
-10. All UI-text på svenska (utom övningsnamn på engelska)
+10. UI-text lokaliseras — engelska som basspråk, svenska via `.strings`
