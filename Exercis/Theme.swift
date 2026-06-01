@@ -11,25 +11,15 @@ extension Color {
     static let appBackground = Color(.systemBackground)
     static let appDivider    = Color(.separator)
 
-    // Program color palette (OKLCH L=0.5325 C=0.160, 12 hues × 30°)
-    // Light/dark variants defined in Assets.xcassets — automatic dark mode
-    static let paletteIntenseRed = Color("paletteIntenseRed") // H=22.4°
-    static let paletteOrange     = Color("paletteOrange")     // H=52.4°
-    static let paletteYellow     = Color("paletteYellow")     // H=82.4°
-    static let paletteLime       = Color("paletteLime")       // H=112.4°
-    static let paletteGreen      = Color("paletteGreen")      // H=142.4°
-    static let paletteTeal       = Color("paletteTeal")       // H=172.4°
-    static let paletteCyan       = Color("paletteCyan")       // H=202.4°
-    static let paletteLightBlue  = Color("paletteLightBlue")  // H=232.4°
-    static let paletteDarkBlue   = Color("paletteDarkBlue")   // H=262.4°
-    static let palettePurple     = Color("palettePurple")     // H=292.4°
-    static let paletteMagenta    = Color("paletteMagenta")    // H=322.4°
-    static let palettePink       = Color("palettePink")       // H=352.4°
-
+    // Program color palette — accessorer genereras automatiskt av Xcode från Assets.xcassets
+    // Använd Color.paletteIntenseRed, Color.paletteOrange etc. direkt
     static let programPalette: [Color] = [
-        .paletteIntenseRed, .paletteOrange, .paletteYellow, .paletteLime,
-        .paletteGreen, .paletteTeal, .paletteCyan, .paletteLightBlue,
-        .paletteDarkBlue, .palettePurple, .paletteMagenta, .palettePink
+        Color("paletteIntenseRed"), Color("paletteOrange"),
+        Color("paletteYellow"),     Color("paletteLime"),
+        Color("paletteGreen"),      Color("paletteTeal"),
+        Color("paletteCyan"),       Color("paletteLightBlue"),
+        Color("paletteDarkBlue"),   Color("palettePurple"),
+        Color("paletteMagenta"),    Color("palettePink")
     ]
 }
 
