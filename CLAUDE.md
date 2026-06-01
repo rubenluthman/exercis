@@ -381,6 +381,10 @@ enum GifSource: String, Codable {
 - Prefill per program (senaste vikt per program, inte globalt)
 - `programID` lagras på `WorkoutSession`
 
+### Programkort
+
+4pt färglist i programfärg längs toppen. Vit bakgrund, `Color(.separator)` 0.5pt kant, `cornerRadius(8)`. Programnamn: Jost Bold 15pt, kerning 1.5, programfärg. Undertitel "5 ÖVNINGAR · 3 SET": Jost Medium 10pt, kerning 1.5, `.secondary`. Markerat: programfärg 12% opacitet som bakgrund + `checkmark.circle.fill` i programfärg uppe till höger. Används i onboarding-grid och programlista — inte som primär action-knapp på HomeView.
+
 ### Standardprogram (7 st, alla med 5 övningar och 3 set som default)
 | # | Program | Grupp |
 |---|---------|-------|
@@ -392,12 +396,12 @@ enum GifSource: String, Codable {
 | 6 | Legs | PUSH–PULL–LEGS |
 | 7 | Bodyweight | KROPPSVIKT |
 
-Bodyweight-programmet (5 övningar): Body Squats, Push Ups, Bodyweight Lunges, Superman, Plank
+Bodyweight-programmet (5 övningar): Body Squats (`wger_body_squats`), Push Ups (`wger_push_ups`), Bodyweight Lunges (`wger_bodyweight_lunges`), Superman (`wger_superman`), Plank (`wger_plank`)
 
 ### Onboarding (2 steg)
 **Steg 1 — Träningsprogram:**
 - Grid med 7 programkort i tematiska grupper separerade av whitespace — inga gruppetikett-rubriker
-- Full Body ensam (full bredd) · Överkropp + Underkropp (2-kolumner) · Push + Pull + Legs (3-kolumner) · Bodyweight ensam (full bredd)
+- Full Body ensam (full bredd) · Överkropp + Underkropp (2-kolumner) · Push + Pull + Legs (3 kolumner, lika breda) · Bodyweight ensam (full bredd)
 - Alla kort samma storlek
 - Multi-select — tryck för att toggla
 - HOPPA ÖVER (textknapp) + FORTSÄTT → (fylld, inaktiv tills val gjorts)
