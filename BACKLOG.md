@@ -17,10 +17,10 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ### 🔴 Hög prioritet (svåra att lägga till senare)
 
-- [ ] **CardioType.displayName som property på modellen** — visningsnamnen finns bara som privat metod i OnboardingView, orsakar aktiv bugg i CardioView (visar "cycling_stationary" etc.) och leder till duplication i varje ny vy
-- [ ] **Prefill per program, inte senaste session** — `buildForms` tar `sessions.first` oavsett program; med 7 program märks detta direkt. `programId` finns redan på `WorkoutSession`
-- [ ] **selectedCardioTypes från onboarding används inte** — sparas i AppStorage men läses aldrig av CardioView; onboarding-steg 2 är meningslöst just nu
-- [ ] **Enhetssystem: implementera eller ta bort** — `weightUnit`/`distanceUnit` finns i Settings men ignoreras av formulär, historik, charts och HealthKit. Varje ny vy som byggs utan enhetsmedvetenhet gör det dyrare att fixa
+- [x] **CardioType.displayName som property på modellen** — visningsnamnen finns bara som privat metod i OnboardingView, orsakar aktiv bugg i CardioView (visar "cycling_stationary" etc.) och leder till duplication i varje ny vy
+- [x] **Prefill per program, inte senaste session** — `buildForms` tar `sessions.first` oavsett program; med 7 program märks detta direkt. `programId` finns redan på `WorkoutSession`
+- [x] **selectedCardioTypes från onboarding används inte** — sparas i AppStorage men läses aldrig av CardioView; onboarding-steg 2 är meningslöst just nu
+- [x] **Enhetssystem: ta bort döda UI-inställningar** — AppStorage-nycklar behållna för framtida implementation — `weightUnit`/`distanceUnit` finns i Settings men ignoreras av formulär, historik, charts och HealthKit. Varje ny vy som byggs utan enhetsmedvetenhet gör det dyrare att fixa
 
 ### 🟡 Snart
 
