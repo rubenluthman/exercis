@@ -12,6 +12,7 @@ struct ProfileView: View {
     @State private var profileImage: UIImage? = nil
     @State private var editingName = false
     @State private var showHistory = false
+    @State private var showSettings = false
 
     var body: some View {
         NavigationStack {
@@ -44,6 +45,9 @@ struct ProfileView: View {
             NavigationStack {
                 HistoryView()
             }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
     }
 
@@ -80,6 +84,7 @@ struct ProfileView: View {
                     }
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Byt profilbild")
 
             if editingName {
                 TextField("Ditt namn", text: $name, onCommit: { editingName = false })
@@ -196,10 +201,8 @@ struct ProfileView: View {
             Button("HISTORIK") { showHistory = true }
                 .buttonStyle(FilledButtonStyle(accent: Color.historyAccent))
 
-            NavigationLink(value: "settings") {
-                Text("INSTÄLLNINGAR")
-            }
-            .buttonStyle(OutlineButtonStyle(accent: Color(.secondaryLabel)))
+            Button("INSTÄLLNINGAR") { showSettings = true }
+                .buttonStyle(OutlineButtonStyle(accent: Color(.secondaryLabel)))
         }
         .padding(.horizontal, 24)
     }

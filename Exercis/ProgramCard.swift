@@ -30,7 +30,7 @@ struct ProgramCard: View {
                     }
                 }
 
-                Text("\(program.exercises.count) ÖVNINGAR · 3 SET")
+                Text("\(program.exercises.count) ÖVNINGAR · \(program.sortedExercises.first?.setCount ?? 3) SET")
                     .font(.jost(.medium, size: 10))
                     .kerning(1.5)
                     .foregroundStyle(Color(.secondaryLabel))
