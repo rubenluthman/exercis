@@ -30,8 +30,8 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ### 🟢 Nästa revision
 
-- [ ] **LockView placeholder-hack** — `Color.clear.frame(height: 44 + 60)` bör ersättas med riktig layout
-- [ ] **UISelectionFeedbackGenerator skapas ny instans vid varje tryck** — bör återanvändas
+- [x] **LockView placeholder-hack** — åtgärdad 2026-06-02
+- [x] **Haptics centraliserade** — `Haptics`-enum i Theme.swift, alla inline-anrop ersatta — åtgärdad 2026-06-02
 
 ---
 
@@ -57,4 +57,4 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ---
 
-*Senast uppdaterad: 2026-06-02*
+*Senast uppdaterad: 2026-06-02 — alla kända åtgärdspunkter klara*
