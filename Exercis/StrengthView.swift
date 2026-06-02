@@ -168,7 +168,7 @@ struct StrengthView: View {
         }
         .onAppear {
             guard !initialized else { return }
-            buildForms(from: sessions.first)
+            buildForms(from: sessions.first { $0.programId == program.id })
             editedStart = startTime
             editedEnd = Date()
             initialized = true

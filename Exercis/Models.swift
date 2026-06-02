@@ -86,6 +86,37 @@ enum CardioType: String, Codable, CaseIterable {
     case jumpRope            = "jump_rope"
     case burpees             = "burpees"
     case mountainClimbers    = "mountain_climbers"
+
+    var displayName: String {
+        switch self {
+        case .crosstrainer:       return "Crosstrainer"
+        case .cyclingStationary:  return "Cykel"
+        case .rowingMachine:      return "Roddmaskin"
+        case .treadmillRun:       return "Löpband (löpning)"
+        case .treadmillWalk:      return "Löpband (gång)"
+        case .stairClimber:       return "Trappmaskin"
+        case .skiErg:             return "Stakmaskin"
+        case .assaultBike:        return "Assault Bike"
+        case .running:            return "Löpning"
+        case .walking:            return "Promenad"
+        case .hiking:             return "Vandring"
+        case .roadCycling:        return "Landsvägscykling"
+        case .mountainBiking:     return "Terrängcykling"
+        case .swimming:           return "Simning"
+        case .crossCountrySkiing: return "Längdskidåkning"
+        case .iceSkating:         return "Skridskoåkning"
+        case .kayaking:           return "Kajak"
+        case .canoeing:           return "Kanot"
+        case .climbing:           return "Klättring"
+        case .boxing:             return "Boxning"
+        case .battleRopes:        return "Battle Ropes"
+        case .sled:               return "Släde"
+        case .rucking:            return "Rucking"
+        case .jumpRope:           return "Hopprep"
+        case .burpees:            return "Burpees"
+        case .mountainClimbers:   return "Mountain Climbers"
+        }
+    }
 }
 
 @Model

@@ -33,38 +33,6 @@ struct SettingsView: View {
                     }
                 }
 
-                Section("Enheter") {
-                    HStack {
-                        Image(systemName: "scalemass")
-                            .foregroundStyle(Color(.secondaryLabel))
-                            .frame(width: 28)
-                        Text("Vikt")
-                            .font(.jost(.regular, size: 16))
-                        Spacer()
-                        Picker("", selection: $weightUnit) {
-                            Text("kg").tag("kg")
-                            Text("lbs").tag("lbs")
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(width: 100)
-                    }
-
-                    HStack {
-                        Image(systemName: "figure.walk")
-                            .foregroundStyle(Color(.secondaryLabel))
-                            .frame(width: 28)
-                        Text("Distans")
-                            .font(.jost(.regular, size: 16))
-                        Spacer()
-                        Picker("", selection: $distanceUnit) {
-                            Text("km").tag("km")
-                            Text("miles").tag("miles")
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(width: 120)
-                    }
-                }
-
                 Section {
                     Toggle(isOn: $healthKitSyncEnabled) {
                         HStack(spacing: 12) {

@@ -21,6 +21,13 @@ struct CardioView: View {
     @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
     @AppStorage("lastCardioType") private var storedType: String = CardioType.crosstrainer.rawValue
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
+    @AppStorage("selectedCardioTypes") private var selectedCardioTypesRaw = ""
+
+    private var activeCardioTypes: [CardioType] {
+        let selected = Set(selectedCardioTypesRaw.split(separator: ",").map(String.init))
+        if selected.isEmpty { return CardioType.allCases }
+        return CardioType.allCases.filter { selected.contains($0.rawValue) }
+    }
     @State private var expandedType: CardioType? = nil
     @State private var hours: [String: String] = [:]
     @State private var durations: [String: String] = [:]
@@ -72,7 +79,7 @@ struct CardioView: View {
                 headerRow
                 ThinDivider().padding(.top, 8)
 
-                ForEach(CardioType.allCases, id: \.self) { type in
+                ForEach(activeCardioTypes, id: \.self) { type in
                     typeRow(type)
                     ThinDivider()
                 }
@@ -265,7 +272,7 @@ struct CardioView: View {
                 }
             } label: {
                 HStack {
-                    Text(type.rawValue)
+                    Text(type.displayName.uppercased())
                         .font(.jost(.semibold, size: 12))
                         .kerning(1.5)
                         .foregroundColor(isExpanded ? Color.workoutAccent : Color(.secondaryLabel))

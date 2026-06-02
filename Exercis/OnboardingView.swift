@@ -185,7 +185,7 @@ struct OnboardingView: View {
                 .font(.system(size: 16))
                 .foregroundStyle(isSelected ? Color.workoutAccent : Color(.tertiaryLabel))
 
-            Text(displayName(for: type))
+            Text(type.displayName)
                 .font(.jost(.regular, size: 14))
                 .foregroundStyle(.primary)
                 .lineLimit(1)
@@ -227,34 +227,4 @@ struct OnboardingView: View {
         onboardingCompleted = true
     }
 
-    private func displayName(for type: CardioType) -> String {
-        switch type {
-        case .crosstrainer:       return "Crosstrainer"
-        case .cyclingStationary:  return "Cykel"
-        case .rowingMachine:      return "Roddmaskin"
-        case .treadmillRun:       return "Löpband (löpning)"
-        case .treadmillWalk:      return "Löpband (gång)"
-        case .stairClimber:       return "Trappmaskin"
-        case .skiErg:             return "Stakmaskin"
-        case .assaultBike:        return "Assault Bike"
-        case .running:            return "Löpning"
-        case .walking:            return "Promenad"
-        case .hiking:             return "Vandring"
-        case .roadCycling:        return "Landsvägscykling"
-        case .mountainBiking:     return "Terrängcykling"
-        case .swimming:           return "Simning"
-        case .crossCountrySkiing: return "Längdskidåkning"
-        case .iceSkating:         return "Skridskoåkning"
-        case .kayaking:           return "Kajak"
-        case .canoeing:           return "Kanot"
-        case .climbing:           return "Klättring"
-        case .boxing:             return "Boxning"
-        case .battleRopes:        return "Battle Ropes"
-        case .sled:               return "Släde"
-        case .rucking:            return "Rucking"
-        case .jumpRope:           return "Hopprep"
-        case .burpees:            return "Burpees"
-        case .mountainClimbers:   return "Mountain Climbers"
-        }
-    }
 }
