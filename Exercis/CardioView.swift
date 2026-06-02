@@ -241,6 +241,7 @@ struct CardioView: View {
     @ViewBuilder
     private func typeRow(_ type: CardioType) -> some View {
         let isExpanded = expandedType == type
+        let summary = lastSessionSummary(for: type)
 
         VStack(spacing: 0) {
             Button {
@@ -260,7 +261,7 @@ struct CardioView: View {
                     }
                 }
             } label: {
-                HStack {
+                HStack(alignment: .firstTextBaseline) {
                     Text(type.displayName.uppercased())
                         .font(.jost(.semibold, size: 12))
                         .kerning(1.5)
@@ -278,89 +279,73 @@ struct CardioView: View {
                         .opacity(increaseTypes.contains(type.rawValue) ? 1 : 0)
                     Spacer()
                     if !isExpanded {
+                        if let summary {
+                            Text(summary)
+                                .font(.jost(.regular, size: 12))
+                                .foregroundColor(Color(.secondaryLabel))
+                        }
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .medium))
                             .foregroundColor(Color(.secondaryLabel))
+                            .padding(.leading, 6)
                     }
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
-                .padding(.bottom, isExpanded ? 14 : 20)
+                .padding(.bottom, isExpanded ? 10 : 20)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
 
             if isExpanded {
+                // Column headers
+                HStack(spacing: 0) {
+                    if type == .hiking {
+                        Text("H")
+                            .frame(width: 60, alignment: .leading)
+                        Text("MIN")
+                            .frame(width: 60, alignment: .leading)
+                    } else {
+                        Text("MIN")
+                            .frame(width: 80, alignment: .leading)
+                    }
+                    Spacer()
+                    Text("KM")
+                        .frame(width: 80, alignment: .trailing)
+                }
+                .font(.jost(.medium, size: 10))
+                .kerning(1.5)
+                .foregroundColor(Color(.secondaryLabel))
+                .padding(.horizontal, 24)
+                .padding(.bottom, 6)
+
+                // Number fields
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
                     if type == .hiking {
-                        TextField("", text: hoursBinding(for: type))
-                            .font(.jost(.semibold, size: 34))
-                            .foregroundColor(.primary)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.leading)
-                            .focused($focusedField, equals: .durationHours(type))
-                            .frame(width: 50, alignment: .leading)
-                            .overlay(alignment: .leading) {
-                                if (hours[type.rawValue] ?? "").isEmpty && focusedField != .durationHours(type) {
-                                    Text("–")
-                                        .font(.jost(.semibold, size: 34))
-                                        .foregroundColor(Color(.tertiaryLabel))
-                                        .allowsHitTesting(false)
-                                }
-                            }
-                        Text("H")
-                            .font(.jost(.medium, size: 10))
-                            .kerning(1.5)
-                            .foregroundColor(Color(.secondaryLabel))
-                            .padding(.trailing, 12)
+                        durationField(
+                            text: hoursBinding(for: type),
+                            focus: .durationHours(type),
+                            keyboard: .numberPad,
+                            width: 60
+                        )
+                        durationField(
+                            text: durationBinding(for: type),
+                            focus: .duration(type),
+                            keyboard: .numberPad,
+                            width: 60
+                        )
+                    } else {
+                        durationField(
+                            text: durationBinding(for: type),
+                            focus: .duration(type),
+                            keyboard: .decimalPad,
+                            width: 80
+                        )
                     }
 
-                    TextField("", text: durationBinding(for: type))
-                        .font(.jost(.semibold, size: 34))
-                        .foregroundColor(.primary)
-                        .keyboardType(type == .hiking ? .numberPad : .decimalPad)
-                        .multilineTextAlignment(.leading)
-                        .focused($focusedField, equals: .duration(type))
-                        .frame(width: type == .hiking ? 50 : 80, alignment: .leading)
-                        .overlay(alignment: .leading) {
-                            if (durations[type.rawValue] ?? "").isEmpty && focusedField != .duration(type) {
-                                Text("–")
-                                    .font(.jost(.semibold, size: 34))
-                                    .foregroundColor(Color(.tertiaryLabel))
-                                    .allowsHitTesting(false)
-                            }
-                        }
-
-                    Text("MIN")
-                        .font(.jost(.medium, size: 10))
-                        .kerning(1.5)
-                        .foregroundColor(Color(.secondaryLabel))
-
                     Spacer()
 
-                    TextField("", text: distanceBinding(for: type))
-                        .font(.jost(.semibold, size: 34))
-                        .foregroundColor(.primary)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.center)
-                        .focused($focusedField, equals: .distance(type))
-                        .frame(width: 80)
-                        .overlay {
-                            if (distances[type.rawValue] ?? "").isEmpty && focusedField != .distance(type) {
-                                Text("–")
-                                    .font(.jost(.semibold, size: 34))
-                                    .foregroundColor(Color(.tertiaryLabel))
-                                    .allowsHitTesting(false)
-                            }
-                        }
-
-                    Text("KM")
-                        .font(.jost(.medium, size: 10))
-                        .kerning(1.5)
-                        .foregroundColor(Color(.secondaryLabel))
-                        .padding(.leading, 6)
-
-                    Spacer()
+                    distanceField(text: distanceBinding(for: type), focus: .distance(type))
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 14)
@@ -384,6 +369,61 @@ struct CardioView: View {
                 UserDefaults.standard.setCardioIncrease(type, increaseTypes.contains(type.rawValue))
             }
         )
+    }
+
+    private func durationField(text: Binding<String>, focus: CardioField, keyboard: UIKeyboardType, width: CGFloat) -> some View {
+        TextField("", text: text)
+            .font(.jost(.semibold, size: 34))
+            .foregroundColor(.primary)
+            .keyboardType(keyboard)
+            .multilineTextAlignment(.leading)
+            .focused($focusedField, equals: focus)
+            .frame(width: width, alignment: .leading)
+            .overlay(alignment: .leading) {
+                if text.wrappedValue.isEmpty && focusedField != focus {
+                    Text("–")
+                        .font(.jost(.semibold, size: 34))
+                        .foregroundColor(Color(.tertiaryLabel))
+                        .allowsHitTesting(false)
+                }
+            }
+    }
+
+    private func distanceField(text: Binding<String>, focus: CardioField) -> some View {
+        TextField("", text: text)
+            .font(.jost(.semibold, size: 34))
+            .foregroundColor(.primary)
+            .keyboardType(.decimalPad)
+            .multilineTextAlignment(.trailing)
+            .focused($focusedField, equals: focus)
+            .frame(width: 80, alignment: .trailing)
+            .overlay(alignment: .trailing) {
+                if text.wrappedValue.isEmpty && focusedField != focus {
+                    Text("–")
+                        .font(.jost(.semibold, size: 34))
+                        .foregroundColor(Color(.tertiaryLabel))
+                        .allowsHitTesting(false)
+                }
+            }
+    }
+
+    private func lastSessionSummary(for type: CardioType) -> String? {
+        guard let dStr = UserDefaults.standard.string(forKey: "cardioSavedDuration_\(type.rawValue)"),
+              let duration = Double(dStr.replacingOccurrences(of: ",", with: ".")),
+              duration > 0 else { return nil }
+        let mins = Int(duration)
+        var text: String
+        if type == .hiking && duration >= 60 {
+            let h = mins / 60; let m = mins % 60
+            text = m > 0 ? "\(h) H \(m) MIN" : "\(h) H"
+        } else {
+            text = "\(mins) MIN"
+        }
+        if let kStr = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)"),
+           let km = Double(kStr.replacingOccurrences(of: ",", with: ".")), km > 0 {
+            text += " · \(formatWeight(km)) KM"
+        }
+        return text
     }
 
     private func totalMinutes(for type: CardioType) -> Double {
