@@ -6,7 +6,8 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 
 ## Just nu
 
-- Ruben testar appen fysiskt i eftermiddag (2026-06-02) — verifiera GifSheet i Xcode (ny fil, måste läggas till i projektet)
+- Exploratory testing planerat — Ruben testar fysiskt nästa session
+- Tre nya filer att lägga till i Xcode: GifSheet.swift, ProgramEditorView.swift, ExercisePickerView.swift
 
 ---
 
