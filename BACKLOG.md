@@ -24,9 +24,9 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ### 🟡 Snart
 
-- [ ] **ProfileView INSTÄLLNINGAR-länk fungerar inte** — `NavigationLink(value: "settings")` saknar `navigationDestination`, gör ingenting
-- [ ] **ProgramCard hardkodar "3 SET"** — ignorerar `ProgramExercise.setCount`
-- [ ] **PhotosPicker i ProfileView saknar accessibilityLabel** — VoiceOver läser ingenting på avatarknappen
+- [x] **ProfileView INSTÄLLNINGAR-länk** — åtgärdad 2026-06-02
+- [x] **ProgramCard hardkodar "3 SET"** — åtgärdad 2026-06-02
+- [x] **PhotosPicker i ProfileView saknar accessibilityLabel** — åtgärdad 2026-06-02
 
 ### 🟢 Nästa revision
 
