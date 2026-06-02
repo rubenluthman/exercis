@@ -20,118 +20,200 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            List {
-                Section("Träning") {
-                    HStack(spacing: 12) {
-                        Image(systemName: "timer")
-                            .foregroundStyle(Color.homeAccent)
-                            .frame(width: 28)
-                        Text("Vilotimer")
-                            .font(.body)
-                        Spacer()
-                        Picker("", selection: $restTimerSeconds) {
-                            Text("30s").tag(30)
-                            Text("60s").tag(60)
-                            Text("90s").tag(90)
-                            Text("2 min").tag(120)
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(width: 160)
-                    }
-                }
+        VStack(spacing: 0) {
+            headerRow
+            ThinDivider().padding(.top, 8)
 
-                Section {
-                    Toggle(isOn: $healthKitSyncEnabled) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "heart.fill")
-                                .foregroundStyle(.red)
-                                .frame(width: 28)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Spara pass till Hälsa")
-                                    .font(.body)
-                                Text("Dina pass sparas i Apple Hälsa så att de visas i Aktivitet och Fitness.")
-                                    .font(.caption)
-                                    .foregroundStyle(Color(.secondaryLabel))
-                            }
-                        }
+            ScrollView {
+                VStack(spacing: 0) {
+                    sectionBlock {
+                        sectionLabel("TRÄNING")
+                        timerRow
                     }
-                    .tint(Color.homeAccent)
 
-                    Toggle(isOn: $healthKitWeightEnabled) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "scalemass.fill")
-                                .foregroundStyle(Color(.secondaryLabel))
-                                .frame(width: 28)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Hämta kroppsvikt från Hälsa")
-                                    .font(.body)
-                                Text("Appen läser ditt senaste registrerade värde och använder det enbart för att beräkna kaloriförbrukning.")
-                                    .font(.caption)
-                                    .foregroundStyle(Color(.secondaryLabel))
-                            }
-                        }
+                    ThinDivider()
+
+                    sectionBlock {
+                        sectionLabel("HÄLSA")
+                        toggleRow(
+                            title: "SPARA PASS TILL HÄLSA",
+                            description: "Dina pass sparas i Apple Hälsa och visas i Aktivitet och Fitness.",
+                            isOn: $healthKitSyncEnabled
+                        )
+                        ThinDivider().padding(.leading, 24)
+                        toggleRow(
+                            title: "HÄMTA KROPPSVIKT FRÅN HÄLSA",
+                            description: "Appen läser ditt senaste registrerade värde och använder det enbart för att beräkna kaloriförbrukning.",
+                            isOn: $healthKitWeightEnabled
+                        )
                     }
-                    .tint(Color.homeAccent)
-                } header: {
-                    Text("Hälsa")
-                }
 
-                Section("Sekretess") {
-                    Toggle(isOn: $lockEnabled) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "faceid")
-                                .foregroundStyle(Color(.secondaryLabel))
-                                .frame(width: 28)
-                            Text("Face ID-lås")
-                                .font(.body)
+                    ThinDivider()
+
+                    sectionBlock {
+                        sectionLabel("SEKRETESS")
+                        toggleRow(
+                            title: "FACE ID-LÅS",
+                            description: nil,
+                            isOn: $lockEnabled
+                        )
+                    }
+
+                    ThinDivider()
+
+                    sectionBlock {
+                        sectionLabel("DATA")
+                        actionRow(
+                            title: "EXPORTERA TRÄNINGSDATA",
+                            systemImage: "square.and.arrow.up"
+                        ) {
+                            exportItems = buildExportItems()
+                            showExportSheet = true
                         }
                     }
-                    .tint(Color.homeAccent)
-                }
 
-                Section("Data") {
-                    Button {
-                        exportItems = buildExportItems()
-                        showExportSheet = true
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "square.and.arrow.up")
-                                .foregroundStyle(Color.historyAccent)
-                                .frame(width: 28)
-                            Text("Exportera träningsdata")
-                                .font(.body)
+                    ThinDivider()
+
+                    sectionBlock {
+                        sectionLabel("OM")
+                        HStack {
+                            Text("VERSION")
+                                .font(.jost(.semibold, size: 12))
+                                .kerning(1.5)
                                 .foregroundStyle(.primary)
+                            Spacer()
+                            Text(appVersion)
+                                .font(.jost(.regular, size: 13))
+                                .foregroundStyle(Color(.secondaryLabel))
                         }
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 16)
                     }
-                }
 
-                Section("Om") {
-                    HStack {
-                        Text("Version")
-                            .font(.body)
-                        Spacer()
-                        Text(appVersion)
-                            .font(.body)
-                            .foregroundStyle(Color(.secondaryLabel))
-                    }
-                }
-            }
-            .navigationTitle("Inställningar")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Klar") { dismiss() }
-                        .font(.body.weight(.semibold))
-                        .foregroundStyle(Color.historyAccent)
-                }
-            }
-            .sheet(isPresented: $showExportSheet) {
-                if !exportItems.isEmpty {
-                    ShareSheet(items: exportItems)
+                    ThinDivider()
                 }
             }
         }
+        .sheet(isPresented: $showExportSheet) {
+            if !exportItems.isEmpty {
+                ShareSheet(items: exportItems)
+            }
+        }
+    }
+
+    // MARK: - Header
+
+    private var headerRow: some View {
+        HStack {
+            Text("INSTÄLLNINGAR")
+                .font(.jost(.bold, size: 17))
+                .kerning(2)
+                .foregroundStyle(.primary)
+            Spacer()
+            Button("KLAR") { dismiss() }
+                .font(.jost(.semibold, size: 13))
+                .kerning(1.5)
+                .foregroundStyle(Color.historyAccent)
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 20)
+    }
+
+    // MARK: - Building blocks
+
+    private func sectionBlock<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            content()
+        }
+    }
+
+    private func sectionLabel(_ title: String) -> some View {
+        Text(title)
+            .font(.jost(.medium, size: 10))
+            .kerning(1.5)
+            .foregroundStyle(Color(.secondaryLabel))
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
+            .padding(.bottom, 8)
+    }
+
+    private func toggleRow(title: String, description: String?, isOn: Binding<Bool>) -> some View {
+        HStack(alignment: description != nil ? .top : .center, spacing: 16) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(.jost(.semibold, size: 12))
+                    .kerning(1.5)
+                    .foregroundStyle(.primary)
+                if let description {
+                    Text(description)
+                        .font(.jost(.regular, size: 12))
+                        .foregroundStyle(Color(.secondaryLabel))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            Spacer()
+            Toggle("", isOn: isOn)
+                .labelsHidden()
+                .tint(Color.homeAccent)
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 14)
+    }
+
+    private func actionRow(title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 14, weight: .medium))
+                Text(title)
+                    .font(.jost(.semibold, size: 12))
+                    .kerning(1.5)
+                Spacer()
+            }
+            .foregroundStyle(Color.historyAccent)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 16)
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Timer row
+
+    private var timerRow: some View {
+        HStack {
+            Text("VILOTIMER")
+                .font(.jost(.semibold, size: 12))
+                .kerning(1.5)
+                .foregroundStyle(.primary)
+            Spacer()
+            HStack(spacing: 0) {
+                ForEach([30, 60, 90, 120], id: \.self) { secs in
+                    Button {
+                        Haptics.selection()
+                        restTimerSeconds = secs
+                    } label: {
+                        Text(secs < 120 ? "\(secs)s" : "2 min")
+                            .font(.jost(.semibold, size: 11))
+                            .kerning(1)
+                            .foregroundStyle(restTimerSeconds == secs ? .white : Color(.secondaryLabel))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(
+                                restTimerSeconds == secs
+                                    ? Color.homeAccent
+                                    : Color(.secondarySystemFill)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                    }
+                    .buttonStyle(.plain)
+                    if secs != 120 {
+                        Spacer().frame(width: 4)
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.bottom, 16)
     }
 
     // MARK: - CSV export
@@ -145,7 +227,6 @@ struct SettingsView: View {
         )) ?? []
 
         var items: [Any] = []
-
         if !workoutSessions.isEmpty {
             if let url = writeCSV(filename: "styrka.csv", content: strengthCSV(workoutSessions)) {
                 items.append(url)
@@ -195,16 +276,4 @@ struct SettingsView: View {
         try? content.write(to: url, atomically: true, encoding: .utf8)
         return url
     }
-}
-
-// MARK: - ShareSheet
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ vc: UIActivityViewController, context: Context) {}
 }
