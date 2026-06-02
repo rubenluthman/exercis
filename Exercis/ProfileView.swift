@@ -56,12 +56,12 @@ struct ProfileView: View {
     private var headerRow: some View {
         HStack {
             Text("PROFIL")
-                .font(.jost(.bold, size: 17))
+                .font(.headline)
                 .kerning(2)
                 .foregroundColor(.primary)
             Spacer()
             Button("←") { dismiss() }
-                .font(.jost(.regular, size: 22))
+                .font(.title3)
                 .foregroundColor(Color(.secondaryLabel))
                 .frame(width: 90, height: 44, alignment: .trailing)
                 .accessibilityLabel("Stäng")
@@ -88,7 +88,7 @@ struct ProfileView: View {
 
             if editingName {
                 TextField("Ditt namn", text: $name, onCommit: { editingName = false })
-                    .font(.jost(.semibold, size: 18))
+                    .font(.title3.weight(.semibold))
                     .multilineTextAlignment(.center)
                     .submitLabel(.done)
                     .padding(.horizontal, 48)
@@ -97,7 +97,7 @@ struct ProfileView: View {
                     editingName = true
                 } label: {
                     Text(name.isEmpty ? "Lägg till namn" : name)
-                        .font(.jost(.semibold, size: 18))
+                        .font(.title3.weight(.semibold))
                         .foregroundColor(name.isEmpty ? Color(.tertiaryLabel) : .primary)
                 }
                 .buttonStyle(.plain)

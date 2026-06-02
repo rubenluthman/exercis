@@ -32,7 +32,7 @@ struct SettingsView: View {
                                 .foregroundStyle(Color.historyAccent)
                                 .frame(width: 28)
                             Text("Profil")
-                                .font(.jost(.regular, size: 16))
+                                .font(.body)
                                 .foregroundStyle(.primary)
                             Spacer()
                             Image(systemName: "chevron.right")
@@ -48,7 +48,7 @@ struct SettingsView: View {
                             .foregroundStyle(Color.homeAccent)
                             .frame(width: 28)
                         Text("Vilotimer")
-                            .font(.jost(.regular, size: 16))
+                            .font(.body)
                         Spacer()
                         Picker("", selection: $restTimerSeconds) {
                             Text("30s").tag(30)
@@ -69,9 +69,9 @@ struct SettingsView: View {
                                 .frame(width: 28)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Spara pass till Hälsa")
-                                    .font(.jost(.regular, size: 16))
+                                    .font(.body)
                                 Text("Dina pass sparas i Apple Hälsa så att de visas i Aktivitet och Fitness.")
-                                    .font(.jost(.regular, size: 12))
+                                    .font(.caption)
                                     .foregroundStyle(Color(.secondaryLabel))
                             }
                         }
@@ -85,9 +85,9 @@ struct SettingsView: View {
                                 .frame(width: 28)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Hämta kroppsvikt från Hälsa")
-                                    .font(.jost(.regular, size: 16))
+                                    .font(.body)
                                 Text("Appen läser ditt senaste registrerade värde och använder det enbart för att beräkna kaloriförbrukning.")
-                                    .font(.jost(.regular, size: 12))
+                                    .font(.caption)
                                     .foregroundStyle(Color(.secondaryLabel))
                             }
                         }
@@ -104,7 +104,7 @@ struct SettingsView: View {
                                 .foregroundStyle(Color(.secondaryLabel))
                                 .frame(width: 28)
                             Text("Face ID-lås")
-                                .font(.jost(.regular, size: 16))
+                                .font(.body)
                         }
                     }
                     .tint(Color.homeAccent)
@@ -120,7 +120,7 @@ struct SettingsView: View {
                                 .foregroundStyle(Color.historyAccent)
                                 .frame(width: 28)
                             Text("Exportera träningsdata")
-                                .font(.jost(.regular, size: 16))
+                                .font(.body)
                                 .foregroundStyle(.primary)
                         }
                     }
@@ -129,10 +129,10 @@ struct SettingsView: View {
                 Section("Om") {
                     HStack {
                         Text("Version")
-                            .font(.jost(.regular, size: 16))
+                            .font(.body)
                         Spacer()
                         Text(appVersion)
-                            .font(.jost(.regular, size: 16))
+                            .font(.body)
                             .foregroundStyle(Color(.secondaryLabel))
                     }
                 }
@@ -142,7 +142,7 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Klar") { dismiss() }
-                        .font(.jost(.semibold, size: 16))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(Color.historyAccent)
                 }
             }

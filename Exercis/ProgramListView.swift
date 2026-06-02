@@ -5,8 +5,9 @@ struct ProgramListView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
     @AppStorage("hasDraft") private var hasDraft = false
-    @AppStorage("lockEnabled") private var lockEnabled = true
     @State private var activeProgram: WorkoutProgram? = nil
+    @State private var editingProgram: WorkoutProgram? = nil
+    @State private var showNewProgram = false
     @State private var showSettings = false
     @State private var showDiscardAlert = false
     @State private var draftProgram: WorkoutProgram? = nil
@@ -33,6 +34,7 @@ struct ProgramListView: View {
                         } label: {
                             HStack(spacing: 0) {
                                 ProgramCard(program: program)
+
                                 if isDraft {
                                     Button {
                                         UserDefaults.standard.saveDraft(nil)
@@ -45,11 +47,43 @@ struct ProgramListView: View {
                                     }
                                     .buttonStyle(.plain)
                                     .accessibilityLabel("Kasta utkast")
+                                } else {
+                                    Button {
+                                        editingProgram = program
+                                    } label: {
+                                        Image(systemName: "pencil")
+                                            .font(.system(size: 13, weight: .medium))
+                                            .foregroundStyle(Color(.tertiaryLabel))
+                                            .frame(width: 44, height: 44)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Redigera \(program.name)")
                                 }
                             }
                         }
                         .buttonStyle(.plain)
                     }
+
+                    Button {
+                        showNewProgram = true
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "plus")
+                                .font(.system(size: 13, weight: .semibold))
+                            Text("NYTT PROGRAM")
+                                .font(.jost(.semibold, size: 12))
+                                .kerning(1.5)
+                        }
+                        .foregroundStyle(Color(.secondaryLabel))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .strokeBorder(Color(.separator), lineWidth: 0.5)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top, 4)
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
@@ -60,6 +94,12 @@ struct ProgramListView: View {
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showSettings) {
             SettingsView()
+        }
+        .sheet(item: $editingProgram) { program in
+            ProgramEditorView(program: program)
+        }
+        .sheet(isPresented: $showNewProgram) {
+            ProgramEditorView(program: nil)
         }
         .fullScreenCover(item: $activeProgram) { program in
             StrengthView(program: program)
