@@ -7,7 +7,6 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 ## Just nu
 
 - Exploratory testing planerat — Ruben testar fysiskt nästa session
-- Tre nya filer att lägga till i Xcode: GifSheet.swift, ProgramEditorView.swift, ExercisePickerView.swift
 
 ---
 
@@ -25,6 +24,8 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 ## Filstruktur
 
 Alla filer ligger platt i `Exercis/`-mappen.
+
+**Viktigt:** Projektet använder implicit Swift file discovery — `Sources`-fasen i `project.pbxproj` är tom. Alla `.swift`-filer i `Exercis/`-mappen inkluderas automatiskt i bygget. Nya filer behöver **inte** läggas till manuellt i Xcode.
 
 ```
 ExercisApp.swift      ← @main ExercisApp + RootView + AppScreen
