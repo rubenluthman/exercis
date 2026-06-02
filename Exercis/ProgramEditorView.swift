@@ -29,7 +29,7 @@ struct ProgramEditorView: View {
             List {
                 Section {
                     TextField("Programnamn", text: $name)
-                        .font(.body)
+                        .font(.jost(.regular, size: 16))
                 }
 
                 Section("Färg") {
@@ -58,7 +58,7 @@ struct ProgramEditorView: View {
                         Text("ÖVNINGAR")
                         Spacer()
                         EditButton()
-                            .font(.caption)
+                            .font(.jost(.regular, size: 12))
                             .foregroundStyle(accent)
                     }
                 }
@@ -76,10 +76,11 @@ struct ProgramEditorView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Avbryt") { dismiss() }
+                        .font(.jost(.regular, size: 16))
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Klar") { save() }
-                        .fontWeight(.semibold)
+                        .font(.jost(.semibold, size: 16))
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
@@ -116,7 +117,7 @@ struct ProgramEditorView: View {
                         .overlay {
                             if isSelected {
                                 Image(systemName: "checkmark")
-                                    .font(.system(size: 14, weight: .bold))
+                                    .font(.jost(.bold, size: 14))
                                     .foregroundStyle(.white)
                             }
                         }
@@ -139,10 +140,10 @@ struct ProgramEditorView: View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(ex.wrappedValue.exerciseName)
-                    .font(.body)
+                    .font(.jost(.regular, size: 16))
                     .foregroundStyle(.primary)
                 Text("\(ex.wrappedValue.setCount) set")
-                    .font(.caption)
+                    .font(.jost(.regular, size: 12))
                     .foregroundStyle(Color(.secondaryLabel))
             }
 

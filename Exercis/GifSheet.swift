@@ -19,7 +19,7 @@ struct GifSheet: View {
                     withAnimation(.easeInOut(duration: 0.22)) { showInfo.toggle() }
                 } label: {
                     Image(systemName: showInfo ? "info.circle.fill" : "info.circle")
-                        .font(.system(size: 20))
+                        .font(.jost(.regular, size: 20))
                         .foregroundStyle(Color.historyAccent)
                         .frame(width: 44, height: 44)
                 }

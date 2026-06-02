@@ -170,7 +170,7 @@ struct OnboardingView: View {
     private func cardioTypeRow(type: CardioType, isSelected: Bool) -> some View {
         HStack(spacing: 10) {
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: 16))
+                .font(.jost(.regular, size: 16))
                 .foregroundStyle(isSelected ? Color.workoutAccent : Color(.tertiaryLabel))
 
             Text(type.displayName)

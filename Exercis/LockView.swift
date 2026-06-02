@@ -26,7 +26,7 @@ struct LockView: View {
                 }
             } label: {
                 Image(systemName: "faceid")
-                    .font(.system(size: 40))
+                    .font(.jost(.regular, size: 40))
                     .foregroundStyle(authFailed ? Color(.secondaryLabel) : .clear)
                     .frame(width: 44, height: 44)
             }

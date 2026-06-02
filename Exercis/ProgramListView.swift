@@ -40,7 +40,7 @@ struct ProgramListView: View {
                                         hasDraft = false
                                     } label: {
                                         Image(systemName: "xmark")
-                                            .font(.system(size: 11, weight: .semibold))
+                                            .font(.jost(.semibold, size: 11))
                                             .foregroundStyle(Color(.secondaryLabel))
                                             .frame(width: 44, height: 44)
                                     }
@@ -51,7 +51,7 @@ struct ProgramListView: View {
                                         editingProgram = program
                                     } label: {
                                         Image(systemName: "pencil")
-                                            .font(.system(size: 13, weight: .medium))
+                                            .font(.jost(.medium, size: 13))
                                             .foregroundStyle(Color(.tertiaryLabel))
                                             .frame(width: 44, height: 44)
                                     }
@@ -68,7 +68,7 @@ struct ProgramListView: View {
                     } label: {
                         HStack(spacing: 8) {
                             Image(systemName: "plus")
-                                .font(.system(size: 13, weight: .semibold))
+                                .font(.jost(.semibold, size: 13))
                             Text("NYTT PROGRAM")
                                 .font(.jost(.semibold, size: 12))
                                 .kerning(1.5)

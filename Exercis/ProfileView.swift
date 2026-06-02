@@ -54,7 +54,7 @@ struct ProfileView: View {
                 showSettings = true
             } label: {
                 Image(systemName: "gearshape")
-                    .font(.system(size: 20))
+                    .font(.jost(.regular, size: 20))
                     .foregroundStyle(Color(.secondaryLabel))
                     .frame(width: 44, height: 44)
             }
@@ -73,7 +73,7 @@ struct ProfileView: View {
                 avatarView
                     .overlay(alignment: .bottomTrailing) {
                         Image(systemName: "pencil.circle.fill")
-                            .font(.system(size: 22))
+                            .font(.jost(.regular, size: 22))
                             .foregroundStyle(Color.historyAccent)
                             .background(Color.appBackground.clipShape(Circle()))
                     }
@@ -83,7 +83,7 @@ struct ProfileView: View {
 
             if editingName {
                 TextField("Ditt namn", text: $name, onCommit: { editingName = false })
-                    .font(.title3.weight(.semibold))
+                    .font(.jost(.semibold, size: 20))
                     .multilineTextAlignment(.center)
                     .submitLabel(.done)
                     .padding(.horizontal, 48)
@@ -92,7 +92,7 @@ struct ProfileView: View {
                     editingName = true
                 } label: {
                     Text(name.isEmpty ? "Lägg till namn" : name)
-                        .font(.title3.weight(.semibold))
+                        .font(.jost(.semibold, size: 20))
                         .foregroundColor(name.isEmpty ? Color(.tertiaryLabel) : .primary)
                 }
                 .buttonStyle(.plain)
@@ -115,7 +115,7 @@ struct ProfileView: View {
                 .overlay {
                     if initials.isEmpty {
                         Image(systemName: "person.fill")
-                            .font(.system(size: 36))
+                            .font(.jost(.regular, size: 36))
                             .foregroundStyle(Color(.secondaryLabel))
                     } else {
                         Text(initials)

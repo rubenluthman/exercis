@@ -25,7 +25,7 @@ struct ProgramCard: View {
                     if showCheckmark {
                         Spacer()
                         Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                            .font(.system(size: 18))
+                            .font(.jost(.regular, size: 18))
                             .foregroundStyle(isSelected ? accent : Color(.tertiaryLabel))
                     }
                 }

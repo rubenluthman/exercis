@@ -50,7 +50,7 @@ struct ExerciseSection: View {
                 Spacer()
                 if isCollapsed {
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 10, weight: .medium))
+                        .font(.jost(.medium, size: 10))
                         .foregroundColor(Color(.secondaryLabel))
                 } else {
                     Text(form.def.repRange)

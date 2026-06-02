@@ -339,7 +339,7 @@ struct StrengthView: View {
                 restSecondsLeft = nil
             } label: {
                 Image(systemName: "xmark")
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.jost(.medium, size: 11))
                     .frame(width: 44, height: 36)
             }
         }
@@ -479,7 +479,7 @@ struct EffortPickerSheet: View {
             if !newPRs.isEmpty {
                 HStack(spacing: 6) {
                     Image(systemName: "trophy.fill")
-                        .font(.system(size: 10))
+                        .font(.jost(.regular, size: 10))
                     Text(newPRs.count == 1
                          ? "NEW RECORD · \(newPRs[0].uppercased())"
                          : "NEW RECORDS · \(newPRs.count) EXERCISES")

@@ -164,7 +164,7 @@ struct SettingsView: View {
         Button(action: action) {
             HStack(spacing: 10) {
                 Image(systemName: systemImage)
-                    .font(.system(size: 14, weight: .medium))
+                    .font(.jost(.medium, size: 14))
                 Text(title)
                     .font(.jost(.semibold, size: 12))
                     .kerning(1.5)

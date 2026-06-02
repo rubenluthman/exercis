@@ -26,7 +26,7 @@ struct ExercisePickerView: View {
                             .foregroundStyle(.primary)
                         if !def.primaryMuscles.isEmpty {
                             Text(def.primaryMuscles.map { $0.capitalized }.joined(separator: ", "))
-                                .font(.caption)
+                                .font(.jost(.regular, size: 12))
                                 .foregroundStyle(Color(.secondaryLabel))
                         }
                     }
@@ -40,6 +40,7 @@ struct ExercisePickerView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Avbryt") { dismiss() }
+                        .font(.jost(.regular, size: 16))
                 }
             }
         }

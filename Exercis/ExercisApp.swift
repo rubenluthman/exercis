@@ -10,6 +10,14 @@ struct ExercisApp: App {
             "lockEnabled":            true,
             "restTimerSeconds":       90
         ])
+
+        if let bold = UIFont(name: "Jost-Bold", size: 17),
+           let regular = UIFont(name: "Jost-Regular", size: 17) {
+            UINavigationBar.appearance().titleTextAttributes = [.font: bold]
+            UINavigationBar.appearance().largeTitleTextAttributes = [.font: bold]
+            UIBarButtonItem.appearance().setTitleTextAttributes([.font: regular], for: .normal)
+            UIBarButtonItem.appearance().setTitleTextAttributes([.font: regular], for: .highlighted)
+        }
     }
 
     var body: some Scene {

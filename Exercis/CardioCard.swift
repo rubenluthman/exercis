@@ -35,12 +35,12 @@ struct CardioCard: View {
                     Spacer()
                     if !isExpanded {
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 10, weight: .medium))
+                            .font(.jost(.medium, size: 10))
                             .foregroundColor(Color(.secondaryLabel))
                     }
                     Button(action: onDelete) {
                         Image(systemName: "xmark")
-                            .font(.system(size: 11, weight: .medium))
+                            .font(.jost(.medium, size: 11))
                             .foregroundColor(Color(.secondaryLabel))
                     }
                     .frame(width: 44, height: 44, alignment: .trailing)
