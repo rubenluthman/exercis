@@ -7,12 +7,14 @@ struct SettingsView: View {
 
     @AppStorage("weightUnit")              private var weightUnit = "kg"
     @AppStorage("distanceUnit")            private var distanceUnit = "km"
+    @AppStorage("restTimerSeconds")        private var restTimerSeconds = 90
     @AppStorage("healthKitSyncEnabled")    private var healthKitSyncEnabled = true
     @AppStorage("healthKitWeightEnabled")  private var healthKitWeightEnabled = true
     @AppStorage("lockEnabled")             private var lockEnabled = true
 
     @State private var exportItems: [Any] = []
     @State private var showExportSheet = false
+    @State private var showProfile = false
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
@@ -21,20 +23,41 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    Button {
+                        showProfile = true
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "person.circle")
+                                .foregroundStyle(Color.historyAccent)
+                                .frame(width: 28)
+                            Text("Profil")
+                                .font(.jost(.regular, size: 16))
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundStyle(Color(.tertiaryLabel))
+                        }
+                    }
+                }
+
                 Section("Träning") {
-                    HStack {
-                        Image(systemName: "square.grid.2x2")
+                    HStack(spacing: 12) {
+                        Image(systemName: "timer")
                             .foregroundStyle(Color.homeAccent)
                             .frame(width: 28)
-                        Text("Program")
+                        Text("Vilotimer")
                             .font(.jost(.regular, size: 16))
                         Spacer()
-                        Text("Kommer snart")
-                            .font(.jost(.regular, size: 14))
-                            .foregroundStyle(Color(.tertiaryLabel))
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundStyle(Color(.tertiaryLabel))
+                        Picker("", selection: $restTimerSeconds) {
+                            Text("30s").tag(30)
+                            Text("60s").tag(60)
+                            Text("90s").tag(90)
+                            Text("2 min").tag(120)
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 160)
                     }
                 }
 
@@ -127,6 +150,9 @@ struct SettingsView: View {
                 if !exportItems.isEmpty {
                     ShareSheet(items: exportItems)
                 }
+            }
+            .sheet(isPresented: $showProfile) {
+                ProfileView()
             }
         }
     }

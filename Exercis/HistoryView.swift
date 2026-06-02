@@ -85,7 +85,6 @@ private enum HistoryRow: Identifiable {
 }
 
 struct HistoryView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutSession.date, order: .reverse) private var workoutSessions: [WorkoutSession]
     @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
@@ -282,22 +281,13 @@ struct HistoryView: View {
     }
 
     private var headerRow: some View {
-        HStack {
-            Text("HISTORIK")
-                .font(.jost(.bold, size: 17))
-                .kerning(2)
-                .foregroundColor(.primary)
-
-            Spacer()
-
-            Button("←") { dismiss() }
-                .font(.jost(.regular, size: 22))
-                .foregroundColor(Color(.secondaryLabel))
-                .frame(width: 90, height: 44, alignment: .trailing)
-                .accessibilityLabel("Tillbaka")
-        }
-        .padding(.horizontal, 24)
-        .padding(.top, 20)
+        Text("HISTORIK")
+            .font(.jost(.bold, size: 17))
+            .kerning(2)
+            .foregroundColor(.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
     }
 
     // MARK: - Logic

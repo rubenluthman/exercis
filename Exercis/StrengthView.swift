@@ -42,6 +42,10 @@ struct StrengthView: View {
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
+    @State private var restSecondsLeft: Int? = nil
+    @State private var restTimerTask: Task<Void, Never>? = nil
+    @State private var newPRNames: [String] = []
+    @AppStorage("restTimerSeconds") private var restTimerDuration = 90
     @FocusState private var activeField: WorkoutField?
 
     private var nextField: WorkoutField? {
@@ -115,7 +119,7 @@ struct StrengthView: View {
                             .frame(width: 36, height: 4)
                             .padding(.top, 8)
                             .padding(.bottom, 4)
-                        EffortPickerSheet(accent: accent, initialScore: lastEffortScore) { score in
+                        EffortPickerSheet(accent: accent, initialScore: lastEffortScore, newPRs: newPRNames) { score in
                             if let score { UserDefaults.standard.set(score, forKey: "workoutEffortScore") }
                             saveSession(effortScore: score)
                             dismiss()
@@ -153,6 +157,7 @@ struct StrengthView: View {
                 Spacer()
                 Button("NÄSTA") {
                     Haptics.selection()
+                    if case .reps = activeField { startRestTimer() }
                     activeField = nextField
                 }
                     .font(.jost(.semibold, size: 13))
@@ -212,20 +217,28 @@ struct StrengthView: View {
     }
 
     private var klarBar: some View {
-        Button("KLAR") {
-            let hasAnyData = exerciseForms.contains { $0.sets.contains { !$0.weight.isEmpty || !$0.reps.isEmpty } }
-            if hasAnyData {
-                activeField = nil
-                let saved = UserDefaults.standard.integer(forKey: "workoutEffortScore")
-                lastEffortScore = saved > 0 ? saved : 5
-                showEffortPicker = true
-            } else {
-                dismiss()
+        VStack(spacing: 0) {
+            if let remaining = restSecondsLeft, remaining > 0 {
+                restTimerBanner(remaining: remaining)
             }
+            Button("KLAR") {
+                let hasAnyData = exerciseForms.contains { $0.sets.contains { !$0.weight.isEmpty || !$0.reps.isEmpty } }
+                if hasAnyData {
+                    activeField = nil
+                    restTimerTask?.cancel()
+                    restSecondsLeft = nil
+                    let saved = UserDefaults.standard.integer(forKey: "workoutEffortScore")
+                    lastEffortScore = saved > 0 ? saved : 5
+                    newPRNames = computeNewPRs()
+                    showEffortPicker = true
+                } else {
+                    dismiss()
+                }
+            }
+            .buttonStyle(FilledButtonStyle(accent: accent))
+            .padding(.horizontal, 24)
+            .padding(.vertical, 16)
         }
-        .buttonStyle(FilledButtonStyle(accent: accent))
-        .padding(.horizontal, 24)
-        .padding(.vertical, 16)
     }
 
     // MARK: Logic
@@ -301,8 +314,83 @@ struct StrengthView: View {
     }
 
     private func saveDraftAndReturn() {
+        restTimerTask?.cancel()
         saveDraftIfNeeded()
         dismiss()
+    }
+
+    // MARK: - Rest timer
+
+    private func restTimerBanner(remaining: Int) -> some View {
+        let mins = remaining / 60
+        let secs = remaining % 60
+        let label = mins > 0 ? "\(mins):\(String(format: "%02d", secs))" : "\(secs)s"
+        return HStack {
+            Text("VILA")
+                .font(.jost(.medium, size: 10))
+                .kerning(1.5)
+            Text("·")
+            Text(label)
+                .font(.jost(.semibold, size: 13))
+                .monospacedDigit()
+            Spacer()
+            Button {
+                restTimerTask?.cancel()
+                restSecondsLeft = nil
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 11, weight: .medium))
+                    .frame(width: 44, height: 36)
+            }
+        }
+        .foregroundStyle(accent)
+        .padding(.horizontal, 24)
+        .background(accent.opacity(0.08))
+        .transition(.move(edge: .bottom).combined(with: .opacity))
+    }
+
+    private func startRestTimer() {
+        restTimerTask?.cancel()
+        let duration = restTimerDuration > 0 ? restTimerDuration : 90
+        restSecondsLeft = duration
+        restTimerTask = Task { @MainActor in
+            while (restSecondsLeft ?? 0) > 0 {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                if Task.isCancelled { return }
+                restSecondsLeft? -= 1
+            }
+            if !Task.isCancelled {
+                restSecondsLeft = nil
+                Haptics.notification(.success)
+            }
+        }
+    }
+
+    // MARK: - PR detection
+
+    private func computeNewPRs() -> [String] {
+        var prs: [String] = []
+        for form in exerciseForms {
+            let currentBest: Double = form.sets.compactMap { s -> Double? in
+                guard let w = parseWeight(s.weight), let r = Int(s.reps), r > 0, w > 0 else { return nil }
+                return w * (1 + Double(r) / 30)
+            }.max() ?? 0
+            guard currentBest > 0 else { continue }
+
+            let historicalBest: Double = sessions
+                .flatMap { $0.exerciseLogs.filter { $0.name == form.def.name } }
+                .flatMap { $0.sets }
+                .compactMap { s -> Double? in
+                    guard s.reps > 0, s.weight > 0 else { return nil }
+                    return s.weight * (1 + Double(s.reps) / 30)
+                }
+                .max() ?? 0
+
+            if currentBest > historicalBest {
+                prs.append(form.def.displayName)
+            }
+        }
+        return prs
     }
 
     private func saveSession(effortScore: Int? = nil) {
@@ -375,23 +463,41 @@ struct StrengthView: View {
 
 struct EffortPickerSheet: View {
     let accent: Color
+    var newPRs: [String] = []
     let onSelect: (Int?) -> Void
     @State private var selectedScore: Int
 
-    init(accent: Color, initialScore: Int = 5, onSelect: @escaping (Int?) -> Void) {
+    init(accent: Color, initialScore: Int = 5, newPRs: [String] = [], onSelect: @escaping (Int?) -> Void) {
         self.accent = accent
+        self.newPRs = newPRs
         self.onSelect = onSelect
         self._selectedScore = State(initialValue: initialScore)
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            if !newPRs.isEmpty {
+                HStack(spacing: 6) {
+                    Image(systemName: "trophy.fill")
+                        .font(.system(size: 10))
+                    Text(newPRs.count == 1
+                         ? "NEW RECORD · \(newPRs[0].uppercased())"
+                         : "NEW RECORDS · \(newPRs.count) EXERCISES")
+                        .font(.jost(.semibold, size: 10))
+                        .kerning(1.5)
+                }
+                .foregroundStyle(accent)
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                .padding(.bottom, 2)
+            }
+
             Text("ANSTRÄNGNING")
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
                 .foregroundColor(accent)
                 .padding(.horizontal, 24)
-                .padding(.top, 24)
+                .padding(.top, newPRs.isEmpty ? 24 : 8)
                 .padding(.bottom, 6)
 
             Text("HUR JOBBIGT VAR PASSET?")

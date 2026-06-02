@@ -13,21 +13,29 @@ struct ExerciseSection: View {
     var onToggleCollapse: () -> Void
     @FocusState.Binding var activeField: WorkoutField?
     var onEdit: () -> Void = {}
-    @State private var showVideo = false
+    @State private var showGif = false
 
     var body: some View {
         VStack(spacing: 0) {
 
             HStack(alignment: .firstTextBaseline) {
-                Button((form.def.shortName ?? form.def.displayName).uppercased()) {
-                    showVideo = true
+                if form.def.hasGif {
+                    Button((form.def.shortName ?? form.def.displayName).uppercased()) {
+                        showGif = true
+                    }
+                    .buttonStyle(.plain)
+                    .font(.jost(.semibold, size: 12))
+                    .kerning(1.5)
+                    .foregroundColor(accent)
+                    .lineLimit(1)
+                    .accessibilityHint("Öppnar övningsanimation")
+                } else {
+                    Text((form.def.shortName ?? form.def.displayName).uppercased())
+                        .font(.jost(.semibold, size: 12))
+                        .kerning(1.5)
+                        .foregroundColor(Color(.secondaryLabel))
+                        .lineLimit(1)
                 }
-                .buttonStyle(.plain)
-                .font(.jost(.semibold, size: 12))
-                .kerning(1.5)
-                .foregroundColor(accent)
-                .lineLimit(1)
-                .accessibilityHint("Öppnar instruktionsvideo")
                 Text("ÖKA")
                     .font(.jost(.medium, size: 9))
                     .kerning(1.5)
@@ -103,8 +111,8 @@ struct ExerciseSection: View {
                 UserDefaults.standard.setIncrease(form.def.name, form.shouldIncrease)
             }
         )
-        .sheet(isPresented: $showVideo) {
-            VideoSheet(def: form.def)
+        .sheet(isPresented: $showGif) {
+            GifSheet(def: form.def)
                 .presentationDetents([.medium, .large])
         }
     }

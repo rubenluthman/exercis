@@ -151,9 +151,7 @@ struct CardioView: View {
                 Spacer()
                 Button("NÄSTA") {
                     Haptics.selection()
-                    if case .duration(let type) = focusedField {
-                        focusedField = .distance(type)
-                    }
+                    focusedField = nextCardioField
                 }
                 .font(.jost(.semibold, size: 13))
                 .foregroundColor(nextCardioField != nil ? Color.workoutAccent : Color(.tertiaryLabel))
@@ -219,7 +217,7 @@ struct CardioView: View {
     // MARK: Sub-views
 
     private var headerRow: some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text("KONDITION")
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
@@ -234,16 +232,7 @@ struct CardioView: View {
             }
             .buttonStyle(.plain)
 
-            Spacer()
-
-            Button("←") {
-                saveDraftIfNeeded()
-                dismiss()
-            }
-            .font(.jost(.regular, size: 22))
-            .foregroundColor(Color(.secondaryLabel))
-            .frame(width: 90, height: 44, alignment: .trailing)
-            .accessibilityLabel("Tillbaka")
+            Spacer(minLength: 0)
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)

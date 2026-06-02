@@ -87,22 +87,11 @@ struct OnboardingView: View {
                     // Bodyweight — full width
                     programRow(programs.first { $0.name == "Bodyweight" })
 
-                    Button("BYGG EGET TRÄNINGSPROGRAM") {}
-                        .font(.jost(.regular, size: 13))
-                        .kerning(1.5)
-                        .foregroundStyle(Color(.secondaryLabel))
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .strokeBorder(Color(.separator), lineWidth: 0.5)
-                        )
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
             }
 
-            Spacer()
             bottomBar(
                 primary: "FORTSÄTT",
                 primaryEnabled: !selectedProgramIds.isEmpty,
@@ -169,7 +158,6 @@ struct OnboardingView: View {
                 .padding(.bottom, 24)
             }
 
-            Spacer()
             bottomBar(
                 primary: "KOM IGÅNG",
                 primaryEnabled: true,

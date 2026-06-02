@@ -62,7 +62,6 @@ struct MainTabView: View {
             NavigationStack {
                 HistoryView()
                     .toolbar(.hidden, for: .navigationBar)
-                    .enableSwipeBack()
             }
             .tabItem {
                 Label("Historik", systemImage: "chart.line.uptrend.xyaxis")

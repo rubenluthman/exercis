@@ -95,7 +95,7 @@ struct CardioCard: View {
                 .padding(.bottom, 4)
             }
 
-            Button(session.cardioType) {
+            Button((CardioType(rawValue: session.cardioType)?.displayName ?? session.cardioType).uppercased()) {
                 chartType = IdentifiableString(id: session.cardioType)
             }
             .buttonStyle(.plain)
