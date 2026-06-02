@@ -33,6 +33,9 @@ struct OnboardingView: View {
             }
         }
         .animation(.easeInOut(duration: 0.22), value: step)
+        .onAppear {
+            seedDefaultProgramsIfNeeded(context: context)
+        }
     }
 
     // MARK: - Header
