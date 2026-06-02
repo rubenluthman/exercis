@@ -8,8 +8,8 @@ Uppdateras löpande under sessioner och vid apprevision.
 ## Rubens beslut
 
 - [ ] **CSV-export** under Inställningar → ny sektion "Data" → "Exportera träningsdata" → iOS share sheet med `styrka.csv` och `kondition.csv`
-- [ ] **Fixa buggar B–E** från revision 2026-06-02 (se nedan)
-- [ ] **CHANGELOG.md** — dokumentera versionshistorik från v0.1.0 (ursprungligt program) och v0.2.0 (programs + onboarding + TabView)
+- [x] **Fixa buggar B–E** — klart 2026-06-02
+- [x] **CHANGELOG.md** — klart 2026-06-02
 
 ---
 
@@ -39,6 +39,21 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 - **GIF-filer i git** — acceptabelt tills köpt databas ersätter dem; lägg till `Exercis/Resources/GIFs/` i `.gitignore` när bytet sker
 - **`cardio_types.json` i Resources laddas inte av någon Swift-kod** — planerad men ej implementerad; ta upp när CardioType-systemet byggs om
+- **Enhetssystem (lbs/miles)** — AppStorage-nycklar finns, UI borttaget; implementera konsekvent i formulär, historik, charts och HealthKit när det prioriteras
+- **HIIT** — timer-baserad träning med work/rest-intervall; `HIITProgram`-modell och `HIITView` med nedräkning; HealthKit: `.highIntensityIntervalTraining`
+- **Övningsväljare** — textbaserad sökning med muskelgrupp- och begränsningsfilter (axel, knä, ländrygg, handled); fuzzy-matching; taggontologin bestäms innan kureringen
+- **Begränsningsfilter** — manuell tagg-annotering per övning; övningar markeras med varningsikon vid konflikt, döljs inte
+- **Vila-timer** — nedräkning mellan set; trivialt att bygga, hög nytta
+- **PR-detektion** — automatisk markering när nytt e1RM-rekord sätts
+- **Live Activities / Dynamic Island** — visar aktivt set/övning på låsskärmen under pass
+- **Siri Shortcuts** — "Starta mitt träningspass" via App Intents
+- **Widgets** — dagens träning, veckans streak, nästa program
+- **iCloud Sync (CloudKit)** — kräver betalt Developer-konto; rimlig premiumfunktion
+- **Apple Watch-app** — Ruben har ingen klocka men Exercis borde ha Watch-stöd
+- **HKWorkoutActivity per övning** — loggar varje `ExerciseLog` som ett aktivitetssegment i HealthKit; ger rikare vy i Apple Fitness
+- **elevationGain för vandring/löpning** — `CMAltimeter` via iPhone; `HKQuantityType(.distanceHillAscent/.distanceHillDescent)` (iOS 16+)
+- **Reduce Motion för GIFs** — respektera `@Environment(\.accessibilityReduceMotion)`; visa statisk JPG istället för GIF
+- **GIF-licens vid App Store** — byt hasaneyldrm → ExerciseDB Pro innan submission; flaggas automatiskt när App Store eller Developer-konto nämns
 
 ---
 

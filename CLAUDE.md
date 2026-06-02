@@ -4,6 +4,15 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 
 ---
 
+## Just nu
+
+- [ ] **CSV-export** — ny sektion "Data" i Inställningar, iOS share sheet med `styrka.csv` + `kondition.csv`
+- [ ] **ProfileView INSTÄLLNINGAR-länk** — `NavigationLink(value: "settings")` saknar `navigationDestination`
+- [ ] **ProgramCard hardkodar "3 SET"** — ska läsa `ProgramExercise.setCount`
+- [ ] **PhotosPicker accessibilityLabel** saknas på avatarknappen i ProfileView
+
+---
+
 ## Tech Stack
 
 - **SwiftUI + SwiftData**, iOS 17+, iPhone only, portrait only
