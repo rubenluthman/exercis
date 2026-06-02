@@ -153,8 +153,8 @@ struct ProfileView: View {
 
     private var volumeText: (String, String?) {
         guard totalVolume > 0 else { return ("—", nil) }
-        if totalVolume >= 1000 { return (formatWeight(totalVolume / 1000), " ton") }
-        return (formatWeight(totalVolume), "kg")
+        if totalVolume >= 1000 { return (formatWeight(totalVolume / 1000), " TON") }
+        return (formatWeight(totalVolume), " KG")
     }
 
     private var totalCardioMinutes: Double {
@@ -164,7 +164,7 @@ struct ProfileView: View {
     private var cardioTimeText: (String, String?) {
         guard totalCardioMinutes > 0 else { return ("—", nil) }
         let hours = totalCardioMinutes / 60
-        return (formatWeight(hours), " h")
+        return (formatWeight(hours), " H")
     }
 
     @ViewBuilder

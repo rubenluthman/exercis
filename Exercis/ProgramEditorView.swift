@@ -159,6 +159,7 @@ struct ProgramEditorView: View {
                         .foregroundStyle(ex.wrappedValue.setCount > 1 ? accent : Color(.tertiaryLabel))
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Minska antal set")
 
                 Text("\(ex.wrappedValue.setCount)")
                     .font(.jost(.semibold, size: 17))
@@ -175,6 +176,7 @@ struct ProgramEditorView: View {
                         .foregroundStyle(ex.wrappedValue.setCount < 6 ? accent : Color(.tertiaryLabel))
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Öka antal set")
             }
         }
         .padding(.vertical, 2)

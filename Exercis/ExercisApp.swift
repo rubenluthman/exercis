@@ -7,7 +7,8 @@ struct ExercisApp: App {
         UserDefaults.standard.register(defaults: [
             "healthKitSyncEnabled":   true,
             "healthKitWeightEnabled": true,
-            "lockEnabled":            true
+            "lockEnabled":            true,
+            "restTimerSeconds":       90
         ])
     }
 

@@ -108,7 +108,7 @@ struct CardioCard: View {
                     .font(.jost(.regular, size: 14))
                     .foregroundColor(Color(.secondaryLabel))
                 if let km = session.distanceKm, km > 0 {
-                    Text("\(formatWeight(km)) km")
+                    Text("\(formatWeight(km)) KM")
                         .font(.jost(.regular, size: 14))
                         .foregroundColor(Color(.secondaryLabel))
                 }
