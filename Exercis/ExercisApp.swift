@@ -66,6 +66,14 @@ struct MainTabView: View {
             .tabItem {
                 Label("Historik", systemImage: "chart.line.uptrend.xyaxis")
             }
+
+            NavigationStack {
+                ProfileView()
+                    .toolbar(.hidden, for: .navigationBar)
+            }
+            .tabItem {
+                Label("Profil", systemImage: "person.fill")
+            }
         }
         .onAppear {
             migrateExerciseNames(context: context)

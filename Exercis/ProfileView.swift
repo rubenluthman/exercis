@@ -3,7 +3,6 @@ import SwiftData
 import PhotosUI
 
 struct ProfileView: View {
-    @Environment(\.dismiss) private var dismiss
     @Query(sort: \WorkoutSession.date, order: .reverse) private var workoutSessions: [WorkoutSession]
     @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
 
@@ -11,24 +10,20 @@ struct ProfileView: View {
     @State private var photoItem: PhotosPickerItem? = nil
     @State private var profileImage: UIImage? = nil
     @State private var editingName = false
-    @State private var showHistory = false
     @State private var showSettings = false
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                headerRow
-                ThinDivider().padding(.top, 8)
+        VStack(spacing: 0) {
+            headerRow
+            ThinDivider().padding(.top, 8)
 
-                ScrollView {
-                    VStack(spacing: 32) {
-                        avatarSection
-                        statsRow
-                        actions
-                    }
-                    .padding(.top, 32)
-                    .padding(.bottom, 32)
+            ScrollView {
+                VStack(spacing: 32) {
+                    avatarSection
+                    statsRow
                 }
+                .padding(.top, 32)
+                .padding(.bottom, 32)
             }
         }
         .onAppear { loadImage() }
@@ -41,11 +36,6 @@ struct ProfileView: View {
                 }
             }
         }
-        .sheet(isPresented: $showHistory) {
-            NavigationStack {
-                HistoryView()
-            }
-        }
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
@@ -56,15 +46,20 @@ struct ProfileView: View {
     private var headerRow: some View {
         HStack {
             Text("PROFIL")
-                .font(.headline)
+                .font(.jost(.bold, size: 17))
                 .kerning(2)
                 .foregroundColor(.primary)
             Spacer()
-            Button("←") { dismiss() }
-                .font(.title3)
-                .foregroundColor(Color(.secondaryLabel))
-                .frame(width: 90, height: 44, alignment: .trailing)
-                .accessibilityLabel("Stäng")
+            Button {
+                showSettings = true
+            } label: {
+                Image(systemName: "gearshape")
+                    .font(.system(size: 20))
+                    .foregroundStyle(Color(.secondaryLabel))
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Inställningar")
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)
@@ -192,19 +187,6 @@ struct ProfileView: View {
         }
         .fixedSize()
         .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .top))
-    }
-
-    // MARK: - Actions
-
-    private var actions: some View {
-        VStack(spacing: 12) {
-            Button("HISTORIK") { showHistory = true }
-                .buttonStyle(FilledButtonStyle(accent: Color.historyAccent))
-
-            Button("INSTÄLLNINGAR") { showSettings = true }
-                .buttonStyle(OutlineButtonStyle(accent: Color(.secondaryLabel)))
-        }
-        .padding(.horizontal, 24)
     }
 
     // MARK: - Image persistence

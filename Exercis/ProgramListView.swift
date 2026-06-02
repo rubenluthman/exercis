@@ -8,7 +8,6 @@ struct ProgramListView: View {
     @State private var activeProgram: WorkoutProgram? = nil
     @State private var editingProgram: WorkoutProgram? = nil
     @State private var showNewProgram = false
-    @State private var showSettings = false
     @State private var showDiscardAlert = false
     @State private var draftProgram: WorkoutProgram? = nil
 
@@ -92,9 +91,6 @@ struct ProgramListView: View {
         }
         .softScrollEdge()
         .toolbar(.hidden, for: .navigationBar)
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
-        }
         .sheet(item: $editingProgram) { program in
             ProgramEditorView(program: program)
         }
@@ -116,26 +112,12 @@ struct ProgramListView: View {
     }
 
     private var headerRow: some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text("EXERCIS")
-                .font(.jost(.black, size: 38))
-                .kerning(6)
-                .foregroundStyle(.primary)
-
-            Spacer()
-
-            Button {
-                showSettings = true
-            } label: {
-                Image(systemName: "gearshape")
-                    .font(.system(size: 20))
-                    .foregroundStyle(Color(.secondaryLabel))
-                    .frame(width: 44, height: 44)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Inställningar")
-        }
-        .padding(.horizontal, 24)
-        .padding(.top, 20)
+        Text("EXERCIS")
+            .font(.jost(.black, size: 38))
+            .kerning(6)
+            .foregroundStyle(.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
     }
 }

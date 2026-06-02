@@ -14,7 +14,6 @@ struct SettingsView: View {
 
     @State private var exportItems: [Any] = []
     @State private var showExportSheet = false
-    @State private var showProfile = false
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
@@ -23,25 +22,6 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    Button {
-                        showProfile = true
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "person.circle")
-                                .foregroundStyle(Color.historyAccent)
-                                .frame(width: 28)
-                            Text("Profil")
-                                .font(.body)
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 11, weight: .medium))
-                                .foregroundStyle(Color(.tertiaryLabel))
-                        }
-                    }
-                }
-
                 Section("Träning") {
                     HStack(spacing: 12) {
                         Image(systemName: "timer")
@@ -150,9 +130,6 @@ struct SettingsView: View {
                 if !exportItems.isEmpty {
                     ShareSheet(items: exportItems)
                 }
-            }
-            .sheet(isPresented: $showProfile) {
-                ProfileView()
             }
         }
     }
