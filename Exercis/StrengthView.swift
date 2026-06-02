@@ -76,7 +76,7 @@ struct StrengthView: View {
                             isCollapsed: collapsedExercises.contains(i),
                             accent: accent,
                             onToggleCollapse: {
-                                UISelectionFeedbackGenerator().selectionChanged()
+                                Haptics.selection()
                                 activeField = nil
                                 withAnimation(.easeInOut(duration: 0.22)) {
                                     if collapsedExercises.contains(i) {
@@ -103,7 +103,7 @@ struct StrengthView: View {
                     .ignoresSafeArea()
                     .transition(.opacity)
                     .onTapGesture {
-                        UINotificationFeedbackGenerator().notificationOccurred(.success)
+                        Haptics.notification(.success)
                         saveSession(effortScore: nil)
                         dismiss()
                     }
@@ -135,7 +135,7 @@ struct StrengthView: View {
                         }
                         .onEnded { value in
                             if value.translation.height > 100 {
-                                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                                Haptics.notification(.success)
                                 saveSession(effortScore: nil)
                                 dismiss()
                             } else {
@@ -152,7 +152,7 @@ struct StrengthView: View {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 Button("NÄSTA") {
-                    UISelectionFeedbackGenerator().selectionChanged()
+                    Haptics.selection()
                     activeField = nextField
                 }
                     .font(.jost(.semibold, size: 13))
@@ -414,7 +414,7 @@ struct EffortPickerSheet: View {
             ThinDivider()
 
             Button("KLAR") {
-                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                Haptics.notification(.success)
                 onSelect(selectedScore)
             }
             .buttonStyle(FilledButtonStyle(accent: accent))
@@ -422,7 +422,7 @@ struct EffortPickerSheet: View {
             .padding(.top, 16)
 
             Button("HOPPA ÖVER") {
-                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                Haptics.notification(.success)
                 onSelect(nil)
             }
             .font(.jost(.regular, size: 12))

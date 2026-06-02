@@ -117,7 +117,7 @@ struct OnboardingView: View {
         if let program {
             let isSelected = selectedProgramIds.contains(program.id)
             Button {
-                UISelectionFeedbackGenerator().selectionChanged()
+                Haptics.selection()
                 if isSelected {
                     selectedProgramIds.remove(program.id)
                 } else {
@@ -149,7 +149,7 @@ struct OnboardingView: View {
                                 ForEach(group.types, id: \.rawValue) { type in
                                     let isSelected = selectedCardioTypes.contains(type.rawValue)
                                     Button {
-                                        UISelectionFeedbackGenerator().selectionChanged()
+                                        Haptics.selection()
                                         if isSelected {
                                             selectedCardioTypes.remove(type.rawValue)
                                         } else {

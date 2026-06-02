@@ -49,7 +49,7 @@ struct SessionTimePicker: View {
             ThinDivider()
 
             Button("KLAR") {
-                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                Haptics.notification(.success)
                 dismiss()
             }
                 .buttonStyle(FilledButtonStyle(accent: accent))

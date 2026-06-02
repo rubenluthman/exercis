@@ -172,7 +172,7 @@ struct HistoryView: View {
         )) {
             Button("Ta bort", role: .destructive) {
                 guard let entry = entryToDelete else { return }
-                UINotificationFeedbackGenerator().notificationOccurred(.warning)
+                Haptics.notification(.warning)
                 deleteEntry(entry)
                 entryToDelete = nil
             }
@@ -200,7 +200,7 @@ struct HistoryView: View {
 
     private func yearHeader(_ year: Int) -> some View {
         Button {
-            UISelectionFeedbackGenerator().selectionChanged()
+            Haptics.selection()
             summaryPeriod = SummaryPeriod(year: year, month: nil)
         } label: {
             Text(verbatim: String(year))
@@ -220,7 +220,7 @@ struct HistoryView: View {
     private func monthHeader(_ group: MonthGroup, isCollapsed: Bool) -> some View {
         HStack(alignment: .firstTextBaseline) {
             Button {
-                UISelectionFeedbackGenerator().selectionChanged()
+                Haptics.selection()
                 summaryPeriod = SummaryPeriod(year: group.year, month: group.month)
             } label: {
                 Text(monthName(year: group.year, month: group.month))
@@ -251,7 +251,7 @@ struct HistoryView: View {
         .padding(.bottom, 2)
         .contentShape(Rectangle())
         .onTapGesture {
-            UISelectionFeedbackGenerator().selectionChanged()
+            Haptics.selection()
             withAnimation(.easeInOut(duration: 0.22)) {
                 if collapsedMonths.contains(group.id) {
                     collapsedMonths.remove(group.id)
@@ -266,7 +266,7 @@ struct HistoryView: View {
     private func entryView(_ entry: HistoryEntry) -> some View {
         let isExpanded = expandedIDs.contains(entry.id)
         let toggle = {
-            UISelectionFeedbackGenerator().selectionChanged()
+            Haptics.selection()
             withAnimation(.easeInOut(duration: 0.22)) {
                 if isExpanded { expandedIDs.remove(entry.id) }
                 else { expandedIDs.insert(entry.id) }

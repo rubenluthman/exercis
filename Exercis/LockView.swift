@@ -19,22 +19,21 @@ struct LockView: View {
 
             Spacer()
 
-            if authFailed {
-                Button {
+            Button {
+                if authFailed {
                     authFailed = false
                     auth.authenticate()
-                } label: {
-                    Image(systemName: "faceid")
-                        .font(.system(size: 40))
-                        .foregroundStyle(Color(.secondaryLabel))
-                        .frame(width: 44, height: 44)
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Logga in")
-                .padding(.bottom, 60)
-            } else {
-                Color.clear.frame(height: 44 + 60)
+            } label: {
+                Image(systemName: "faceid")
+                    .font(.system(size: 40))
+                    .foregroundStyle(authFailed ? Color(.secondaryLabel) : .clear)
+                    .frame(width: 44, height: 44)
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Logga in")
+            .disabled(!authFailed)
+            .padding(.bottom, 60)
         }
         .onAppear {
             auth.authenticate()

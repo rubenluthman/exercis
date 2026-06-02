@@ -7,7 +7,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ## Rubens beslut
 
-- [ ] **CSV-export** under Inställningar → ny sektion "Data" → "Exportera träningsdata" → iOS share sheet med `styrka.csv` och `kondition.csv`
+- [x] **CSV-export** — klart 2026-06-02
 - [x] **Fixa buggar B–E** — klart 2026-06-02
 - [x] **CHANGELOG.md** — klart 2026-06-02
 

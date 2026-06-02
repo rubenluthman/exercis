@@ -92,7 +92,7 @@ struct CardioView: View {
                     .ignoresSafeArea()
                     .transition(.opacity)
                     .onTapGesture {
-                        UINotificationFeedbackGenerator().notificationOccurred(.success)
+                        Haptics.notification(.success)
                         saveSession(effortScore: nil)
                         dismiss()
                     }
@@ -123,7 +123,7 @@ struct CardioView: View {
                         }
                         .onEnded { value in
                             if value.translation.height > 100 {
-                                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                                Haptics.notification(.success)
                                 saveSession(effortScore: nil)
                                 dismiss()
                             } else {
@@ -150,7 +150,7 @@ struct CardioView: View {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 Button("NÄSTA") {
-                    UISelectionFeedbackGenerator().selectionChanged()
+                    Haptics.selection()
                     if case .duration(let type) = focusedField {
                         focusedField = .distance(type)
                     }
@@ -259,7 +259,7 @@ struct CardioView: View {
                     longPressFired.remove(type)
                     return
                 }
-                UISelectionFeedbackGenerator().selectionChanged()
+                Haptics.selection()
                 focusedField = nil
                 withAnimation(.easeInOut(duration: 0.22)) {
                     if isExpanded {
@@ -381,7 +381,7 @@ struct CardioView: View {
         .animation(.easeInOut(duration: 0.22), value: isExpanded)
         .simultaneousGesture(
             LongPressGesture(minimumDuration: 0.5).onEnded { _ in
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                Haptics.impact(.medium)
                 longPressFired.insert(type)
                 var t = Transaction()
                 t.disablesAnimations = true

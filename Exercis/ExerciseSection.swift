@@ -94,7 +94,7 @@ struct ExerciseSection: View {
         .onTapGesture { onToggleCollapse() }
         .simultaneousGesture(
             LongPressGesture(minimumDuration: 0.5).onEnded { _ in
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                Haptics.impact(.medium)
                 var t = Transaction()
                 t.disablesAnimations = true
                 withTransaction(t) {
