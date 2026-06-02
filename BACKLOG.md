@@ -43,8 +43,8 @@ Uppdateras löpande under sessioner och vid apprevision.
 - **HIIT** — timer-baserad träning med work/rest-intervall; `HIITProgram`-modell och `HIITView` med nedräkning; HealthKit: `.highIntensityIntervalTraining`
 - **Övningsväljare** — textbaserad sökning med muskelgrupp- och begränsningsfilter (axel, knä, ländrygg, handled); fuzzy-matching; taggontologin bestäms innan kureringen
 - **Begränsningsfilter** — manuell tagg-annotering per övning; övningar markeras med varningsikon vid konflikt, döljs inte
-- **Vila-timer** — nedräkning mellan set; trivialt att bygga, hög nytta
-- **PR-detektion** — automatisk markering när nytt e1RM-rekord sätts
+- ~~**Vila-timer**~~ — byggt 2026-06-02
+- ~~**PR-detektion**~~ — byggt 2026-06-02
 - **Live Activities / Dynamic Island** — visar aktivt set/övning på låsskärmen under pass
 - **Siri Shortcuts** — "Starta mitt träningspass" via App Intents
 - **Widgets** — dagens träning, veckans streak, nästa program
@@ -52,7 +52,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 - **Apple Watch-app** — Ruben har ingen klocka men Exercis borde ha Watch-stöd
 - **HKWorkoutActivity per övning** — loggar varje `ExerciseLog` som ett aktivitetssegment i HealthKit; ger rikare vy i Apple Fitness
 - **elevationGain för vandring/löpning** — `CMAltimeter` via iPhone; `HKQuantityType(.distanceHillAscent/.distanceHillDescent)` (iOS 16+)
-- **Reduce Motion för GIFs** — respektera `@Environment(\.accessibilityReduceMotion)`; visa statisk JPG istället för GIF
+- ~~**Reduce Motion för GIFs**~~ — byggt i GifSheet 2026-06-02
 - **GIF-licens vid App Store** — byt hasaneyldrm → ExerciseDB Pro innan submission; flaggas automatiskt när App Store eller Developer-konto nämns
 
 ---

@@ -6,7 +6,7 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 
 ## Just nu
 
-Inget akut — alla kända buggar åtgärdade 2026-06-02. Nästa: bygga ut appen (se BACKLOG.md).
+- Ruben testar appen fysiskt i eftermiddag (2026-06-02) — verifiera GifSheet i Xcode (ny fil, måste läggas till i projektet)
 
 ---
 
