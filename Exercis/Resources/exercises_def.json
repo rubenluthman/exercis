@@ -669,7 +669,7 @@
       "Sit-Up",
       "Full Sit-Up"
     ],
-    "description": "Lie on your back with knees bent and feet anchored. Raise your entire torso up toward your knees by contracting your core, then lower under control back to the floor."
+    "description": "Lie on your back with knees bent and feet secured or held down. Place your hands across your chest or behind your head. Contract your core and flex at the hips to raise your entire torso toward your knees, then lower under control back to the floor."
   },
   {
     "id": "wger_benchpress_dumbbells",
@@ -713,7 +713,7 @@
       "DB Bench Press",
       "Flat DB Press"
     ],
-    "description": "Lie on a flat bench holding a dumbbell in each hand at chest level. Press both dumbbells upward until your arms are fully extended, then lower them back to chest level with control."
+    "description": "Lie on a flat bench with a dumbbell in each hand held just outside your chest, elbows at roughly 45 degrees to your torso. Press both dumbbells upward and slightly inward until your arms are fully extended, then lower back to chest level with control."
   },
   {
     "id": "wger_butterfly",
@@ -1215,7 +1215,7 @@
       "BB Row",
       "Overhand Row"
     ],
-    "description": "Hinge at the hips with a flat back until your torso is roughly parallel to the floor, holding a barbell with an overhand grip. Row the bar toward your lower ribcage by driving your elbows back. Lower under control."
+    "description": "Hold a barbell with a pronated grip, bend your knees slightly, and hinge your torso forward until nearly parallel to the floor. Row the bar toward your lower ribcage by driving your elbows back and retracting your shoulder blades. Lower under control and repeat."
   },
   {
     "id": "wger_bent_over_rowing_reverse",
@@ -1303,7 +1303,7 @@
       "Back Squat",
       "Barbell Squat"
     ],
-    "description": "Stand with a barbell across your upper traps, feet shoulder-width apart. Descend by breaking at the hips and knees simultaneously until your thighs are parallel or below, then drive back up through your heels."
+    "description": "Set a barbell in a rack just below shoulder height. Step under it so the bar sits across your upper traps, unrack, and step back with a shoulder-width stance. Descend by breaking at the hips and knees simultaneously until your thighs are parallel or below, then drive back up through your heels."
   },
   {
     "id": "wger_dumbbell_lunges_standing",
@@ -2458,7 +2458,7 @@
       "Side Raise",
       "Dumbbell Lateral Raise"
     ],
-    "description": "Stand holding dumbbells at your sides with a slight bend in the elbows. Raise both dumbbells out to the sides until your arms are parallel to the floor, then lower with control."
+    "description": "Stand holding dumbbells at your sides, palms facing inward. With a slight bend in the elbows, raise both dumbbells out to the sides in a wide arc until your arms are parallel to the floor. Hold briefly and lower with control. Avoid using momentum by keeping the movement smooth."
   },
   {
     "id": "wger_lateral_raises_on_cable_one_armed",
@@ -3069,7 +3069,7 @@
       "Hanging Knee Raise",
       "HLR"
     ],
-    "description": "Hang from a pull-up bar with arms extended. Raise your legs until they are parallel to the floor or higher, keeping them straight or with knees bent. Lower under control without swinging."
+    "description": "Hang from a pull-up bar with an overhand grip and arms fully extended. Keeping legs straight or slightly bent, raise them until they are parallel to the floor or higher by contracting your abs and hip flexors. Lower under control without swinging."
   },
   {
     "id": "wger_cable_woodchoppers",
@@ -3108,7 +3108,7 @@
       "Cable Wood Chop",
       "Diagonal Chop"
     ],
-    "description": "Set a cable at high or low position. Grip with both hands and pull diagonally across your body while rotating through your core. Works the obliques and transverse abdominis."
+    "description": "Set a cable pulley to chest height or higher. Stand with your side to the machine and grip the handle with both hands. Keep your hips stable and facing forward as you pull the handle diagonally across your body in a chopping motion, rotating through the core. Return under control."
   },
   {
     "id": "wger_incline_pushups",
@@ -3752,7 +3752,7 @@
       "Scott Curl",
       "EZ Bar Preacher Curl"
     ],
-    "description": "Rest the back of your upper arms on a preacher bench pad while gripping a barbell or EZ-bar. Curl the weight upward to full flexion, then lower slowly to full extension without letting the arms go slack."
+    "description": "Place an EZ-bar on the preacher bench rest. Lean over the pad and grip the bar with an underhand grip, resting the backs of your upper arms against the pad. Curl the bar up to full flexion, then lower slowly to full extension without letting the arms go slack."
   },
   {
     "id": "wger_crossbench_dumbbell_pullovers",
@@ -3794,7 +3794,7 @@
       "Dumbbell Pullover",
       "Cross-Bench Pullover"
     ],
-    "description": "Lie across a bench with only your shoulders supported, hips lowered toward the floor, holding a dumbbell above your chest. Lower the dumbbell in an arc behind your head until you feel a stretch in your chest and lats, then pull it back."
+    "description": "Grasp a dumbbell with both palms flat against the underside of the top plate and thumbs wrapped around the handle. Lie across a bench with only your shoulders supported and hips lowered. Lower the dumbbell in an arc behind your head until you feel a stretch in your chest and lats, then pull it back."
   },
   {
     "id": "wger_push_ups",
@@ -3839,7 +3839,7 @@
       "Push-Up",
       "Standard Push-Up"
     ],
-    "description": "Start in a high plank with hands slightly wider than shoulders. Lower your chest toward the floor by bending your elbows, then push back to the start keeping your body rigid."
+    "description": "A fundamental bodyweight exercise targeting the chest, triceps, and shoulders. Start in a high plank with hands slightly wider than shoulder-width and body forming a straight line. Lower your chest toward the floor by bending your elbows, then push back to the start."
   },
   {
     "id": "wger_overhand_cable_curl",
@@ -4008,7 +4008,7 @@
       "Lat Pulldown",
       "Wide Grip Lat Pulldown"
     ],
-    "description": "Sit at a lat pulldown station and grip the bar wider than shoulder-width. Pull the bar down toward your upper chest by driving your elbows down and back. Return the bar to the top under control."
+    "description": "Sit at a lat pulldown station and grip the bar wider than shoulder-width with arms fully extended, feeling a stretch in your lats. Keep your shoulders depressed — do not shrug — as you pull the bar to your upper chest by driving your elbows straight down. Return under control to the fully extended position."
   },
   {
     "id": "wger_singlearm_preacher_curl",
@@ -4451,7 +4451,7 @@
       "Rope Straight Arm Pulldown",
       "Rope Cable Pullover"
     ],
-    "description": "Attach a rope to a high pulley. Grip the rope with arms extended and pull downward in an arc toward your thighs without bending your elbows. Feel the lats stretch at the top and squeeze at the bottom."
+    "description": "Attach a rope to a high pulley. Grip the two ends of the rope with arms extended straight out in front of you. Without bending the elbows, pull the rope downward in an arc toward your thighs by extending through the shoulder joint. Return slowly to the stretched position."
   },
   {
     "id": "wger_straightarm_pull_down_bar_attachment",
@@ -5879,7 +5879,7 @@
       "Incline Curl",
       "Incline Bicep Curl"
     ],
-    "description": "Lie back on an incline bench set to 45-60 degrees, holding dumbbells with arms hanging straight down. Curl the dumbbells upward without moving your upper arms, achieving a greater stretch at the bottom than a standing curl."
+    "description": "Set an adjustable bench to 45–60 degrees. Sit back with arms hanging straight down, fully extended, holding a dumbbell in each hand. Curl the dumbbells upward without moving your upper arms, achieving a greater stretch at the bottom than a standing curl. Lower under control."
   },
   {
     "id": "wger_pelvic_tilting_medium_risk",
@@ -7041,7 +7041,7 @@
       "Body Up",
       "Planche Lean"
     ],
-    "description": "Start in a push-up position and push your body backward over your hands by extending your arms, then pull forward again. Develops the pushing muscles of the shoulder girdle."
+    "description": "Assume a forearm plank position, supporting your bodyweight on your toes and forearms with your body in a straight line. Push yourself up to a high plank position by extending one arm at a time, then lower back to the forearms. Alternate the leading arm each rep."
   },
   {
     "id": "wger_braced_squat",
@@ -7443,7 +7443,7 @@
       "Romanian Deadlift",
       "Stiff-Leg Deadlift Barbell"
     ],
-    "description": "Hold a barbell at hip height with a shoulder-width overhand grip. Hinge at the hips with a slight knee bend, lowering the bar along your legs until you feel a strong hamstring stretch, then drive your hips forward to return."
+    "description": "Hold a barbell at hip height with a shoulder-width overhand grip. Keeping a neutral spine and slight knee bend, hinge at the hips and lower the bar along your legs until you feel a strong hamstring stretch. Drive your hips forward to return to the starting position."
   },
   {
     "id": "wger_burpees",

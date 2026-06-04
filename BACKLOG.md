@@ -53,6 +53,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 - **Apple Watch-app** — Ruben har ingen klocka
 - **HKWorkoutActivity per övning** — loggar varje ExerciseLog som aktivitetssegment i HealthKit
 - **elevationGain för vandring** — `CMAltimeter`; `HKQuantityType(.distanceHillAscent)`
+- **Övningsbeskrivningar — kvalitetsgenomgång** — 186 beskrivningar genererade av Claude, 15 förbättrade med wger som referens. Resterande 171 är ej granskade mot extern källa. Gå igenom och bedöm kvalitet, framför allt för komplexa övningar (olympiska lyft, gymmastikrelaterade). wger-data finns hämtad och jämförd — de flesta wger-texter är kortare eller sämre, men ~60 har tekniska detaljer vi saknar.
 - **GIF-licens vid App Store** — byt hasaneyldrm → ExerciseDB Pro innan submission
 - **Apple Swift Packages** — `swift-algorithms` + `swift-collections`; inte prioriterat förrän appen växer
 - **ProgramListView** — fil finns kvar men är defunct (ersatt av TrainingView + SettingsView); kan tas bort
