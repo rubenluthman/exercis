@@ -10,7 +10,6 @@ struct ProfileView: View {
     @State private var photoItem: PhotosPickerItem? = nil
     @State private var profileImage: UIImage? = nil
     @State private var editingName = false
-    @State private var showSettings = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -36,9 +35,6 @@ struct ProfileView: View {
                 }
             }
         }
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
-        }
     }
 
     // MARK: - Header
@@ -49,17 +45,6 @@ struct ProfileView: View {
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
                 .foregroundColor(.primary)
-            Spacer()
-            Button {
-                showSettings = true
-            } label: {
-                Image(systemName: "gearshape")
-                    .font(.jost(.regular, size: 20))
-                    .foregroundStyle(Color(.secondaryLabel))
-                    .frame(width: 44, height: 44)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Inställningar")
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)

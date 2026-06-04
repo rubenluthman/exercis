@@ -15,6 +15,8 @@ private enum CardioField: Hashable {
 }
 
 struct CardioView: View {
+    var initialType: CardioType? = nil
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
 
@@ -202,7 +204,7 @@ struct CardioView: View {
                         distances[savedType] = draftDistance
                     }
                 } else {
-                    expandedType = CardioType(rawValue: storedType)
+                    expandedType = initialType ?? CardioType(rawValue: storedType)
                 }
             }
             editedEnd = Date()

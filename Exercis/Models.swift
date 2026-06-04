@@ -53,7 +53,8 @@ final class SetLog {
 
 // MARK: - Cardio
 
-enum CardioType: String, Codable, CaseIterable {
+enum CardioType: String, Codable, CaseIterable, Identifiable {
+    var id: String { rawValue }
     // Maskiner
     case crosstrainer        = "crosstrainer"
     case cyclingStationary   = "cycling_stationary"
@@ -149,6 +150,7 @@ final class WorkoutProgram {
     var name: String = ""
     var colorName: String = "paletteIntenseRed"
     var sortIndex: Int = 0
+    var isOnTrainingPage: Bool = true
 
     @Relationship(deleteRule: .cascade, inverse: \ProgramExercise.program)
     var exercises: [ProgramExercise] = []

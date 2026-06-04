@@ -54,18 +54,10 @@ struct MainTabView: View {
     var body: some View {
         TabView {
             NavigationStack {
-                ProgramListView()
+                TrainingView()
             }
             .tabItem {
-                Label("Styrka", systemImage: "dumbbell.fill")
-            }
-
-            NavigationStack {
-                CardioView()
-                    .toolbar(.hidden, for: .navigationBar)
-            }
-            .tabItem {
-                Label("Kondition", systemImage: "heart.fill")
+                Label("Träning", systemImage: "dumbbell.fill")
             }
 
             NavigationStack {
@@ -82,6 +74,14 @@ struct MainTabView: View {
             }
             .tabItem {
                 Label("Profil", systemImage: "person.fill")
+            }
+
+            NavigationStack {
+                SettingsView()
+                    .toolbar(.hidden, for: .navigationBar)
+            }
+            .tabItem {
+                Label("Inställningar", systemImage: "gearshape.fill")
             }
         }
         .onAppear {

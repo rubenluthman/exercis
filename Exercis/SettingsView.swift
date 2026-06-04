@@ -2,21 +2,26 @@ import SwiftUI
 import SwiftData
 
 struct SettingsView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
+    @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
 
-    @AppStorage("weightUnit")              private var weightUnit = "kg"
-    @AppStorage("distanceUnit")            private var distanceUnit = "km"
     @AppStorage("restTimerSeconds")        private var restTimerSeconds = 90
     @AppStorage("healthKitSyncEnabled")    private var healthKitSyncEnabled = true
     @AppStorage("healthKitWeightEnabled")  private var healthKitWeightEnabled = true
     @AppStorage("lockEnabled")             private var lockEnabled = true
+    @AppStorage("selectedCardioTypes")     private var selectedCardioTypesRaw = ""
 
     @State private var exportItems: [Any] = []
     @State private var showExportSheet = false
+    @State private var editingProgram: WorkoutProgram? = nil
+    @State private var showNewProgram = false
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
+    }
+
+    private var selectedTypes: Set<String> {
+        Set(selectedCardioTypesRaw.split(separator: ",").map(String.init))
     }
 
     var body: some View {
@@ -26,6 +31,46 @@ struct SettingsView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
+                    sectionBlock {
+                        sectionLabel("STYRKEPROGRAM")
+                        ForEach(programs) { program in
+                            programRow(program)
+                            if program.id != programs.last?.id {
+                                ThinDivider().padding(.leading, 24)
+                            }
+                        }
+                        Button {
+                            showNewProgram = true
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "plus")
+                                    .font(.jost(.semibold, size: 13))
+                                Text("NYTT PROGRAM")
+                                    .font(.jost(.semibold, size: 12))
+                                    .kerning(1.5)
+                            }
+                            .foregroundStyle(Color(.secondaryLabel))
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    ThinDivider()
+
+                    sectionBlock {
+                        sectionLabel("KONDITIONSFORMER")
+                        ForEach(CardioType.allCases, id: \.self) { type in
+                            cardioTypeRow(type)
+                            if type != CardioType.allCases.last {
+                                ThinDivider().padding(.leading, 24)
+                            }
+                        }
+                    }
+
+                    ThinDivider()
+
                     sectionBlock {
                         sectionLabel("TRÄNING")
                         timerRow
@@ -99,24 +144,24 @@ struct SettingsView: View {
                 ShareSheet(items: exportItems)
             }
         }
+        .sheet(item: $editingProgram) { program in
+            ProgramEditorView(program: program)
+        }
+        .sheet(isPresented: $showNewProgram) {
+            ProgramEditorView(program: nil)
+        }
     }
 
     // MARK: - Header
 
     private var headerRow: some View {
-        HStack {
-            Text("INSTÄLLNINGAR")
-                .font(.jost(.bold, size: 17))
-                .kerning(2)
-                .foregroundStyle(.primary)
-            Spacer()
-            Button("KLAR") { dismiss() }
-                .font(.jost(.semibold, size: 13))
-                .kerning(1.5)
-                .foregroundStyle(Color.historyAccent)
-        }
-        .padding(.horizontal, 24)
-        .padding(.top, 20)
+        Text("INSTÄLLNINGAR")
+            .font(.jost(.bold, size: 17))
+            .kerning(2)
+            .foregroundStyle(.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
     }
 
     // MARK: - Building blocks
@@ -175,6 +220,71 @@ struct SettingsView: View {
             .padding(.vertical, 16)
         }
         .buttonStyle(.plain)
+    }
+
+    // MARK: - Program row
+
+    private func programRow(_ program: WorkoutProgram) -> some View {
+        HStack(spacing: 12) {
+            Toggle("", isOn: Binding(
+                get: { program.isOnTrainingPage },
+                set: { program.isOnTrainingPage = $0; try? context.save() }
+            ))
+            .labelsHidden()
+            .tint(Color(program.colorName))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(program.name.uppercased())
+                    .font(.jost(.semibold, size: 12))
+                    .kerning(1.5)
+                    .foregroundStyle(.primary)
+                Text("\(program.sortedExercises.count) ÖVNINGAR · \(program.sortedExercises.first?.setCount ?? 3) SET")
+                    .font(.jost(.medium, size: 10))
+                    .kerning(1.5)
+                    .foregroundStyle(Color(.secondaryLabel))
+            }
+
+            Spacer()
+
+            Button {
+                editingProgram = program
+            } label: {
+                Image(systemName: "pencil")
+                    .font(.jost(.medium, size: 13))
+                    .foregroundStyle(Color(.tertiaryLabel))
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Redigera \(program.name)")
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 10)
+    }
+
+    // MARK: - Cardio type row
+
+    private func cardioTypeRow(_ type: CardioType) -> some View {
+        HStack {
+            Toggle("", isOn: Binding(
+                get: { selectedTypes.contains(type.rawValue) },
+                set: { on in
+                    var types = selectedTypes
+                    if on { types.insert(type.rawValue) } else { types.remove(type.rawValue) }
+                    selectedCardioTypesRaw = types.joined(separator: ",")
+                }
+            ))
+            .labelsHidden()
+            .tint(Color.workoutAccent)
+
+            Text(type.displayName.uppercased())
+                .font(.jost(.semibold, size: 12))
+                .kerning(1.5)
+                .foregroundStyle(.primary)
+
+            Spacer()
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 14)
     }
 
     // MARK: - Timer row
