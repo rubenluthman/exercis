@@ -13,7 +13,6 @@ struct HealthKitManager {
             HKQuantityType(.activeEnergyBurned),
             HKQuantityType(.distanceCycling),
             HKQuantityType(.distanceWalkingRunning),
-            HKQuantityType(.distanceHillAscent)
         ]
         if #available(iOS 18.0, *) {
             shareTypes.insert(HKQuantityType(.workoutEffortScore))
@@ -54,10 +53,10 @@ struct HealthKitManager {
         if let km = distanceKm, km > 0 {
             await addDistance(to: builder, km: km, cardioType: type, start: start, end: end)
         }
-        if let elevation = elevationGain, elevation > 0 {
-            await addElevation(to: builder, meters: elevation, start: start, end: end)
-        }
         try? await builder.endCollection(at: end)
+        if let elevation = elevationGain, elevation > 0 {
+            await addElevationMetadata(to: builder, meters: elevation)
+        }
         guard let workout = try? await builder.finishWorkout() else { return nil }
         if #available(iOS 18.0, *), let score = effortScore {
             await attachEffortScore(score, to: workout, start: start, end: end)
@@ -140,12 +139,12 @@ struct HealthKitManager {
         }
     }
 
-    private func addElevation(to builder: HKWorkoutBuilder, meters: Double, start: Date, end: Date) async {
-        let type = HKQuantityType(.distanceHillAscent)
-        let quantity = HKQuantity(unit: .meter(), doubleValue: meters)
-        let sample = HKQuantitySample(type: type, quantity: quantity, start: start, end: end)
+    private func addElevationMetadata(to builder: HKWorkoutBuilder, meters: Double) async {
+        let metadata: [String: Any] = [
+            HKMetadataKeyElevationAscended: HKQuantity(unit: .meter(), doubleValue: meters)
+        ]
         await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
-            builder.add([sample]) { _, _ in cont.resume() }
+            builder.addMetadata(metadata) { _, _ in cont.resume() }
         }
     }
 
