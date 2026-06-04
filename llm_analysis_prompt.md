@@ -8,7 +8,7 @@ Gör en **strategisk arkitekturgenomgång**. Fokus är inte att hitta stavfel el
 
 1. **Inkonsekvenser** — platser där samma sak görs på olika sätt i olika filer, eller där namngivning/struktur inte följer något tydligt mönster
 2. **Onödiga beroenden** — kod som är hårdare kopplad än den behöver vara, eller där state hanteras på ett sätt som gör framtida ändringar svårare
-3. **Risker inför nästa omskrivning** — appen ska snart få en stor strukturell förändring: TabView ersätter nuvarande navigation, och `ExerciseDef` ska bli en SwiftData-modell istället för en statisk struct. Vad i nuvarande kod riskerar att skapa problem när det sker?
+3. **Risker inför nästa omskrivning** — appen ska snart få en stor strukturell förändring: nuvarande TabView (4 tabbar) ska omstruktureras till 3 tabbar där Inställningar och Profil flyttar till ett kugghjul i navigationsbaren, och `ExerciseDef` ska bli en SwiftData-modell istället för en statisk struct. Vad i nuvarande kod riskerar att skapa problem när det sker?
 4. **Datamodell-problem** — UserDefaults-nycklar som är för löst definierade, SwiftData-relationer som är felaktigt modellerade, state som lever på fel ställe
 
 ## Format
