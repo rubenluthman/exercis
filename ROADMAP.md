@@ -30,8 +30,8 @@ enum GifSource: String, Codable {
 }
 ```
 
-### TabView-navigation
-Ersätter nuvarande custom TrainingView + navigationDestination. Tre tabbar:
+### TabView-omstrukturering
+Nuvarande: 4 tabbar (Träning · Historik · Profil · Inställningar). Ny struktur: 3 tabbar:
 
 ```
 │  💪 Styrka  │  ♥ Kondition  │  📊 Historik  │
