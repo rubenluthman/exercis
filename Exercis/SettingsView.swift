@@ -6,6 +6,7 @@ struct SettingsView: View {
     @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
 
     @AppStorage("restTimerSeconds")        private var restTimerSeconds = 90
+    @AppStorage("useImperialUnits")        private var useImperialUnits = false
     @AppStorage("healthKitSyncEnabled")    private var healthKitSyncEnabled = true
     @AppStorage("healthKitWeightEnabled")  private var healthKitWeightEnabled = true
     @AppStorage("lockEnabled")             private var lockEnabled = true
@@ -73,6 +74,8 @@ struct SettingsView: View {
 
                     sectionBlock {
                         sectionLabel("TRÄNING")
+                        unitRow
+                        ThinDivider().padding(.leading, 24)
                         timerRow
                     }
 
@@ -287,6 +290,40 @@ struct SettingsView: View {
 
     // MARK: - Timer row
 
+    private var unitRow: some View {
+        HStack {
+            Text("ENHETER")
+                .font(.jost(.semibold, size: 12))
+                .kerning(1.5)
+                .foregroundStyle(.primary)
+            Spacer()
+            HStack(spacing: 4) {
+                ForEach([(false, "KG / KM"), (true, "LBS / MI")], id: \.0) { imperial, label in
+                    Button {
+                        Haptics.selection()
+                        useImperialUnits = imperial
+                    } label: {
+                        Text(label)
+                            .font(.jost(.semibold, size: 11))
+                            .kerning(1)
+                            .foregroundStyle(useImperialUnits == imperial ? .white : Color(.secondaryLabel))
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 6)
+                            .background(
+                                useImperialUnits == imperial
+                                    ? Color.homeAccent
+                                    : Color(.secondarySystemFill)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.bottom, 16)
+    }
+
     private var timerRow: some View {
         HStack {
             Text("VILOTIMER")
@@ -294,17 +331,17 @@ struct SettingsView: View {
                 .kerning(1.5)
                 .foregroundStyle(.primary)
             Spacer()
-            HStack(spacing: 0) {
-                ForEach([30, 60, 90, 120], id: \.self) { secs in
+            HStack(spacing: 4) {
+                ForEach([0, 30, 60, 90, 120], id: \.self) { secs in
                     Button {
                         Haptics.selection()
                         restTimerSeconds = secs
                     } label: {
-                        Text(secs < 120 ? "\(secs)s" : "2 min")
+                        Text(secs == 0 ? "AV" : secs < 120 ? "\(secs)s" : "2m")
                             .font(.jost(.semibold, size: 11))
                             .kerning(1)
                             .foregroundStyle(restTimerSeconds == secs ? .white : Color(.secondaryLabel))
-                            .padding(.horizontal, 10)
+                            .padding(.horizontal, 9)
                             .padding(.vertical, 6)
                             .background(
                                 restTimerSeconds == secs
@@ -314,9 +351,6 @@ struct SettingsView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
                     .buttonStyle(.plain)
-                    if secs != 120 {
-                        Spacer().frame(width: 4)
-                    }
                 }
             }
         }

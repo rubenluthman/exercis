@@ -14,6 +14,7 @@ struct ExerciseSection: View {
     @FocusState.Binding var activeField: WorkoutField?
     var onEdit: () -> Void = {}
     @State private var showGif = false
+    @AppStorage("useImperialUnits") private var imperial = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -67,7 +68,7 @@ struct ExerciseSection: View {
                 HStack(spacing: 0) {
                     Text("SET")
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("KG")
+                    Text(weightLabel(imperial))
                         .frame(width: 80, alignment: .leading)
                     Text("REPS")
                         .frame(width: 120, alignment: .trailing)
@@ -113,7 +114,7 @@ struct ExerciseSection: View {
         )
         .sheet(isPresented: $showGif) {
             GifSheet(def: form.def)
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
     }

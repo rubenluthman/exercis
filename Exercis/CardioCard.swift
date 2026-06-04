@@ -19,6 +19,7 @@ struct CardioCard: View {
     let onDelete: () -> Void
     @State private var chartType: IdentifiableString? = nil
     @State private var showEffortChart = false
+    @AppStorage("useImperialUnits") private var imperial = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -110,7 +111,7 @@ struct CardioCard: View {
                     .font(.jost(.regular, size: 14))
                     .foregroundColor(Color(.secondaryLabel))
                 if let km = session.distanceKm, km > 0 {
-                    Text("\(formatWeight(km)) KM")
+                    Text("\(displayDistance(km, imperial: imperial)) \(distanceLabel(imperial))")
                         .font(.jost(.regular, size: 14))
                         .foregroundColor(Color(.secondaryLabel))
                 }

@@ -20,6 +20,7 @@ struct TrainingView: View {
         selectedCardioTypesRaw
             .split(separator: ",")
             .compactMap { CardioType(rawValue: String($0)) }
+            .sorted { $0.displayName < $1.displayName }
     }
 
     var body: some View {
@@ -83,36 +84,53 @@ struct TrainingView: View {
             ThinDivider()
             ForEach(trainingPrograms) { program in
                 let isDraft = hasDraft && UserDefaults.standard.loadDraft()?.programId == program.id.uuidString
-                Button {
-                    if isDraft {
-                        activeProgram = program
-                    } else if hasDraft {
-                        pendingProgram = program
-                        showDiscardAlert = true
-                    } else {
-                        activeProgram = program
-                    }
-                } label: {
-                    HStack(spacing: 0) {
-                        ProgramCard(program: program)
-                            .padding(.horizontal, 24)
-                            .padding(.vertical, 12)
+                HStack(spacing: 0) {
+                    Button {
                         if isDraft {
+                            activeProgram = program
+                        } else if hasDraft {
+                            pendingProgram = program
+                            showDiscardAlert = true
+                        } else {
+                            activeProgram = program
+                        }
+                    } label: {
+                        HStack(spacing: 0) {
+                            ProgramCard(program: program)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 12)
+                            if !isDraft {
+                                Image(systemName: "chevron.right")
+                                    .font(.jost(.medium, size: 10))
+                                    .foregroundStyle(Color(.tertiaryLabel))
+                                    .padding(.trailing, 24)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .buttonStyle(.plain)
+
+                    if isDraft {
+                        VStack(spacing: 2) {
+                            Text("FORTSÄTT")
+                                .font(.jost(.semibold, size: 10))
+                                .kerning(1.5)
+                                .foregroundStyle(Color(program.colorName))
                             Button {
                                 UserDefaults.standard.saveDraft(nil)
                                 hasDraft = false
                             } label: {
                                 Image(systemName: "xmark")
-                                    .font(.jost(.semibold, size: 11))
-                                    .foregroundStyle(Color(.secondaryLabel))
+                                    .font(.jost(.medium, size: 11))
+                                    .foregroundStyle(Color(.tertiaryLabel))
                                     .frame(width: 44, height: 44)
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel("Kasta utkast")
                         }
+                        .padding(.trailing, 8)
                     }
                 }
-                .buttonStyle(.plain)
                 ThinDivider()
             }
         }

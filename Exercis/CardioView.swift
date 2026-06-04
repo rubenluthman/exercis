@@ -10,6 +10,7 @@ struct CardioView: View {
     @Environment(\.modelContext) private var context
 
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
+    @AppStorage("useImperialUnits") private var imperial = false
 
     @State private var distance = ""
     @State private var increaseActive = false
@@ -51,7 +52,7 @@ struct CardioView: View {
         text = text.trimmingCharacters(in: .whitespaces)
         if let kStr = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)"),
            let km = Double(kStr.replacingOccurrences(of: ",", with: ".")), km > 0 {
-            text += " · \(formatWeight(km)) KM"
+            text += " · \(displayDistance(km, imperial: imperial)) \(distanceLabel(imperial))"
         }
         return text
     }
@@ -103,7 +104,7 @@ struct CardioView: View {
                                     .allowsHitTesting(false)
                             }
                         }
-                        Text("KM")
+                        Text(distanceLabel(imperial))
                             .font(.jost(.medium, size: 10))
                             .kerning(1.5)
                             .foregroundColor(Color(.secondaryLabel))
@@ -206,8 +207,9 @@ struct CardioView: View {
                 distance = UserDefaults.standard.string(forKey: draftDistanceKey) ?? ""
             } else {
                 editedStart = Date()
-                if let savedDist = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)") {
-                    distance = savedDist
+                if let savedDist = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)"),
+                   let km = parseWeight(savedDist) {
+                    distance = displayDistance(km, imperial: imperial)
                 }
             }
             Task { await HealthKitManager.shared.requestAuthorization() }
@@ -296,7 +298,7 @@ struct CardioView: View {
         let minutes = durationFromTime()
         didCompleteSession = true
 
-        let distanceKm = distance.isEmpty ? nil : Double(distance.replacingOccurrences(of: ",", with: "."))
+        let distanceKm = distance.isEmpty ? nil : parseDistanceInput(distance, imperial: imperial)
 
         UserDefaults.standard.removeObject(forKey: draftStartKey)
         UserDefaults.standard.removeObject(forKey: draftDistanceKey)

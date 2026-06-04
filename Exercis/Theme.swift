@@ -146,3 +146,26 @@ func parseWeight(_ text: String) -> Double? {
     let normalized = text.replacingOccurrences(of: ",", with: ".")
     return Double(normalized)
 }
+
+// MARK: - Unit-aware display (kg/lbs, km/mi)
+
+func displayWeight(_ kg: Double, imperial: Bool) -> String {
+    formatWeight(imperial ? kg * 2.20462 : kg)
+}
+
+func displayDistance(_ km: Double, imperial: Bool) -> String {
+    formatWeight(imperial ? km * 0.621371 : km)
+}
+
+func parseWeightInput(_ text: String, imperial: Bool) -> Double? {
+    guard let value = parseWeight(text) else { return nil }
+    return imperial ? value / 2.20462 : value
+}
+
+func parseDistanceInput(_ text: String, imperial: Bool) -> Double? {
+    guard let value = parseWeight(text) else { return nil }
+    return imperial ? value / 0.621371 : value
+}
+
+func weightLabel(_ imperial: Bool) -> String { imperial ? "LBS" : "KG" }
+func distanceLabel(_ imperial: Bool) -> String { imperial ? "MI" : "KM" }

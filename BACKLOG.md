@@ -7,6 +7,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ## Rubens beslut
 
+- [x] **Enhetssystem (lbs/miles)** — klart 2026-06-04; charts (ExerciseChartSheet, CardioChartSheet, PeriodSummarySheet) konverterar ännu inte — nästa revision
 - [ ] **Övningsbeskrivningar — kvalitetsgenomgång** — 186 beskrivningar genererade av Claude, 15 förbättrade med wger som referens. Resterande 171 är ej granskade mot extern källa. ~60 wger-texter har tekniska detaljer vi saknar.
 
 - [x] **CSV-export** — klart 2026-06-02
@@ -41,21 +42,24 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ---
 
+## Inför App Store-release (kräver Developer-konto)
+
+- **iCloud Sync (CloudKit)** — kräver betalt Developer-konto
+- **GIF-licens** — byt hasaneyldrm-källan mot licensierad (ExerciseDB Pro) innan submission
+- **GIF-filer i git** — städa bort från repot; i .gitignore men finns i historik
+
+---
+
 ## Rubens parkerade beslut
 
 - **HIIT** — timer-baserad träning; `HIITView` med nedräkning; HealthKit: `.highIntensityIntervalTraining`
-- **iCloud Sync (CloudKit)** — kräver betalt Developer-konto
-- **GIF-licens vid App Store** — byt hasaneyldrm → ExerciseDB Pro innan submission
 
 ---
 
 ## Claudes parkerade förslag
 
-- **Live Activities / Dynamic Island** — visar aktivt set/övning på låsskärmen under pass
-- **GIF-filer i git** — nu i .gitignore; ersätt med licensierad källa innan App Store
-- **Enhetssystem (lbs/miles)** — AppStorage-nycklar finns; implementera konsekvent när det prioriteras
 - **Begränsningsfilter** — tagg-annotering per övning; varningsikon vid konflikt
-- **Siri Shortcuts** — App Intents; "Hej Siri, starta ett pass"
+- **Siri Shortcuts** — App Intents; saknar tydligt use case för en-användarapp där appen öppnas manuellt
 - **Widgets** — streak, nästa program
 - **Apple Watch-app** — Ruben har ingen klocka
 - **HKWorkoutActivity per övning** — loggar varje ExerciseLog som aktivitetssegment i HealthKit

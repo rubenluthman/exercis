@@ -27,6 +27,7 @@ struct StrengthView: View {
     private var sessions: [WorkoutSession]
 
     @AppStorage("hasDraft") private var hasDraft = false
+    @AppStorage("useImperialUnits") private var imperial = false
     @State private var exerciseForms: [ExerciseFormData] = []
 
     private var accent: Color { Color(program.colorName) }
@@ -284,7 +285,7 @@ struct StrengthView: View {
                let log = session.exerciseLogs.first(where: { $0.name == def.name }),
                let maxWeight = log.sets.filter({ $0.weight > 0 }).map(\.weight).max(),
                let bestSet = log.sets.filter({ $0.weight == maxWeight }).max(by: { $0.reps < $1.reps }) {
-                let w = formatWeight(bestSet.weight)
+                let w = displayWeight(bestSet.weight, imperial: imperial)
                 let r = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
                 sets = Array(repeating: SetFormData(weight: w, reps: r), count: setCount)
             }
@@ -456,7 +457,7 @@ struct StrengthView: View {
             for (j, s) in form.sets.enumerated() {
                 let setLog = SetLog(
                     setNumber: j + 1,
-                    weight:    parseWeight(s.weight) ?? 0,
+                    weight:    parseWeightInput(s.weight, imperial: imperial) ?? 0,
                     reps:      Int(s.reps) ?? 0
                 )
                 setLog.exerciseLog = log

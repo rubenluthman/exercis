@@ -24,6 +24,7 @@ struct HistoryCard: View {
     let onDelete: () -> Void
     @State private var chartExercise: IdentifiableString? = nil
     @State private var showEffortChart = false
+    @AppStorage("useImperialUnits") private var imperial = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -146,7 +147,7 @@ struct HistoryCard: View {
             .sorted { $0.setNumber < $1.setNumber }
             .compactMap { s -> String? in
                 guard s.reps > 0 || s.weight > 0 else { return nil }
-                let w = s.weight > 0 ? formatWeight(s.weight) : "–"
+                let w = s.weight > 0 ? displayWeight(s.weight, imperial: imperial) : "–"
                 let r = s.reps > 0 ? "\(s.reps)" : "–"
                 return "\(w)×\(r)"
             }
