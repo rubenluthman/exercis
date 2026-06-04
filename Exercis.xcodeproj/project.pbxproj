@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CE3DDF892FD18222002C849C /* Fuse in Frameworks */ = {isa = PBXBuildFile; productRef = CE3DDF882FD18222002C849C /* Fuse */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		CE17ABA42FC09F13007E1C27 /* Exercis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Exercis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE3DDF892FD18222002C849C /* Fuse in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = Exercis;
 			packageProductDependencies = (
+				CE3DDF882FD18222002C849C /* Fuse */,
 			);
 			productName = Exercis;
 			productReference = CE17ABA42FC09F13007E1C27 /* Exercis.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = CE17AB9B2FC09F12007E1C27;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CE3DDF872FD18222002C849C /* XCRemoteSwiftPackageReference "fuse-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CE17ABA52FC09F13007E1C27 /* Products */;
 			projectDirPath = "";
@@ -359,6 +368,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CE3DDF872FD18222002C849C /* XCRemoteSwiftPackageReference "fuse-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krisk/fuse-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CE3DDF882FD18222002C849C /* Fuse */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE3DDF872FD18222002C849C /* XCRemoteSwiftPackageReference "fuse-swift" */;
+			productName = Fuse;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CE17AB9C2FC09F12007E1C27 /* Project object */;
 }

@@ -60,7 +60,7 @@ extension ExerciseDef {
         ExerciseLibrary.shared.find(id: id)
     }
 
-    static let migrationVersion = 4
+    static let migrationVersion = 5
 }
 
 // MARK: - JSON Codable
@@ -79,6 +79,7 @@ private struct ExerciseDefJSON: Codable {
     let setRange: RangeJSON
     let gifFile: String?
     let gifSource: String?
+    let aliases: [String]?
 
     struct RangeJSON: Codable {
         let min: Int
@@ -118,7 +119,8 @@ final class ExerciseLibrary {
                     setRangeMin: json.setRange.min,
                     setRangeMax: json.setRange.max,
                     gifFile: json.gifFile,
-                    gifSource: GifSource(rawValue: json.gifSource ?? "none") ?? .none
+                    gifSource: GifSource(rawValue: json.gifSource ?? "none") ?? .none,
+                    aliases: json.aliases ?? []
                 )
             }
     }

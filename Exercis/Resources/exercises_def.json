@@ -1123,7 +1123,12 @@
     "gifId": "0043",
     "gifFile": "0043-qXTaZnJ.gif",
     "gifSource": "hasaneyldrm",
-    "gifQuality": "strong"
+    "gifQuality": "strong",
+    "aliases": [
+      "Barbell Back Squat",
+      "Back Squat",
+      "Barbell Squat"
+    ]
   },
   {
     "id": "wger_dumbbell_lunges_standing",
@@ -3484,7 +3489,12 @@
     "gifId": "2330",
     "gifFile": "2330-LEprlgG.gif",
     "gifSource": "hasaneyldrm",
-    "gifQuality": "weak"
+    "gifQuality": "weak",
+    "aliases": [
+      "Neutral-Grip Lat Pulldown",
+      "Lat Pulldown",
+      "Wide Grip Lat Pulldown"
+    ]
   },
   {
     "id": "wger_singlearm_preacher_curl",
@@ -3689,7 +3699,12 @@
     "gifId": "0314",
     "gifFile": "0314-ns0SIbU.gif",
     "gifSource": "hasaneyldrm",
-    "gifQuality": "strong"
+    "gifQuality": "strong",
+    "aliases": [
+      "Neutral-Grip Incline Dumbbell Bench Press",
+      "Incline Dumbbell Bench Press",
+      "Incline DB Press"
+    ]
   },
   {
     "id": "wger_leverage_machine_chest_press",

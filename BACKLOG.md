@@ -54,6 +54,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 - **elevationGain för vandring/löpning** — `CMAltimeter` via iPhone; `HKQuantityType(.distanceHillAscent/.distanceHillDescent)` (iOS 16+)
 - ~~**Reduce Motion för GIFs**~~ — byggt i GifSheet 2026-06-02
 - **GIF-licens vid App Store** — byt hasaneyldrm → ExerciseDB Pro innan submission; flaggas automatiskt när App Store eller Developer-konto nämns
+- **Apple Swift Packages** — `swift-algorithms` (`chunked(by:)` för månadsgrupper i HistoryView) och `swift-collections` (`OrderedDictionary`) kan förenkla datakod; inte prioriterat förrän appen växer
 
 ---
 
