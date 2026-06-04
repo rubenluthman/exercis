@@ -118,7 +118,11 @@ struct HealthKitManager {
              .hiking, .rucking, .crosstrainer, .stairClimber:
             identifier = .distanceWalkingRunning
         case .crossCountrySkiing:
-            identifier = .distanceCrossCountrySkiing
+            if #available(iOS 18.0, *) {
+                identifier = .distanceCrossCountrySkiing
+            } else {
+                return
+            }
         case .swimming:
             identifier = .distanceSwimming
         default:

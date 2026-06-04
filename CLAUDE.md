@@ -6,9 +6,9 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 
 ## Just nu
 
-- Byggt och klart för exploratory testing på enhet
-- GIF-laddning otestad (base64-fix implementerad)
-- Ny TrainingView och 4-tabbars navigation otestad
+- Klart för exploratory testing på gymmet
+- Deployment target fixat till iOS 17.0
+- CardioView omskriven: dedikerad sida per typ + automatisk paus
 
 ---
 
@@ -334,10 +334,10 @@ LockView → (Face ID) → MainTabView
 |--------|-----|-------|-------|
 | `hasDraft` | Bool (@AppStorage) | TrainingView/StrengthView | Om styrke-draft finns |
 | `hasCardioDraft` | Bool (@AppStorage) | TrainingView/CardioView | Om konditions-draft finns |
-| `lastCardioType` | String (@AppStorage) | CardioView | Senast öppnad/stängd typ (tom = ingen) |
 | `workoutDraft` | Data | UserDefaults | WorkoutDraft (JSON) inkl. ihopfällningsläge |
-| `cardioDraftType` | String | UserDefaults | Typ för konditions-draft |
-| `cardioDraftDistance` | String | UserDefaults | Distans (km) för konditions-draft |
+| `cardioDraftType` | String | UserDefaults | Typ för aktiv konditions-draft |
+| `cardioDraftStartTime_{TYPE}` | Double | UserDefaults | Starttid (timeIntervalSince1970) för pausat konditionspass |
+| `cardioDraftDistance_{TYPE}` | String | UserDefaults | Distans (km) för pausat konditionspass |
 | `cardioSavedDuration_{TYPE}` | String | UserDefaults | Senast sparad duration per kardioform (beräknad från tid) |
 | `cardioSavedDistance_{TYPE}` | String | UserDefaults | Senast sparad distans per kardioform |
 | `cardioEffortScore_{TYPE}` | Int | UserDefaults | Senast sparad ansträngning per kardioform (startvärde i picker) |

@@ -19,12 +19,10 @@ struct CardioView: View {
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
-    @State private var longPressFired = false
     @FocusState private var distanceFocused: Bool
 
     private var draftStartKey: String { "cardioDraftStartTime_\(type.rawValue)" }
     private var draftDistanceKey: String { "cardioDraftDistance_\(type.rawValue)" }
-    private var draftActiveKey: String { "cardioDraftActive_\(type.rawValue)" }
 
     private var lastSummary: String? {
         guard let dStr = UserDefaults.standard.string(forKey: "cardioSavedDuration_\(type.rawValue)"),
@@ -176,7 +174,6 @@ struct CardioView: View {
             LongPressGesture(minimumDuration: 0.5).onEnded { _ in
                 guard !showEffortPicker else { return }
                 Haptics.impact(.medium)
-                longPressFired = true
                 increaseActive.toggle()
                 UserDefaults.standard.setCardioIncrease(type, increaseActive)
             }

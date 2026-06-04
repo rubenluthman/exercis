@@ -60,4 +60,14 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ---
 
+---
+
+## Revision 2026-06-04 — fynd
+
+- [x] Deployment target var 26.5 — fixat till 17.0
+- [x] `draftActiveKey` i CardioView — oanvänd variabel, borttagen
+- [x] `longPressFired` i CardioView — kvarglömt från accordion, borttaget
+- [x] `lastCardioType` AppStorage — borttagen (accordion-artefakt)
+- [x] `distanceCrossCountrySkiing` — saknade `#available(iOS 18.0, *)` guard
+
 *Senast uppdaterad: 2026-06-04*
