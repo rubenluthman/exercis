@@ -217,18 +217,17 @@
       "barbell"
     ],
     "contraindications": [
-      "elbow_extension_loaded",
-      "wrist_extension"
+      "elbow_extension_loaded"
     ],
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 4,
-      "max": 8
+      "min": 8,
+      "max": 12
     },
     "setRange": {
       "min": 3,
-      "max": 5
+      "max": 4
     },
     "gifId": null,
     "gifFile": null,
@@ -340,11 +339,11 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 6,
-      "max": 12
+      "min": 8,
+      "max": 15
     },
     "setRange": {
-      "min": 3,
+      "min": 2,
       "max": 4
     },
     "gifId": "0195",
@@ -382,12 +381,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 4,
-      "max": 8
+      "min": 6,
+      "max": 12
     },
     "setRange": {
       "min": 3,
-      "max": 5
+      "max": 4
     },
     "gifId": "0025",
     "gifFile": "0025-EIeI8Vf.gif",
@@ -822,12 +821,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 4,
-      "max": 8
+      "min": 8,
+      "max": 12
     },
     "setRange": {
       "min": 3,
-      "max": 5
+      "max": 4
     },
     "gifId": "0753",
     "gifFile": "0753-ETZfAbZ.gif",
@@ -1063,7 +1062,9 @@
       "barbell"
     ],
     "contraindications": [
-      "lumbar_compression"
+      "elbow_flexion_loaded",
+      "lumbar_compression",
+      "shoulder_impingement"
     ],
     "status": "include",
     "rejectReason": null,
@@ -1106,7 +1107,8 @@
     ],
     "contraindications": [
       "elbow_flexion_loaded",
-      "shoulder_impingement"
+      "shoulder_impingement",
+      "shoulder_instability"
     ],
     "status": "include",
     "rejectReason": null,
@@ -1149,7 +1151,9 @@
       "cable"
     ],
     "contraindications": [
-      "lumbar_compression"
+      "elbow_flexion_loaded",
+      "lumbar_compression",
+      "shoulder_impingement"
     ],
     "status": "include",
     "rejectReason": null,
@@ -1868,7 +1872,6 @@
       "barbell"
     ],
     "contraindications": [
-      "elbow_medial",
       "lumbar_compression",
       "shoulder_impingement"
     ],
@@ -2191,7 +2194,10 @@
     "equipment": [
       "dumbbell"
     ],
-    "contraindications": [],
+    "contraindications": [
+      "elbow_flexion_loaded",
+      "shoulder_impingement"
+    ],
     "status": "include",
     "rejectReason": null,
     "repRange": {
@@ -2395,7 +2401,6 @@
       "smith_machine"
     ],
     "contraindications": [
-      "elbow_medial",
       "lumbar_compression",
       "shoulder_impingement"
     ],
@@ -2721,7 +2726,8 @@
     ],
     "contraindications": [
       "elbow_flexion_loaded",
-      "shoulder_impingement"
+      "shoulder_impingement",
+      "shoulder_instability"
     ],
     "status": "include",
     "rejectReason": null,
@@ -2971,12 +2977,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 10,
-      "max": 15
+      "min": 3,
+      "max": 6
     },
     "setRange": {
       "min": 3,
-      "max": 4
+      "max": 5
     },
     "gifId": null,
     "gifFile": null,
@@ -3012,11 +3018,11 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 10,
-      "max": 15
+      "min": 8,
+      "max": 20
     },
     "setRange": {
-      "min": 3,
+      "min": 2,
       "max": 4
     },
     "gifId": null,
@@ -3318,7 +3324,8 @@
     ],
     "contraindications": [
       "elbow_flexion_loaded",
-      "shoulder_impingement"
+      "shoulder_impingement",
+      "shoulder_instability"
     ],
     "status": "include",
     "rejectReason": null,
@@ -3566,11 +3573,11 @@
     "rejectReason": null,
     "repRange": {
       "min": 1,
-      "max": 5
+      "max": 3
     },
     "setRange": {
       "min": 3,
-      "max": 5
+      "max": 6
     },
     "gifId": "0648",
     "gifFile": "0648-SiWCcTN.gif",
@@ -3611,12 +3618,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 6,
-      "max": 12
+      "min": 3,
+      "max": 6
     },
     "setRange": {
       "min": 3,
-      "max": 4
+      "max": 5
     },
     "gifId": "0816",
     "gifFile": "0816-fSrPP6B.gif",
@@ -4227,7 +4234,11 @@
       "dumbbell",
       "resistance_band"
     ],
-    "contraindications": [],
+    "contraindications": [
+      "elbow_extension_loaded",
+      "shoulder_impingement",
+      "shoulder_instability"
+    ],
     "status": "include",
     "rejectReason": null,
     "repRange": {
@@ -4778,11 +4789,11 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 6,
-      "max": 12
+      "min": 10,
+      "max": 20
     },
     "setRange": {
-      "min": 3,
+      "min": 2,
       "max": 4
     },
     "gifId": "0075",
@@ -4812,17 +4823,17 @@
       "bodyweight"
     ],
     "contraindications": [
-      "wrist_extension"
+      "intra_abdominal_pressure"
     ],
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 10,
-      "max": 15
+      "min": 1,
+      "max": 1
     },
     "setRange": {
-      "min": 3,
-      "max": 4
+      "min": 2,
+      "max": 5
     },
     "gifId": "0464",
     "gifFile": "0464-CosupLu.gif",
@@ -5295,12 +5306,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 10,
-      "max": 15
+      "min": 5,
+      "max": 8
     },
     "setRange": {
       "min": 3,
-      "max": 4
+      "max": 5
     },
     "gifId": null,
     "gifFile": null,
@@ -5381,12 +5392,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 4,
-      "max": 8
+      "min": 1,
+      "max": 3
     },
     "setRange": {
       "min": 3,
-      "max": 5
+      "max": 6
     },
     "gifId": "0776",
     "gifFile": "0776-dG5Smob.gif",
@@ -5613,18 +5624,17 @@
       "dumbbell"
     ],
     "contraindications": [
-      "lumbar_compression",
-      "wrist_grip"
+      "lumbar_compression"
     ],
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 8,
-      "max": 15
+      "min": 1,
+      "max": 1
     },
     "setRange": {
       "min": 2,
-      "max": 4
+      "max": 5
     },
     "gifId": "2133",
     "gifFile": "2133-qPEzJjA.gif",
@@ -5703,12 +5713,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 8,
-      "max": 15
+      "min": 1,
+      "max": 1
     },
     "setRange": {
       "min": 2,
-      "max": 4
+      "max": 5
     },
     "gifId": null,
     "gifFile": null,
@@ -5785,12 +5795,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 6,
-      "max": 12
+      "min": 1,
+      "max": 1
     },
     "setRange": {
       "min": 3,
-      "max": 4
+      "max": 6
     },
     "gifId": null,
     "gifFile": null,
@@ -5825,12 +5835,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 12,
-      "max": 20
+      "min": 1,
+      "max": 1
     },
     "setRange": {
-      "min": 3,
-      "max": 4
+      "min": 2,
+      "max": 5
     },
     "gifId": null,
     "gifFile": null,
@@ -6297,7 +6307,6 @@
       "dumbbell"
     ],
     "contraindications": [
-      "elbow_medial",
       "lumbar_compression",
       "shoulder_impingement"
     ],
@@ -6700,12 +6709,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 10,
-      "max": 15
+      "min": 1,
+      "max": 1
     },
     "setRange": {
-      "min": 3,
-      "max": 4
+      "min": 2,
+      "max": 5
     },
     "gifId": "1775",
     "gifFile": "1775-VO2qeJg.gif",
@@ -6906,12 +6915,12 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 10,
-      "max": 15
+      "min": 1,
+      "max": 1
     },
     "setRange": {
-      "min": 3,
-      "max": 4
+      "min": 2,
+      "max": 5
     },
     "gifId": "0500",
     "gifFile": "0500-11wrviz.gif",
@@ -6942,7 +6951,8 @@
       "bodyweight"
     ],
     "contraindications": [
-      "lumbar_compression"
+      "elbow_flexion_loaded",
+      "shoulder_impingement"
     ],
     "status": "include",
     "rejectReason": null,
@@ -6983,7 +6993,10 @@
     "equipment": [
       "dumbbell"
     ],
-    "contraindications": [],
+    "contraindications": [
+      "elbow_flexion_loaded",
+      "shoulder_impingement"
+    ],
     "status": "include",
     "rejectReason": null,
     "repRange": {
@@ -7272,7 +7285,10 @@
     "equipment": [
       "bodyweight"
     ],
-    "contraindications": [],
+    "contraindications": [
+      "shoulder_impingement",
+      "shoulder_instability"
+    ],
     "status": "include",
     "rejectReason": null,
     "repRange": {
@@ -7813,11 +7829,11 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 6,
-      "max": 12
+      "min": 10,
+      "max": 20
     },
     "setRange": {
-      "min": 3,
+      "min": 2,
       "max": 4
     },
     "gifId": "0594",

@@ -94,7 +94,7 @@
     "name": "Ski Erg",
     "displayName": "Stakmaskin",
     "subcategory": "machine",
-    "hkActivityType": "rowing",
+    "hkActivityType": "functionalStrengthTraining",
     "equipment": [
       "ski_erg"
     ],
@@ -293,7 +293,7 @@
     "name": "Battle Ropes",
     "displayName": "Battle Ropes",
     "subcategory": "other",
-    "hkActivityType": "highIntensityIntervalTraining",
+    "hkActivityType": "functionalStrengthTraining",
     "equipment": [
       "battle_ropes"
     ],
