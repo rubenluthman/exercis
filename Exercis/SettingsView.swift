@@ -199,7 +199,6 @@ struct SettingsView: View {
             Spacer()
             Toggle("", isOn: isOn)
                 .labelsHidden()
-                .tint(Color.homeAccent)
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 14)
@@ -215,7 +214,7 @@ struct SettingsView: View {
                     .kerning(1.5)
                 Spacer()
             }
-            .foregroundStyle(Color.historyAccent)
+            .foregroundStyle(.primary)
             .padding(.horizontal, 24)
             .padding(.vertical, 16)
         }
@@ -274,7 +273,6 @@ struct SettingsView: View {
                 }
             ))
             .labelsHidden()
-            .tint(Color.workoutAccent)
 
             Text(type.displayName.uppercased())
                 .font(.jost(.semibold, size: 12))

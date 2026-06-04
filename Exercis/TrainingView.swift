@@ -28,18 +28,19 @@ struct TrainingView: View {
                 headerRow
                 ThinDivider().padding(.top, 8)
 
-                VStack(spacing: 24) {
+                VStack(spacing: 0) {
                     if !trainingPrograms.isEmpty {
                         programSection
+                        ThinDivider()
                     }
                     if !selectedCardioTypes.isEmpty {
                         cardioSection
                     }
                     if trainingPrograms.isEmpty && selectedCardioTypes.isEmpty {
                         emptyState
+                            .padding(.horizontal, 24)
                     }
                 }
-                .padding(.horizontal, 24)
                 .padding(.top, 20)
                 .padding(.bottom, 40)
             }
@@ -76,8 +77,10 @@ struct TrainingView: View {
     }
 
     private var programSection: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 0) {
             sectionLabel("STYRKA")
+                .padding(.horizontal, 24)
+            ThinDivider()
             ForEach(trainingPrograms) { program in
                 let isDraft = hasDraft && UserDefaults.standard.loadDraft()?.programId == program.id.uuidString
                 Button {
@@ -92,6 +95,8 @@ struct TrainingView: View {
                 } label: {
                     HStack(spacing: 0) {
                         ProgramCard(program: program)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
                         if isDraft {
                             Button {
                                 UserDefaults.standard.saveDraft(nil)
@@ -108,14 +113,16 @@ struct TrainingView: View {
                     }
                 }
                 .buttonStyle(.plain)
+                ThinDivider()
             }
         }
     }
 
     private var cardioSection: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 0) {
             sectionLabel("KONDITION")
-            ForEach(selectedCardioTypes, id: \.self) { type in
+            ThinDivider()
+            ForEach(Array(selectedCardioTypes.enumerated()), id: \.element) { _, type in
                 let isDraft = hasCardioDraft && UserDefaults.standard.string(forKey: "cardioDraftType") == type.rawValue
                 Button {
                     activeCardioType = type
@@ -130,17 +137,21 @@ struct TrainingView: View {
                             Text("FORTSÄTT")
                                 .font(.jost(.medium, size: 10))
                                 .kerning(1.5)
-                                .foregroundStyle(Color.workoutAccent)
+                                .foregroundStyle(Color(.secondaryLabel))
                         }
+                        Image(systemName: "chevron.right")
+                            .font(.jost(.medium, size: 10))
+                            .foregroundStyle(Color(.tertiaryLabel))
                     }
-                    .padding(.horizontal, 16)
-                    .frame(height: 50)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 18)
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                ThinDivider()
             }
         }
+        .padding(.horizontal, 0)
     }
 
     private var emptyState: some View {
@@ -162,5 +173,7 @@ struct TrainingView: View {
             .kerning(1.5)
             .foregroundStyle(Color(.secondaryLabel))
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 20)
+            .padding(.bottom, 8)
     }
 }

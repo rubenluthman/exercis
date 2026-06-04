@@ -59,7 +59,7 @@ struct ProfileView: View {
                     .overlay(alignment: .bottomTrailing) {
                         Image(systemName: "pencil.circle.fill")
                             .font(.jost(.regular, size: 22))
-                            .foregroundStyle(Color.historyAccent)
+                            .foregroundStyle(Color(.secondaryLabel))
                             .background(Color.appBackground.clipShape(Circle()))
                     }
             }

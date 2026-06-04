@@ -48,29 +48,29 @@ struct CardioView: View {
                 headerRow
                 ThinDivider().padding(.top, 8)
 
-                VStack(alignment: .trailing, spacing: 6) {
+                VStack(spacing: 4) {
+                    ZStack {
+                        TextField("", text: $distance)
+                            .font(.jost(.semibold, size: 72))
+                            .foregroundColor(.primary)
+                            .keyboardType(.decimalPad)
+                            .multilineTextAlignment(.center)
+                            .focused($distanceFocused)
+                        if distance.isEmpty && !distanceFocused {
+                            Text("–")
+                                .font(.jost(.semibold, size: 72))
+                                .foregroundColor(Color(.tertiaryLabel))
+                                .allowsHitTesting(false)
+                        }
+                    }
                     Text("KM")
                         .font(.jost(.medium, size: 10))
                         .kerning(1.5)
                         .foregroundColor(Color(.secondaryLabel))
-
-                    TextField("", text: $distance)
-                        .font(.jost(.semibold, size: 56))
-                        .foregroundColor(.primary)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.trailing)
-                        .focused($distanceFocused)
-                        .overlay(alignment: .trailing) {
-                            if distance.isEmpty && !distanceFocused {
-                                Text("–")
-                                    .font(.jost(.semibold, size: 56))
-                                    .foregroundColor(Color(.tertiaryLabel))
-                                    .allowsHitTesting(false)
-                            }
-                        }
                 }
+                .frame(maxWidth: .infinity)
                 .padding(.horizontal, 24)
-                .padding(.top, 32)
+                .padding(.top, 48)
 
                 Spacer()
             }

@@ -40,8 +40,8 @@ struct ProgramCard: View {
         }
         .background(
             isSelected
-                ? accent.opacity(0.12)
-                : Color(.secondarySystemGroupedBackground)
+                ? accent.opacity(0.08)
+                : Color.appBackground
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(
