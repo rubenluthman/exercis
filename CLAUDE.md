@@ -4,13 +4,6 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 
 ---
 
-## Just nu
-
-- Deployment target fixat till iOS 17.0
-- CardioView omskriven: dedikerad sida per typ + automatisk paus
-- Begränsningsfilter klart: kroppsbegränsningar (SettingsView) + programbegränsningar (ProgramEditorView) — skuggar övningar i ExercisePickerView
-- Onboarding: programkort har pencil-ikon för att redigera direkt i onboarding
-
 ---
 
 ## Tech Stack
@@ -55,10 +48,11 @@ SettingsView.swift        ← inställningar + programhantering + konditionsform
 ProgramEditorView.swift   ← redigera program (namn, färg, begränsning, övningar, set-antal)
 ExercisePickerView.swift  ← övningsväljare med fuzzy search + filterchips (MUSKEL/REDSKAP/RÖRELSE) + dimning
 ProgramCard.swift         ← programkort (används i TrainingView och SettingsView)
-ProgramListView.swift     ← DEPRECATED — ersatt av TrainingView + SettingsView
 OnboardingView.swift      ← onboarding (steg 1: program med pencil-redigering, steg 2: konditionsformer)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
 ExerciseLibrary.swift     ← laddar exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton + BodyLimitation/ProgramConstraint/MuscleGroup enums
+ExercisActivityAttributes.swift ← ActivityKit-attribut för Live Activity (programnamn, accentfärg, övning/set-state)
+LiveActivityManager.swift ← hanterar start/update/end av Live Activity under styrketräning
 ```
 
 ---
@@ -190,16 +184,16 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 ```
 
 **`CardioType` enum** (i Models.swift, `Identifiable`):
-```swift
-enum CardioType: String, Codable, CaseIterable, Identifiable {
-    var id: String { rawValue }
-    case crosstrainer = "CROSSTRAINER"
-    case cykel        = "CYKEL"
-    case roddmaskin   = "RODDMASKIN"
-    case hiking       = "VANDRING"
-}
-```
-Lagras som `String` i `CardioSession` för att undvika migrationsproblem.
+
+28 cases i lowercase rawValue — grupperade i kommentarer:
+- **Maskiner**: `crosstrainer`, `cycling_stationary`, `rowing_machine`, `treadmill_run`, `treadmill_walk`, `stair_climber`, `ski_erg`, `assault_bike`
+- **Utomhus**: `running`, `walking`, `hiking`, `road_cycling`, `mountain_biking`, `swimming`
+- **Nordiska**: `cross_country_skiing`, `ice_skating`
+- **Vatten**: `kayaking`, `canoeing`
+- **Övrigt**: `climbing`, `boxing`, `battle_ropes`, `sled`, `rucking`
+- **Calisthenics cardio**: `jump_rope`, `burpees`, `mountain_climbers`
+
+Lagras som `String` i `CardioSession` för att undvika migrationsproblem. Gamla VERSALER-rawvärden migreras vid app-start via `migrateCardioTypes(context:)` i Models.swift.
 
 **`WorkoutDraft`** (Codable, sparas i UserDefaults):
 - Innehåller övningsdata, `startTime` och `collapsedExercises: [Int]`
@@ -208,32 +202,25 @@ Lagras som `String` i `CardioSession` för att undvika migrationsproblem.
 **Vikt-inmatning**: acceptera både punkt och komma som decimaltecken (`parseWeight`).
 **Vikt-visning**: formatera med `formatWeight` (NumberFormatter, locale: .current).
 
-**ModelContainer** registrerar `[WorkoutSession.self, CardioSession.self]` — relaterade modeller (ExerciseLog, SetLog) inkluderas automatiskt via `@Relationship`.
+**ModelContainer** registrerar `[WorkoutSession.self, CardioSession.self, WorkoutProgram.self]` — relaterade modeller (ExerciseLog, SetLog, ProgramExercise) inkluderas automatiskt via `@Relationship`.
 
 ---
 
 ## Övningar
 
-Exakt dessa fem, i denna ordning, definierade i `ExerciseDef.all`:
+Laddas från `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~186 övningar med `status == "include"` är aktiva — resten är exkluderade i JSON.
 
-| Kanoniskt namn | Visningsnamn | Rep-intervall | Video |
-|----------------|-------------|--------------|-------|
-| Barbell Back Squat | Barbell Back Squat | 5–8 REPS | YouTube R2dMsNhN3DE |
-| Neutral-Grip Incline Dumbbell Bench Press | Incline Dumbbell Bench Press (shortName: Incline Bench Press i ExerciseSection) | 6–10 REPS | YouTube 8nNi8jbbUPE |
-| Romanian Deadlift | Romanian Deadlift | 6–8 REPS | YouTube -m45n1_x32E |
-| Seated Cable Row | Seated Cable Row | 8–12 REPS | muscleandstrength.com/exercises/seated-row.html |
-| Neutral-Grip Lat Pulldown | Lat Pulldown | 8–12 REPS | YouTube iKrKgWR9wbY |
+`ExerciseDef` fält: `id` (stabil nyckel, används i `ProgramExercise.exerciseId`), `name` (visas i UI och lagras i `ExerciseLog.name`), `aliases` (gamla namn, migreras vid app-start), `repRange`, `setRange`, `primaryMuscles`, `equipment`, `movement`, `contraindications`, `gifFile/gifSource`, `description`.
 
-`ExerciseDef` har tre namnfält: `name` (lagras i SwiftData, används som nyckel), `displayName` (visas i UI), `aliases` (gamla namn som migreras vid app-start). Byt aldrig `name` utan att lägga gamla värdet i `aliases` och bumpa `migrationVersion`.
+**Nyckel är `id`** i program (`ProgramExercise.exerciseId`) men **`name`** i loggad historik (`ExerciseLog.name`) — viktigt att hålla isär. Byt aldrig `id` eller `name` utan att lägga gamla värdet i `aliases` och bumpa `migrationVersion` (nuvarande: 5).
 
 **Pensionering av övning** — när en övning byts ut och gammal data ska bevaras i historik:
-1. Flytta definitionen från `all` till `retired` (ingen migration, ingen radering)
-2. Lägg till den nya övningen i `all`
-3. Gammal data visas korrekt i HistoryCard och ExerciseChartSheet via `ExerciseDef.find(name:)` som söker i båda listorna
+- Sätt `status` till `"retired"` i JSON (eller håll i separat lista) — ingen migration, ingen radering
+- `ExerciseDef.find(name:)` söker aktiva + pensionerade, så historik visas korrekt
 
-**Aktiv radering** (som Chest-Supported Row) är ett separat spår — kräver explicit delete-steg i `migrateExerciseNames`.
+**Aktiv radering** kräver explicit delete-steg i `migrateExerciseNames`.
 
-Övningsnamnet i StrengthView är en **klickbar rubrik** (Button) som öppnar videon i SFSafariViewController. I HistoryView är namnen klickbara och öppnar `ExerciseChartSheet` (e1RM-progression via Epley-formeln).
+Övningsnamnet i StrengthView är en **klickbar rubrik** som öppnar GIF/info via `GifSheet`. I HistoryView är namnen klickbara och öppnar `ExerciseChartSheet` (e1RM-progression via Epley-formeln).
 
 ---
 
@@ -273,6 +260,7 @@ LockView → (Face ID) → MainTabView
 - **PR-detektion**: jämför e1RM mot historik, visar PR-indikator
 - **Tangentbordsverktygsfält**: NÄSTA + KLAR i homeAccent
 - **Draft**: sparas i UserDefaults (WorkoutDraft inkl. ihopfällningsläge och programId)
+- **Live Activity**: startas vid pass-start via `LiveActivityManager.shared` — visar aktuell övning, set-nummer och progress på Dynamic Island/Lock Screen. Uppdateras per set, avslutas vid KLAR eller dismiss.
 - Datum klickbart → `SessionTimePicker`
 
 ### CardioView — Konditionsträning (accentfärg: workoutAccent)
@@ -318,9 +306,13 @@ LockView → (Face ID) → MainTabView
 | Pass | ActivityType | Tid |
 |------|-------------|-----|
 | Styrketräning | `.traditionalStrengthTraining` | start = när StrengthView öppnas, slut = KLAR |
-| Crosstrainer | `.elliptical` | slut = nu, start = nu − minuter |
-| Cykel | `.cycling` | slut = nu, start = nu − minuter |
-| Roddmaskin | `.rowing` | slut = nu, start = nu − minuter |
+| crosstrainer | `.elliptical` | slut = nu, start = nu − minuter |
+| cycling_stationary, road_cycling, mountain_biking, assault_bike | `.cycling` | slut = nu, start = nu − minuter |
+| rowing_machine, ski_erg, kayaking, canoeing | `.rowing` | slut = nu, start = nu − minuter |
+| hiking, rucking, crosstrainer, stair_climber | `.hiking` | slut = nu, start = nu − minuter |
+| running, treadmill_run | `.running` | slut = nu, start = nu − minuter |
+| walking, treadmill_walk | `.walking` | slut = nu, start = nu − minuter |
+| sled | `.functionalStrengthTraining` | slut = nu, start = nu − minuter |
 
 - Begär tillstånd vid varje StrengthView/CardioView-öppning (`requestAuthorization()`) — iOS hanterar "redan beviljat" automatiskt
 - Alla anrop guards med `HKHealthStore.isHealthDataAvailable()` — no-op på simulator
