@@ -24,7 +24,14 @@ struct SessionTimePicker: View {
                     .kerning(1.5)
                     .foregroundColor(Color(.secondaryLabel))
                 Spacer()
-                DatePicker("", selection: $start, in: ...end, displayedComponents: [.date, .hourAndMinute])
+                DatePicker("", selection: Binding(
+                    get: { start },
+                    set: { newStart in
+                        let duration = end.timeIntervalSince(start)
+                        start = newStart
+                        end = newStart.addingTimeInterval(duration)
+                    }
+                ), displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
                     .environment(\.locale, Locale(identifier: "sv_SE"))
             }
@@ -39,7 +46,7 @@ struct SessionTimePicker: View {
                     .kerning(1.5)
                     .foregroundColor(Color(.secondaryLabel))
                 Spacer()
-                DatePicker("", selection: $end, in: start..., displayedComponents: [.date, .hourAndMinute])
+                DatePicker("", selection: $end, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
                     .environment(\.locale, Locale(identifier: "sv_SE"))
             }
