@@ -62,7 +62,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 - **Siri Shortcuts** — App Intents; saknar tydligt use case för en-användarapp där appen öppnas manuellt
 - **Widgets** — streak, nästa program
 - **Apple Watch-app** — Ruben har ingen klocka
-- **HKWorkoutActivity per övning** — loggar varje ExerciseLog som aktivitetssegment i HealthKit
+- **HKWorkoutActivity per övning** — ett pass, inte fem; segmenten syns under workoutet i Hälsa. Problemet: segmentlängd = rörelse + vila, går inte att särskilja — ger ingen meningsfull data
 - **Apple Swift Packages** — `swift-algorithms` + `swift-collections`; inte prioriterat förrän appen växer
 - **ProgramListView** — fil är defunct (ersatt av TrainingView + SettingsView); kan tas bort
 
