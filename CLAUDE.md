@@ -6,9 +6,10 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 
 ## Just nu
 
-- Klart för exploratory testing på gymmet
 - Deployment target fixat till iOS 17.0
 - CardioView omskriven: dedikerad sida per typ + automatisk paus
+- Begränsningsfilter klart: kroppsbegränsningar (SettingsView) + programbegränsningar (ProgramEditorView) — skuggar övningar i ExercisePickerView
+- Onboarding: programkort har pencil-ikon för att redigera direkt i onboarding
 
 ---
 
@@ -50,14 +51,14 @@ CardioEffortChartSheet.swift ← ansträngningsprogression kondition (Swift Char
 PeriodSummarySheet.swift  ← periodsammanfattning månads/årsvy (Swift Charts, öppnas från HistoryView)
 SessionTimePicker.swift   ← delad sheet för start/slut-tid (startändring drar med slut, slut fritt)
 ProfileView.swift         ← profilbild, namn, statistik
-SettingsView.swift        ← inställningar + programhantering + konditionsformer
-ProgramEditorView.swift   ← redigera program (namn, färg, övningar, set-antal)
-ExercisePickerView.swift  ← övningsväljare med fuzzy search (Fuse.swift)
+SettingsView.swift        ← inställningar + programhantering + konditionsformer + kroppsbegränsningar
+ProgramEditorView.swift   ← redigera program (namn, färg, begränsning, övningar, set-antal)
+ExercisePickerView.swift  ← övningsväljare med fuzzy search + filterchips (MUSKEL/REDSKAP/RÖRELSE) + dimning
 ProgramCard.swift         ← programkort (används i TrainingView och SettingsView)
 ProgramListView.swift     ← DEPRECATED — ersatt av TrainingView + SettingsView
-OnboardingView.swift      ← onboarding (steg 1: program, steg 2: konditionsformer)
+OnboardingView.swift      ← onboarding (steg 1: program med pencil-redigering, steg 2: konditionsformer)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
-ExerciseLibrary.swift     ← laddar exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton
+ExerciseLibrary.swift     ← laddar exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton + BodyLimitation/ProgramConstraint/MuscleGroup enums
 ```
 
 ---
@@ -179,6 +180,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 @Model class WorkoutProgram {
     var id: UUID; var name: String; var colorName: String; var sortIndex: Int
     var isOnTrainingPage: Bool = true   // visas på Träning-tab
+    var programConstraint: String = ""  // ProgramConstraint.rawValue — skuggar övningar i ExercisePickerView
     @Relationship(deleteRule: .cascade) var exercises: [ProgramExercise]
 }
 @Model class ProgramExercise {
@@ -345,6 +347,32 @@ LockView → (Face ID) → MainTabView
 | `increaseExercises` | [String] | UserDefaults | Övningsnamn med aktiv ÖKA-badge (styrka) |
 | `increaseCardioTypes` | [String] | UserDefaults | Kardioformer med aktiv ÖKA-badge |
 | `exerciseNameMigrationVersion` | Int | UserDefaults | Version för körd namnmigration (bumpa vid övningsändringar) |
+| `bodyLimitations` | String (@AppStorage) | SettingsView/ExercisePickerView | Kommaseparerade BodyLimitation.rawValue — skuggar övningar som belastar valda leder |
+
+---
+
+## Begränsningssystem (ExercisePickerView)
+
+Övningsväljaren har två oberoende signaler som skuggar övningar (opacity 0.4) och samlar dem under "EJ REKOMMENDERAT" längst ner i listan:
+
+**Kroppsbegränsningar** (globala, `@AppStorage("bodyLimitations")`):
+- Sätts i SettingsView → BEGRÄNSNINGAR med toggles per led
+- `BodyLimitation` enum i ExerciseLibrary.swift: KNÄ / AXEL / RYGG / ARMBÅGE / HANDLED / HÖFT
+- Varje led mappar till specifika `contraindications`-taggar i exercises_def.json
+
+**Programbegränsningar** (per program, `WorkoutProgram.programConstraint`):
+- Sätts i ProgramEditorView → Begränsning med chip-väljare
+- `ProgramConstraint` enum: INGEN / PUSH / PULL / BEN / ÖVERKROPP / KROPPSVIKT
+- Standardprogram får rätt constraint från seeder (t.ex. Push → "push", Bodyweight → "bodyweight")
+- Skickas in till ExercisePickerView som parameter
+
+**Filterchips** (sessionella, nollställs vid stängning):
+- MUSKEL → `MuscleGroup` enum (6 grupper → primaryMuscles-mappning)
+- REDSKAP → equipment-råvärden
+- RÖRELSE → movement-råvärden
+- Öppnar FilterSheet (`.sheet`, `.medium`/`.large` detents) med checkboxar
+
+Alla tre system är additive — en övning skuggas om någon av signalerna matchar.
 
 ---
 
