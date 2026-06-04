@@ -50,8 +50,9 @@ struct TrainingView: View {
             StrengthView(program: program)
                 .enableSwipeBack()
         }
-        .sheet(item: $activeCardioType) { type in
+        .navigationDestination(item: $activeCardioType) { type in
             CardioView(initialType: type)
+                .enableSwipeBack()
         }
         .alert("Ta bort pågående utkast?", isPresented: $showDiscardAlert) {
             Button("Ta bort", role: .destructive) {
