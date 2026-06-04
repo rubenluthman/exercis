@@ -9,8 +9,6 @@ import SwiftData
 }
 
 private enum CardioField: Hashable {
-    case durationHours(CardioType)
-    case duration(CardioType)
     case distance(CardioType)
 }
 
@@ -31,8 +29,6 @@ struct CardioView: View {
         return CardioType.allCases.filter { selected.contains($0.rawValue) }
     }
     @State private var expandedType: CardioType? = nil
-    @State private var hours: [String: String] = [:]
-    @State private var durations: [String: String] = [:]
     @State private var distances: [String: String] = [:]
     @State private var increaseTypes: Set<String> = []
     @State private var longPressFired: Set<CardioType> = []
@@ -45,28 +41,6 @@ struct CardioView: View {
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
     @FocusState private var focusedField: CardioField?
-
-    private var nextCardioField: CardioField? {
-        switch focusedField {
-        case .durationHours(let type): return .duration(type)
-        case .duration(let type):      return .distance(type)
-        default:                       return nil
-        }
-    }
-
-    private func hoursBinding(for type: CardioType) -> Binding<String> {
-        Binding(
-            get: { hours[type.rawValue] ?? "" },
-            set: { hours[type.rawValue] = $0 }
-        )
-    }
-
-    private func durationBinding(for type: CardioType) -> Binding<String> {
-        Binding(
-            get: { durations[type.rawValue] ?? "" },
-            set: { durations[type.rawValue] = $0 }
-        )
-    }
 
     private func distanceBinding(for type: CardioType) -> Binding<String> {
         Binding(
@@ -151,13 +125,6 @@ struct CardioView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("NÄSTA") {
-                    Haptics.selection()
-                    focusedField = nextCardioField
-                }
-                .font(.jost(.semibold, size: 13))
-                .foregroundColor(nextCardioField != nil ? Color.workoutAccent : Color(.tertiaryLabel))
-                .disabled(nextCardioField == nil)
                 Button("KLAR") { focusedField = nil }
                     .font(.jost(.semibold, size: 13))
                     .foregroundColor(Color.workoutAccent)
@@ -165,24 +132,8 @@ struct CardioView: View {
         }
         .onAppear {
             for type in CardioType.allCases {
-                let hasSession = cardioSessions.contains { $0.cardioType == type.rawValue }
-                if hasSession {
-                    if let saved = UserDefaults.standard.string(forKey: "cardioSavedDuration_\(type.rawValue)") {
-                        if type == .hiking, let totalMins = parseWeight(saved) {
-                            let h = Int(totalMins) / 60
-                            let m = Int(totalMins) % 60
-                            hours[type.rawValue] = h > 0 ? "\(h)" : ""
-                            durations[type.rawValue] = m > 0 ? "\(m)" : ""
-                        } else {
-                            durations[type.rawValue] = saved
-                        }
-                    }
-                    if let saved = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)") {
-                        distances[type.rawValue] = saved
-                    }
-                } else {
-                    UserDefaults.standard.removeObject(forKey: "cardioSavedDuration_\(type.rawValue)")
-                    UserDefaults.standard.removeObject(forKey: "cardioSavedDistance_\(type.rawValue)")
+                if let saved = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)") {
+                    distances[type.rawValue] = saved
                 }
             }
             increaseTypes = UserDefaults.standard.increaseCardioTypes()
@@ -194,12 +145,6 @@ struct CardioView: View {
                    let type = CardioType(rawValue: savedType) {
                     expandedType = type
                     storedType = savedType
-                    if let draftMinutes = UserDefaults.standard.string(forKey: "cardioDraftMinutes") {
-                        durations[savedType] = draftMinutes
-                    }
-                    if type == .hiking, let draftHours = UserDefaults.standard.string(forKey: "cardioDraftHours") {
-                        hours[savedType] = draftHours
-                    }
                     if let draftDistance = UserDefaults.standard.string(forKey: "cardioDraftDistance") {
                         distances[savedType] = draftDistance
                     }
@@ -300,53 +245,19 @@ struct CardioView: View {
             .buttonStyle(.plain)
 
             if isExpanded {
-                // Column headers
                 HStack(spacing: 0) {
-                    if type == .hiking {
-                        Text("H")
-                            .frame(width: 60, alignment: .leading)
-                        Text("MIN")
-                            .frame(width: 60, alignment: .leading)
-                    } else {
-                        Text("MIN")
-                            .frame(width: 80, alignment: .leading)
-                    }
                     Spacer()
                     Text("KM")
+                        .font(.jost(.medium, size: 10))
+                        .kerning(1.5)
+                        .foregroundColor(Color(.secondaryLabel))
                         .frame(width: 80, alignment: .trailing)
                 }
-                .font(.jost(.medium, size: 10))
-                .kerning(1.5)
-                .foregroundColor(Color(.secondaryLabel))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 6)
 
-                // Number fields
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
-                    if type == .hiking {
-                        durationField(
-                            text: hoursBinding(for: type),
-                            focus: .durationHours(type),
-                            keyboard: .numberPad,
-                            width: 60
-                        )
-                        durationField(
-                            text: durationBinding(for: type),
-                            focus: .duration(type),
-                            keyboard: .numberPad,
-                            width: 60
-                        )
-                    } else {
-                        durationField(
-                            text: durationBinding(for: type),
-                            focus: .duration(type),
-                            keyboard: .decimalPad,
-                            width: 80
-                        )
-                    }
-
                     Spacer()
-
                     distanceField(text: distanceBinding(for: type), focus: .distance(type))
                 }
                 .padding(.horizontal, 24)
@@ -371,24 +282,6 @@ struct CardioView: View {
                 UserDefaults.standard.setCardioIncrease(type, increaseTypes.contains(type.rawValue))
             }
         )
-    }
-
-    private func durationField(text: Binding<String>, focus: CardioField, keyboard: UIKeyboardType, width: CGFloat) -> some View {
-        TextField("", text: text)
-            .font(.jost(.semibold, size: 34))
-            .foregroundColor(.primary)
-            .keyboardType(keyboard)
-            .multilineTextAlignment(.leading)
-            .focused($focusedField, equals: focus)
-            .frame(width: width, alignment: .leading)
-            .overlay(alignment: .leading) {
-                if text.wrappedValue.isEmpty && focusedField != focus {
-                    Text("–")
-                        .font(.jost(.semibold, size: 34))
-                        .foregroundColor(Color(.tertiaryLabel))
-                        .allowsHitTesting(false)
-                }
-            }
     }
 
     private func distanceField(text: Binding<String>, focus: CardioField) -> some View {
@@ -428,19 +321,16 @@ struct CardioView: View {
         return text
     }
 
-    private func totalMinutes(for type: CardioType) -> Double {
-        if type == .hiking {
-            let h = Double(hours[type.rawValue]?.replacingOccurrences(of: ",", with: ".") ?? "") ?? 0
-            let m = Double((durations[type.rawValue] ?? "").replacingOccurrences(of: ",", with: ".")) ?? 0
-            return h * 60 + m
-        }
-        return Double((durations[type.rawValue] ?? "").replacingOccurrences(of: ",", with: ".")) ?? 0
+    private func durationFromTime() -> Double {
+        let end = editedEnd
+        let start = editedStart
+        return max(1, end.timeIntervalSince(start) / 60)
     }
 
     private func handleKlar() {
-        guard let type = expandedType, totalMinutes(for: type) > 0 else { dismiss(); return }
+        guard expandedType != nil else { dismiss(); return }
         focusedField = nil
-        let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
+        let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(expandedType!.rawValue)")
         lastEffortScore = saved > 0 ? saved : 5
         showEffortPicker = true
     }
@@ -455,20 +345,8 @@ struct CardioView: View {
     // MARK: Logic
 
     private func saveDraftIfNeeded() {
-        guard !didCompleteSession else { return }
-        guard let type = expandedType else { return }
-        let hasData: Bool
-        if type == .hiking {
-            hasData = !(hours[type.rawValue] ?? "").isEmpty || !(durations[type.rawValue] ?? "").isEmpty
-        } else {
-            hasData = !(durations[type.rawValue] ?? "").isEmpty
-        }
-        guard hasData else { return }
+        guard !didCompleteSession, let type = expandedType else { return }
         UserDefaults.standard.set(type.rawValue, forKey: "cardioDraftType")
-        UserDefaults.standard.set(durations[type.rawValue] ?? "", forKey: "cardioDraftMinutes")
-        if type == .hiking {
-            UserDefaults.standard.set(hours[type.rawValue] ?? "", forKey: "cardioDraftHours")
-        }
         let distStr = distances[type.rawValue] ?? ""
         if !distStr.isEmpty {
             UserDefaults.standard.set(distStr, forKey: "cardioDraftDistance")
@@ -480,16 +358,15 @@ struct CardioView: View {
 
     private func saveSession(effortScore: Int? = nil) {
         guard let type = expandedType else { return }
-        let minutes = totalMinutes(for: type)
-        guard minutes > 0 else { return }
+        let end = editedEnd
+        let start = editedStart
+        let minutes = durationFromTime()
         didCompleteSession = true
 
         let distanceStr = distances[type.rawValue] ?? ""
         let distanceKm = distanceStr.isEmpty ? nil : Double(distanceStr.replacingOccurrences(of: ",", with: "."))
 
         UserDefaults.standard.removeObject(forKey: "cardioDraftType")
-        UserDefaults.standard.removeObject(forKey: "cardioDraftMinutes")
-        UserDefaults.standard.removeObject(forKey: "cardioDraftHours")
         UserDefaults.standard.removeObject(forKey: "cardioDraftDistance")
         hasCardioDraft = false
 
@@ -510,9 +387,6 @@ struct CardioView: View {
             UserDefaults.standard.setCardioIncrease(type, false)
         }
 
-        let end = hasCustomTime && editedEnd > editedStart ? editedEnd : Date()
-        let start = hasCustomTime ? (editedStart < end ? editedStart : end.addingTimeInterval(-minutes * 60))
-                                  : end.addingTimeInterval(-minutes * 60)
         let session = CardioSession(date: end, startDate: start, durationMinutes: minutes, cardioType: type.rawValue, distanceKm: distanceKm)
         session.effortScore = effortScore
         context.insert(session)
