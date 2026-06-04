@@ -10,6 +10,7 @@ struct OnboardingView: View {
     @State private var step = 1
     @State private var selectedProgramIds: Set<UUID> = []
     @State private var selectedCardioTypes: Set<String> = []
+    @State private var editingProgram: WorkoutProgram? = nil
 
     // Cardio groups for step 2
     private let cardioGroups: [(title: String, types: [CardioType])] = [
@@ -35,6 +36,9 @@ struct OnboardingView: View {
         .animation(.easeInOut(duration: 0.22), value: step)
         .onAppear {
             seedDefaultProgramsIfNeeded(context: context)
+        }
+        .sheet(item: $editingProgram) { program in
+            ProgramEditorView(program: program)
         }
     }
 
@@ -105,17 +109,30 @@ struct OnboardingView: View {
     private func programRow(_ program: WorkoutProgram?) -> some View {
         if let program {
             let isSelected = selectedProgramIds.contains(program.id)
-            Button {
-                Haptics.selection()
-                if isSelected {
-                    selectedProgramIds.remove(program.id)
-                } else {
-                    selectedProgramIds.insert(program.id)
+            ZStack(alignment: .topTrailing) {
+                Button {
+                    Haptics.selection()
+                    if isSelected {
+                        selectedProgramIds.remove(program.id)
+                    } else {
+                        selectedProgramIds.insert(program.id)
+                    }
+                } label: {
+                    ProgramCard(program: program, isSelected: isSelected, showCheckmark: true)
                 }
-            } label: {
-                ProgramCard(program: program, isSelected: isSelected, showCheckmark: true)
+                .buttonStyle(.plain)
+
+                Button {
+                    editingProgram = program
+                } label: {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color(program.colorName))
+                        .frame(width: 36, height: 36)
+                }
+                .buttonStyle(.plain)
+                .padding(4)
             }
-            .buttonStyle(.plain)
         }
     }
 
