@@ -36,6 +36,10 @@ Uppdateras löpande under sessioner och vid apprevision.
 - [x] ~~**ProgramCard hardkodar "3 SET"** — åtgärdad 2026-06-02~~
 - [x] ~~**PhotosPicker i ProfileView saknar accessibilityLabel** — åtgärdad 2026-06-02~~
 
+### 🔵 Kodkvalitet
+
+- **Extern LLM-analys av hela kodbasen** — appen har vuxit organiskt och kan ha arkitekturproblem som är svåra att se inifrån. Generera en concatenerad fil (`find Exercis/ -name "*.swift" | sort | xargs cat > full_codebase.txt`) och be en annan modell (t.ex. Gemini Ultra eller GPT-4o) om en strategisk genomgång: inkonsekvenser, onödigt beroenden, risker inför nästa stora omskrivning (TabView, SwiftData-övningar).
+
 ### 🟢 Nästa revision
 
 - [x] ~~**LockView placeholder-hack** — åtgärdad 2026-06-02~~
