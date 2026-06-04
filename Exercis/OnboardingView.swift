@@ -211,6 +211,10 @@ struct OnboardingView: View {
     // MARK: - Completion
 
     private func completeOnboarding() {
+        for program in programs {
+            program.isOnTrainingPage = selectedProgramIds.contains(program.id)
+        }
+        try? context.save()
         selectedCardioTypesRaw = selectedCardioTypes.joined(separator: ",")
         onboardingCompleted = true
     }

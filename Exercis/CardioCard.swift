@@ -114,6 +114,11 @@ struct CardioCard: View {
                         .font(.jost(.regular, size: 14))
                         .foregroundColor(Color(.secondaryLabel))
                 }
+                if let elevation = session.elevationGain, elevation > 0 {
+                    Text("+\(Int(elevation.rounded())) M")
+                        .font(.jost(.regular, size: 14))
+                        .foregroundColor(Color(.secondaryLabel))
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

@@ -95,12 +95,15 @@ struct StrengthView: View {
                         )
                         ThinDivider()
                     }
-
-                    klarBar
-                        .opacity(showEffortPicker ? 0 : 1)
                 }
             }
+            .scrollDismissesKeyboard(.interactively)
             .softScrollEdge()
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if !showEffortPicker {
+                    klarBar
+                }
+            }
 
             if showEffortPicker {
                 Color.black.opacity(0.3)
@@ -158,7 +161,11 @@ struct StrengthView: View {
                 Button("NÄSTA") {
                     Haptics.selection()
                     if case .reps = activeField { startRestTimer() }
-                    activeField = nextField
+                    let next = nextField
+                    activeField = next
+                    if case .weight(let ex, let set) = next {
+                        LiveActivityManager.shared.update(state: makeActivityState(exerciseIndex: ex, setNumber: set + 1))
+                    }
                 }
                     .font(.jost(.semibold, size: 13))
                     .foregroundColor(nextField != nil ? accent : Color(.tertiaryLabel))
@@ -178,9 +185,11 @@ struct StrengthView: View {
             editedEnd = Date()
             initialized = true
             Task { await HealthKitManager.shared.requestAuthorization() }
+            startLiveActivity()
         }
         .onDisappear {
             saveDraftIfNeeded()
+            if !didCompleteSession { LiveActivityManager.shared.end() }
         }
     }
 
@@ -315,8 +324,30 @@ struct StrengthView: View {
 
     private func saveDraftAndReturn() {
         restTimerTask?.cancel()
+        LiveActivityManager.shared.end()
         saveDraftIfNeeded()
         dismiss()
+    }
+
+    private func startLiveActivity() {
+        guard !exerciseForms.isEmpty else { return }
+        LiveActivityManager.shared.start(
+            programName: program.name,
+            colorName: program.colorName,
+            state: makeActivityState(exerciseIndex: 0, setNumber: 1)
+        )
+    }
+
+    private func makeActivityState(exerciseIndex: Int, setNumber: Int) -> ExercisActivityAttributes.ContentState {
+        let idx = min(exerciseIndex, exerciseForms.count - 1)
+        let form = exerciseForms[idx]
+        return ExercisActivityAttributes.ContentState(
+            exerciseName: form.def.displayName,
+            setNumber: setNumber,
+            totalSets: form.sets.count,
+            exerciseIndex: idx,
+            totalExercises: exerciseForms.count
+        )
     }
 
     // MARK: - Rest timer
@@ -350,8 +381,9 @@ struct StrengthView: View {
     }
 
     private func startRestTimer() {
+        guard restTimerDuration > 0 else { return }
         restTimerTask?.cancel()
-        let duration = restTimerDuration > 0 ? restTimerDuration : 90
+        let duration = restTimerDuration
         restSecondsLeft = duration
         restTimerTask = Task { @MainActor in
             while (restSecondsLeft ?? 0) > 0 {
@@ -447,6 +479,7 @@ struct StrengthView: View {
 
         UserDefaults.standard.saveDraft(nil)
         hasDraft = false
+        LiveActivityManager.shared.end()
 
         if UserDefaults.standard.bool(forKey: "healthKitSyncEnabled") {
             let capturedStart = start

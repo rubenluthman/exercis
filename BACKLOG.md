@@ -7,6 +7,8 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ## Rubens beslut
 
+- [ ] **Övningsbeskrivningar — kvalitetsgenomgång** — 186 beskrivningar genererade av Claude, 15 förbättrade med wger som referens. Resterande 171 är ej granskade mot extern källa. ~60 wger-texter har tekniska detaljer vi saknar.
+
 - [x] **CSV-export** — klart 2026-06-02
 - [x] **Fixa buggar B–E** — klart 2026-06-02
 - [x] **CHANGELOG.md** — klart 2026-06-02
@@ -39,24 +41,26 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ---
 
-## Parkerat
+## Rubens parkerade beslut
 
-- **GIF-filer i git** — nu i .gitignore; ersätt med licensierad källa innan App Store
-- **`cardio_types.json` laddas inte** — planerad; ta upp när CardioType-systemet byggs om
-- **Enhetssystem (lbs/miles)** — AppStorage-nycklar finns; implementera konsekvent när det prioriteras
 - **HIIT** — timer-baserad träning; `HIITView` med nedräkning; HealthKit: `.highIntensityIntervalTraining`
-- **Begränsningsfilter** — tagg-annotering per övning; varningsikon vid konflikt
-- **Live Activities / Dynamic Island** — visar aktivt set/övning på låsskärmen
-- **Siri Shortcuts** — App Intents
-- **Widgets** — streak, nästa program
 - **iCloud Sync (CloudKit)** — kräver betalt Developer-konto
+- **GIF-licens vid App Store** — byt hasaneyldrm → ExerciseDB Pro innan submission
+
+---
+
+## Claudes parkerade förslag
+
+- **Live Activities / Dynamic Island** — visar aktivt set/övning på låsskärmen under pass
+- **GIF-filer i git** — nu i .gitignore; ersätt med licensierad källa innan App Store
+- **Enhetssystem (lbs/miles)** — AppStorage-nycklar finns; implementera konsekvent när det prioriteras
+- **Begränsningsfilter** — tagg-annotering per övning; varningsikon vid konflikt
+- **Siri Shortcuts** — App Intents; "Hej Siri, starta ett pass"
+- **Widgets** — streak, nästa program
 - **Apple Watch-app** — Ruben har ingen klocka
 - **HKWorkoutActivity per övning** — loggar varje ExerciseLog som aktivitetssegment i HealthKit
-- **elevationGain för vandring** — `CMAltimeter`; `HKQuantityType(.distanceHillAscent)`
-- **Övningsbeskrivningar — kvalitetsgenomgång** — 186 beskrivningar genererade av Claude, 15 förbättrade med wger som referens. Resterande 171 är ej granskade mot extern källa. Gå igenom och bedöm kvalitet, framför allt för komplexa övningar (olympiska lyft, gymmastikrelaterade). wger-data finns hämtad och jämförd — de flesta wger-texter är kortare eller sämre, men ~60 har tekniska detaljer vi saknar.
-- **GIF-licens vid App Store** — byt hasaneyldrm → ExerciseDB Pro innan submission
 - **Apple Swift Packages** — `swift-algorithms` + `swift-collections`; inte prioriterat förrän appen växer
-- **ProgramListView** — fil finns kvar men är defunct (ersatt av TrainingView + SettingsView); kan tas bort
+- **ProgramListView** — fil är defunct (ersatt av TrainingView + SettingsView); kan tas bort
 
 ---
 

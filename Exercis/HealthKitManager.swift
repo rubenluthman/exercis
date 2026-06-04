@@ -12,7 +12,8 @@ struct HealthKitManager {
             HKWorkoutType.workoutType(),
             HKQuantityType(.activeEnergyBurned),
             HKQuantityType(.distanceCycling),
-            HKQuantityType(.distanceWalkingRunning)
+            HKQuantityType(.distanceWalkingRunning),
+            HKQuantityType(.distanceHillAscent)
         ]
         if #available(iOS 18.0, *) {
             shareTypes.insert(HKQuantityType(.workoutEffortScore))
@@ -21,7 +22,7 @@ struct HealthKitManager {
         try? await store.requestAuthorization(toShare: shareTypes, read: readTypes)
     }
 
-    func saveCardioWorkout(start: Date, end: Date, type: CardioType, distanceKm: Double?, effortScore: Int? = nil) async -> UUID? {
+    func saveCardioWorkout(start: Date, end: Date, type: CardioType, distanceKm: Double?, effortScore: Int? = nil, elevationGain: Double? = nil) async -> UUID? {
         guard isAvailable else { return nil }
         let config = HKWorkoutConfiguration()
         var met = 0.0
@@ -52,6 +53,9 @@ struct HealthKitManager {
         await addCalories(to: builder, met: met, start: start, end: end)
         if let km = distanceKm, km > 0 {
             await addDistance(to: builder, km: km, cardioType: type, start: start, end: end)
+        }
+        if let elevation = elevationGain, elevation > 0 {
+            await addElevation(to: builder, meters: elevation, start: start, end: end)
         }
         try? await builder.endCollection(at: end)
         guard let workout = try? await builder.finishWorkout() else { return nil }
@@ -130,6 +134,15 @@ struct HealthKitManager {
         }
         let type = HKQuantityType(identifier)
         let quantity = HKQuantity(unit: .meter(), doubleValue: km * 1000)
+        let sample = HKQuantitySample(type: type, quantity: quantity, start: start, end: end)
+        await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
+            builder.add([sample]) { _, _ in cont.resume() }
+        }
+    }
+
+    private func addElevation(to builder: HKWorkoutBuilder, meters: Double, start: Date, end: Date) async {
+        let type = HKQuantityType(.distanceHillAscent)
+        let quantity = HKQuantity(unit: .meter(), doubleValue: meters)
         let sample = HKQuantitySample(type: type, quantity: quantity, start: start, end: end)
         await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
             builder.add([sample]) { _, _ in cont.resume() }

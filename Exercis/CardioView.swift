@@ -1,5 +1,7 @@
 import SwiftUI
 import SwiftData
+import Combine
+import CoreMotion
 
 struct CardioView: View {
     let type: CardioType
@@ -19,7 +21,23 @@ struct CardioView: View {
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
+    @State private var now = Date()
     @FocusState private var distanceFocused: Bool
+
+    private let altimeter = CMAltimeter()
+    @State private var elevationGain: Double = 0
+    @State private var lastAltitude: Double? = nil
+
+    private var elapsedString: String {
+        let elapsed = max(0, now.timeIntervalSince(editedStart))
+        let h = Int(elapsed) / 3600
+        let m = Int(elapsed) % 3600 / 60
+        let s = Int(elapsed) % 60
+        if h > 0 {
+            return String(format: "%d:%02d:%02d", h, m, s)
+        }
+        return String(format: "%d:%02d", m, s)
+    }
 
     private var draftStartKey: String { "cardioDraftStartTime_\(type.rawValue)" }
     private var draftDistanceKey: String { "cardioDraftDistance_\(type.rawValue)" }
@@ -44,33 +62,56 @@ struct CardioView: View {
 
     var body: some View {
         ZStack {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture { distanceFocused = false }
+
             VStack(spacing: 0) {
                 headerRow
                 ThinDivider().padding(.top, 8)
 
-                VStack(spacing: 4) {
-                    ZStack {
-                        TextField("", text: $distance)
+                VStack(spacing: 0) {
+                    VStack(spacing: 4) {
+                        Text(elapsedString)
                             .font(.jost(.semibold, size: 72))
                             .foregroundColor(.primary)
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.center)
-                            .focused($distanceFocused)
-                        if distance.isEmpty && !distanceFocused {
-                            Text("–")
-                                .font(.jost(.semibold, size: 72))
-                                .foregroundColor(Color(.tertiaryLabel))
-                                .allowsHitTesting(false)
-                        }
+                            .monospacedDigit()
+                        Text("TID")
+                            .font(.jost(.medium, size: 10))
+                            .kerning(1.5)
+                            .foregroundColor(Color(.secondaryLabel))
                     }
-                    Text("KM")
-                        .font(.jost(.medium, size: 10))
-                        .kerning(1.5)
-                        .foregroundColor(Color(.secondaryLabel))
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 48)
+                    .padding(.bottom, 32)
+
+                    ThinDivider()
+
+                    VStack(spacing: 4) {
+                        ZStack {
+                            TextField("", text: $distance)
+                                .font(.jost(.semibold, size: 72))
+                                .foregroundColor(.primary)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.center)
+                                .focused($distanceFocused)
+                            if distance.isEmpty && !distanceFocused {
+                                Text("–")
+                                    .font(.jost(.semibold, size: 72))
+                                    .foregroundColor(Color(.tertiaryLabel))
+                                    .allowsHitTesting(false)
+                            }
+                        }
+                        Text("KM")
+                            .font(.jost(.medium, size: 10))
+                            .kerning(1.5)
+                            .foregroundColor(Color(.secondaryLabel))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 32)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 24)
-                .padding(.top, 48)
 
                 Spacer()
             }
@@ -149,7 +190,11 @@ struct CardioView: View {
                     .foregroundColor(Color.workoutAccent)
             }
         }
+        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
+            if !didCompleteSession { now = Date() }
+        }
         .onAppear {
+            now = Date()
             increaseActive = UserDefaults.standard.increaseCardioTypes().contains(type.rawValue)
             let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
             lastEffortScore = saved > 0 ? saved : 5
@@ -166,8 +211,21 @@ struct CardioView: View {
                 }
             }
             Task { await HealthKitManager.shared.requestAuthorization() }
+
+            if type == .hiking, CMAltimeter.isRelativeAltitudeAvailable() {
+                altimeter.startRelativeAltitudeUpdates(to: .main) { [self] data, _ in
+                    guard let data else { return }
+                    let current = data.relativeAltitude.doubleValue
+                    if let last = lastAltitude {
+                        let delta = current - last
+                        if delta > 0 { elevationGain += delta }
+                    }
+                    lastAltitude = current
+                }
+            }
         }
         .onDisappear {
+            if type == .hiking { altimeter.stopRelativeAltitudeUpdates() }
             saveDraftIfNeeded()
         }
         .simultaneousGesture(
@@ -260,14 +318,18 @@ struct CardioView: View {
             UserDefaults.standard.setCardioIncrease(type, false)
         }
 
+        let elevation = type == .hiking && elevationGain > 1 ? elevationGain : nil
+        if type == .hiking { altimeter.stopRelativeAltitudeUpdates() }
+
         let session = CardioSession(date: end, startDate: start, durationMinutes: minutes, cardioType: type.rawValue, distanceKm: distanceKm)
         session.effortScore = effortScore
+        session.elevationGain = elevation
         context.insert(session)
         try? context.save()
 
         if UserDefaults.standard.bool(forKey: "healthKitSyncEnabled") {
             Task { @MainActor in
-                let uuid = await HealthKitManager.shared.saveCardioWorkout(start: start, end: end, type: type, distanceKm: distanceKm, effortScore: effortScore)
+                let uuid = await HealthKitManager.shared.saveCardioWorkout(start: start, end: end, type: type, distanceKm: distanceKm, effortScore: effortScore, elevationGain: elevation)
                 session.healthKitID = uuid
                 try? context.save()
             }

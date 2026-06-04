@@ -369,6 +369,7 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
 
     for (i, def) in defaults.enumerated() {
         let program = WorkoutProgram(name: def.name, colorName: def.color, sortIndex: i)
+        program.isOnTrainingPage = false
         context.insert(program)
         for (j, ex) in def.exercises.enumerated() {
             let pe = ProgramExercise(exerciseId: ex.id, exerciseName: ex.name, sortIndex: j)
