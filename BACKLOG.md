@@ -55,6 +55,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 - ~~**Reduce Motion för GIFs**~~ — byggt i GifSheet 2026-06-02
 - **GIF-licens vid App Store** — byt hasaneyldrm → ExerciseDB Pro innan submission; flaggas automatiskt när App Store eller Developer-konto nämns
 - **Apple Swift Packages** — `swift-algorithms` (`chunked(by:)` för månadsgrupper i HistoryView) och `swift-collections` (`OrderedDictionary`) kan förenkla datakod; inte prioriterat förrän appen växer
+- **Aliases för övningar** — 198 övningar saknar alternativa söknamn; kräver en källa (synonymdatabas) eller manuell genomgång; de tre migrerade övningarna (Squats, Incline Dumbbell Press, Wide-Grip Pulldown) är klara
 
 ---
 
