@@ -8,6 +8,7 @@ struct ProgramEditorView: View {
 
     @State private var name: String
     @State private var colorName: String
+    @State private var constraintRaw: String
     @State private var exercises: [ExerciseDraft]
     @State private var showPicker = false
     @State private var showDeleteAlert = false
@@ -16,6 +17,7 @@ struct ProgramEditorView: View {
         self.program = program
         _name = State(initialValue: program?.name ?? "")
         _colorName = State(initialValue: program?.colorName ?? "paletteIntenseRed")
+        _constraintRaw = State(initialValue: program?.programConstraint ?? "")
         _exercises = State(initialValue: program?.sortedExercises.map {
             ExerciseDraft(exerciseId: $0.exerciseId, exerciseName: $0.exerciseName, setCount: $0.setCount)
         } ?? [])
@@ -34,6 +36,10 @@ struct ProgramEditorView: View {
 
                 Section("Färg") {
                     colorPicker
+                }
+
+                Section("Begränsning") {
+                    constraintPicker
                 }
 
                 Section {
@@ -85,19 +91,49 @@ struct ProgramEditorView: View {
                 }
             }
             .sheet(isPresented: $showPicker) {
-                ExercisePickerView { def in
-                    exercises.append(ExerciseDraft(
-                        exerciseId: def.id,
-                        exerciseName: def.displayName,
-                        setCount: 3
-                    ))
-                }
+                ExercisePickerView(
+                    onSelect: { def in
+                        exercises.append(ExerciseDraft(
+                            exerciseId: def.id,
+                            exerciseName: def.displayName,
+                            setCount: 3
+                        ))
+                    },
+                    programConstraint: ProgramConstraint(rawValue: constraintRaw) ?? .none
+                )
             }
             .alert("Ta bort \(program?.name ?? "program")?", isPresented: $showDeleteAlert) {
                 Button("Ta bort", role: .destructive) { deleteProgram() }
                 Button("Avbryt", role: .cancel) {}
             }
             .presentationDragIndicator(.visible)
+        }
+    }
+
+    // MARK: - Constraint picker
+
+    private var constraintPicker: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(ProgramConstraint.allCases, id: \.rawValue) { c in
+                    let isSelected = constraintRaw == c.rawValue
+                    Button {
+                        Haptics.selection()
+                        constraintRaw = c.rawValue
+                    } label: {
+                        Text(c.displayName)
+                            .font(.jost(.semibold, size: 11))
+                            .kerning(1)
+                            .foregroundStyle(isSelected ? .white : Color(.label))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 7)
+                            .background(isSelected ? accent : Color(.secondarySystemFill))
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.vertical, 4)
         }
     }
 
@@ -193,6 +229,7 @@ struct ProgramEditorView: View {
         if let program {
             program.name = trimmed
             program.colorName = colorName
+            program.programConstraint = constraintRaw
             for ex in program.exercises { context.delete(ex) }
             for (i, draft) in exercises.enumerated() {
                 let pe = ProgramExercise(exerciseId: draft.exerciseId, exerciseName: draft.exerciseName, sortIndex: i, setCount: draft.setCount)
@@ -201,7 +238,7 @@ struct ProgramEditorView: View {
             }
         } else {
             let maxSort = (try? context.fetch(FetchDescriptor<WorkoutProgram>()))?.map(\.sortIndex).max() ?? -1
-            let program = WorkoutProgram(name: trimmed, colorName: colorName, sortIndex: maxSort + 1)
+            let program = WorkoutProgram(name: trimmed, colorName: colorName, sortIndex: maxSort + 1, programConstraint: constraintRaw)
             context.insert(program)
             for (i, draft) in exercises.enumerated() {
                 let pe = ProgramExercise(exerciseId: draft.exerciseId, exerciseName: draft.exerciseName, sortIndex: i, setCount: draft.setCount)

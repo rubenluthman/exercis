@@ -89,6 +89,115 @@ private struct ExerciseDefJSON: Codable {
     }
 }
 
+// MARK: - Body Limitation
+
+enum BodyLimitation: String, CaseIterable {
+    case knee     = "knee"
+    case shoulder = "shoulder"
+    case back     = "back"
+    case elbow    = "elbow"
+    case wrist    = "wrist"
+    case hip      = "hip"
+
+    var displayName: String {
+        switch self {
+        case .knee:     return "KNÄ"
+        case .shoulder: return "AXEL"
+        case .back:     return "RYGG"
+        case .elbow:    return "ARMBÅGE"
+        case .wrist:    return "HANDLED"
+        case .hip:      return "HÖFT"
+        }
+    }
+
+    var contraindications: [String] {
+        switch self {
+        case .knee:     return ["knee_compression", "knee_flexion_loaded"]
+        case .shoulder: return ["shoulder_compression", "shoulder_impingement", "shoulder_instability"]
+        case .back:     return ["lumbar_compression", "lumbar_extension", "lumbar_flexion", "lumbar_rotation"]
+        case .elbow:    return ["elbow_extension_loaded", "elbow_flexion_loaded", "elbow_medial"]
+        case .wrist:    return ["wrist_extension", "wrist_grip"]
+        case .hip:      return ["hip_flexion_loaded"]
+        }
+    }
+}
+
+// MARK: - Program Constraint
+
+enum ProgramConstraint: String, CaseIterable {
+    case none       = ""
+    case push       = "push"
+    case pull       = "pull"
+    case legs       = "legs"
+    case upper      = "upper"
+    case bodyweight = "bodyweight"
+
+    var displayName: String {
+        switch self {
+        case .none:       return "INGEN"
+        case .push:       return "PUSH"
+        case .pull:       return "PULL"
+        case .legs:       return "BEN"
+        case .upper:      return "ÖVERKROPP"
+        case .bodyweight: return "KROPPSVIKT"
+        }
+    }
+
+    func matches(_ def: ExerciseDef) -> Bool {
+        switch self {
+        case .none:   return true
+        case .push:   return def.movement == "push"
+        case .pull:   return def.movement == "pull"
+        case .legs:
+            let legMuscles = Set(["quadriceps", "hamstrings", "glutes", "calves"])
+            return def.primaryMuscles.contains { legMuscles.contains($0) }
+        case .upper:
+            let legMuscles = Set(["quadriceps", "hamstrings", "glutes", "calves"])
+            return def.primaryMuscles.allSatisfy { !legMuscles.contains($0) }
+        case .bodyweight:
+            let bwEquipment = Set(["bodyweight", "pull_up_bar", "dip_bar"])
+            return def.equipment.allSatisfy { bwEquipment.contains($0) }
+        }
+    }
+}
+
+// MARK: - Muscle Group
+
+enum MuscleGroup: String, CaseIterable {
+    case chest     = "chest"
+    case back      = "back"
+    case shoulders = "shoulders"
+    case legs      = "legs"
+    case arms      = "arms"
+    case core      = "core"
+
+    var displayName: String {
+        switch self {
+        case .chest:     return "BRÖST"
+        case .back:      return "RYGG"
+        case .shoulders: return "AXLAR"
+        case .legs:      return "BEN"
+        case .arms:      return "ARMAR"
+        case .core:      return "CORE"
+        }
+    }
+
+    var muscles: [String] {
+        switch self {
+        case .chest:     return ["chest"]
+        case .back:      return ["latissimus_dorsi", "trapezius", "rear_deltoid", "erector_spinae"]
+        case .shoulders: return ["front_deltoid", "side_deltoid", "rear_deltoid"]
+        case .legs:      return ["quadriceps", "hamstrings", "glutes", "calves"]
+        case .arms:      return ["biceps", "triceps", "forearms"]
+        case .core:      return ["abs", "obliques"]
+        }
+    }
+
+    func matches(_ def: ExerciseDef) -> Bool {
+        def.primaryMuscles.contains { muscles.contains($0) }
+    }
+}
+
 // MARK: - ExerciseLibrary
 
 final class ExerciseLibrary {

@@ -151,14 +151,16 @@ final class WorkoutProgram {
     var colorName: String = "paletteIntenseRed"
     var sortIndex: Int = 0
     var isOnTrainingPage: Bool = true
+    var programConstraint: String = ""
 
     @Relationship(deleteRule: .cascade, inverse: \ProgramExercise.program)
     var exercises: [ProgramExercise] = []
 
-    init(name: String, colorName: String, sortIndex: Int = 0) {
+    init(name: String, colorName: String, sortIndex: Int = 0, programConstraint: String = "") {
         self.name = name
         self.colorName = colorName
         self.sortIndex = sortIndex
+        self.programConstraint = programConstraint
     }
 
     var sortedExercises: [ProgramExercise] {
@@ -315,50 +317,50 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
     let existing = (try? context.fetch(FetchDescriptor<WorkoutProgram>())) ?? []
     guard existing.isEmpty else { return }
 
-    let defaults: [(name: String, color: String, exercises: [(id: String, name: String)])] = [
-        ("Full Body", "paletteIntenseRed", [
+    let defaults: [(name: String, color: String, constraint: String, exercises: [(id: String, name: String)])] = [
+        ("Full Body", "paletteIntenseRed", "", [
             ("wger_squats",                   "Squats"),
             ("wger_bench_press",              "Bench Press"),
             ("wger_romanian_deadlift",        "Romanian Deadlift"),
             ("wger_bent_over_rowing",         "Bent Over Rowing"),
             ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells")
         ]),
-        ("Överkropp", "paletteOrange", [
+        ("Överkropp", "paletteOrange", "upper", [
             ("wger_bench_press",              "Bench Press"),
             ("wger_bent_over_rowing",         "Bent Over Rowing"),
             ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells"),
             ("wger_pullups",                  "Pull-Ups"),
             ("wger_lateral_raises",           "Lateral Raises")
         ]),
-        ("Underkropp", "paletteYellow", [
+        ("Underkropp", "paletteYellow", "legs", [
             ("wger_squats",                 "Squats"),
             ("wger_romanian_deadlift",      "Romanian Deadlift"),
             ("wger_leg_presses_wide",       "Leg Presses (Wide)"),
             ("wger_leg_curls_laying",       "Leg Curls (Laying)"),
             ("wger_standing_calf_raises",   "Standing Calf Raises")
         ]),
-        ("Push", "paletteLime", [
+        ("Push", "paletteLime", "push", [
             ("wger_bench_press",                          "Bench Press"),
             ("wger_incline_dumbbell_press",               "Incline Dumbbell Press"),
             ("wger_shoulder_press_dumbbells",             "Shoulder Press, Dumbbells"),
             ("wger_lateral_raises",                       "Lateral Raises"),
             ("wger_triceps_extensions_on_cable_with_bar", "Triceps Extensions On Cable With Bar")
         ]),
-        ("Pull", "paletteGreen", [
+        ("Pull", "paletteGreen", "pull", [
             ("wger_deadlifts",                   "Deadlifts"),
             ("wger_pullups",                     "Pull-Ups"),
             ("wger_rowing_seated",               "Rowing, Seated"),
             ("wger_lat_pull_down_straight_back", "Lat Pull Down (Straight Back)"),
             ("wger_biceps_curls_with_dumbbell",  "Biceps Curls With Dumbbell")
         ]),
-        ("Legs", "paletteTeal", [
+        ("Legs", "paletteTeal", "legs", [
             ("wger_squats",             "Squats"),
             ("wger_romanian_deadlift",  "Romanian Deadlift"),
             ("wger_leg_presses_wide",   "Leg Presses (Wide)"),
             ("wger_leg_extension",      "Leg Extension"),
             ("wger_leg_curls_laying",   "Leg Curls (Laying)")
         ]),
-        ("Bodyweight", "paletteCyan", [
+        ("Bodyweight", "paletteCyan", "bodyweight", [
             ("wger_body_squats",         "Body Squats"),
             ("wger_push_ups",            "Push Ups"),
             ("wger_bodyweight_lunges",   "Bodyweight Lunges"),
@@ -368,7 +370,7 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
     ]
 
     for (i, def) in defaults.enumerated() {
-        let program = WorkoutProgram(name: def.name, colorName: def.color, sortIndex: i)
+        let program = WorkoutProgram(name: def.name, colorName: def.color, sortIndex: i, programConstraint: def.constraint)
         program.isOnTrainingPage = false
         context.insert(program)
         for (j, ex) in def.exercises.enumerated() {

@@ -11,6 +11,7 @@ struct SettingsView: View {
     @AppStorage("healthKitWeightEnabled")  private var healthKitWeightEnabled = true
     @AppStorage("lockEnabled")             private var lockEnabled = true
     @AppStorage("selectedCardioTypes")     private var selectedCardioTypesRaw = ""
+    @AppStorage("bodyLimitations")         private var bodyLimitationsRaw = ""
 
     @State private var exportItems: [Any] = []
     @State private var showExportSheet = false
@@ -65,6 +66,23 @@ struct SettingsView: View {
                         ForEach(CardioType.allCases, id: \.self) { type in
                             cardioTypeRow(type)
                             if type != CardioType.allCases.last {
+                                ThinDivider().padding(.leading, 24)
+                            }
+                        }
+                    }
+
+                    ThinDivider()
+
+                    sectionBlock {
+                        sectionLabel("BEGRÄNSNINGAR")
+                        Text("Övningar som belastar markerade leder skuggas i övningsväljaren.")
+                            .font(.jost(.regular, size: 12))
+                            .foregroundStyle(Color(.secondaryLabel))
+                            .padding(.horizontal, 24)
+                            .padding(.bottom, 12)
+                        ForEach(BodyLimitation.allCases, id: \.rawValue) { limitation in
+                            limitationRow(limitation)
+                            if limitation != BodyLimitation.allCases.last {
                                 ThinDivider().padding(.leading, 24)
                             }
                         }
@@ -222,6 +240,35 @@ struct SettingsView: View {
             .padding(.vertical, 16)
         }
         .buttonStyle(.plain)
+    }
+
+    // MARK: - Limitation row
+
+    private var bodyLimitationsActive: Set<String> {
+        Set(bodyLimitationsRaw.split(separator: ",").map(String.init).filter { !$0.isEmpty })
+    }
+
+    private func limitationRow(_ limitation: BodyLimitation) -> some View {
+        HStack {
+            Toggle("", isOn: Binding(
+                get: { bodyLimitationsActive.contains(limitation.rawValue) },
+                set: { on in
+                    var active = bodyLimitationsActive
+                    if on { active.insert(limitation.rawValue) } else { active.remove(limitation.rawValue) }
+                    bodyLimitationsRaw = active.sorted().joined(separator: ",")
+                }
+            ))
+            .labelsHidden()
+
+            Text(limitation.displayName)
+                .font(.jost(.semibold, size: 12))
+                .kerning(1.5)
+                .foregroundStyle(.primary)
+
+            Spacer()
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 14)
     }
 
     // MARK: - Program row
