@@ -1,37 +1,16 @@
 import SwiftUI
 import SwiftData
 
-#Preview {
-    NavigationStack {
-        CardioView()
-            .modelContainer(for: CardioSession.self, inMemory: true)
-    }
-}
-
-private enum CardioField: Hashable {
-    case distance(CardioType)
-}
-
 struct CardioView: View {
-    var initialType: CardioType? = nil
+    let type: CardioType
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
 
-    @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
-    @AppStorage("lastCardioType") private var storedType: String = CardioType.crosstrainer.rawValue
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
-    @AppStorage("selectedCardioTypes") private var selectedCardioTypesRaw = ""
 
-    private var activeCardioTypes: [CardioType] {
-        let selected = Set(selectedCardioTypesRaw.split(separator: ",").map(String.init))
-        if selected.isEmpty { return CardioType.allCases }
-        return CardioType.allCases.filter { selected.contains($0.rawValue) }
-    }
-    @State private var expandedType: CardioType? = nil
-    @State private var distances: [String: String] = [:]
-    @State private var increaseTypes: Set<String> = []
-    @State private var longPressFired: Set<CardioType> = []
+    @State private var distance = ""
+    @State private var increaseActive = false
     @State private var showEffortPicker = false
     @State private var showTimePicker = false
     @State private var editedStart: Date = Date()
@@ -40,13 +19,29 @@ struct CardioView: View {
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
-    @FocusState private var focusedField: CardioField?
+    @State private var longPressFired = false
+    @FocusState private var distanceFocused: Bool
 
-    private func distanceBinding(for type: CardioType) -> Binding<String> {
-        Binding(
-            get: { distances[type.rawValue] ?? "" },
-            set: { distances[type.rawValue] = $0 }
-        )
+    private var draftStartKey: String { "cardioDraftStartTime_\(type.rawValue)" }
+    private var draftDistanceKey: String { "cardioDraftDistance_\(type.rawValue)" }
+    private var draftActiveKey: String { "cardioDraftActive_\(type.rawValue)" }
+
+    private var lastSummary: String? {
+        guard let dStr = UserDefaults.standard.string(forKey: "cardioSavedDuration_\(type.rawValue)"),
+              let duration = Double(dStr.replacingOccurrences(of: ",", with: ".")),
+              duration > 0 else { return nil }
+        let mins = Int(duration)
+        var text = mins >= 60 ? "\(mins/60) H \(mins%60 > 0 ? "\(mins%60) MIN" : "")" : "\(mins) MIN"
+        text = text.trimmingCharacters(in: .whitespaces)
+        if let kStr = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)"),
+           let km = Double(kStr.replacingOccurrences(of: ",", with: ".")), km > 0 {
+            text += " · \(formatWeight(km)) KM"
+        }
+        return text
+    }
+
+    private func durationFromTime() -> Double {
+        max(1, editedEnd.timeIntervalSince(editedStart) / 60)
     }
 
     var body: some View {
@@ -55,10 +50,29 @@ struct CardioView: View {
                 headerRow
                 ThinDivider().padding(.top, 8)
 
-                ForEach(activeCardioTypes, id: \.self) { type in
-                    typeRow(type)
-                    ThinDivider()
+                VStack(alignment: .trailing, spacing: 6) {
+                    Text("KM")
+                        .font(.jost(.medium, size: 10))
+                        .kerning(1.5)
+                        .foregroundColor(Color(.secondaryLabel))
+
+                    TextField("", text: $distance)
+                        .font(.jost(.semibold, size: 56))
+                        .foregroundColor(.primary)
+                        .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
+                        .focused($distanceFocused)
+                        .overlay(alignment: .trailing) {
+                            if distance.isEmpty && !distanceFocused {
+                                Text("–")
+                                    .font(.jost(.semibold, size: 56))
+                                    .foregroundColor(Color(.tertiaryLabel))
+                                    .allowsHitTesting(false)
+                            }
+                        }
                 }
+                .padding(.horizontal, 24)
+                .padding(.top, 32)
 
                 Spacer()
             }
@@ -93,8 +107,7 @@ struct CardioView: View {
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
-                            var t = Transaction()
-                            t.disablesAnimations = true
+                            var t = Transaction(); t.disablesAnimations = true
                             withTransaction(t) { effortDragOffset = value.translation.height }
                         }
                         .onEnded { value in
@@ -113,9 +126,17 @@ struct CardioView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if !showEffortPicker {
-                klarBar
-                    .opacity(focusedField != nil ? 0 : 1)
-                    .animation(.linear(duration: 0), value: focusedField)
+                Button("KLAR") {
+                    distanceFocused = false
+                    let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
+                    lastEffortScore = saved > 0 ? saved : 5
+                    showEffortPicker = true
+                }
+                .buttonStyle(FilledButtonStyle(accent: .workoutAccent))
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
+                .opacity(distanceFocused ? 0 : 1)
+                .animation(.linear(duration: 0), value: distanceFocused)
             }
         }
         .sheet(isPresented: $showTimePicker, onDismiss: { hasCustomTime = true }) {
@@ -125,51 +146,68 @@ struct CardioView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("KLAR") { focusedField = nil }
+                Button("KLAR") { distanceFocused = false }
                     .font(.jost(.semibold, size: 13))
                     .foregroundColor(Color.workoutAccent)
             }
         }
         .onAppear {
-            for type in CardioType.allCases {
-                if let saved = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)") {
-                    distances[type.rawValue] = saved
-                }
-            }
-            increaseTypes = UserDefaults.standard.increaseCardioTypes()
-            var t = Transaction()
-            t.disablesAnimations = true
-            withTransaction(t) {
-                if hasCardioDraft,
-                   let savedType = UserDefaults.standard.string(forKey: "cardioDraftType"),
-                   let type = CardioType(rawValue: savedType) {
-                    expandedType = type
-                    storedType = savedType
-                    if let draftDistance = UserDefaults.standard.string(forKey: "cardioDraftDistance") {
-                        distances[savedType] = draftDistance
-                    }
-                } else {
-                    expandedType = initialType ?? CardioType(rawValue: storedType)
-                }
-            }
+            increaseActive = UserDefaults.standard.increaseCardioTypes().contains(type.rawValue)
+            let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
+            lastEffortScore = saved > 0 ? saved : 5
             editedEnd = Date()
-            editedStart = Date()
+
+            // Återuppta pågående pass om draft finns
+            if let startInterval = UserDefaults.standard.object(forKey: draftStartKey) as? Double {
+                editedStart = Date(timeIntervalSince1970: startInterval)
+                distance = UserDefaults.standard.string(forKey: draftDistanceKey) ?? ""
+            } else {
+                editedStart = Date()
+                if let savedDist = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)") {
+                    distance = savedDist
+                }
+            }
             Task { await HealthKitManager.shared.requestAuthorization() }
         }
         .onDisappear {
             saveDraftIfNeeded()
         }
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.5).onEnded { _ in
+                guard !showEffortPicker else { return }
+                Haptics.impact(.medium)
+                longPressFired = true
+                increaseActive.toggle()
+                UserDefaults.standard.setCardioIncrease(type, increaseActive)
+            }
+        )
     }
 
-    // MARK: Sub-views
+    // MARK: - Header
 
     private var headerRow: some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
-            Text("KONDITION")
-                .font(.jost(.bold, size: 17))
-                .kerning(2)
-                .foregroundColor(.primary)
-
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text(type.displayName.uppercased())
+                        .font(.jost(.bold, size: 17))
+                        .kerning(2)
+                        .foregroundColor(.primary)
+                    Text("ÖKA")
+                        .font(.jost(.medium, size: 9))
+                        .kerning(1.5)
+                        .foregroundColor(Color.workoutAccent)
+                        .padding(.horizontal, 5).padding(.vertical, 2)
+                        .overlay(RoundedRectangle(cornerRadius: 2).strokeBorder(Color.workoutAccent, lineWidth: 0.5))
+                        .opacity(increaseActive ? 1 : 0)
+                }
+                if let summary = lastSummary {
+                    Text(summary)
+                        .font(.jost(.regular, size: 12))
+                        .foregroundColor(Color(.secondaryLabel))
+                }
+            }
+            Spacer(minLength: 0)
             Button {
                 showTimePicker = true
             } label: {
@@ -178,212 +216,50 @@ struct CardioView: View {
                     .foregroundColor(Color(.secondaryLabel))
             }
             .buttonStyle(.plain)
-
-            Spacer(minLength: 0)
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)
     }
 
-    @ViewBuilder
-    private func typeRow(_ type: CardioType) -> some View {
-        let isExpanded = expandedType == type
-        let summary = lastSessionSummary(for: type)
-
-        VStack(spacing: 0) {
-            Button {
-                if longPressFired.contains(type) {
-                    longPressFired.remove(type)
-                    return
-                }
-                Haptics.selection()
-                focusedField = nil
-                withAnimation(.easeInOut(duration: 0.22)) {
-                    if isExpanded {
-                        expandedType = nil
-                        storedType = ""
-                    } else {
-                        expandedType = type
-                        storedType = type.rawValue
-                    }
-                }
-            } label: {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(type.displayName.uppercased())
-                        .font(.jost(.semibold, size: 12))
-                        .kerning(1.5)
-                        .foregroundColor(isExpanded ? Color.workoutAccent : Color(.secondaryLabel))
-                    Text("ÖKA")
-                        .font(.jost(.medium, size: 9))
-                        .kerning(1.5)
-                        .foregroundColor(Color.workoutAccent)
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 2)
-                                .strokeBorder(Color.workoutAccent, lineWidth: 0.5)
-                        )
-                        .opacity(increaseTypes.contains(type.rawValue) ? 1 : 0)
-                    Spacer()
-                    if !isExpanded {
-                        if let summary {
-                            Text(summary)
-                                .font(.jost(.regular, size: 12))
-                                .foregroundColor(Color(.secondaryLabel))
-                        }
-                        Image(systemName: "chevron.right")
-                            .font(.jost(.medium, size: 10))
-                            .foregroundColor(Color(.secondaryLabel))
-                            .padding(.leading, 6)
-                    }
-                }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
-                .padding(.bottom, isExpanded ? 10 : 20)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
-            if isExpanded {
-                HStack(spacing: 0) {
-                    Spacer()
-                    Text("KM")
-                        .font(.jost(.medium, size: 10))
-                        .kerning(1.5)
-                        .foregroundColor(Color(.secondaryLabel))
-                        .frame(width: 80, alignment: .trailing)
-                }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 6)
-
-                HStack(alignment: .firstTextBaseline, spacing: 0) {
-                    Spacer()
-                    distanceField(text: distanceBinding(for: type), focus: .distance(type))
-                }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 14)
-                .transition(.opacity.combined(with: .move(edge: .top)))
-            }
-        }
-        .animation(.easeInOut(duration: 0.22), value: isExpanded)
-        .simultaneousGesture(
-            LongPressGesture(minimumDuration: 0.5).onEnded { _ in
-                Haptics.impact(.medium)
-                longPressFired.insert(type)
-                var t = Transaction()
-                t.disablesAnimations = true
-                withTransaction(t) {
-                    if increaseTypes.contains(type.rawValue) {
-                        increaseTypes.remove(type.rawValue)
-                    } else {
-                        increaseTypes.insert(type.rawValue)
-                    }
-                }
-                UserDefaults.standard.setCardioIncrease(type, increaseTypes.contains(type.rawValue))
-            }
-        )
-    }
-
-    private func distanceField(text: Binding<String>, focus: CardioField) -> some View {
-        TextField("", text: text)
-            .font(.jost(.semibold, size: 34))
-            .foregroundColor(.primary)
-            .keyboardType(.decimalPad)
-            .multilineTextAlignment(.trailing)
-            .focused($focusedField, equals: focus)
-            .frame(width: 80, alignment: .trailing)
-            .overlay(alignment: .trailing) {
-                if text.wrappedValue.isEmpty && focusedField != focus {
-                    Text("–")
-                        .font(.jost(.semibold, size: 34))
-                        .foregroundColor(Color(.tertiaryLabel))
-                        .allowsHitTesting(false)
-                }
-            }
-    }
-
-    private func lastSessionSummary(for type: CardioType) -> String? {
-        guard let dStr = UserDefaults.standard.string(forKey: "cardioSavedDuration_\(type.rawValue)"),
-              let duration = Double(dStr.replacingOccurrences(of: ",", with: ".")),
-              duration > 0 else { return nil }
-        let mins = Int(duration)
-        var text: String
-        if type == .hiking && duration >= 60 {
-            let h = mins / 60; let m = mins % 60
-            text = m > 0 ? "\(h) H \(m) MIN" : "\(h) H"
-        } else {
-            text = "\(mins) MIN"
-        }
-        if let kStr = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)"),
-           let km = Double(kStr.replacingOccurrences(of: ",", with: ".")), km > 0 {
-            text += " · \(formatWeight(km)) KM"
-        }
-        return text
-    }
-
-    private func durationFromTime() -> Double {
-        let end = editedEnd
-        let start = editedStart
-        return max(1, end.timeIntervalSince(start) / 60)
-    }
-
-    private func handleKlar() {
-        guard expandedType != nil else { dismiss(); return }
-        focusedField = nil
-        let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(expandedType!.rawValue)")
-        lastEffortScore = saved > 0 ? saved : 5
-        showEffortPicker = true
-    }
-
-    private var klarBar: some View {
-        Button("KLAR", action: handleKlar)
-            .buttonStyle(FilledButtonStyle(accent: Color.workoutAccent))
-            .padding(.horizontal, 24)
-            .padding(.vertical, 16)
-    }
-
-    // MARK: Logic
+    // MARK: - Logic
 
     private func saveDraftIfNeeded() {
-        guard !didCompleteSession, let type = expandedType else { return }
-        UserDefaults.standard.set(type.rawValue, forKey: "cardioDraftType")
-        let distStr = distances[type.rawValue] ?? ""
-        if !distStr.isEmpty {
-            UserDefaults.standard.set(distStr, forKey: "cardioDraftDistance")
+        guard !didCompleteSession else { return }
+        UserDefaults.standard.set(editedStart.timeIntervalSince1970, forKey: draftStartKey)
+        if !distance.isEmpty {
+            UserDefaults.standard.set(distance, forKey: draftDistanceKey)
         } else {
-            UserDefaults.standard.removeObject(forKey: "cardioDraftDistance")
+            UserDefaults.standard.removeObject(forKey: draftDistanceKey)
         }
+        UserDefaults.standard.set(type.rawValue, forKey: "cardioDraftType")
         hasCardioDraft = true
     }
 
     private func saveSession(effortScore: Int? = nil) {
-        guard let type = expandedType else { return }
         let end = editedEnd
         let start = editedStart
         let minutes = durationFromTime()
         didCompleteSession = true
 
-        let distanceStr = distances[type.rawValue] ?? ""
-        let distanceKm = distanceStr.isEmpty ? nil : Double(distanceStr.replacingOccurrences(of: ",", with: "."))
+        let distanceKm = distance.isEmpty ? nil : Double(distance.replacingOccurrences(of: ",", with: "."))
 
+        UserDefaults.standard.removeObject(forKey: draftStartKey)
+        UserDefaults.standard.removeObject(forKey: draftDistanceKey)
         UserDefaults.standard.removeObject(forKey: "cardioDraftType")
-        UserDefaults.standard.removeObject(forKey: "cardioDraftDistance")
         hasCardioDraft = false
 
         let previousDuration = Double(UserDefaults.standard.string(forKey: "cardioSavedDuration_\(type.rawValue)")?.replacingOccurrences(of: ",", with: ".") ?? "") ?? 0
         UserDefaults.standard.set(formatWeight(minutes), forKey: "cardioSavedDuration_\(type.rawValue)")
-        if !distanceStr.isEmpty {
-            UserDefaults.standard.set(distanceStr, forKey: "cardioSavedDistance_\(type.rawValue)")
+        if let km = distanceKm {
+            UserDefaults.standard.set(formatWeight(km), forKey: "cardioSavedDistance_\(type.rawValue)")
         } else {
             UserDefaults.standard.removeObject(forKey: "cardioSavedDistance_\(type.rawValue)")
         }
-
         if let score = effortScore {
             UserDefaults.standard.set(score, forKey: "cardioEffortScore_\(type.rawValue)")
         }
-
-        if minutes > previousDuration && increaseTypes.contains(type.rawValue) {
-            increaseTypes.remove(type.rawValue)
+        if minutes > previousDuration && increaseActive {
+            increaseActive = false
             UserDefaults.standard.setCardioIncrease(type, false)
         }
 
@@ -404,11 +280,7 @@ struct CardioView: View {
 
 private extension UserDefaults {
     static let increaseCardioKey = "increaseCardioTypes"
-
-    func increaseCardioTypes() -> Set<String> {
-        Set(stringArray(forKey: Self.increaseCardioKey) ?? [])
-    }
-
+    func increaseCardioTypes() -> Set<String> { Set(stringArray(forKey: Self.increaseCardioKey) ?? []) }
     func setCardioIncrease(_ type: CardioType, _ value: Bool) {
         var types = increaseCardioTypes()
         if value { types.insert(type.rawValue) } else { types.remove(type.rawValue) }

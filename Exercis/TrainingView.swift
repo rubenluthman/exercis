@@ -51,7 +51,7 @@ struct TrainingView: View {
                 .enableSwipeBack()
         }
         .navigationDestination(item: $activeCardioType) { type in
-            CardioView(initialType: type)
+            CardioView(type: type)
                 .enableSwipeBack()
         }
         .alert("Ta bort pågående utkast?", isPresented: $showDiscardAlert) {
