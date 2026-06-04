@@ -8,27 +8,10 @@ Uppdateras löpande under sessioner och vid apprevision.
 ## Näst på tur
 
 - **Extern LLM-analys av kodbasen** — filer redo: `full_codebase.txt` + `llm_analysis_prompt.md`. Kör i Gemini 2.5 Pro, ta med fynd till FleetView.
-- **GIF-system** — isolerat, ger direkt synlig förbättring, blockerar ingenting. Bra startpunkt.
 
 ---
 
 ## Planerade funktioner
-
-### GIF-system
-- Övningsnamn med GIF visas i accentfärg (tryckbar) — utan GIF i `.primary`
-- Tryck → halvskärm med GIF (WKWebView, base64-inbäddning)
-- `ⓘ` (`info.circle`) i GIF-sheeten → expanderar till primära muskler, sekundära muskler, beskrivningstext (Apple Photos-mönster)
-- GIF-mappning: `gif_mapping.md` i projektets rot (180 övningar, exact/strong/weak/none)
-- GIF-filer: `Exercis/Resources/GIFs/` (folder reference i Xcode)
-
-```swift
-enum GifSource: String, Codable {
-    case hasaneyldrm   // primär källa, icke-kommersiell
-    case exercisedb    // sekundär källa, icke-kommersiell
-    case needsSource   // borde ha GIF men ingen hittad än
-    case none          // behöver inte GIF
-}
-```
 
 ### TabView-omstrukturering
 Nuvarande: 4 tabbar (Träning · Historik · Profil · Inställningar). Ny struktur: 3 tabbar:
@@ -121,6 +104,7 @@ Se `cardio_types.json` — 26 typer med `id`, `displayName`, `hkActivityType`, `
 
 ## Klart
 
+- [x] GIF-system — 155 övningar med GIF (accentfärg + tryckbar), GifSheet med WKWebView + muskelinfo (2026-06-05)
 - [x] Övningsbeskrivningar — 186 granskade, 8 faktafel åtgärdade (2026-06-05)
 - [x] exercises_def.json + cardio_types.json — AI-revision via Gemini + ChatGPT (2026-06-05)
 - [x] Begränsningsfilter — kroppsbegränsningar + programbegränsningar i ExercisePickerView
@@ -133,4 +117,4 @@ Se `cardio_types.json` — 26 typer med `id`, `displayName`, `hkActivityType`, `
 - [x] CSV-export (2026-06-02)
 - [x] Haptics centraliserade (2026-06-02)
 
-*Senast uppdaterad: 2026-06-05*
+*Senast uppdaterad: 2026-06-05 (GIF-system markerat klart)*
