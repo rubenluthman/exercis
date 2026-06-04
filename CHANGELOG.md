@@ -2,6 +2,36 @@
 
 ---
 
+## v0.3.0 — 2026-06-04
+*Navigation, konditionsloggning och övningsdatabas omarbetade.*
+
+**Nytt**
+- TrainingView — ny startsida (Träning-tab) visar användarens valda program och konditionsformer; tryck för att starta direkt
+- 4-tabbars navigation: Träning · Historik · Profil · Inställningar
+- Programhantering i Inställningar — toggle vilka program som visas på Träning-sidan, redigera innehåll
+- Konditionsformer i Inställningar — toggle vilka typer som visas
+- Automatisk tidsloggning för kondition — tid mäts från att vyn öppnas till KLAR; ingen manuell inmatning
+- SessionTimePicker: ändring av startdatum drar automatiskt med slutdatum (bevarar passlängd); stödjer pass över midnatt
+- Fuzzy search i övningsväljaren via Fuse.swift — hittar rätt även vid stavfel
+- Aliases och beskrivningar för alla 186 övningar i exercises_def.json
+- Övningsbeskrivning visas i GifSheet info-vy (⓪-knapp)
+- Claude Code-versionsnotis vid session-start om ny version installerats
+
+**Förbättringar**
+- Swipe-back fungerar från styrkepass och konditionspass (navigationDestination istället för fullScreenCover/sheet)
+- GIF-laddning via base64-inbäddning i WKWebView — kringgår iOS filsystemsbegränsningar
+- Datamigration v5: gamla övningsnamn (Barbell Back Squat, Neutral-Grip Incline Dumbbell Bench Press, Neutral-Grip Lat Pulldown) migreras till korrekt ExerciseDef-namn
+- Portrait-only och iPhone-only rättat i build settings
+
+**Bakom kulisserna**
+- `WorkoutProgram` fick `isOnTrainingPage: Bool`-fält
+- `CardioType` implementerar `Identifiable`
+- `CardioField`-enum förenklad (duration-case borttagna)
+- GIFs tillagda i .gitignore
+- ExerciseDef: `aliases` och `description`-fält tillagda i JSON-schema och Swift-laddare
+
+---
+
 ## v0.2.0 — 2026-06-01
 *Den stora ombyggnaden. Appen gick från ett personligt träningsverktyg till en generaliserbar plattform för alla.*
 

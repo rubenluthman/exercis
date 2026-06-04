@@ -6,7 +6,9 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 
 ## Just nu
 
-- Exploratory testing planerat — Ruben testar fysiskt nästa session
+- Byggt och klart för exploratory testing på enhet
+- GIF-laddning otestad (base64-fix implementerad)
+- Ny TrainingView och 4-tabbars navigation otestad
 
 ---
 
@@ -28,26 +30,34 @@ Alla filer ligger platt i `Exercis/`-mappen.
 **Viktigt:** Projektet använder implicit Swift file discovery — `Sources`-fasen i `project.pbxproj` är tom. Alla `.swift`-filer i `Exercis/`-mappen inkluderas automatiskt i bygget. Nya filer behöver **inte** läggas till manuellt i Xcode.
 
 ```
-ExercisApp.swift      ← @main ExercisApp + RootView + AppScreen
-AuthManager.swift     ← AuthManager (Face ID/lösenkod)
-Models.swift          ← SwiftData-modeller (WorkoutSession, CardioSession, ExerciseDef, WorkoutDraft, CardioType)
-Theme.swift           ← färger, typsnitt, knappstillar, ThinDivider, enableSwipeBack, formatWeight/parseWeight
-HomeView.swift        ← startsida med tre knappar
-LockView.swift        ← inloggningsskärm
-StrengthView.swift    ← logga styrketräningspass (SetFormData, ExerciseFormData, nextField-logik)
-ExerciseSection.swift ← övningssektion med sets/reps + WorkoutField-enum + UserDefaults-extension
-VideoSheet.swift      ← video/webb i SFSafariViewController vid klick på övningsnamn
-CardioView.swift      ← logga konditionspass (accordion med CROSSTRAINER/CYKEL/RODDMASKIN)
-HistoryView.swift     ← historiklista (blandar styrka och kondition, HistoryEntry-enum)
-HistoryCard.swift     ← expanderbart kort för styrkepass (övningsnamn klickbara → ExerciseChartSheet)
-CardioCard.swift      ← expanderbart kort för konditionspass (typ klickbar → CardioChartSheet)
-ExerciseChartSheet.swift      ← e1RM-progression per övning (Swift Charts, öppnas från HistoryCard)
-CardioChartSheet.swift        ← durationsprogression per kardioform (Swift Charts, öppnas från CardioCard)
-EffortChartSheet.swift        ← ansträngningsprogression över styrkepass (Swift Charts, öppnas från HistoryCard)
-CardioEffortChartSheet.swift  ← ansträngningsprogression per kardioform (Swift Charts, öppnas från CardioCard)
-PeriodSummarySheet.swift      ← periodsammanfattning månads/årsvy (Swift Charts, öppnas från HistoryView)
-SessionTimePicker.swift   ← delad sheet för att redigera start/slut-tid (öppnas via datum-text i header)
+ExercisApp.swift          ← @main ExercisApp + RootView + MainTabView (4 tabbar)
+AuthManager.swift         ← AuthManager (Face ID/lösenkod)
+Models.swift              ← SwiftData-modeller (WorkoutSession, CardioSession, WorkoutProgram, ProgramExercise, CardioType)
+Theme.swift               ← färger, typsnitt, knappstillar, ThinDivider, enableSwipeBack, formatWeight/parseWeight
+LockView.swift            ← inloggningsskärm
+TrainingView.swift        ← startsida (Träning-tab) — valda program + konditionsformer, bara starta pass
+StrengthView.swift        ← logga styrketräningspass (SetFormData, ExerciseFormData, nextField-logik)
+ExerciseSection.swift     ← övningssektion med sets/reps + WorkoutField-enum + UserDefaults-extension
+GifSheet.swift            ← GIF + övningsinformation (WKWebView, base64-inbäddning, öppnas från ExerciseSection)
+CardioView.swift          ← logga konditionspass (accordion, tid mäts automatiskt, bara KM matas in)
+HistoryView.swift         ← historiklista (blandar styrka och kondition, HistoryEntry-enum)
+HistoryCard.swift         ← expanderbart kort för styrkepass (övningsnamn klickbara → ExerciseChartSheet)
+CardioCard.swift          ← expanderbart kort för konditionspass (typ klickbar → CardioChartSheet)
+ExerciseChartSheet.swift  ← e1RM-progression per övning (Swift Charts, öppnas från HistoryCard)
+CardioChartSheet.swift    ← durationsprogression per kardioform (Swift Charts, öppnas från CardioCard)
+EffortChartSheet.swift    ← ansträngningsprogression styrka (Swift Charts, öppnas från HistoryCard)
+CardioEffortChartSheet.swift ← ansträngningsprogression kondition (Swift Charts, öppnas från CardioCard)
+PeriodSummarySheet.swift  ← periodsammanfattning månads/årsvy (Swift Charts, öppnas från HistoryView)
+SessionTimePicker.swift   ← delad sheet för start/slut-tid (startändring drar med slut, slut fritt)
+ProfileView.swift         ← profilbild, namn, statistik
+SettingsView.swift        ← inställningar + programhantering + konditionsformer
+ProgramEditorView.swift   ← redigera program (namn, färg, övningar, set-antal)
+ExercisePickerView.swift  ← övningsväljare med fuzzy search (Fuse.swift)
+ProgramCard.swift         ← programkort (används i TrainingView och SettingsView)
+ProgramListView.swift     ← DEPRECATED — ersatt av TrainingView + SettingsView
+OnboardingView.swift      ← onboarding (steg 1: program, steg 2: konditionsformer)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
+ExerciseLibrary.swift     ← laddar exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton
 ```
 
 ---
@@ -164,9 +174,23 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 }
 ```
 
-**`CardioType` enum** (i Models.swift):
+**`WorkoutProgram` / `ProgramExercise`** (SwiftData):
 ```swift
-enum CardioType: String, Codable, CaseIterable {
+@Model class WorkoutProgram {
+    var id: UUID; var name: String; var colorName: String; var sortIndex: Int
+    var isOnTrainingPage: Bool = true   // visas på Träning-tab
+    @Relationship(deleteRule: .cascade) var exercises: [ProgramExercise]
+}
+@Model class ProgramExercise {
+    var exerciseId: String; var exerciseName: String; var sortIndex: Int; var setCount: Int
+    var program: WorkoutProgram?
+}
+```
+
+**`CardioType` enum** (i Models.swift, `Identifiable`):
+```swift
+enum CardioType: String, Codable, CaseIterable, Identifiable {
+    var id: String { rawValue }
     case crosstrainer = "CROSSTRAINER"
     case cykel        = "CYKEL"
     case roddmaskin   = "RODDMASKIN"
@@ -214,55 +238,50 @@ Exakt dessa fem, i denna ordning, definierade i `ExerciseDef.all`:
 ## Skärmar & Navigation
 
 ```
-LockView → (Face ID) → HomeView → StrengthView
-                               → CardioView
-                               → HistoryView
+LockView → (Face ID) → MainTabView
+                         ├── TrainingView (Träning) → StrengthView (navigationDestination)
+                         │                          → CardioView (navigationDestination)
+                         ├── HistoryView (Historik)
+                         ├── ProfileView (Profil)
+                         └── SettingsView (Inställningar) → ProgramEditorView (sheet)
 ```
 
-- Navigation via `NavigationStack` + `NavigationLink(value: AppScreen)` — ingen skärmposition sparas mellan app-starter (alltid LockView vid ny start)
-- Swipe-back aktivt på alla tre undersidor via `enableSwipeBack()`
-- **KLAR** sparar och returnerar till HomeView; **←** returnerar utan att spara (men sparar draft om data finns)
-- **Swipe-back** beter sig identiskt med ← — sparar draft via `onDisappear` → `saveDraftIfNeeded()` (skippar om `didCompleteSession = true`)
+- 4 tabbar: **Träning · Historik · Profil · Inställningar**
+- `navigationDestination(item:)` för StrengthView och CardioView — swipe-back via `enableSwipeBack()`
+- **KLAR** sparar och returnerar via dismiss; **←** (swipe-back) sparar draft via `onDisappear`
 
 ### LockView (ingen accentfärg)
-- "EXERCIS" Jost Black 900, centrerat vertikalt med Spacer
+- "EXERCIS" Jost Black 900, centrerat vertikalt
 - `faceid` SF Symbol (~40pt) som retry-knapp, `.secondary` färg — visas bara om Face ID misslyckades
-- `accessibilityLabel: "Logga in"` på retry-ikonen
-- Inga platshållare, inget färgat element — neutral skärm
-- `auth.authenticate()` triggas i `.onAppear` (auto Face ID) och via ikonen (retry)
-- **Obs:** befintlig implementation använder fylld homeAccent-knapp + två `Color.clear.frame(height: 50)` — ersätts vid nästa revision
+- `auth.authenticate()` triggas i `.onAppear` och via retry-ikonen
 
-### HomeView (accentfärg: homeAccent)
-- "EXERCIS" (Jost Black 900) + tre knappar i `VStack(spacing: 12)`, `padding(.horizontal, 24)`, `padding(.top, 30)`
-- **STYRKA** (fylld, homeAccent) — om draft: **FORTSÄTT STYRKA** + × för att kassera
-- **KONDITION** (fylld, workoutAccent) — om draft: **FORTSÄTT KONDITION** + × för att kassera
-- **HISTORIK** (konturknapp, historyAccent)
-- Senaste passens datum visas under HISTORIK (nyast av styrka/kondition, svensk locale) — klickbart, navigerar till HistoryView
-- Kassera-alert: separata `.alert()` för styrka respektive kondition (destructive button)
+### TrainingView (Träning-tab, accentfärg per program/workoutAccent)
+- Visar valda styrkeprogram (filter: `isOnTrainingPage == true`) under STYRKA
+- Visar valda konditionsformer (från `selectedCardioTypes` AppStorage) under KONDITION
+- Tryck på program → navigerar till StrengthView; tryck på konditionsform → navigerar till CardioView med `initialType`
+- Draft-indikator: pencil-ikon på program med aktiv draft; "FORTSÄTT"-text på konditionsform med aktiv draft
+- Tomt tillstånd om inget är konfigurerat
 
-### StrengthView — Styrketräning (accentfärg: homeAccent)
-- Header: "STYRKETRÄNING" 17pt bold, kerning 2 + förkortat datum 13pt + "←" 90pt trailing
-- Formuläret **förifyller automatiskt** med tyngsta setets vikt och reps (samma värde på alla tre set) från senaste sessionen; tomt vid allra första passet
-- Alltid 3 set per övning
+### StrengthView — Styrketräning (accentfärg: homeAccent/programfärg)
+- Header: "STYRKETRÄNING" 17pt bold, kerning 2 + förkortat datum 13pt
+- Formuläret **förifyller automatiskt** per program från senaste session med samma `programId`
+- Set-antal per övning definieras i programmet (1–6, default 3)
 - Kolumnrubriker: **SET, KG, REPS** — layout: SET=maxWidth leading, KG=80pt leading, REPS=120pt trailing
-- **Ihopfällbara sektioner**: tryck var som helst på sektionen (ej namn-länk eller textfält) för att fälla ihop/ut. Chevron visas vid ihopfällt läge, rep-intervall vid utfällt. Startar alltid utfällt vid nytt pass.
-- **ÖKA-badge**: håll inne (500ms long press) på sektion för att toggla — indikerar vikthöjning nästa pass. Rensas automatiskt om tyngre vikt skrivs in. Sparas i UserDefaults.
-- **Tangentbordsverktygsfält**: NÄSTA (navigerar weight→reps→nästa övning) + KLAR, båda i homeAccent. NÄSTA är inaktivt på sista fältet.
-- **Draft**: ← sparar till UserDefaults (WorkoutDraft inkl. ihopfällningsläge). Återladdas via FORTSÄTT STYRKA. Rensas vid KLAR eller om alla fält är tomma.
-- Datum-texten i headern är klickbar → öppnar `SessionTimePicker` för att sätta anpassat datum/start/slut. Standard: start = när StrengthView öppnades, slut = nu.
+- **Ihopfällbara sektioner**, **ÖKA-badge** (long press 500ms), **vila-timer** (triggas efter sista reps-fält)
+- **PR-detektion**: jämför e1RM mot historik, visar PR-indikator
+- **Tangentbordsverktygsfält**: NÄSTA + KLAR i homeAccent
+- **Draft**: sparas i UserDefaults (WorkoutDraft inkl. ihopfällningsläge och programId)
+- Datum klickbart → `SessionTimePicker`
 
 ### CardioView — Konditionsträning (accentfärg: workoutAccent)
-- Header: "KONDITION" 17pt bold, kerning 2 + datum 13pt + "←" 90pt trailing
-- **Accordion med 4 typer**: CROSSTRAINER / CYKEL / RODDMASKIN / VANDRING — separerade av ThinDivider
-- VANDRING har två tidsfält (H + MIN) istället för ett MIN-fält. Duration sparas som totalt antal minuter i SwiftData och UserDefaults. Visas som "3 h 45 min" i CardioCard. NÄSTA navigerar H → MIN → KM.
-- Tryck på en rad för att öppna den; tryck igen för att stänga (ingen behöver vara öppen)
-- Öppet/stängt läge sparas i `@AppStorage("lastCardioType")` (tom sträng = ingen öppen)
-- Varje typ minns sin senaste *sparade* duration i UserDefaults (`cardioSavedDuration_{TYPE}`) — laddas vid öppning
-- **Draft**: ← sparar aktiv typs värde (om ifyllt) till `cardioDraftType`/`cardioDraftMinutes`/`cardioDraftHours`. Återladdas via FORTSÄTT KONDITION. Övriga typers in-session-värden (ej sparade) går förlorade vid ← — de återhämtas från `cardioSavedDuration_*` från senaste slutförda session.
-- **Tangentbordsverktygsfält**: NÄSTA (vänster) + KLAR (höger), båda i workoutAccent. NÄSTA navigerar MIN → KM (eller H → MIN → KM för VANDRING).
-- KLAR visar effort-picker-overlay om duration är ifylld, annars dismiss direkt. Minns senaste ansträngning per typ i `cardioEffortScore_{TYPE}`.
-- Datum-texten i headern är klickbar → öppnar `SessionTimePicker` för att sätta anpassat datum/start/slut. Påverkar `session.startDate`, `session.date` och HealthKit-intervallet. Standard: start = slut − duration, slut = nu.
-- KLAR sparar `CardioSession` (inkl. `effortScore`), sparar duration/distans/ansträngning till UserDefaults, loggar till HealthKit
+- Öppnas med `initialType: CardioType?` — öppnar rätt accordion direkt
+- **Accordion med valda konditionstyper** — separerade av ThinDivider
+- **Tid mäts automatiskt**: start = när CardioView öppnas, slut = KLAR. Inget manuellt tidsinmatning.
+- Enda manuell input: **KM** (distans) för typer med distans
+- **Tangentbordsverktygsfält**: bara KLAR (ett fält = ingen NÄSTA)
+- **Draft**: sparar aktiv typ + eventuell distans till UserDefaults
+- Datum klickbart → `SessionTimePicker` (startändring drar med slutet, slut fritt — stödjer pass över midnatt)
+- KLAR → effort-picker → sparar `CardioSession`, loggar till HealthKit
 
 ### HistoryView (accentfärg: historyAccent)
 - Header: "HISTORIK" 17pt bold + "←" 90pt trailing
@@ -313,15 +332,13 @@ LockView → (Face ID) → HomeView → StrengthView
 
 | Nyckel | Typ | Ägare | Syfte |
 |--------|-----|-------|-------|
-| `hasDraft` | Bool (@AppStorage) | HomeView/StrengthView | Om styrke-draft finns |
-| `hasCardioDraft` | Bool (@AppStorage) | HomeView/CardioView | Om konditions-draft finns |
+| `hasDraft` | Bool (@AppStorage) | TrainingView/StrengthView | Om styrke-draft finns |
+| `hasCardioDraft` | Bool (@AppStorage) | TrainingView/CardioView | Om konditions-draft finns |
 | `lastCardioType` | String (@AppStorage) | CardioView | Senast öppnad/stängd typ (tom = ingen) |
 | `workoutDraft` | Data | UserDefaults | WorkoutDraft (JSON) inkl. ihopfällningsläge |
 | `cardioDraftType` | String | UserDefaults | Typ för konditions-draft |
-| `cardioDraftMinutes` | String | UserDefaults | Minuter för konditions-draft |
 | `cardioDraftDistance` | String | UserDefaults | Distans (km) för konditions-draft |
-| `cardioDraftHours` | String | UserDefaults | Timmar för vandringsdraft (enbart VANDRING) |
-| `cardioSavedDuration_{TYPE}` | String | UserDefaults | Senast sparad duration per kardioform |
+| `cardioSavedDuration_{TYPE}` | String | UserDefaults | Senast sparad duration per kardioform (beräknad från tid) |
 | `cardioSavedDistance_{TYPE}` | String | UserDefaults | Senast sparad distans per kardioform |
 | `cardioEffortScore_{TYPE}` | Int | UserDefaults | Senast sparad ansträngning per kardioform (startvärde i picker) |
 | `workoutEffortScore` | Int | UserDefaults | Senast sparad ansträngning för styrkepass (startvärde i picker) |

@@ -78,6 +78,12 @@ struct GifSheet: View {
     private var infoView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                if let description = def.description {
+                    Text(description)
+                        .font(.jost(.regular, size: 14))
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 if !def.primaryMuscles.isEmpty {
                     muscleSection(label: "PRIMARY MUSCLES", muscles: def.primaryMuscles)
                 }

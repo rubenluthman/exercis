@@ -28,6 +28,7 @@ struct ExerciseDef: Identifiable {
     let gifFile: String?
     let gifSource: GifSource
     var aliases: [String] = []
+    var description: String? = nil
 
     var displayName: String { name }
     var shortName: String? { nil }
@@ -80,6 +81,7 @@ private struct ExerciseDefJSON: Codable {
     let gifFile: String?
     let gifSource: String?
     let aliases: [String]?
+    let description: String?
 
     struct RangeJSON: Codable {
         let min: Int
@@ -120,7 +122,8 @@ final class ExerciseLibrary {
                     setRangeMax: json.setRange.max,
                     gifFile: json.gifFile,
                     gifSource: GifSource(rawValue: json.gifSource ?? "none") ?? .none,
-                    aliases: json.aliases ?? []
+                    aliases: json.aliases ?? [],
+                    description: json.description
                 )
             }
     }
