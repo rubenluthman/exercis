@@ -590,7 +590,7 @@
       "Reverse Crunch",
       "Hip Raise"
     ],
-    "description": "Lie on your back and bring your knees to your chest. Curl your hips off the floor by contracting your lower abs, then lower with control. Focuses on the lower portion of the rectus abdominis."
+    "description": "Lie on your back with knees bent. Perform a standard crunch upward, then slowly lower your shoulder blades back to the floor over 3 to 5 seconds to emphasize the eccentric portion."
   },
   {
     "id": "wger_crunches_on_machine",
@@ -1847,7 +1847,7 @@
       "Captain's Chair",
       "Knee Raise"
     ],
-    "description": "Hang from a captain's chair or support yourself with armrests. Raise your knees toward your chest or extend your legs to horizontal, contracting the abs. Lower under control."
+    "description": "Stand upright while holding a stable support for balance. Raise one leg forward in a controlled manner while keeping your torso upright, then lower and repeat before switching sides."
   },
   {
     "id": "wger_upright_row_szbar",
@@ -1890,7 +1890,7 @@
       "EZ Bar Upright Row",
       "Upright Row EZ Bar"
     ],
-    "description": "Hold an EZ-bar in front of your thighs with an overhand grip. Pull the bar straight up toward your chin by raising your elbows above your hands, then lower under control."
+    "description": "Hold an EZ-bar in front of your thighs with an overhand grip. Pull the bar straight up toward your chest by raising your elbows to shoulder height, then lower under control."
   },
   {
     "id": "wger_hyperextensions",
@@ -2013,7 +2013,7 @@
       "45 Degree Leg Press",
       "Machine Leg Press"
     ],
-    "description": "Sit in a leg press machine with feet hip-width on the platform. Lower the weight toward your chest by bending your knees to 90 degrees, then press back up to full extension without locking the knees."
+    "description": "Step onto the Hackenschmidt machine platform and position your shoulders under the pads with feet shoulder-width apart. Lower your body by bending your knees to 90 degrees, then drive through your feet to press back to the starting position."
   },
   {
     "id": "wger_hammercurls_on_cable",
@@ -2417,7 +2417,7 @@
       "Smith Machine Upright Row",
       "Machine Upright Row"
     ],
-    "description": "Set a Smith machine bar at thigh height and grip it with a shoulder-width overhand grip. Pull the bar straight up toward your chin by leading with your elbows, then lower."
+    "description": "Set a Smith machine bar at thigh height and grip it with a shoulder-width overhand grip. Pull the bar straight up toward your chest by leading with your elbows until they reach shoulder height, then lower."
   },
   {
     "id": "wger_lateral_raises",
@@ -5053,7 +5053,7 @@
       "Seated Military Press",
       "Seated OHP"
     ],
-    "description": "Sit on a bench with back support and hold a barbell at shoulder level. Press the bar overhead to full extension, then lower back to shoulder height. The seated position removes leg drive for stricter shoulder isolation."
+    "description": "Stand holding a barbell at shoulder height with a shoulder-width grip. Press the bar overhead to full extension while maintaining a braced torso, then lower under control."
   },
   {
     "id": "wger_upper_external_oblique",
@@ -6319,7 +6319,7 @@
       "Dumbbell Upright Row",
       "DB Upright Row"
     ],
-    "description": "Hold dumbbells in front of your thighs. Pull them upward close to your body, leading with your elbows until they reach chin height, then lower with control."
+    "description": "Hold dumbbells in front of your thighs. Pull them upward close to your body, leading with your elbows until they reach mid-chest height, then lower with control."
   },
   {
     "id": "wger_lying_rotator_cuff_exercise",
@@ -7749,7 +7749,7 @@
       "Overhead Tricep Extension",
       "Tricep Pushdown Dumbbell"
     ],
-    "description": "Hold a dumbbell or weight overhead with both hands. Lower the weight behind your head by bending the elbows, then press back up to full extension."
+    "description": "Stand at a high cable pulley with a straight bar or rope attachment. Keeping your elbows fixed at your sides, push the attachment downward until your arms are fully extended, then return under control."
   },
   {
     "id": "wger_hip_raise_lying",
