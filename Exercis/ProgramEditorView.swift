@@ -97,6 +97,7 @@ struct ProgramEditorView: View {
                 Button("Ta bort", role: .destructive) { deleteProgram() }
                 Button("Avbryt", role: .cancel) {}
             }
+            .presentationDragIndicator(.visible)
         }
     }
 

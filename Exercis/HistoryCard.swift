@@ -72,10 +72,12 @@ struct HistoryCard: View {
         .sheet(item: $chartExercise) { item in
             ExerciseChartSheet(exerciseName: item.id)
                 .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $showEffortChart) {
             EffortChartSheet()
                 .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
     }
 

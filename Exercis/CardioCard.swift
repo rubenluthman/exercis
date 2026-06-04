@@ -67,10 +67,12 @@ struct CardioCard: View {
         .sheet(item: $chartType) { item in
             CardioChartSheet(cardioType: item.id)
                 .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $showEffortChart) {
             CardioEffortChartSheet(cardioType: session.cardioType)
                 .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
     }
 

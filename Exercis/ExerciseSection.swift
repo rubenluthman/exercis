@@ -114,6 +114,7 @@ struct ExerciseSection: View {
         .sheet(isPresented: $showGif) {
             GifSheet(def: form.def)
                 .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
     }
 

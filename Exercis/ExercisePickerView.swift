@@ -46,6 +46,7 @@ struct ExercisePickerView: View {
                         .font(.jost(.regular, size: 16))
                 }
             }
+            .presentationDragIndicator(.visible)
         }
     }
 }
