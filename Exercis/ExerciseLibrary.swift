@@ -40,9 +40,9 @@ struct ExerciseDef: Identifiable {
 
     var gifBundleURL: URL? {
         guard let file = gifFile else { return nil }
-        return Bundle.main.url(forResource: file,
-                               withExtension: nil,
-                               subdirectory: "GIFs")
+        return Bundle.main.url(forResource: file, withExtension: nil, subdirectory: "GIFs")
+            ?? Bundle.main.url(forResource: file, withExtension: nil, subdirectory: "Resources/GIFs")
+            ?? Bundle.main.url(forResource: file, withExtension: nil)
     }
 }
 

@@ -144,6 +144,8 @@ struct GifWebView: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
+        guard let data = try? Data(contentsOf: url) else { return }
+        let base64 = data.base64EncodedString()
         let html = """
         <!DOCTYPE html><html><head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -153,9 +155,9 @@ struct GifWebView: UIViewRepresentable {
         img { max-width: 100%; max-height: 100vh; object-fit: contain; }
         </style>
         </head><body>
-        <img src="\(url.lastPathComponent)">
+        <img src="data:image/gif;base64,\(base64)">
         </body></html>
         """
-        webView.loadHTMLString(html, baseURL: url.deletingLastPathComponent())
+        webView.loadHTMLString(html, baseURL: nil)
     }
 }

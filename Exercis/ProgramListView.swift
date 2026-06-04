@@ -97,8 +97,9 @@ struct ProgramListView: View {
         .sheet(isPresented: $showNewProgram) {
             ProgramEditorView(program: nil)
         }
-        .fullScreenCover(item: $activeProgram) { program in
+        .navigationDestination(item: $activeProgram) { program in
             StrengthView(program: program)
+                .enableSwipeBack()
         }
         .alert("Ta bort pågående utkast?", isPresented: $showDiscardAlert) {
             Button("Ta bort", role: .destructive) {
