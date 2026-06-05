@@ -139,6 +139,7 @@ struct TrainingView: View {
     private var cardioSection: some View {
         VStack(spacing: 0) {
             sectionLabel("CARDIO")
+                .padding(.horizontal, 24)
             ThinDivider()
             ForEach(Array(selectedCardioTypes.enumerated()), id: \.element) { _, type in
                 let isDraft = hasCardioDraft && UserDefaults.standard.string(forKey: "cardioDraftType") == type.rawValue
