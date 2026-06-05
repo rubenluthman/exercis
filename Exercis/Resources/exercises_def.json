@@ -5024,7 +5024,7 @@
     "id": "wger_military_press_256",
     "wgerId": 256,
     "wgerBaseId": 418,
-    "name": "Military Press",
+    "name": "Seated Military Press",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -5062,7 +5062,8 @@
     "aliases": [
       "Seated Overhead Press",
       "Seated Military Press",
-      "Seated OHP"
+      "Seated OHP",
+      "Military Press"
     ],
     "description": "Stand holding a barbell at shoulder height with a shoulder-width grip. Press the bar overhead to full extension while maintaining a braced torso, then lower under control."
   },
