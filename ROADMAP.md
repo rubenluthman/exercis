@@ -68,6 +68,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 - [x] CardioType-mappningstester — tracksElevation + HKWorkoutActivityType (2026-06-05)
 - [x] hkActivityType extraherad till CardioType — enda sanningskälla (2026-06-05)
 - [x] Fix: duplikat-alias-krasch i migrateExerciseNames (2026-06-05)
+- [x] Fix: lokalisering i hjälpfunktioner (Text(LocalizedStringKey)) (2026-06-05)
 
 *Senast uppdaterad: 2026-06-05*
 

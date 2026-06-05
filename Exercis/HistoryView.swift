@@ -44,7 +44,7 @@ import SwiftData
     return NavigationStack { HistoryView().modelContainer(container) }
 }
 
-private enum HistoryEntry: Identifiable {
+enum HistoryEntry: Identifiable {
     case workout(WorkoutSession)
     case cardio(CardioSession)
 
@@ -62,7 +62,7 @@ private enum HistoryEntry: Identifiable {
     }
 }
 
-private struct MonthGroup: Identifiable {
+struct MonthGroup: Identifiable {
     let year: Int
     let month: Int
     let entries: [HistoryEntry]
@@ -72,7 +72,7 @@ private struct MonthGroup: Identifiable {
     var cardioCount: Int  { entries.filter { if case .cardio  = $0 { return true }; return false }.count }
 }
 
-private enum HistoryRow: Identifiable {
+enum HistoryRow: Identifiable {
     case year(Int)
     case month(MonthGroup)
 
@@ -82,6 +82,40 @@ private enum HistoryRow: Identifiable {
         case .month(let g): return "month-\(g.id)"
         }
     }
+}
+
+func groupHistoryEntries(_ entries: [HistoryEntry]) -> [MonthGroup] {
+    let calendar = Calendar.current
+    var groups: [String: [HistoryEntry]] = [:]
+    for entry in entries {
+        let comps = calendar.dateComponents([.year, .month], from: entry.date)
+        let key = "\(comps.year!)-\(String(format: "%02d", comps.month!))"
+        groups[key, default: []].append(entry)
+    }
+    return groups
+        .map { key, entries in
+            let parts = key.split(separator: "-")
+            return MonthGroup(
+                year: Int(parts[0])!,
+                month: Int(parts[1])!,
+                entries: entries.sorted { $0.date > $1.date }
+            )
+        }
+        .sorted { ($0.year, $0.month) > ($1.year, $1.month) }
+}
+
+func buildHistoryRows(_ groups: [MonthGroup]) -> [HistoryRow] {
+    let showYears = Set(groups.map(\.year)).count > 1
+    var rows: [HistoryRow] = []
+    var lastYear: Int? = nil
+    for group in groups {
+        if showYears && group.year != lastYear {
+            rows.append(.year(group.year))
+            lastYear = group.year
+        }
+        rows.append(.month(group))
+    }
+    return rows
 }
 
 struct HistoryView: View {
@@ -100,39 +134,9 @@ struct HistoryView: View {
         return (w + c).sorted { $0.date > $1.date }
     }
 
-    private var groupedEntries: [MonthGroup] {
-        let calendar = Calendar.current
-        var groups: [String: [HistoryEntry]] = [:]
-        for entry in entries {
-            let comps = calendar.dateComponents([.year, .month], from: entry.date)
-            let key = "\(comps.year!)-\(String(format: "%02d", comps.month!))"
-            groups[key, default: []].append(entry)
-        }
-        return groups
-            .map { key, entries in
-                let parts = key.split(separator: "-")
-                return MonthGroup(
-                    year: Int(parts[0])!,
-                    month: Int(parts[1])!,
-                    entries: entries.sorted { $0.date > $1.date }
-                )
-            }
-            .sorted { ($0.year, $0.month) > ($1.year, $1.month) }
-    }
+    private var groupedEntries: [MonthGroup] { groupHistoryEntries(entries) }
 
-    private var historyRows: [HistoryRow] {
-        let showYears = Set(groupedEntries.map(\.year)).count > 1
-        var rows: [HistoryRow] = []
-        var lastYear: Int? = nil
-        for group in groupedEntries {
-            if showYears && group.year != lastYear {
-                rows.append(.year(group.year))
-                lastYear = group.year
-            }
-            rows.append(.month(group))
-        }
-        return rows
-    }
+    private var historyRows: [HistoryRow] { buildHistoryRows(groupedEntries) }
 
     var body: some View {
         ZStack {
