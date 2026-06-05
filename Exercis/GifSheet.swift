@@ -11,12 +11,12 @@ struct GifSheet: View {
                 if let url = def.gifBundleURL {
                     if reduceMotion {
                         staticFrameView(url: url)
-                            .accessibilityLabel("\(def.displayName) exercise demonstration")
+                            .accessibilityLabel("Animation showing \(def.displayName)")
                     } else {
                         GifWebView(url: url)
                             .aspectRatio(1, contentMode: .fit)
                             .frame(maxWidth: .infinity)
-                            .accessibilityLabel("\(def.displayName) exercise demonstration")
+                            .accessibilityLabel("Animation showing \(def.displayName)")
                             .accessibilityAddTraits(.isImage)
                     }
                 }
