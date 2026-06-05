@@ -11,6 +11,9 @@ struct CardioView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
+    @Query(sort: \WorkoutSession.date, order: .reverse) private var workoutSessions: [WorkoutSession]
+    @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
+    @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
 
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
     @AppStorage("useImperialUnits") private var imperial = false
@@ -337,6 +340,13 @@ struct CardioView: View {
         session.elevationGain = elevation
         context.insert(session)
         do { try context.save() } catch { saveError = true; return }
+
+        let snapshot = buildWidgetSnapshot(
+            workoutSessions: Array(workoutSessions),
+            cardioSessions: Array(cardioSessions),
+            programs: Array(programs)
+        )
+        WidgetDataStore.save(snapshot)
 
         if UserDefaults.standard.bool(forKey: "healthKitSyncEnabled") {
             Task { @MainActor in

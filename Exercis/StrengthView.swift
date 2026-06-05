@@ -31,6 +31,8 @@ struct StrengthView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: [SortDescriptor(\WorkoutSession.date, order: .reverse)])
     private var sessions: [WorkoutSession]
+    @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
+    @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
 
     @AppStorage("hasDraft") private var hasDraft = false
     @AppStorage("useImperialUnits") private var imperial = false
@@ -519,6 +521,13 @@ struct StrengthView: View {
 
         session.effortScore = effortScore
         do { try context.save() } catch { saveError = true; return }
+
+        let snapshot = buildWidgetSnapshot(
+            workoutSessions: Array(sessions),
+            cardioSessions: Array(cardioSessions),
+            programs: Array(programs)
+        )
+        WidgetDataStore.save(snapshot)
 
         UserDefaults.standard.saveDraft(nil)
         hasDraft = false

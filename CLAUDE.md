@@ -62,7 +62,17 @@ LiveActivityManager.swift ← hanterar start/update/end av Live Activity under s
 ```
 ExercisWidgetBundle.swift   ← WidgetBundle-entry för widget-target
 ExercisLiveActivity.swift   ← Live Activity-layout (Dynamic Island + Lock Screen)
+ExercisHomeWidget.swift     ← Hemskärmswidget (small + medium): streak, senaste pass, nästa program
+WidgetShared.swift          ← WidgetSnapshot + WidgetDataStore + ProgramColor (kopia för widget-target)
+ExercisWidget.entitlements  ← App Group: group.rubenluthman.Exercis
 ```
+
+**App Group** (`group.rubenluthman.Exercis`):
+- Måste aktiveras i Xcode för BÅDA targets: Exercis och ExercisWidget (Signing & Capabilities → + → App Groups)
+- `WidgetDataStore` skriver/läser via `UserDefaults(suiteName: "group.rubenluthman.Exercis")`
+- App-target har `WidgetDataStore.swift` + `WidgetSnapshot` + `WidgetSnapshotBuilder.swift`
+- Widget-target har `WidgetShared.swift` (kopia av WidgetSnapshot + WidgetDataStore + ProgramColor)
+- `WidgetShared.swift` ska INTE läggas till app-target (ger redefinition-fel)
 
 ---
 
