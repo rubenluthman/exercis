@@ -578,7 +578,6 @@ struct SettingsView: View {
 
     private var reminderTimeRow: some View {
         let (sugH, sugM) = ReminderManager.suggestedTime(from: Array(sessions))
-        let timeString = String(format: "%02d:%02d", reminderHour, reminderMinute)
         return HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text("TIME")

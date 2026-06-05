@@ -2,6 +2,7 @@ import XCTest
 import SwiftData
 @testable import Exercis
 
+@MainActor
 final class ProgramSeederTests: XCTestCase {
 
     private var container: ModelContainer!

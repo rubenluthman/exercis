@@ -69,12 +69,10 @@ final class PRDetectionTests: XCTestCase {
         ))
     }
 
-    func testOneRepMaxExactlyEqualIsNotPR() {
-        let e1rm = epleyE1RM(weight: 100, reps: 5)
-        // same e1RM from different weight/rep combo
-        let altWeight = e1rm          // 1 rep at e1rm value
+    func testEquivalentE1RMAcrossCombosIsNotPR() {
+        // 100×5 → e1RM = 116.67; 90×8 → e1RM = 114.0 — lower, not a PR
         XCTAssertFalse(isPR(
-            current:    [(altWeight, 1)],
+            current:    [(90, 8)],
             historical: [(100, 5)]
         ))
     }

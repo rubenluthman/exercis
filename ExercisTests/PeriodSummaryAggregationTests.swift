@@ -2,6 +2,7 @@ import XCTest
 import SwiftData
 @testable import Exercis
 
+@MainActor
 final class PeriodSummaryAggregationTests: XCTestCase {
 
     private var container: ModelContainer!
@@ -114,18 +115,18 @@ final class PeriodSummaryAggregationTests: XCTestCase {
     }
 
     func testCardioMinutesSingleSession() {
-        let session = CardioSession(date: Date(), cardioType: CardioType.running.rawValue, durationMinutes: 45)
+        let session = CardioSession(date: Date(), durationMinutes: 45, cardioType: CardioType.running.rawValue)
         XCTAssertEqual(totalMinutes([session]), 45, accuracy: 0.001)
     }
 
     func testCardioMinutesMultipleSessions() {
-        let s1 = CardioSession(date: Date(), cardioType: CardioType.running.rawValue, durationMinutes: 30)
-        let s2 = CardioSession(date: Date(), cardioType: CardioType.cycling_stationary.rawValue, durationMinutes: 45)
+        let s1 = CardioSession(date: Date(), durationMinutes: 30, cardioType: CardioType.running.rawValue)
+        let s2 = CardioSession(date: Date(), durationMinutes: 45, cardioType: CardioType.cyclingStationary.rawValue)
         XCTAssertEqual(totalMinutes([s1, s2]), 75, accuracy: 0.001)
     }
 
     func testCardioMinutesFractional() {
-        let s = CardioSession(date: Date(), cardioType: CardioType.running.rawValue, durationMinutes: 22.5)
+        let s = CardioSession(date: Date(), durationMinutes: 22.5, cardioType: CardioType.running.rawValue)
         XCTAssertEqual(totalMinutes([s]), 22.5, accuracy: 0.001)
     }
 }
