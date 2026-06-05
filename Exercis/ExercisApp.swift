@@ -84,6 +84,7 @@ struct MainTabView: View {
                 Label("SETTINGS", systemImage: "gearshape.fill")
             }
         }
+        .tabBarMinimizeBehavior(.onScrollDown)
         .onAppear {
             migrateExerciseNames(context: context)
             migrateCardioTypes(context: context)

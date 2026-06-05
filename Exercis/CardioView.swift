@@ -176,7 +176,7 @@ struct CardioView: View {
                     lastEffortScore = saved > 0 ? saved : 5
                     showEffortPicker = true
                 }
-                .buttonStyle(FilledButtonStyle(accent: .workoutAccent))
+                .buttonStyle(GlassFilledButtonStyle(accent: .workoutAccent))
                 .padding(.horizontal, 24)
                 .padding(.vertical, 16)
                 .opacity(distanceFocused ? 0 : 1)

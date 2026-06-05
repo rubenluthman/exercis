@@ -107,6 +107,24 @@ struct OutlineButtonStyle: ButtonStyle {
     }
 }
 
+// MARK: - iOS 26 glass button (test — revert by swapping back to FilledButtonStyle)
+// Usage: .buttonStyle(FilledButtonStyle(accent: X))  ← original, geometric
+//        .buttonStyle(GlassFilledButtonStyle(accent: X))  ← iOS 26 glass variant
+struct GlassFilledButtonStyle: ButtonStyle {
+    let accent: Color
+    var fontSize: CGFloat = 15
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.jost(.bold, size: fontSize))
+            .kerning(1.8)
+            .foregroundStyle(accent)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .glassEffect(.regular.tint(accent.opacity(0.25)), in: .rect(cornerRadius: 4))
+            .opacity(configuration.isPressed ? 0.75 : 1)
+    }
+}
+
 // MARK: - Shared UI
 
 struct ThinDivider: View {
