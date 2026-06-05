@@ -12,7 +12,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ~~2. **Zombie Live Activity vid krasch**~~ — klart (2026-06-05)
 
-3. **CSV-export: share sheet** — byt nuvarande export mot `UIActivityViewController` (eller SwiftUI `ShareLink`) så att iOS standard share sheet visas. Ruben kan då spara till Filer, AirDrop, maila etc. Liten förändring i ProfileView/SettingsView.
+~~3. **CSV-export: share sheet**~~ — var redan implementerat via `UIActivityViewController` (2026-06-05)
 
 4. **SwiftData-fel synliga** — byt `try? context.save()` mot `do/try/catch` med en `@State var saveError: Bool` och ett `.alert("Kunde inte spara", ...)` i berörda vyer (StrengthView, CardioView). Single-user OK med tyst fallback, men en synlig varning vid faktiskt fel förhindrar att data tyst försvinner.
 

@@ -47,6 +47,7 @@ struct StrengthView: View {
     @State private var restSecondsLeft: Int? = nil
     private let restTicker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var newPRNames: [String] = []
+    @State private var saveError = false
     @AppStorage("restTimerSeconds") private var restTimerDuration = 90
     @FocusState private var activeField: WorkoutField?
 
@@ -181,6 +182,11 @@ struct StrengthView: View {
         }
         .sheet(isPresented: $showTimePicker, onDismiss: { hasCustomTime = true }) {
             SessionTimePicker(start: $editedStart, end: $editedEnd, accent: accent)
+        }
+        .alert("Could not save workout", isPresented: $saveError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("An error occurred while saving. Try again or restart the app.")
         }
         .onAppear {
             guard !initialized else { return }
@@ -486,7 +492,7 @@ struct StrengthView: View {
         }
 
         session.effortScore = effortScore
-        try? context.save()
+        do { try context.save() } catch { saveError = true; return }
 
         UserDefaults.standard.saveDraft(nil)
         hasDraft = false

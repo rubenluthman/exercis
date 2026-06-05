@@ -22,6 +22,7 @@ struct CardioView: View {
     @State private var lastEffortScore = 5
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
+    @State private var saveError = false
     @State private var now = Date()
     @FocusState private var distanceFocused: Bool
 
@@ -194,6 +195,11 @@ struct CardioView: View {
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
             if !didCompleteSession { now = Date() }
         }
+        .alert("Could not save workout", isPresented: $saveError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("An error occurred while saving. Try again or restart the app.")
+        }
         .onAppear {
             now = Date()
             increaseActive = UserDefaults.standard.increaseCardioTypes().contains(type.rawValue)
@@ -327,7 +333,7 @@ struct CardioView: View {
         session.effortScore = effortScore
         session.elevationGain = elevation
         context.insert(session)
-        try? context.save()
+        do { try context.save() } catch { saveError = true; return }
 
         if UserDefaults.standard.bool(forKey: "healthKitSyncEnabled") {
             Task { @MainActor in
