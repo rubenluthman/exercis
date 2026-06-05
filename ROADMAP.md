@@ -69,6 +69,9 @@ Uppdateras löpande under sessioner och vid apprevision.
 - [x] hkActivityType extraherad till CardioType — enda sanningskälla (2026-06-05)
 - [x] Fix: duplikat-alias-krasch i migrateExerciseNames (2026-06-05)
 - [x] Fix: lokalisering i hjälpfunktioner (Text(LocalizedStringKey)) (2026-06-05)
+- [x] ExerciseLibrary-tester — laddning, find, filtrering, BodyLimitation, ProgramConstraint (2026-06-05)
+- [x] HistoryView-grupperingstester — månader, sortering, årsrubrik (2026-06-05)
+- [x] Fix: duplikat övning Military Press → Seated Military Press i exercises_def.json (2026-06-05)
 
 *Senast uppdaterad: 2026-06-05*
 
