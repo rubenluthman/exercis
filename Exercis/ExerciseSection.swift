@@ -119,13 +119,39 @@ struct ExerciseSection: View {
         }
     }
 
+    private var hasSuggestion: Bool {
+        !form.suggestedWeight.isEmpty && !form.suggestedReps.isEmpty
+    }
+
+    private func isSuggestionVisible(index: Int) -> Bool {
+        guard hasSuggestion else { return false }
+        return form.sets[index].weight.isEmpty && form.sets[index].reps.isEmpty
+    }
+
     @ViewBuilder
     private func setRow(index: Int) -> some View {
         HStack(spacing: 0) {
-            Text("\(index + 1)")
-                .font(.jost(.semibold, size: 34))
-                .foregroundColor(Color(.secondaryLabel))
-                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading, spacing: 1) {
+                Text("\(index + 1)")
+                    .font(.jost(.semibold, size: 34))
+                    .foregroundColor(Color(.secondaryLabel))
+
+                if isSuggestionVisible(index: index) {
+                    Text("→ \(form.suggestedWeight) × \(form.suggestedReps)")
+                        .font(.jost(.medium, size: 9))
+                        .kerning(1)
+                        .foregroundColor(accent)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 2)
+                                .strokeBorder(accent.opacity(0.5), lineWidth: 0.5)
+                        )
+                        .transition(.opacity.combined(with: .scale(scale: 0.9, anchor: .leading)))
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .animation(.easeInOut(duration: 0.18), value: isSuggestionVisible(index: index))
 
             TextField("", text: $form.sets[index].weight)
                 .font(.jost(.semibold, size: 34))

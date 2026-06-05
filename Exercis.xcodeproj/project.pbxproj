@@ -50,6 +50,7 @@
 		CE5937852FD22845007082AF /* ExercisWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ExercisWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5937872FD22845007082AF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		CE5937892FD22846007082AF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		CEA82AB52FD2F1A80004176E /* Exercis.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Exercis.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -132,6 +133,7 @@
 		CE17AB9B2FC09F12007E1C27 = {
 			isa = PBXGroup;
 			children = (
+				CEA82AB52FD2F1A80004176E /* Exercis.xctestplan */,
 				CE17ABA62FC09F13007E1C27 /* Exercis */,
 				CE59378B2FD22846007082AF /* ExercisWidget */,
 				CE3595372FD2E26C00699B00 /* ExercisTests */,
@@ -480,6 +482,7 @@
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Används för att låsa upp appen";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Appen läser inte hälsodata.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Appen sparar dina styrketräningspass i Hälsa.";
+				INFOPLIST_KEY_NSUserNotificationsUsageDescription = "Exercis skickar påminnelser om du aktiverar träningspåminnelser i inställningarna.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -519,6 +522,7 @@
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Används för att låsa upp appen";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Appen läser inte hälsodata.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Appen sparar dina styrketräningspass i Hälsa.";
+				INFOPLIST_KEY_NSUserNotificationsUsageDescription = "Exercis skickar påminnelser om du aktiverar träningspåminnelser i inställningarna.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

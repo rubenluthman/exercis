@@ -19,6 +19,8 @@ struct ExerciseFormData: Identifiable {
     var sets: [SetFormData]
     var shouldIncrease: Bool = false
     var previousMaxWeight: Double = 0
+    var suggestedWeight: String = ""
+    var suggestedReps: String = ""
 }
 
 // MARK: - StrengthView
@@ -291,12 +293,25 @@ struct StrengthView: View {
             startTime = draft.startTime
             collapsedExercises = Set(draft.collapsedExercises)
             exerciseForms = defs.map { def in
+                let session = sessions.first(where: { $0.programId == program.id })
                 if let ex = draft.exercises.first(where: { $0.name == def.name }) {
+                    let prevMax = ex.previousMaxWeight
+                    var sugW = ""
+                    var sugR = ""
+                    if prevMax > 0,
+                       let log = session?.exerciseLogs.first(where: { $0.name == def.name }),
+                       let bestSet = log.sets.filter({ $0.weight == prevMax }).max(by: { $0.reps < $1.reps }) {
+                        let targetWeight = ex.shouldIncrease ? prevMax + 2.5 : prevMax
+                        sugW = displayWeight(targetWeight, imperial: imperial)
+                        sugR = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
+                    }
                     return ExerciseFormData(
                         def: def,
                         sets: ex.sets.map { SetFormData(weight: $0.weight, reps: $0.reps) },
                         shouldIncrease: ex.shouldIncrease,
-                        previousMaxWeight: ex.previousMaxWeight
+                        previousMaxWeight: prevMax,
+                        suggestedWeight: sugW,
+                        suggestedReps: sugR
                     )
                 }
                 return ExerciseFormData(def: def, sets: Array(repeating: SetFormData(), count: setCount))
@@ -321,7 +336,18 @@ struct StrengthView: View {
             let prevMax = session?.exerciseLogs
                 .first(where: { $0.name == def.name })?
                 .sets.map(\.weight).max() ?? 0
-            return ExerciseFormData(def: def, sets: sets, shouldIncrease: increase, previousMaxWeight: prevMax)
+
+            var sugW = ""
+            var sugR = ""
+            if prevMax > 0,
+               let log = session?.exerciseLogs.first(where: { $0.name == def.name }),
+               let bestSet = log.sets.filter({ $0.weight == prevMax }).max(by: { $0.reps < $1.reps }) {
+                let targetWeight = increase ? prevMax + 2.5 : prevMax
+                sugW = displayWeight(targetWeight, imperial: imperial)
+                sugR = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
+            }
+            return ExerciseFormData(def: def, sets: sets, shouldIncrease: increase, previousMaxWeight: prevMax,
+                                    suggestedWeight: sugW, suggestedReps: sugR)
         }
     }
 

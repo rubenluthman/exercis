@@ -52,6 +52,8 @@ OnboardingView.swift      ← onboarding (steg 1: program med pencil-redigering,
 Previews.swift            ← Canvas-previews för alla huvudvyer med mock-data (används i Xcode Canvas, byggs ej i release)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
 ExerciseLibrary.swift     ← laddar exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton + BodyLimitation/ProgramConstraint/MuscleGroup enums
+ReminderManager.swift         ← UNUserNotificationCenter-wrapper; schedule(weekdays:hour:minute:), cancel(), suggestedTime(from:)
+WhatsNewSheet.swift           ← releasenoter per version (öppnas från VERSION-raden i SettingsView)
 ExercisActivityAttributes.swift ← ActivityKit-attribut för Live Activity (programnamn, accentfärg, övning/set-state)
 LiveActivityManager.swift ← hanterar start/update/end av Live Activity under styrketräning
 ```
@@ -361,6 +363,10 @@ LockView → (Face ID) → MainTabView
 | `increaseCardioTypes` | [String] | UserDefaults | Kardioformer med aktiv ÖKA-badge |
 | `exerciseNameMigrationVersion` | Int | UserDefaults | Version för körd namnmigration (bumpa vid övningsändringar) |
 | `bodyLimitations` | String (@AppStorage) | SettingsView/ExercisePickerView | Kommaseparerade BodyLimitation.rawValue — skuggar övningar som belastar valda leder |
+| `reminderEnabled` | Bool (@AppStorage) | SettingsView | Om träningspåminnelser är aktiva |
+| `reminderWeekdays` | String (@AppStorage) | SettingsView | Kommaseparerade veckodagar (1=sön, 2=mån…7=lör) |
+| `reminderHour` | Int (@AppStorage) | SettingsView | Timme för påminnelse (24h), sätts automatiskt från senaste passstart |
+| `reminderMinute` | Int (@AppStorage) | SettingsView | Minut för påminnelse |
 
 ---
 

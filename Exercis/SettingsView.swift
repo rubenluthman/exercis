@@ -7,6 +7,7 @@ private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
+    @Query(sort: \WorkoutSession.startDate, order: .reverse) private var sessions: [WorkoutSession]
 
     @AppStorage("onboardingCompleted")     private var onboardingCompleted = true
     @AppStorage("restTimerSeconds")        private var restTimerSeconds = 90
@@ -16,6 +17,10 @@ struct SettingsView: View {
     @AppStorage("lockEnabled")             private var lockEnabled = true
     @AppStorage("selectedCardioTypes")     private var selectedCardioTypesRaw = ""
     @AppStorage("bodyLimitations")         private var bodyLimitationsRaw = ""
+    @AppStorage("reminderEnabled")         private var reminderEnabled = false
+    @AppStorage("reminderWeekdays")        private var reminderWeekdaysRaw = ""
+    @AppStorage("reminderHour")            private var reminderHour = 17
+    @AppStorage("reminderMinute")          private var reminderMinute = 0
 
     @State private var exportItems: [Any] = []
     @State private var showExportSheet = false
@@ -128,6 +133,29 @@ struct SettingsView: View {
                             description: nil,
                             isOn: $lockEnabled
                         )
+                    }
+
+                    ThinDivider()
+
+                    sectionBlock {
+                        sectionLabel("REMINDERS")
+                        toggleRow(
+                            title: "TRAINING REMINDERS",
+                            description: nil,
+                            isOn: Binding(
+                                get: { reminderEnabled },
+                                set: { newValue in
+                                    reminderEnabled = newValue
+                                    Task { await applyReminders(enabled: newValue) }
+                                }
+                            )
+                        )
+                        if reminderEnabled {
+                            ThinDivider().padding(.leading, 24)
+                            reminderWeekdaysRow
+                            ThinDivider().padding(.leading, 24)
+                            reminderTimeRow
+                        }
                     }
 
                     ThinDivider()
@@ -508,6 +536,105 @@ struct SettingsView: View {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
         try? content.write(to: url, atomically: true, encoding: .utf8)
         return url
+    }
+
+    // MARK: - Reminders
+
+    private var reminderWeekdays: Set<Int> {
+        get { Set(reminderWeekdaysRaw.split(separator: ",").compactMap { Int($0) }) }
+    }
+
+    private func setReminderWeekdays(_ days: Set<Int>) {
+        reminderWeekdaysRaw = days.sorted().map(String.init).joined(separator: ",")
+    }
+
+    private var reminderWeekdaysRow: some View {
+        let days = [(2, "Mon"), (3, "Tue"), (4, "Wed"), (5, "Thu"), (6, "Fri"), (7, "Sat"), (1, "Sun")]
+        let selected = reminderWeekdays
+        return HStack(spacing: 6) {
+            ForEach(days, id: \.0) { weekday, label in
+                let isOn = selected.contains(weekday)
+                Button {
+                    var updated = selected
+                    if isOn { updated.remove(weekday) } else { updated.insert(weekday) }
+                    setReminderWeekdays(updated)
+                    Task { await applyReminders(enabled: reminderEnabled) }
+                } label: {
+                    Text(label)
+                        .font(.jost(.medium, size: 10))
+                        .kerning(1)
+                        .foregroundStyle(isOn ? Color.appBackground : Color(.secondaryLabel))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 7)
+                        .background(isOn ? Color.homeAccent : Color(.secondarySystemFill))
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 12)
+    }
+
+    private var reminderTimeRow: some View {
+        let (sugH, sugM) = ReminderManager.suggestedTime(from: Array(sessions))
+        let timeString = String(format: "%02d:%02d", reminderHour, reminderMinute)
+        return HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("TIME")
+                    .font(.jost(.medium, size: 10))
+                    .kerning(1.5)
+                    .foregroundStyle(Color(.secondaryLabel))
+                Text("Based on your last session start")
+                    .font(.jost(.regular, size: 12))
+                    .foregroundStyle(Color(.tertiaryLabel))
+            }
+            Spacer()
+            DatePicker(
+                "",
+                selection: Binding(
+                    get: {
+                        var c = Calendar.current.dateComponents([.hour, .minute], from: Date())
+                        c.hour = reminderHour; c.minute = reminderMinute
+                        return Calendar.current.date(from: c) ?? Date()
+                    },
+                    set: { date in
+                        let c = Calendar.current.dateComponents([.hour, .minute], from: date)
+                        reminderHour = c.hour ?? sugH
+                        reminderMinute = c.minute ?? sugM
+                        Task { await applyReminders(enabled: reminderEnabled) }
+                    }
+                ),
+                displayedComponents: .hourAndMinute
+            )
+            .labelsHidden()
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 12)
+        .onAppear {
+            // Auto-set time from history on first enable
+            if reminderHour == 17 && reminderMinute == 0 {
+                reminderHour = sugH
+                reminderMinute = sugM
+            }
+        }
+    }
+
+    private func applyReminders(enabled: Bool) async {
+        guard enabled else {
+            await ReminderManager.shared.cancel()
+            return
+        }
+        let authorized = await ReminderManager.shared.requestAuthorization()
+        guard authorized else {
+            reminderEnabled = false
+            return
+        }
+        await ReminderManager.shared.schedule(
+            weekdays: reminderWeekdays,
+            hour: reminderHour,
+            minute: reminderMinute
+        )
     }
 }
 
