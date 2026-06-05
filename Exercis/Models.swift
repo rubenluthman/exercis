@@ -1,6 +1,9 @@
 import Foundation
 import SwiftData
 import HealthKit
+import OSLog
+
+private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 
 // MARK: - SwiftData Models
 
@@ -284,7 +287,11 @@ func migrateExerciseNames(context: ModelContext) {
             for log in logs {
                 if let newName = aliasMap[log.name] { log.name = newName }
             }
-            try? context.save()
+            do { try context.save() } catch {
+                    #if DEBUG
+                    logger.error("context.save failed: \(error)")
+                    #endif
+                }
         }
         current = 2
     }
@@ -294,7 +301,11 @@ func migrateExerciseNames(context: ModelContext) {
         for log in logs where log.name == "Chest-Supported Row" {
             context.delete(log)
         }
-        try? context.save()
+        do { try context.save() } catch {
+                #if DEBUG
+                logger.error("context.save failed: \(error)")
+                #endif
+            }
     }
 
     if current < 4 {
@@ -302,7 +313,11 @@ func migrateExerciseNames(context: ModelContext) {
         for log in logs where log.name == "Romanian Deadlift (RDL)" {
             log.name = "Romanian Deadlift"
         }
-        try? context.save()
+        do { try context.save() } catch {
+                #if DEBUG
+                logger.error("context.save failed: \(error)")
+                #endif
+            }
     }
 
     if current < 5 {
@@ -315,7 +330,11 @@ func migrateExerciseNames(context: ModelContext) {
         for log in logs {
             if let newName = renames[log.name] { log.name = newName }
         }
-        try? context.save()
+        do { try context.save() } catch {
+                #if DEBUG
+                logger.error("context.save failed: \(error)")
+                #endif
+            }
     }
 
     UserDefaults.standard.set(ExerciseDef.migrationVersion, forKey: key)
@@ -341,7 +360,11 @@ func migrateCardioTypes(context: ModelContext) {
             session.cardioType = newValue
         }
     }
-    try? context.save()
+    do { try context.save() } catch {
+            #if DEBUG
+            logger.error("context.save failed: \(error)")
+            #endif
+        }
 
     UserDefaults.standard.set(1, forKey: key)
 }
@@ -418,6 +441,10 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
             context.insert(pe)
         }
     }
-    try? context.save()
+    do { try context.save() } catch {
+            #if DEBUG
+            logger.error("context.save failed: \(error)")
+            #endif
+        }
     UserDefaults.standard.set(true, forKey: "hasSeededPrograms")
 }

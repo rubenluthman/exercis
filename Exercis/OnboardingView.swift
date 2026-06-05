@@ -1,5 +1,8 @@
 import SwiftUI
+import OSLog
 import SwiftData
+
+private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 
 struct OnboardingView: View {
     @Environment(\.modelContext) private var context
@@ -231,7 +234,11 @@ struct OnboardingView: View {
         for program in programs {
             program.isOnTrainingPage = selectedProgramIds.contains(program.id)
         }
-        try? context.save()
+        do { try context.save() } catch {
+            #if DEBUG
+            logger.error("context.save failed: \(error)")
+            #endif
+        }
         selectedCardioTypesRaw = selectedCardioTypes.joined(separator: ",")
         onboardingCompleted = true
     }

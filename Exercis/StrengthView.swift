@@ -1,6 +1,9 @@
 import SwiftUI
+import OSLog
 import SwiftData
 import Combine
+
+private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 
 // MARK: - Form Data
 
@@ -504,7 +507,11 @@ struct StrengthView: View {
             Task { @MainActor in
                 let uuid = await HealthKitManager.shared.saveWorkout(start: capturedStart, end: capturedEnd, effortScore: effortScore)
                 capturedSession.healthKitID = uuid
-                try? context.save()
+                do { try context.save() } catch {
+                    #if DEBUG
+                    logger.error("context.save failed: \(error)")
+                    #endif
+                }
             }
         }
     }

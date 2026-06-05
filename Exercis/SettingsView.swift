@@ -1,5 +1,8 @@
 import SwiftUI
+import OSLog
 import SwiftData
+
+private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
@@ -290,7 +293,11 @@ struct SettingsView: View {
         HStack(spacing: 12) {
             Toggle("", isOn: Binding(
                 get: { program.isOnTrainingPage },
-                set: { program.isOnTrainingPage = $0; try? context.save() }
+                set: { program.isOnTrainingPage = $0; do { try context.save() } catch {
+     #if DEBUG
+     logger.error("context.save failed: \(error)")
+     #endif
+ } }
             ))
             .labelsHidden()
             .tint(Color(program.colorName))

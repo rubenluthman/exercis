@@ -56,6 +56,12 @@ ExercisActivityAttributes.swift ← ActivityKit-attribut för Live Activity (pro
 LiveActivityManager.swift ← hanterar start/update/end av Live Activity under styrketräning
 ```
 
+**Widget-mapp** (`ExercisWidget/`, separat target):
+```
+ExercisWidgetBundle.swift   ← WidgetBundle-entry för widget-target
+ExercisLiveActivity.swift   ← Live Activity-layout (Dynamic Island + Lock Screen)
+```
+
 ---
 
 ## Theme.swift
@@ -202,8 +208,15 @@ Lagras som `String` i `CardioSession` för att undvika migrationsproblem. Gamla 
 `var tracksElevation: Bool` — `true` för: `hiking`, `running`, `walking`, `road_cycling`, `mountain_biking`, `cross_country_skiing`, `rucking`, `climbing`. Styr om `CMAltimeter` startas i CardioView och om `elevationGain` skickas till HealthKit.
 
 **`WorkoutDraft`** (Codable, sparas i UserDefaults):
-- Innehåller övningsdata, `startTime` och `collapsedExercises: [Int]`
-- Har custom `init(from:)` för bakåtkompatibilitet (nya fält får default-värden vid avkodning av gamla drafts)
+```swift
+struct WorkoutDraft: Codable {
+    var exercises: [ExerciseFormData]
+    var startTime: Date
+    var collapsedExercises: [Int]   // default [] vid avkodning av gamla drafts
+    var programId: UUID?            // default nil vid avkodning av gamla drafts
+}
+```
+- Har custom `init(from:)` för bakåtkompatibilitet — nya fält med default-värden avkodas tyst från äldre JSON
 
 **Vikt-inmatning**: acceptera både punkt och komma som decimaltecken (`parseWeight`).
 **Vikt-visning**: formatera med `formatWeight` (NumberFormatter, locale: .current).
@@ -215,6 +228,8 @@ Lagras som `String` i `CardioSession` för att undvika migrationsproblem. Gamla 
 ## Övningar
 
 Laddas från `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~186 övningar med `status == "include"` är aktiva — resten är exkluderade i JSON.
+
+**Övningsnamn är på engelska** — medvetet val. De lokaliseras inte via `.strings`. Engelska används i UI, i loggad historik (`ExerciseLog.name`) och i CSV-export.
 
 `ExerciseDef` fält: `id` (stabil nyckel, används i `ProgramExercise.exerciseId`), `name` (visas i UI och lagras i `ExerciseLog.name`), `aliases` (gamla namn, migreras vid app-start), `repRange`, `setRange`, `primaryMuscles`, `equipment`, `movement`, `contraindications`, `gifFile/gifSource`, `description`.
 
@@ -262,7 +277,7 @@ LockView → (Face ID) → MainTabView
 - Formuläret **förifyller automatiskt** per program från senaste session med samma `programId`
 - Set-antal per övning definieras i programmet (1–6, default 3)
 - Kolumnrubriker: **SET, KG, REPS** — layout: SET=maxWidth leading, KG=80pt leading, REPS=120pt trailing
-- **Ihopfällbara sektioner**, **ÖKA-badge** (long press 500ms), **vila-timer** (triggas efter sista reps-fält)
+- **Ihopfällbara sektioner**, **ÖKA-badge** (long press 500ms), **vila-timer** (triggas efter sista reps-fält — konfigureras globalt i SettingsView: 0/30/60/90/120s, `@AppStorage("restTimerSeconds")`, default 90s)
 - **PR-detektion**: jämför e1RM mot historik, visar PR-indikator
 - **Tangentbordsverktygsfält**: NÄSTA + KLAR i homeAccent
 - **Draft**: sparas i UserDefaults (WorkoutDraft inkl. ihopfällningsläge och programId)

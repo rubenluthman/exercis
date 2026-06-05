@@ -1,5 +1,8 @@
 import SwiftUI
+import OSLog
 import SwiftData
+
+private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
@@ -330,7 +333,11 @@ struct HistoryView: View {
             }
             context.delete(session)
         }
-        try? context.save()
+        do { try context.save() } catch {
+            #if DEBUG
+            logger.error("context.save failed: \(error)")
+            #endif
+        }
     }
 
     private var emptyState: some View {

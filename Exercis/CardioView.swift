@@ -1,7 +1,10 @@
 import SwiftUI
+import OSLog
 import SwiftData
 import Combine
 import CoreMotion
+
+private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 
 struct CardioView: View {
     let type: CardioType
@@ -339,7 +342,11 @@ struct CardioView: View {
             Task { @MainActor in
                 let uuid = await HealthKitManager.shared.saveCardioWorkout(start: start, end: end, type: type, distanceKm: distanceKm, effortScore: effortScore, elevationGain: elevation)
                 session.healthKitID = uuid
-                try? context.save()
+                do { try context.save() } catch {
+                    #if DEBUG
+                    logger.error("context.save failed: \(error)")
+                    #endif
+                }
             }
         }
     }

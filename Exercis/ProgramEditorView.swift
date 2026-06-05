@@ -1,5 +1,8 @@
 import SwiftUI
+import OSLog
 import SwiftData
+
+private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 
 struct ProgramEditorView: View {
     let program: WorkoutProgram?
@@ -239,14 +242,22 @@ struct ProgramEditorView: View {
                 context.insert(pe)
             }
         }
-        try? context.save()
+        do { try context.save() } catch {
+            #if DEBUG
+            logger.error("context.save failed: \(error)")
+            #endif
+        }
         dismiss()
     }
 
     private func deleteProgram() {
         guard let program else { return }
         context.delete(program)
-        try? context.save()
+        do { try context.save() } catch {
+            #if DEBUG
+            logger.error("context.save failed: \(error)")
+            #endif
+        }
         dismiss()
     }
 }
