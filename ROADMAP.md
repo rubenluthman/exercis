@@ -10,7 +10,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ~~1. **Onboarding-dubletter vid reinstall**~~ — klart (2026-06-05)
 
-2. **Zombie Live Activity vid krasch** — i `StrengthView.onAppear`: iterera `Activity<ExercisActivityAttributes>.activities`, avsluta alla vars `contentState` inte matchar aktuell session. Förhindrar att en gammal Live Activity sitter kvar på Lock Screen i upp till 8 timmar efter krasch.
+~~2. **Zombie Live Activity vid krasch**~~ — klart (2026-06-05)
 
 3. **CSV-export: share sheet** — byt nuvarande export mot `UIActivityViewController` (eller SwiftUI `ShareLink`) så att iOS standard share sheet visas. Ruben kan då spara till Filer, AirDrop, maila etc. Liten förändring i ProfileView/SettingsView.
 
