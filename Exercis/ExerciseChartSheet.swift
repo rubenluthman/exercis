@@ -36,9 +36,8 @@ struct ExerciseChartSheet: View {
         let e1RM: Double
     }
 
-    private func epley(weight: Double, reps: Int) -> Double {
-        guard reps > 0, weight > 0 else { return 0 }
-        return weight * (1 + Double(reps) / 30)
+    func epley(weight: Double, reps: Int) -> Double {
+        epleyE1RM(weight: weight, reps: reps)
     }
 
     private var dataPoints: [DataPoint] {

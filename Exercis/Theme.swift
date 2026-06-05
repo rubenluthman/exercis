@@ -157,6 +157,13 @@ enum Haptics {
     }
 }
 
+// MARK: - Epley e1RM
+
+func epleyE1RM(weight: Double, reps: Int) -> Double {
+    guard reps > 0, weight > 0 else { return 0 }
+    return weight * (1 + Double(reps) / 30)
+}
+
 // MARK: - Weight Formatting
 
 func formatWeight(_ value: Double) -> String {

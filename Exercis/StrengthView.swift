@@ -421,18 +421,15 @@ struct StrengthView: View {
         var prs: [String] = []
         for form in exerciseForms {
             let currentBest: Double = form.sets.compactMap { s -> Double? in
-                guard let w = parseWeight(s.weight), let r = Int(s.reps), r > 0, w > 0 else { return nil }
-                return w * (1 + Double(r) / 30)
+                guard let w = parseWeight(s.weight), let r = Int(s.reps) else { return nil }
+                return epleyE1RM(weight: w, reps: r)
             }.max() ?? 0
             guard currentBest > 0 else { continue }
 
             let historicalBest: Double = sessions
                 .flatMap { $0.exerciseLogs.filter { $0.name == form.def.name } }
                 .flatMap { $0.sets }
-                .compactMap { s -> Double? in
-                    guard s.reps > 0, s.weight > 0 else { return nil }
-                    return s.weight * (1 + Double(s.reps) / 30)
-                }
+                .map { epleyE1RM(weight: $0.weight, reps: $0.reps) }
                 .max() ?? 0
 
             if currentBest > historicalBest {
