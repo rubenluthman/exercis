@@ -189,6 +189,9 @@ struct StrengthView: View {
             editedEnd = Date()
             initialized = true
             Task { await HealthKitManager.shared.requestAuthorization() }
+            #if canImport(ActivityKit)
+            LiveActivityManager.shared.endAllZombies()
+            #endif
             startLiveActivity()
         }
         .onDisappear {

@@ -7,6 +7,14 @@ final class LiveActivityManager {
     static let shared = LiveActivityManager()
     private var activity: Activity<ExercisActivityAttributes>?
 
+    func endAllZombies() {
+        Task {
+            for zombie in Activity<ExercisActivityAttributes>.activities {
+                await zombie.end(nil, dismissalPolicy: .immediate)
+            }
+        }
+    }
+
     func start(programName: String, colorName: String, state: ExercisActivityAttributes.ContentState) {
         let attributes = ExercisActivityAttributes(
             programName: programName,
