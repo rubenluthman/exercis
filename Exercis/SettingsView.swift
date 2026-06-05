@@ -129,6 +129,19 @@ struct SettingsView: View {
 
                     sectionBlock {
                         sectionLabel("DATA")
+                        HStack(alignment: .top, spacing: 10) {
+                            Image(systemName: "icloud")
+                                .font(.system(size: 14))
+                                .foregroundStyle(Color(.tertiaryLabel))
+                                .padding(.top, 1)
+                            Text("Your data is backed up via iCloud Backup when enabled on your device. Export CSV as an extra copy.")
+                                .font(.jost(.regular, size: 12))
+                                .foregroundStyle(Color(.secondaryLabel))
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 12)
+                        .padding(.bottom, 4)
                         actionRow(
                             title: "EXPORT TRAINING DATA",
                             systemImage: "square.and.arrow.up"
