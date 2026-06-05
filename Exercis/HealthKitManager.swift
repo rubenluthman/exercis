@@ -25,32 +25,9 @@ struct HealthKitManager {
         guard isAvailable else { return nil }
         let config = HKWorkoutConfiguration()
         config.activityType = type.hkActivityType
-        let met: Double
-        switch type {
-        case .crosstrainer:                        met = 7.0
-        case .cyclingStationary:                   met = 8.0
-        case .rowingMachine:                       met = 7.5
-        case .hiking, .rucking:                    met = 5.5
-        case .running, .treadmillRun:              met = 9.0
-        case .walking, .treadmillWalk:             met = 3.5
-        case .stairClimber:                        met = 8.0
-        case .skiErg:                              met = 8.0
-        case .assaultBike:                         met = 10.0
-        case .roadCycling, .mountainBiking:        met = 8.0
-        case .swimming:                            met = 7.0
-        case .crossCountrySkiing:                  met = 9.0
-        case .iceSkating:                          met = 7.0
-        case .kayaking, .canoeing:                 met = 5.0
-        case .climbing:                            met = 8.0
-        case .boxing:                              met = 9.0
-        case .battleRopes:                         met = 10.0
-        case .sled:                                met = 9.0
-        case .jumpRope:                            met = 10.0
-        case .burpees, .mountainClimbers:          met = 10.0
-        }
         let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: .local())
         try? await builder.beginCollection(at: start)
-        await addCalories(to: builder, met: met, start: start, end: end)
+        await addCalories(to: builder, met: type.met, start: start, end: end)
         if let km = distanceKm, km > 0 {
             await addDistance(to: builder, km: km, cardioType: type, start: start, end: end)
         }

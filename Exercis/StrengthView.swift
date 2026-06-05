@@ -303,9 +303,9 @@ struct StrengthView: View {
                     if prevMax > 0,
                        let log = session?.exerciseLogs.first(where: { $0.name == def.name }),
                        let bestSet = log.sets.filter({ $0.weight == prevMax }).max(by: { $0.reps < $1.reps }) {
-                        let targetWeight = ex.shouldIncrease ? prevMax + 2.5 : prevMax
-                        sugW = displayWeight(targetWeight, imperial: imperial)
-                        sugR = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
+                        let suggestion = progressionSuggestion(prevMax: prevMax, shouldIncrease: ex.shouldIncrease, bestSetReps: bestSet.reps)
+                        sugW = displayWeight(suggestion.weight, imperial: imperial)
+                        sugR = suggestion.reps > 0 ? "\(suggestion.reps)" : ""
                     }
                     return ExerciseFormData(
                         def: def,
@@ -344,9 +344,9 @@ struct StrengthView: View {
             if prevMax > 0,
                let log = session?.exerciseLogs.first(where: { $0.name == def.name }),
                let bestSet = log.sets.filter({ $0.weight == prevMax }).max(by: { $0.reps < $1.reps }) {
-                let targetWeight = increase ? prevMax + 2.5 : prevMax
-                sugW = displayWeight(targetWeight, imperial: imperial)
-                sugR = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
+                let suggestion = progressionSuggestion(prevMax: prevMax, shouldIncrease: increase, bestSetReps: bestSet.reps)
+                sugW = displayWeight(suggestion.weight, imperial: imperial)
+                sugR = suggestion.reps > 0 ? "\(suggestion.reps)" : ""
             }
             return ExerciseFormData(def: def, sets: sets, shouldIncrease: increase, previousMaxWeight: prevMax,
                                     suggestedWeight: sugW, suggestedReps: sugR)

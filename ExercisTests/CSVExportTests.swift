@@ -16,25 +16,15 @@ final class CSVExportTests: XCTestCase {
         container = nil
     }
 
-    private func cardioCSV(_ sessions: [CardioSession]) -> String {
-        var rows = ["datum,typ,minuter,km,ansträngning"]
-        let fmt = ISO8601DateFormatter()
-        fmt.formatOptions = [.withFullDate]
-        for session in sessions {
-            let date = fmt.string(from: session.date)
-            let type_ = CardioType(rawValue: session.cardioType)?.displayName ?? session.cardioType
-            let km = session.distanceKm.map { formatWeight($0) } ?? ""
-            let effort = session.effortScore.map { "\($0)" } ?? ""
-            rows.append("\(date),\(type_),\(formatWeight(session.durationMinutes)),\(km),\(effort)")
-        }
-        return rows.joined(separator: "\n")
-    }
-
     // MARK: - Headers
 
+    func testStrengthCSVHasCorrectHeader() {
+        XCTAssertEqual(strengthCSV([]).split(separator: "\n").first.map(String.init),
+                       "datum,program,övning,set,kg,reps,e1RM")
+    }
+
     func testCardioCSVHasCorrectHeader() {
-        let csv = cardioCSV([])
-        XCTAssertEqual(csv, "datum,typ,minuter,km,ansträngning")
+        XCTAssertEqual(cardioCSV([]), "datum,typ,minuter,km,ansträngning")
     }
 
     // MARK: - Cardio CSV
@@ -57,9 +47,11 @@ final class CSVExportTests: XCTestCase {
         try context.save()
 
         let csv = cardioCSV(try context.fetch(FetchDescriptor<CardioSession>()))
-        let dataRow = String(csv.split(separator: "\n")[1])
-        let fields = dataRow.split(separator: ",", omittingEmptySubsequences: false)
+        let fields = csv.split(separator: "\n")[1].split(separator: ",", omittingEmptySubsequences: false)
         XCTAssertEqual(fields[3], "")
         XCTAssertEqual(fields[4], "")
     }
+
+    // MARK: - Strength CSV
+    // Column structure and e1RM value tests are in SkippedTests — see explanation there.
 }

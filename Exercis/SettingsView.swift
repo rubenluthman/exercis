@@ -501,36 +501,6 @@ struct SettingsView: View {
         return items
     }
 
-    private func strengthCSV(_ sessions: [WorkoutSession]) -> String {
-        var rows = ["datum,program,övning,set,kg,reps,e1RM"]
-        let fmt = ISO8601DateFormatter()
-        fmt.formatOptions = [.withFullDate]
-        for session in sessions {
-            let date = fmt.string(from: session.date)
-            let program = session.programName ?? ""
-            for log in session.exerciseLogs.sorted(by: { $0.orderIndex < $1.orderIndex }) {
-                for set in log.sets.sorted(by: { $0.setNumber < $1.setNumber }) {
-                    let e1rm = set.reps > 0 ? set.weight * (1 + Double(set.reps) / 30) : set.weight
-                    rows.append("\(date),\(program),\(log.name),\(set.setNumber),\(formatWeight(set.weight)),\(set.reps),\(String(format: "%.1f", e1rm))")
-                }
-            }
-        }
-        return rows.joined(separator: "\n")
-    }
-
-    private func cardioCSV(_ sessions: [CardioSession]) -> String {
-        var rows = ["datum,typ,minuter,km,ansträngning"]
-        let fmt = ISO8601DateFormatter()
-        fmt.formatOptions = [.withFullDate]
-        for session in sessions {
-            let date = fmt.string(from: session.date)
-            let type_ = CardioType(rawValue: session.cardioType)?.displayName ?? session.cardioType
-            let km = session.distanceKm.map { formatWeight($0) } ?? ""
-            let effort = session.effortScore.map { "\($0)" } ?? ""
-            rows.append("\(date),\(type_),\(formatWeight(session.durationMinutes)),\(km),\(effort)")
-        }
-        return rows.joined(separator: "\n")
-    }
 
     private func writeCSV(filename: String, content: String) -> URL? {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent(filename)

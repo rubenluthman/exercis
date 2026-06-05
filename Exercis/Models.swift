@@ -125,6 +125,31 @@ enum CardioType: String, Codable, CaseIterable, Identifiable {
         }
     }
 
+    var met: Double {
+        switch self {
+        case .crosstrainer:                        return 7.0
+        case .cyclingStationary:                   return 8.0
+        case .rowingMachine:                       return 7.5
+        case .hiking, .rucking:                    return 5.5
+        case .running, .treadmillRun:              return 9.0
+        case .walking, .treadmillWalk:             return 3.5
+        case .stairClimber:                        return 8.0
+        case .skiErg:                              return 8.0
+        case .assaultBike:                         return 10.0
+        case .roadCycling, .mountainBiking:        return 8.0
+        case .swimming:                            return 7.0
+        case .crossCountrySkiing:                  return 9.0
+        case .iceSkating:                          return 7.0
+        case .kayaking, .canoeing:                 return 5.0
+        case .climbing:                            return 8.0
+        case .boxing:                              return 9.0
+        case .battleRopes:                         return 10.0
+        case .sled:                                return 9.0
+        case .jumpRope:                            return 10.0
+        case .burpees, .mountainClimbers:          return 10.0
+        }
+    }
+
     var displayName: String {
         switch self {
         case .crosstrainer:       return "Crosstrainer"

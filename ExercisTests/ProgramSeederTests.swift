@@ -6,11 +6,10 @@ import SwiftData
 final class ProgramSeederTests: XCTestCase {
 
     private var container: ModelContainer!
-    private var context: ModelContext!
+    private var context: ModelContext { container.mainContext }
 
     override func setUpWithError() throws {
         container = try makeTestContainer()
-        context = ModelContext(container)
         UserDefaults.standard.removeObject(forKey: "hasSeededPrograms")
     }
 

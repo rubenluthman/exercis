@@ -195,6 +195,83 @@ func epleyE1RM(weight: Double, reps: Int) -> Double {
     return weight * (1 + Double(reps) / 30)
 }
 
+func estimatedCalories(met: Double, bodyMass: Double, seconds: Double) -> Double {
+    met * bodyMass * (seconds / 3600)
+}
+
+// MARK: - Streak
+
+func computeCurrentStreak(days: Set<Date>) -> Int {
+    let cal = Calendar.current
+    let today = cal.startOfDay(for: Date())
+    var cursor = days.contains(today) ? today : cal.date(byAdding: .day, value: -1, to: today)!
+    var count = 0
+    while days.contains(cursor) {
+        count += 1
+        cursor = cal.date(byAdding: .day, value: -1, to: cursor)!
+    }
+    return count
+}
+
+func computeBestStreak(days: Set<Date>) -> Int {
+    guard !days.isEmpty else { return 0 }
+    let cal = Calendar.current
+    var best = 0
+    var current = 0
+    var cursor = days.min()!
+    let last = days.max()!
+    while cursor <= last {
+        if days.contains(cursor) {
+            current += 1
+            best = max(best, current)
+        } else {
+            current = 0
+        }
+        cursor = cal.date(byAdding: .day, value: 1, to: cursor)!
+    }
+    return best
+}
+
+// MARK: - Progression suggestion
+
+func progressionSuggestion(prevMax: Double, shouldIncrease: Bool, bestSetReps: Int) -> (weight: Double, reps: Int) {
+    let targetWeight = shouldIncrease ? prevMax + 2.5 : prevMax
+    return (targetWeight, bestSetReps)
+}
+
+// MARK: - CSV export
+
+func strengthCSV(_ sessions: [WorkoutSession]) -> String {
+    var rows = ["datum,program,övning,set,kg,reps,e1RM"]
+    let fmt = ISO8601DateFormatter()
+    fmt.formatOptions = [.withFullDate]
+    for session in sessions {
+        let date = fmt.string(from: session.date)
+        let program = session.programName ?? ""
+        for log in session.exerciseLogs.sorted(by: { $0.orderIndex < $1.orderIndex }) {
+            for set in log.sets.sorted(by: { $0.setNumber < $1.setNumber }) {
+                let e1rm = set.reps > 0 ? set.weight * (1 + Double(set.reps) / 30) : set.weight
+                rows.append("\(date),\(program),\(log.name),\(set.setNumber),\(formatWeight(set.weight)),\(set.reps),\(String(format: "%.1f", e1rm))")
+            }
+        }
+    }
+    return rows.joined(separator: "\n")
+}
+
+func cardioCSV(_ sessions: [CardioSession]) -> String {
+    var rows = ["datum,typ,minuter,km,ansträngning"]
+    let fmt = ISO8601DateFormatter()
+    fmt.formatOptions = [.withFullDate]
+    for session in sessions {
+        let date = fmt.string(from: session.date)
+        let type_ = CardioType(rawValue: session.cardioType)?.displayName ?? session.cardioType
+        let km = session.distanceKm.map { formatWeight($0) } ?? ""
+        let effort = session.effortScore.map { "\($0)" } ?? ""
+        rows.append("\(date),\(type_),\(formatWeight(session.durationMinutes)),\(km),\(effort)")
+    }
+    return rows.joined(separator: "\n")
+}
+
 // MARK: - Weight Formatting
 
 func formatWeight(_ value: Double) -> String {

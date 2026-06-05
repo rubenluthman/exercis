@@ -391,42 +391,16 @@ struct ProfileView: View {
         return (formatWeight(totalCardioMinutes / 60), " H")
     }
 
-    private var currentStreak: Int {
+    private var trainingDays: Set<Date> {
         let cal = Calendar.current
         var days = Set<Date>()
         for s in workoutSessions { days.insert(cal.startOfDay(for: s.date)) }
         for s in cardioSessions   { days.insert(cal.startOfDay(for: s.date)) }
-        let today = cal.startOfDay(for: Date())
-        var cursor = days.contains(today) ? today : cal.date(byAdding: .day, value: -1, to: today)!
-        var count = 0
-        while days.contains(cursor) {
-            count += 1
-            cursor = cal.date(byAdding: .day, value: -1, to: cursor)!
-        }
-        return count
+        return days
     }
 
-    private var bestStreak: Int {
-        let cal = Calendar.current
-        var days = Set<Date>()
-        for s in workoutSessions { days.insert(cal.startOfDay(for: s.date)) }
-        for s in cardioSessions   { days.insert(cal.startOfDay(for: s.date)) }
-        guard !days.isEmpty else { return 0 }
-        var best = 0
-        var current = 0
-        var cursor = days.min()!
-        let last = days.max()!
-        while cursor <= last {
-            if days.contains(cursor) {
-                current += 1
-                best = max(best, current)
-            } else {
-                current = 0
-            }
-            cursor = cal.date(byAdding: .day, value: 1, to: cursor)!
-        }
-        return best
-    }
+    private var currentStreak: Int { computeCurrentStreak(days: trainingDays) }
+    private var bestStreak: Int    { computeBestStreak(days: trainingDays) }
 
     private struct SessionEntry {
         let title: String
