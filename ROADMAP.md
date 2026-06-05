@@ -16,7 +16,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ~~4. **SwiftData-fel synliga**~~ — klart (2026-06-05)
 
-5. **Lokalisering** — lägg till `sv.lproj/Localizable.strings` med alla synliga UI-strängar. SwiftUI `Text()` med strängliteraler plockar upp dem automatiskt; icke-SwiftUI-strängar kräver `String(localized:)`. Kartlägg strängar med `grep -r 'Text("' --include="*.swift"`. Engelska är basspråk — svenska-filen är det enda som behöver skapas.
+~~5. **Lokalisering**~~ — klart (2026-06-05)
 
 ---
 
