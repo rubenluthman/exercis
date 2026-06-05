@@ -5,11 +5,6 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ---
 
-## Näst på tur
-
-- **Extern LLM-analys av kodbasen** — filer redo: `full_codebase.txt` + `llm_analysis_prompt.md`. Kör i Gemini 2.5 Pro, ta med fynd till FleetView.
-
----
 
 ## Planerade funktioner
 
