@@ -21,7 +21,6 @@ Två kategorier: **Rubens beslut** (explicit bekräftade val) och **Claudes reko
 
 - **iOS 26 / Knappar** — `FilledButtonStyle` (cornerRadius 4, höjd 50pt, fylld rektangel) är iOS 17-estetik. iOS 26 har `.buttonStyle(.glass(.prominent))` med tint som ny primär knappstil. Kan behållas som medvetet designbeslut men ser daterat ut bredvid systemknappar.
 - **iOS 26 / Tab bar** — `.tabBarMinimizeBehavior(.onScrollDown)` ger floating tab bar som minimeras vid scroll. Standard `TabView` fungerar men ger inte det moderna beteendet.
-- **iOS 26 / softScrollEdge()** — systemet hanterar nu scroll edge-effekter automatiskt via `.scrollEdgeEffectStyle`. Den manuella masken är troligen redundant och bör utvärderas mot hur systemet beter sig.
 
 - **CloudKit-sync** — utan det förlorar användaren all data vid telefonbyte utan aktiv backup. Första prioritet när betalt Apple Developer-konto finns.
 
