@@ -63,6 +63,11 @@ Uppdateras löpande under sessioner och vid apprevision.
 - [x] SwiftData-fel synliga i UI (2026-06-05)
 - [x] Lokalisering — engelska basspråk, svenska via sv.lproj (2026-06-05)
 - [x] XCTest-target + första tester (Epley, viktsformatering) (2026-06-05)
+- [x] WorkoutDraft encode/decode + bakåtkompatibilitet (2026-06-05)
+- [x] Migrationstester — CardioType + övningsnamn (2026-06-05)
+- [x] CardioType-mappningstester — tracksElevation + HKWorkoutActivityType (2026-06-05)
+- [x] hkActivityType extraherad till CardioType — enda sanningskälla (2026-06-05)
+- [x] Fix: duplikat-alias-krasch i migrateExerciseNames (2026-06-05)
 
 *Senast uppdaterad: 2026-06-05*
 

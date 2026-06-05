@@ -24,28 +24,29 @@ struct HealthKitManager {
     func saveCardioWorkout(start: Date, end: Date, type: CardioType, distanceKm: Double?, effortScore: Int? = nil, elevationGain: Double? = nil) async -> UUID? {
         guard isAvailable else { return nil }
         let config = HKWorkoutConfiguration()
-        var met = 0.0
+        config.activityType = type.hkActivityType
+        let met: Double
         switch type {
-        case .crosstrainer:       config.activityType = .elliptical; met = 7.0
-        case .cyclingStationary:  config.activityType = .cycling;    met = 8.0
-        case .rowingMachine:      config.activityType = .rowing;     met = 7.5
-        case .hiking, .rucking:   config.activityType = .hiking;     met = 5.5
-        case .running, .treadmillRun: config.activityType = .running; met = 9.0
-        case .walking, .treadmillWalk: config.activityType = .walking; met = 3.5
-        case .stairClimber:       config.activityType = .stairClimbing; met = 8.0
-        case .skiErg:             config.activityType = .rowing;     met = 8.0
-        case .assaultBike:        config.activityType = .cycling;    met = 10.0
-        case .roadCycling, .mountainBiking: config.activityType = .cycling; met = 8.0
-        case .swimming:           config.activityType = .swimming;   met = 7.0
-        case .crossCountrySkiing: config.activityType = .crossCountrySkiing; met = 9.0
-        case .iceSkating:          config.activityType = .skatingSports; met = 7.0
-        case .kayaking, .canoeing: config.activityType = .rowing;       met = 5.0
-        case .climbing:           config.activityType = .climbing;   met = 8.0
-        case .boxing:             config.activityType = .boxing;     met = 9.0
-        case .battleRopes:        config.activityType = .highIntensityIntervalTraining; met = 10.0
-        case .sled:               config.activityType = .functionalStrengthTraining; met = 9.0
-        case .jumpRope:           config.activityType = .jumpRope;   met = 10.0
-        case .burpees, .mountainClimbers: config.activityType = .highIntensityIntervalTraining; met = 10.0
+        case .crosstrainer:                        met = 7.0
+        case .cyclingStationary:                   met = 8.0
+        case .rowingMachine:                       met = 7.5
+        case .hiking, .rucking:                    met = 5.5
+        case .running, .treadmillRun:              met = 9.0
+        case .walking, .treadmillWalk:             met = 3.5
+        case .stairClimber:                        met = 8.0
+        case .skiErg:                              met = 8.0
+        case .assaultBike:                         met = 10.0
+        case .roadCycling, .mountainBiking:        met = 8.0
+        case .swimming:                            met = 7.0
+        case .crossCountrySkiing:                  met = 9.0
+        case .iceSkating:                          met = 7.0
+        case .kayaking, .canoeing:                 met = 5.0
+        case .climbing:                            met = 8.0
+        case .boxing:                              met = 9.0
+        case .battleRopes:                         met = 10.0
+        case .sled:                                met = 9.0
+        case .jumpRope:                            met = 10.0
+        case .burpees, .mountainClimbers:          met = 10.0
         }
         let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: .local())
         try? await builder.beginCollection(at: start)

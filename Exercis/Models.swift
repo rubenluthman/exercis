@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import HealthKit
 
 // MARK: - SwiftData Models
 
@@ -95,6 +96,29 @@ enum CardioType: String, Codable, CaseIterable, Identifiable {
             return true
         default:
             return false
+        }
+    }
+
+    var hkActivityType: HKWorkoutActivityType {
+        switch self {
+        case .crosstrainer:                       return .elliptical
+        case .cyclingStationary, .assaultBike,
+             .roadCycling, .mountainBiking:       return .cycling
+        case .rowingMachine, .skiErg,
+             .kayaking, .canoeing:                return .rowing
+        case .hiking, .rucking:                   return .hiking
+        case .running, .treadmillRun:             return .running
+        case .walking, .treadmillWalk:            return .walking
+        case .stairClimber:                       return .stairClimbing
+        case .swimming:                           return .swimming
+        case .crossCountrySkiing:                 return .crossCountrySkiing
+        case .iceSkating:                         return .skatingSports
+        case .climbing:                           return .climbing
+        case .boxing:                             return .boxing
+        case .battleRopes, .burpees,
+             .mountainClimbers:                   return .highIntensityIntervalTraining
+        case .sled:                               return .functionalStrengthTraining
+        case .jumpRope:                           return .jumpRope
         }
     }
 
