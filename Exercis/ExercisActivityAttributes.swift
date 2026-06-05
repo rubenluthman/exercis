@@ -1,3 +1,4 @@
+#if canImport(ActivityKit)
 import ActivityKit
 import Foundation
 
@@ -12,3 +13,4 @@ struct ExercisActivityAttributes: ActivityAttributes {
     var programName: String
     var accentHex: String
 }
+#endif

@@ -165,7 +165,9 @@ struct StrengthView: View {
                     let next = nextField
                     activeField = next
                     if case .weight(let ex, let set) = next {
+                        #if canImport(ActivityKit)
                         LiveActivityManager.shared.update(state: makeActivityState(exerciseIndex: ex, setNumber: set + 1))
+                        #endif
                     }
                 }
                     .font(.jost(.semibold, size: 13))
@@ -190,7 +192,9 @@ struct StrengthView: View {
         }
         .onDisappear {
             saveDraftIfNeeded()
+            #if canImport(ActivityKit)
             if !didCompleteSession { LiveActivityManager.shared.end() }
+            #endif
         }
     }
 
@@ -325,11 +329,14 @@ struct StrengthView: View {
 
     private func saveDraftAndReturn() {
         restTimerTask?.cancel()
+        #if canImport(ActivityKit)
         LiveActivityManager.shared.end()
+        #endif
         saveDraftIfNeeded()
         dismiss()
     }
 
+    #if canImport(ActivityKit)
     private func startLiveActivity() {
         guard !exerciseForms.isEmpty else { return }
         LiveActivityManager.shared.start(
@@ -350,6 +357,9 @@ struct StrengthView: View {
             totalExercises: exerciseForms.count
         )
     }
+    #else
+    private func startLiveActivity() {}
+    #endif
 
     // MARK: - Rest timer
 
@@ -480,7 +490,9 @@ struct StrengthView: View {
 
         UserDefaults.standard.saveDraft(nil)
         hasDraft = false
+        #if canImport(ActivityKit)
         LiveActivityManager.shared.end()
+        #endif
 
         if UserDefaults.standard.bool(forKey: "healthKitSyncEnabled") {
             let capturedStart = start

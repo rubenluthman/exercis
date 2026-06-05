@@ -1,3 +1,4 @@
+#if canImport(ActivityKit)
 import ActivityKit
 import Foundation
 
@@ -44,3 +45,4 @@ final class LiveActivityManager {
         }
     }
 }
+#endif
