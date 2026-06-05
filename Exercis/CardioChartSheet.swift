@@ -74,12 +74,12 @@ struct CardioChartSheet: View {
 
                 if hasDistanceData {
                     HStack(spacing: 16) {
-                        Button("TID") { withAnimation(.easeInOut(duration: 0.2)) { showDistance = false } }
+                        Button("TIME") { withAnimation(.easeInOut(duration: 0.2)) { showDistance = false } }
                             .font(.jost(showDistance ? .regular : .semibold, size: 11))
                             .kerning(1.5)
                             .foregroundColor(showDistance ? Color(.secondaryLabel) : Color.historyAccent)
 
-                        Button("DISTANS") { withAnimation(.easeInOut(duration: 0.2)) { showDistance = true } }
+                        Button("DISTANCE") { withAnimation(.easeInOut(duration: 0.2)) { showDistance = true } }
                             .font(.jost(showDistance ? .semibold : .regular, size: 11))
                             .kerning(1.5)
                             .foregroundColor(showDistance ? Color.historyAccent : Color(.secondaryLabel))
@@ -92,7 +92,7 @@ struct CardioChartSheet: View {
 
             if activePoints.count < 2 {
                 Spacer()
-                Text(activePoints.isEmpty ? "Inga loggade pass ännu." : "Behöver minst två pass för att visa graf.")
+                Text(activePoints.isEmpty ? "No logged sessions yet." : "Need at least two sessions to show chart.")
                     .font(.jost(.regular, size: 14))
                     .foregroundColor(Color(.secondaryLabel))
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -153,9 +153,9 @@ struct CardioChartSheet: View {
                     .padding(.top, 20)
 
                 HStack(alignment: .top, spacing: 0) {
-                    statBlock(label: "LÄNGST", value: formatWeight(longestValue), unit: unit, alignment: .leading)
-                    statBlock(label: "SENASTE", value: formatWeight(lastValue), unit: unit, alignment: .center)
-                    statBlock(label: "PASS", value: "\(activePoints.count)", alignment: .trailing)
+                    statBlock(label: "LONGEST", value: formatWeight(longestValue), unit: unit, alignment: .leading)
+                    statBlock(label: "LATEST", value: formatWeight(lastValue), unit: unit, alignment: .center)
+                    statBlock(label: "SESSIONS", value: "\(activePoints.count)", alignment: .trailing)
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)

@@ -1,0 +1,118 @@
+/* Tabs */
+"TRAINING" = "TRÄNING";
+"HISTORY" = "HISTORIK";
+"PROFILE" = "PROFIL";
+"SETTINGS" = "INSTÄLLNINGAR";
+
+/* Section headers */
+"STRENGTH PROGRAMS" = "STYRKEPROGRAM";
+"CARDIO TYPES" = "KONDITIONSFORMER";
+"LIMITATIONS" = "BEGRÄNSNINGAR";
+"HEALTH" = "HÄLSA";
+"PRIVACY" = "SEKRETESS";
+"DATA" = "DATA";
+"ABOUT" = "OM";
+"UNITS" = "ENHETER";
+"REST TIMER" = "VILOTIMER";
+"VERSION" = "VERSION";
+"NEW PROGRAM" = "NYTT PROGRAM";
+"EXERCISES" = "ÖVNINGAR";
+
+/* Workout UI */
+"SET" = "SET";
+"REPS" = "REPS";
+"INCREASE" = "ÖKA";
+"REST" = "VILA";
+"NEXT" = "NÄSTA";
+"DONE" = "KLAR";
+"CONTINUE" = "FORTSÄTT";
+"TIME" = "TID";
+"DISTANCE" = "DISTANS";
+"EFFORT" = "ANSTRÄNGNING";
+"HOW HARD WAS THE WORKOUT?" = "HUR JOBBIGT VAR PASSET?";
+"STRENGTH" = "STYRKA";
+"CARDIO" = "KONDITION";
+"NOT RECOMMENDED" = "EJ REKOMMENDERAT";
+"CLEAR" = "RENSA";
+"TIMESTAMP" = "TIDPUNKT";
+"START" = "START";
+"END" = "SLUT";
+"OFF" = "AV";
+
+/* History month summary counts */
+"%d STRENGTH" = "%d STYRKA";
+"%d CARDIO" = "%d KONDITION";
+
+/* Stats */
+"BEST" = "BÄSTA";
+"LATEST" = "SENASTE";
+"SESSIONS" = "PASS";
+"LONGEST" = "LÄNGST";
+"VOLUME" = "VOLYM";
+"CARDIO TIME" = "KONDITIONSTID";
+"EASIEST" = "LÄTTAST";
+"HARDEST" = "TUFFAST";
+
+/* Buttons */
+"Delete" = "Ta bort";
+"Cancel" = "Avbryt";
+"Delete Program" = "Ta bort program";
+"Add Exercise" = "Lägg till övning";
+"Delete Workout" = "Radera pass";
+"Save" = "Klar";
+
+/* Alerts */
+"Delete workout?" = "Ta bort pass?";
+"Delete %@?" = "Ta bort %@?";
+"Could not save workout" = "Kunde inte spara passet";
+"An error occurred while saving. Try again or restart the app." = "Något gick fel vid sparning. Försök igen eller starta om appen.";
+"Discard active draft?" = "Ta bort pågående utkast?";
+"OK" = "OK";
+
+/* Empty states */
+"No saved workouts yet." = "Inga sparade pass ännu.";
+"No training configured" = "Inga träningspass konfigurerade";
+"Add programs and cardio types in Settings" = "Lägg till program och konditionsformer i Inställningar";
+"No logged sessions yet." = "Inga loggade pass ännu.";
+"Need at least two sessions to show chart." = "Behöver minst två pass för att visa graf.";
+"No sessions in this period." = "Inga pass under perioden.";
+
+/* Accessibility */
+"Change profile picture" = "Byt profilbild";
+"Edit %@" = "Redigera %@";
+"Decrease set count" = "Minska antal set";
+"Increase set count" = "Öka antal set";
+"Back" = "Tillbaka";
+"Delete workout" = "Ta bort pass";
+"Discard draft" = "Kasta utkast";
+"Log in" = "Logga in";
+
+/* TextField placeholders */
+"Your name" = "Ditt namn";
+"Add name" = "Lägg till namn";
+"Program name" = "Programnamn";
+
+/* Navigation titles */
+"New program" = "Nytt program";
+"Edit" = "Redigera";
+"Choose exercise" = "Välj övning";
+
+/* Settings descriptions */
+"Exercises that stress marked joints are dimmed in the exercise picker." = "Övningar som belastar markerade leder skuggas i övningsväljaren.";
+"SAVE WORKOUTS TO HEALTH" = "SPARA PASS TILL HÄLSA";
+"Your workouts are saved in Apple Health and appear in Activity and Fitness." = "Dina pass sparas i Apple Hälsa och visas i Aktivitet och Fitness.";
+"FETCH BODY WEIGHT FROM HEALTH" = "HÄMTA KROPPSVIKT FRÅN HÄLSA";
+"The app reads your latest recorded value and uses it only to calculate calorie burn." = "Appen läser ditt senaste registrerade värde och använder det enbart för att beräkna kaloriförbrukning.";
+"FACE ID LOCK" = "FACE ID-LÅS";
+"EXPORT TRAINING DATA" = "EXPORTERA TRÄNINGSDATA";
+
+/* GifSheet */
+"PRIMARY MUSCLES" = "PRIMÄRA MUSKLER";
+"SECONDARY MUSCLES" = "SEKUNDÄRA MUSKLER";
+"MOVEMENT" = "RÖRELSE";
+"MECHANIC" = "MEKANIK";
+"EQUIPMENT" = "REDSKAP";
+"REP RANGE" = "REP-INTERVALL";
+
+/* AuthManager */
+"Unlock Exercis" = "Lås upp Exercis";

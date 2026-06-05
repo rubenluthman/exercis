@@ -41,7 +41,7 @@ struct ProfileView: View {
 
     private var headerRow: some View {
         HStack {
-            Text("PROFIL")
+            Text("PROFILE")
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
                 .foregroundColor(.primary)
@@ -64,10 +64,10 @@ struct ProfileView: View {
                     }
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Byt profilbild")
+            .accessibilityLabel("Change profile picture")
 
             if editingName {
-                TextField("Ditt namn", text: $name, onCommit: { editingName = false })
+                TextField("Your name", text: $name, onCommit: { editingName = false })
                     .font(.jost(.semibold, size: 20))
                     .multilineTextAlignment(.center)
                     .submitLabel(.done)
@@ -76,7 +76,7 @@ struct ProfileView: View {
                 Button {
                     editingName = true
                 } label: {
-                    Text(name.isEmpty ? "Lägg till namn" : name)
+                    Text(name.isEmpty ? "Add name" : name)
                         .font(.jost(.semibold, size: 20))
                         .foregroundColor(name.isEmpty ? Color(.tertiaryLabel) : .primary)
                 }
@@ -120,10 +120,10 @@ struct ProfileView: View {
 
     private var statsRow: some View {
         HStack(alignment: .top, spacing: 0) {
-            statBlock(label: "STYRKA", value: "\(workoutSessions.count)", alignment: .leading)
-            statBlock(label: "KONDITION", value: "\(cardioSessions.count)", alignment: .center)
-            statBlock(label: "VOLYM", value: volumeText.0, unit: volumeText.1, alignment: .center)
-            statBlock(label: "KONDITIONSTID", value: cardioTimeText.0, unit: cardioTimeText.1, alignment: .trailing)
+            statBlock(label: "STRENGTH", value: "\(workoutSessions.count)", alignment: .leading)
+            statBlock(label: "CARDIO", value: "\(cardioSessions.count)", alignment: .center)
+            statBlock(label: "VOLUME", value: volumeText.0, unit: volumeText.1, alignment: .center)
+            statBlock(label: "CARDIO TIME", value: cardioTimeText.0, unit: cardioTimeText.1, alignment: .trailing)
         }
         .padding(.horizontal, 24)
     }

@@ -57,7 +57,7 @@ struct MainTabView: View {
                 TrainingView()
             }
             .tabItem {
-                Label("Träning", systemImage: "dumbbell.fill")
+                Label("TRAINING", systemImage: "dumbbell.fill")
             }
 
             NavigationStack {
@@ -65,7 +65,7 @@ struct MainTabView: View {
                     .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
-                Label("Historik", systemImage: "chart.line.uptrend.xyaxis")
+                Label("HISTORY", systemImage: "chart.line.uptrend.xyaxis")
             }
 
             NavigationStack {
@@ -73,7 +73,7 @@ struct MainTabView: View {
                     .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
-                Label("Profil", systemImage: "person.fill")
+                Label("PROFILE", systemImage: "person.fill")
             }
 
             NavigationStack {
@@ -81,7 +81,7 @@ struct MainTabView: View {
                     .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
-                Label("Inställningar", systemImage: "gearshape.fill")
+                Label("SETTINGS", systemImage: "gearshape.fill")
             }
         }
         .onAppear {

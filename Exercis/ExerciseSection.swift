@@ -37,7 +37,7 @@ struct ExerciseSection: View {
                         .foregroundColor(Color(.secondaryLabel))
                         .lineLimit(1)
                 }
-                Text("ÖKA")
+                Text("INCREASE")
                     .font(.jost(.medium, size: 9))
                     .kerning(1.5)
                     .foregroundColor(accent)

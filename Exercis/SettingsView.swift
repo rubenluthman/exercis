@@ -34,7 +34,7 @@ struct SettingsView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     sectionBlock {
-                        sectionLabel("STYRKEPROGRAM")
+                        sectionLabel("STRENGTH PROGRAMS")
                         ForEach(programs) { program in
                             programRow(program)
                             if program.id != programs.last?.id {
@@ -47,7 +47,7 @@ struct SettingsView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "plus")
                                     .font(.jost(.semibold, size: 13))
-                                Text("NYTT PROGRAM")
+                                Text("NEW PROGRAM")
                                     .font(.jost(.semibold, size: 12))
                                     .kerning(1.5)
                             }
@@ -62,7 +62,7 @@ struct SettingsView: View {
                     ThinDivider()
 
                     sectionBlock {
-                        sectionLabel("KONDITIONSFORMER")
+                        sectionLabel("CARDIO TYPES")
                         ForEach(CardioType.allCases, id: \.self) { type in
                             cardioTypeRow(type)
                             if type != CardioType.allCases.last {
@@ -74,8 +74,8 @@ struct SettingsView: View {
                     ThinDivider()
 
                     sectionBlock {
-                        sectionLabel("BEGRÄNSNINGAR")
-                        Text("Övningar som belastar markerade leder skuggas i övningsväljaren.")
+                        sectionLabel("LIMITATIONS")
+                        Text("Exercises that stress marked joints are dimmed in the exercise picker.")
                             .font(.jost(.regular, size: 12))
                             .foregroundStyle(Color(.secondaryLabel))
                             .padding(.horizontal, 24)
@@ -91,7 +91,7 @@ struct SettingsView: View {
                     ThinDivider()
 
                     sectionBlock {
-                        sectionLabel("TRÄNING")
+                        sectionLabel("TRAINING")
                         unitRow
                         ThinDivider().padding(.leading, 24)
                         timerRow
@@ -100,16 +100,16 @@ struct SettingsView: View {
                     ThinDivider()
 
                     sectionBlock {
-                        sectionLabel("HÄLSA")
+                        sectionLabel("HEALTH")
                         toggleRow(
-                            title: "SPARA PASS TILL HÄLSA",
-                            description: "Dina pass sparas i Apple Hälsa och visas i Aktivitet och Fitness.",
+                            title: "SAVE WORKOUTS TO HEALTH",
+                            description: "Your workouts are saved in Apple Health and appear in Activity and Fitness.",
                             isOn: $healthKitSyncEnabled
                         )
                         ThinDivider().padding(.leading, 24)
                         toggleRow(
-                            title: "HÄMTA KROPPSVIKT FRÅN HÄLSA",
-                            description: "Appen läser ditt senaste registrerade värde och använder det enbart för att beräkna kaloriförbrukning.",
+                            title: "FETCH BODY WEIGHT FROM HEALTH",
+                            description: "The app reads your latest recorded value and uses it only to calculate calorie burn.",
                             isOn: $healthKitWeightEnabled
                         )
                     }
@@ -117,9 +117,9 @@ struct SettingsView: View {
                     ThinDivider()
 
                     sectionBlock {
-                        sectionLabel("SEKRETESS")
+                        sectionLabel("PRIVACY")
                         toggleRow(
-                            title: "FACE ID-LÅS",
+                            title: "FACE ID LOCK",
                             description: nil,
                             isOn: $lockEnabled
                         )
@@ -130,7 +130,7 @@ struct SettingsView: View {
                     sectionBlock {
                         sectionLabel("DATA")
                         actionRow(
-                            title: "EXPORTERA TRÄNINGSDATA",
+                            title: "EXPORT TRAINING DATA",
                             systemImage: "square.and.arrow.up"
                         ) {
                             exportItems = buildExportItems()
@@ -141,7 +141,7 @@ struct SettingsView: View {
                     ThinDivider()
 
                     sectionBlock {
-                        sectionLabel("OM")
+                        sectionLabel("ABOUT")
                         HStack {
                             Text("VERSION")
                                 .font(.jost(.semibold, size: 12))
@@ -176,7 +176,7 @@ struct SettingsView: View {
     // MARK: - Header
 
     private var headerRow: some View {
-        Text("INSTÄLLNINGAR")
+        Text("SETTINGS")
             .font(.jost(.bold, size: 17))
             .kerning(2)
             .foregroundStyle(.primary)
@@ -304,7 +304,7 @@ struct SettingsView: View {
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Redigera \(program.name)")
+            .accessibilityLabel(String(format: String(localized: "Edit %@"), program.name))
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 10)
@@ -339,7 +339,7 @@ struct SettingsView: View {
 
     private var unitRow: some View {
         HStack {
-            Text("ENHETER")
+            Text("UNITS")
                 .font(.jost(.semibold, size: 12))
                 .kerning(1.5)
                 .foregroundStyle(.primary)
@@ -373,7 +373,7 @@ struct SettingsView: View {
 
     private var timerRow: some View {
         HStack {
-            Text("VILOTIMER")
+            Text("REST TIMER")
                 .font(.jost(.semibold, size: 12))
                 .kerning(1.5)
                 .foregroundStyle(.primary)
@@ -384,7 +384,7 @@ struct SettingsView: View {
                         Haptics.selection()
                         restTimerSeconds = secs
                     } label: {
-                        Text(secs == 0 ? "AV" : secs < 120 ? "\(secs)s" : "2m")
+                        Text(secs == 0 ? "OFF" : secs < 120 ? "\(secs)s" : "2m")
                             .font(.jost(.semibold, size: 11))
                             .kerning(1)
                             .foregroundStyle(restTimerSeconds == secs ? .white : Color(.secondaryLabel))

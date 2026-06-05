@@ -56,19 +56,19 @@ struct TrainingView: View {
             CardioView(type: type)
                 .enableSwipeBack()
         }
-        .alert("Ta bort pågående utkast?", isPresented: $showDiscardAlert) {
-            Button("Ta bort", role: .destructive) {
+        .alert("Discard active draft?", isPresented: $showDiscardAlert) {
+            Button("Delete", role: .destructive) {
                 UserDefaults.standard.saveDraft(nil)
                 hasDraft = false
                 activeProgram = pendingProgram
                 pendingProgram = nil
             }
-            Button("Avbryt", role: .cancel) { pendingProgram = nil }
+            Button("Cancel", role: .cancel) { pendingProgram = nil }
         }
     }
 
     private var headerRow: some View {
-        Text("TRÄNING")
+        Text("TRAINING")
             .font(.jost(.bold, size: 17))
             .kerning(2)
             .foregroundStyle(.primary)
@@ -79,7 +79,7 @@ struct TrainingView: View {
 
     private var programSection: some View {
         VStack(spacing: 0) {
-            sectionLabel("STYRKA")
+            sectionLabel("STRENGTH")
                 .padding(.horizontal, 24)
             ThinDivider()
             ForEach(trainingPrograms) { program in
@@ -112,7 +112,7 @@ struct TrainingView: View {
 
                     if isDraft {
                         VStack(spacing: 2) {
-                            Text("FORTSÄTT")
+                            Text("CONTINUE")
                                 .font(.jost(.semibold, size: 10))
                                 .kerning(1.5)
                                 .foregroundStyle(Color(program.colorName))
@@ -126,7 +126,7 @@ struct TrainingView: View {
                                     .frame(width: 44, height: 44)
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("Kasta utkast")
+                            .accessibilityLabel("Discard draft")
                         }
                         .padding(.trailing, 8)
                     }
@@ -138,7 +138,7 @@ struct TrainingView: View {
 
     private var cardioSection: some View {
         VStack(spacing: 0) {
-            sectionLabel("KONDITION")
+            sectionLabel("CARDIO")
             ThinDivider()
             ForEach(Array(selectedCardioTypes.enumerated()), id: \.element) { _, type in
                 let isDraft = hasCardioDraft && UserDefaults.standard.string(forKey: "cardioDraftType") == type.rawValue
@@ -152,7 +152,7 @@ struct TrainingView: View {
                             .foregroundStyle(Color.workoutAccent)
                         Spacer()
                         if isDraft {
-                            Text("FORTSÄTT")
+                            Text("CONTINUE")
                                 .font(.jost(.medium, size: 10))
                                 .kerning(1.5)
                                 .foregroundStyle(Color(.secondaryLabel))
@@ -174,10 +174,10 @@ struct TrainingView: View {
 
     private var emptyState: some View {
         VStack(spacing: 8) {
-            Text("Inga träningspass konfigurerade")
+            Text("No training configured")
                 .font(.jost(.regular, size: 15))
                 .foregroundStyle(Color(.secondaryLabel))
-            Text("Lägg till program och konditionsformer i Inställningar")
+            Text("Add programs and cardio types in Settings")
                 .font(.jost(.regular, size: 13))
                 .foregroundStyle(Color(.tertiaryLabel))
                 .multilineTextAlignment(.center)

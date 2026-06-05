@@ -165,17 +165,17 @@ struct HistoryView: View {
                 }
             }
         }
-        .alert("Ta bort pass?", isPresented: Binding(
+        .alert("Delete workout?", isPresented: Binding(
             get: { entryToDelete != nil },
             set: { if !$0 { entryToDelete = nil } }
         )) {
-            Button("Ta bort", role: .destructive) {
+            Button("Delete", role: .destructive) {
                 guard let entry = entryToDelete else { return }
                 Haptics.notification(.warning)
                 deleteEntry(entry)
                 entryToDelete = nil
             }
-            Button("Avbryt", role: .cancel) { entryToDelete = nil }
+            Button("Cancel", role: .cancel) { entryToDelete = nil }
         }
         .sheet(item: $summaryPeriod) { period in
             PeriodSummarySheet(period: period)
@@ -237,8 +237,8 @@ struct HistoryView: View {
                     .foregroundColor(Color(.secondaryLabel))
             } else {
                 HStack(spacing: 10) {
-                    if group.workoutCount > 0 { Text("\(group.workoutCount) STYRKA") }
-                    if group.cardioCount > 0  { Text("\(group.cardioCount) KONDITION") }
+                    if group.workoutCount > 0 { Text(String(format: String(localized: "%d STRENGTH"), group.workoutCount)) }
+                    if group.cardioCount > 0  { Text(String(format: String(localized: "%d CARDIO"), group.cardioCount)) }
                 }
                 .font(.jost(.regular, size: 11))
                 .kerning(1)
@@ -281,7 +281,7 @@ struct HistoryView: View {
     }
 
     private var headerRow: some View {
-        Text("HISTORIK")
+        Text("HISTORY")
             .font(.jost(.bold, size: 17))
             .kerning(2)
             .foregroundColor(.primary)
@@ -332,7 +332,7 @@ struct HistoryView: View {
     private var emptyState: some View {
         VStack {
             Spacer()
-            Text("Inga sparade pass ännu.")
+            Text("No saved workouts yet.")
                 .font(.jost(.regular, size: 14))
                 .foregroundColor(Color(.secondaryLabel))
             Spacer()

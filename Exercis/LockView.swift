@@ -31,7 +31,7 @@ struct LockView: View {
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Logga in")
+            .accessibilityLabel("Log in")
             .disabled(!authFailed)
             .padding(.bottom, 60)
         }

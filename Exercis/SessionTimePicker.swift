@@ -8,7 +8,7 @@ struct SessionTimePicker: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("TIDPUNKT")
+            Text("TIMESTAMP")
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
                 .foregroundColor(accent)
@@ -41,7 +41,7 @@ struct SessionTimePicker: View {
             ThinDivider()
 
             HStack {
-                Text("SLUT")
+                Text("END")
                     .font(.jost(.medium, size: 10))
                     .kerning(1.5)
                     .foregroundColor(Color(.secondaryLabel))
@@ -55,7 +55,7 @@ struct SessionTimePicker: View {
 
             ThinDivider()
 
-            Button("KLAR") {
+            Button("DONE") {
                 Haptics.notification(.success)
                 dismiss()
             }

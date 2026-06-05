@@ -30,7 +30,7 @@ struct ProgramEditorView: View {
         NavigationStack {
             List {
                 Section {
-                    TextField("Programnamn", text: $name)
+                    TextField("Program name", text: $name)
                         .font(.jost(.regular, size: 16))
                 }
 
@@ -56,12 +56,12 @@ struct ProgramEditorView: View {
                     Button {
                         showPicker = true
                     } label: {
-                        Label("Lägg till övning", systemImage: "plus.circle.fill")
+                        Label("Add Exercise", systemImage: "plus.circle.fill")
                             .foregroundStyle(accent)
                     }
                 } header: {
                     HStack {
-                        Text("ÖVNINGAR")
+                        Text("EXERCISES")
                         Spacer()
                         EditButton()
                             .font(.jost(.regular, size: 12))
@@ -71,21 +71,21 @@ struct ProgramEditorView: View {
 
                 if !isNew {
                     Section {
-                        Button("Ta bort program", role: .destructive) {
+                        Button("Delete Program", role: .destructive) {
                             showDeleteAlert = true
                         }
                     }
                 }
             }
-            .navigationTitle(isNew ? "Nytt program" : "Redigera")
+            .navigationTitle(isNew ? "New program" : "Edit")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Avbryt") { dismiss() }
+                    Button("Cancel") { dismiss() }
                         .font(.jost(.regular, size: 16))
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Klar") { save() }
+                    Button("Save") { save() }
                         .font(.jost(.semibold, size: 16))
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
@@ -102,9 +102,9 @@ struct ProgramEditorView: View {
                     programConstraint: ProgramConstraint(rawValue: constraintRaw) ?? .none
                 )
             }
-            .alert("Ta bort \(program?.name ?? "program")?", isPresented: $showDeleteAlert) {
-                Button("Ta bort", role: .destructive) { deleteProgram() }
-                Button("Avbryt", role: .cancel) {}
+            .alert(String(format: String(localized: "Delete %@?"), program?.name ?? ""), isPresented: $showDeleteAlert) {
+                Button("Delete", role: .destructive) { deleteProgram() }
+                Button("Cancel", role: .cancel) {}
             }
             .presentationDragIndicator(.visible)
         }
@@ -190,7 +190,7 @@ struct ProgramEditorView: View {
                         .foregroundStyle(ex.wrappedValue.setCount > 1 ? accent : Color(.tertiaryLabel))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Minska antal set")
+                .accessibilityLabel("Decrease set count")
 
                 Text("\(ex.wrappedValue.setCount)")
                     .font(.jost(.semibold, size: 17))
@@ -207,7 +207,7 @@ struct ProgramEditorView: View {
                         .foregroundStyle(ex.wrappedValue.setCount < 6 ? accent : Color(.tertiaryLabel))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Öka antal set")
+                .accessibilityLabel("Increase set count")
             }
         }
         .padding(.vertical, 2)

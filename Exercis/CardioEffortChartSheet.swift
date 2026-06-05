@@ -50,7 +50,7 @@ struct CardioEffortChartSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("ANSTRÄNGNING")
+            Text("EFFORT")
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
                 .foregroundColor(Color.historyAccent)
@@ -60,7 +60,7 @@ struct CardioEffortChartSheet: View {
 
             if dataPoints.count < 2 {
                 Spacer()
-                Text(dataPoints.isEmpty ? "Inga betygsatta pass ännu." : "Behöver minst två pass för att visa graf.")
+                Text(dataPoints.isEmpty ? "No logged sessions yet." : "Need at least two sessions to show chart.")
                     .font(.jost(.regular, size: 14))
                     .foregroundColor(Color(.secondaryLabel))
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -121,9 +121,9 @@ struct CardioEffortChartSheet: View {
                     .padding(.top, 20)
 
                 HStack(alignment: .top, spacing: 0) {
-                    statBlock(label: "LÄTTAST", value: "\(easiest)", unit: "/10", alignment: .leading)
-                    statBlock(label: "SENASTE", value: "\(latest)", unit: "/10", alignment: .center)
-                    statBlock(label: "TUFFAST", value: "\(hardest)", unit: "/10", alignment: .trailing)
+                    statBlock(label: "EASIEST", value: "\(easiest)", unit: "/10", alignment: .leading)
+                    statBlock(label: "LATEST", value: "\(latest)", unit: "/10", alignment: .center)
+                    statBlock(label: "HARDEST", value: "\(hardest)", unit: "/10", alignment: .trailing)
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)

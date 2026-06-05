@@ -51,7 +51,7 @@ struct HistoryCard: View {
                     }
                     .frame(width: 44, height: 44, alignment: .trailing)
                     .contentShape(Rectangle())
-                    .accessibilityLabel("Ta bort pass")
+                    .accessibilityLabel("Delete workout")
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 8)
@@ -61,7 +61,7 @@ struct HistoryCard: View {
             .buttonStyle(.plain)
             .contextMenu {
                 Button(role: .destructive, action: onDelete) {
-                    Label("Radera pass", systemImage: "trash")
+                    Label("Delete Workout", systemImage: "trash")
                 }
             }
 
@@ -92,7 +92,7 @@ struct HistoryCard: View {
                     showEffortChart = true
                 } label: {
                     HStack(spacing: 4) {
-                        Text("ANSTRÄNGNING")
+                        Text("EFFORT")
                             .font(.jost(.medium, size: 10))
                             .kerning(1.5)
                             .foregroundColor(Color(.secondaryLabel))

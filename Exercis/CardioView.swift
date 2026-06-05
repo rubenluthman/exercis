@@ -78,7 +78,7 @@ struct CardioView: View {
                             .font(.jost(.semibold, size: 72))
                             .foregroundColor(.primary)
                             .monospacedDigit()
-                        Text("TID")
+                        Text("TIME")
                             .font(.jost(.medium, size: 10))
                             .kerning(1.5)
                             .foregroundColor(Color(.secondaryLabel))
@@ -167,7 +167,7 @@ struct CardioView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if !showEffortPicker {
-                Button("KLAR") {
+                Button("DONE") {
                     distanceFocused = false
                     let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
                     lastEffortScore = saved > 0 ? saved : 5
@@ -187,7 +187,7 @@ struct CardioView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("KLAR") { distanceFocused = false }
+                Button("DONE") { distanceFocused = false }
                     .font(.jost(.semibold, size: 13))
                     .foregroundColor(Color.workoutAccent)
             }
@@ -256,7 +256,7 @@ struct CardioView: View {
                         .font(.jost(.bold, size: 17))
                         .kerning(2)
                         .foregroundColor(.primary)
-                    Text("ÖKA")
+                    Text("INCREASE")
                         .font(.jost(.medium, size: 9))
                         .kerning(1.5)
                         .foregroundColor(Color.workoutAccent)

@@ -161,7 +161,7 @@ struct StrengthView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("NÄSTA") {
+                Button("NEXT") {
                     Haptics.selection()
                     if case .reps = activeField { startRestTimer() }
                     let next = nextField
@@ -175,7 +175,7 @@ struct StrengthView: View {
                     .font(.jost(.semibold, size: 13))
                     .foregroundColor(nextField != nil ? accent : Color(.tertiaryLabel))
                     .disabled(nextField == nil)
-                Button("KLAR") { activeField = nil }
+                Button("DONE") { activeField = nil }
                     .font(.jost(.semibold, size: 13))
                     .foregroundColor(accent)
             }
@@ -245,7 +245,7 @@ struct StrengthView: View {
             .font(.jost(.regular, size: 22))
             .foregroundColor(Color(.secondaryLabel))
             .frame(width: 90, height: 44, alignment: .trailing)
-            .accessibilityLabel("Tillbaka")
+            .accessibilityLabel("Back")
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)
@@ -256,7 +256,7 @@ struct StrengthView: View {
             if let remaining = restSecondsLeft, remaining > 0 {
                 restTimerBanner(remaining: remaining)
             }
-            Button("KLAR") {
+            Button("DONE") {
                 let hasAnyData = exerciseForms.contains { $0.sets.contains { !$0.weight.isEmpty || !$0.reps.isEmpty } }
                 if hasAnyData {
                     activeField = nil
@@ -388,7 +388,7 @@ struct StrengthView: View {
         let secs = remaining % 60
         let label = mins > 0 ? "\(mins):\(String(format: "%02d", secs))" : "\(secs)s"
         return HStack {
-            Text("VILA")
+            Text("REST")
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
             Text("·")
@@ -544,7 +544,7 @@ struct EffortPickerSheet: View {
                 .padding(.bottom, 2)
             }
 
-            Text("ANSTRÄNGNING")
+            Text("EFFORT")
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
                 .foregroundColor(accent)
@@ -552,7 +552,7 @@ struct EffortPickerSheet: View {
                 .padding(.top, newPRs.isEmpty ? 24 : 8)
                 .padding(.bottom, 6)
 
-            Text("HUR JOBBIGT VAR PASSET?")
+            Text("HOW HARD WAS THE WORKOUT?")
                 .font(.jost(.regular, size: 11))
                 .kerning(1.5)
                 .foregroundColor(Color(.secondaryLabel))
@@ -571,7 +571,7 @@ struct EffortPickerSheet: View {
 
             ThinDivider()
 
-            Button("KLAR") {
+            Button("DONE") {
                 Haptics.notification(.success)
                 onSelect(selectedScore)
             }

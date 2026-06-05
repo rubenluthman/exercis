@@ -72,7 +72,7 @@ struct ExerciseChartSheet: View {
 
             if dataPoints.count < 2 {
                 Spacer()
-                Text(dataPoints.isEmpty ? "Inga loggade pass ännu." : "Behöver minst två pass för att visa graf.")
+                Text(dataPoints.isEmpty ? "No logged sessions yet." : "Need at least two sessions to show chart.")
                     .font(.jost(.regular, size: 14))
                     .foregroundColor(Color(.secondaryLabel))
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -133,9 +133,9 @@ struct ExerciseChartSheet: View {
                     .padding(.top, 20)
 
                 HStack(alignment: .top, spacing: 0) {
-                    statBlock(label: "BÄSTA", value: formatWeight(bestE1RM), unit: "kg", alignment: .leading)
-                    statBlock(label: "SENASTE", value: formatWeight(lastE1RM), unit: "kg", alignment: .center)
-                    statBlock(label: "PASS", value: "\(dataPoints.count)", alignment: .trailing)
+                    statBlock(label: "BEST", value: formatWeight(bestE1RM), unit: "kg", alignment: .leading)
+                    statBlock(label: "LATEST", value: formatWeight(lastE1RM), unit: "kg", alignment: .center)
+                    statBlock(label: "SESSIONS", value: "\(dataPoints.count)", alignment: .trailing)
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)

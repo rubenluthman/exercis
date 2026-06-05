@@ -161,10 +161,10 @@ struct PeriodSummarySheet: View {
 
     private var statsRow: some View {
         HStack(alignment: .top, spacing: 0) {
-            statBlock(label: "STYRKA",    value: workouts.count > 0 ? "\(workouts.count)" : "—",    alignment: .leading)
-            statBlock(label: "VOLYM",     value: volumeText.0, unit: volumeText.1,                  alignment: .leading)
-            statBlock(label: "KONDITION", value: cardio.count > 0 ? "\(cardio.count)" : "—",        alignment: .trailing)
-            statBlock(label: "TID",       value: totalMinutes > 0 ? formatWeight(totalMinutes) : "—",
+            statBlock(label: "STRENGTH",  value: workouts.count > 0 ? "\(workouts.count)" : "—",    alignment: .leading)
+            statBlock(label: "VOLUME",    value: volumeText.0, unit: volumeText.1,                  alignment: .leading)
+            statBlock(label: "CARDIO",    value: cardio.count > 0 ? "\(cardio.count)" : "—",        alignment: .trailing)
+            statBlock(label: "TIME",      value: totalMinutes > 0 ? formatWeight(totalMinutes) : "—",
                       unit: totalMinutes > 0 ? " MIN" : nil,                                         alignment: .trailing)
         }
         .padding(.horizontal, 24)
@@ -217,7 +217,7 @@ struct PeriodSummarySheet: View {
 
         if barData.isEmpty {
             Spacer()
-            Text("Inga pass under perioden.")
+            Text("No sessions in this period.")
                 .font(.jost(.regular, size: 14))
                 .foregroundColor(Color(.secondaryLabel))
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -226,8 +226,8 @@ struct PeriodSummarySheet: View {
             ThinDivider()
 
             HStack(spacing: 12) {
-                legendDot(color: .homeAccent,    label: "STYRKA")
-                legendDot(color: .workoutAccent, label: "KONDITION")
+                legendDot(color: .homeAccent,    label: "STRENGTH")
+                legendDot(color: .workoutAccent, label: "CARDIO")
             }
             .padding(.horizontal, 24)
             .padding(.top, 16)

@@ -78,7 +78,7 @@ struct ExercisePickerView: View {
                         Section {
                             ForEach(notRecommended) { def in exerciseRow(def, dimmed: true) }
                         } header: {
-                            Text("EJ REKOMMENDERAT")
+                            Text("NOT RECOMMENDED")
                                 .font(.jost(.medium, size: 10))
                                 .kerning(1.5)
                                 .foregroundStyle(Color(.secondaryLabel))
@@ -88,11 +88,11 @@ struct ExercisePickerView: View {
                 .listStyle(.plain)
             }
             .searchable(text: $searchText, prompt: "Sök övning")
-            .navigationTitle("Välj övning")
+            .navigationTitle("Choose exercise")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Avbryt") { dismiss() }
+                    Button("Cancel") { dismiss() }
                         .font(.jost(.regular, size: 16))
                 }
             }
@@ -127,7 +127,7 @@ struct ExercisePickerView: View {
                         selectedEquipment = []
                         selectedMovements = []
                     } label: {
-                        Text("RENSA")
+                        Text("CLEAR")
                             .font(.jost(.regular, size: 11))
                             .kerning(1)
                             .foregroundStyle(Color(.secondaryLabel))
@@ -247,7 +247,7 @@ struct FilterSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Klar") { dismiss() }
+                    Button("Save") { dismiss() }
                         .font(.jost(.semibold, size: 16))
                 }
                 if !selected.isEmpty {
