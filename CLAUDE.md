@@ -27,7 +27,7 @@ Alla filer ligger platt i `Exercis/`-mappen.
 ExercisApp.swift          ← @main ExercisApp + RootView + MainTabView (4 tabbar)
 AuthManager.swift         ← AuthManager (Face ID/lösenkod)
 Models.swift              ← SwiftData-modeller (WorkoutSession, CardioSession, WorkoutProgram, ProgramExercise, CardioType)
-Theme.swift               ← färger, typsnitt, knappstillar, ThinDivider, enableSwipeBack, formatWeight/parseWeight
+Theme.swift               ← färger, typsnitt, knappstillar, ThinDivider, enableSwipeBack, formatWeight/parseWeight, fria funktioner för affärslogik
 LockView.swift            ← inloggningsskärm
 TrainingView.swift        ← startsida (Träning-tab) — valda program + konditionsformer, bara starta pass
 StrengthView.swift        ← logga styrketräningspass (SetFormData, ExerciseFormData, progressionsförslag, PR-detektion)
@@ -149,6 +149,22 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 ### Navigationsbrygga
 `enableSwipeBack()` — View-extension som via UIKit-bridge återaktiverar `interactivePopGestureRecognizer` (behövs eftersom `.toolbar(.hidden, for: .navigationBar)` inaktiverar swipe-back i iOS 17).
 
+### Fria funktioner för affärslogik (testbara)
+
+Alla fria funktioner i Theme.swift är enhetstestade och ska hållas fria från SwiftUI/SwiftData-beroenden.
+
+| Funktion | Syfte |
+|----------|-------|
+| `epleyE1RM(weight:reps:)` | Epley-formel för beräknat 1RM |
+| `estimatedCalories(met:bodyMass:seconds:)` | Kaloriberäkning via MET |
+| `computeCurrentStreak(days:)` | Aktuell träningsstreak från `Set<Date>` |
+| `computeBestStreak(days:)` | Bästa streak någonsin från `Set<Date>` |
+| `progressionSuggestion(prevMax:shouldIncrease:bestSetReps:)` | Föreslår nästa vikt (+2.5 kg om ÖKA) och reps |
+| `strengthCSV(_:)` | Genererar CSV-sträng för styrkepass |
+| `cardioCSV(_:)` | Genererar CSV-sträng för konditionspass |
+| `formatWeight(_:)` | Formaterar Double → sträng utan onödiga decimaler |
+| `parseWeight(_:)` | Parsar sträng → Double, accepterar punkt och komma |
+
 ---
 
 ## Design-regler
@@ -207,7 +223,7 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 
 **`CardioType` enum** (i Models.swift, `Identifiable`):
 
-28 cases i lowercase rawValue — grupperade i kommentarer:
+26 cases i lowercase rawValue — grupperade i kommentarer:
 - **Maskiner**: `crosstrainer`, `cycling_stationary`, `rowing_machine`, `treadmill_run`, `treadmill_walk`, `stair_climber`, `ski_erg`, `assault_bike`
 - **Utomhus**: `running`, `walking`, `hiking`, `road_cycling`, `mountain_biking`, `swimming`
 - **Nordiska**: `cross_country_skiing`, `ice_skating`
@@ -218,6 +234,10 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 Lagras som `String` i `CardioSession` för att undvika migrationsproblem. Gamla VERSALER-rawvärden migreras vid app-start via `migrateCardioTypes(context:)` i Models.swift.
 
 `var tracksElevation: Bool` — `true` för: `hiking`, `running`, `walking`, `road_cycling`, `mountain_biking`, `cross_country_skiing`, `rucking`, `climbing`. Styr om `CMAltimeter` startas i CardioView och om `elevationGain` skickas till HealthKit.
+
+`var met: Double` — MET-värde (Metabolic Equivalent of Task) per typ, används av `estimatedCalories` för kaloriberäkning till HealthKit.
+
+`var hkActivityType: HKWorkoutActivityType` — mappning till HealthKit-aktivitetstyp.
 
 **`WorkoutDraft`** (Codable, sparas i UserDefaults):
 ```swift
@@ -379,7 +399,7 @@ LockView → (Face ID) → MainTabView
 - Begär tillstånd vid varje StrengthView/CardioView-öppning (`requestAuthorization()`) — iOS hanterar "redan beviljat" automatiskt
 - Alla anrop guards med `HKHealthStore.isHealthDataAvailable()` — no-op på simulator
 - `healthKitID: UUID?` sparas på session-objektet för att möjliggöra radering
-- Kalorier beräknas via MET × kroppsvikt (läses från HealthKit, fallback 75 kg) × tid i timmar
+- Kalorier beräknas via `estimatedCalories(met:bodyMass:seconds:)` — MET hämtas från `CardioType.met`, kroppsvikt läses från HealthKit (fallback 75 kg)
 - **iOS 18+**: ansträngningspoäng sparas som `HKQuantityType(.workoutEffortScore)` via `store.relateWorkoutEffortSample(_:with:activity:)` — gäller både styrke- och konditionspass
 
 ---
