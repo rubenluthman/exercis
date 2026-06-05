@@ -221,6 +221,21 @@ final class ProgramExercise {
     }
 }
 
+// MARK: - Schema versioning
+
+enum ExercisSchemaV1: VersionedSchema {
+    static var versionIdentifier = Schema.Version(1, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        [WorkoutSession.self, ExerciseLog.self, SetLog.self,
+         CardioSession.self, WorkoutProgram.self, ProgramExercise.self]
+    }
+}
+
+enum ExercisMigrationPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] { [ExercisSchemaV1.self] }
+    static var stages: [MigrationStage] { [] }
+}
+
 // MARK: - Draft
 
 struct WorkoutDraft: Codable {

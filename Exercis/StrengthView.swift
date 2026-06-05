@@ -272,7 +272,7 @@ struct StrengthView: View {
                     dismiss()
                 }
             }
-            .buttonStyle(GlassFilledButtonStyle(accent: accent))
+            .primaryButtonStyle(accent: accent)
             .padding(.horizontal, 24)
             .padding(.vertical, 16)
         }
@@ -579,7 +579,7 @@ struct EffortPickerSheet: View {
                 Haptics.notification(.success)
                 onSelect(selectedScore)
             }
-            .buttonStyle(GlassFilledButtonStyle(accent: accent))
+            .primaryButtonStyle(accent: accent)
             .padding(.horizontal, 24)
             .padding(.top, 16)
 

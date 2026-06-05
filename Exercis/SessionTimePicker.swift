@@ -59,7 +59,7 @@ struct SessionTimePicker: View {
                 Haptics.notification(.success)
                 dismiss()
             }
-                .buttonStyle(GlassFilledButtonStyle(accent: accent))
+                .primaryButtonStyle(accent: accent)
                 .padding(.horizontal, 24)
                 .padding(.top, 16)
                 .padding(.bottom, 8)

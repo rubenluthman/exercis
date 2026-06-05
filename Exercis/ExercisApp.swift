@@ -24,7 +24,10 @@ struct ExercisApp: App {
         WindowGroup {
             RootView()
         }
-        .modelContainer(for: [WorkoutSession.self, CardioSession.self, WorkoutProgram.self])
+        .modelContainer(try! ModelContainer(
+            for: Schema(ExercisSchemaV1.models),
+            migrationPlan: ExercisMigrationPlan.self
+        ))
     }
 }
 
@@ -84,11 +87,21 @@ struct MainTabView: View {
                 Label("SETTINGS", systemImage: "gearshape.fill")
             }
         }
-        .tabBarMinimizeBehavior(.onScrollDown)
+        .minimizeTabBarOnScroll()
         .onAppear {
             migrateExerciseNames(context: context)
             migrateCardioTypes(context: context)
             seedDefaultProgramsIfNeeded(context: context)
+        }
+    }
+}
+
+private extension View {
+    @ViewBuilder func minimizeTabBarOnScroll() -> some View {
+        if #available(iOS 26, *) {
+            self.tabBarMinimizeBehavior(.onScrollDown)
+        } else {
+            self
         }
     }
 }

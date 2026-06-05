@@ -218,7 +218,7 @@ struct OnboardingView: View {
                     .foregroundStyle(Color(.secondaryLabel))
 
                 Button(primary) { primaryAction() }
-                    .buttonStyle(GlassFilledButtonStyle(accent: .homeAccent))
+                    .primaryButtonStyle(accent: .homeAccent)
                     .opacity(primaryEnabled ? 1 : 0.4)
                     .disabled(!primaryEnabled)
             }
