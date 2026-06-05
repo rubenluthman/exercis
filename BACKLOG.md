@@ -19,7 +19,10 @@ Två kategorier: **Rubens beslut** (explicit bekräftade val) och **Claudes reko
 
 ### Hög prioritet
 
-- **iOS 26 / Liquid Glass-anpassning** — `FilledButtonStyle`/`OutlineButtonStyle` tar inte glass-behandling automatiskt. `.toolbar(.hidden)` + manuell back-knapp bryter mot redesignad nav-bar. `softScrollEdge()` kan kollidera med nativa glass-scrolledges. Behöver en dedikerad genomgång mot iOS 26.
+- **iOS 26 / Liquid Glass — sheet-bakgrunder** — `.background(Color.appBackground)` på sheets (ExerciseChartSheet, CardioChartSheet, EffortChartSheet, CardioEffortChartSheet, PeriodSummarySheet, SessionTimePicker) sätter en ogenomskinlig bakgrund som bryter det nya glasmaterialet. Apple säger explicit att `presentationBackground`/opaka bakgrunder på sheets ska tas bort. Fixa: ta bort `.background(Color.appBackground)` från dessa vyer.
+- **iOS 26 / Knappar** — `FilledButtonStyle` (cornerRadius 4, höjd 50pt, fylld rektangel) är iOS 17-estetik. iOS 26 har `.buttonStyle(.glass(.prominent))` med tint som ny primär knappstil. Kan behållas som medvetet designbeslut men ser daterat ut bredvid systemknappar.
+- **iOS 26 / Tab bar** — `.tabBarMinimizeBehavior(.onScrollDown)` ger floating tab bar som minimeras vid scroll. Standard `TabView` fungerar men ger inte det moderna beteendet.
+- **iOS 26 / softScrollEdge()** — systemet hanterar nu scroll edge-effekter automatiskt via `.scrollEdgeEffectStyle`. Den manuella masken är troligen redundant och bör utvärderas mot hur systemet beter sig.
 
 - **CloudKit-sync** — utan det förlorar användaren all data vid telefonbyte utan aktiv backup. Första prioritet när betalt Apple Developer-konto finns.
 
