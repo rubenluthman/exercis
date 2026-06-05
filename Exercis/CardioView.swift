@@ -214,7 +214,7 @@ struct CardioView: View {
             }
             Task { await HealthKitManager.shared.requestAuthorization() }
 
-            if type == .hiking, CMAltimeter.isRelativeAltitudeAvailable() {
+            if type.tracksElevation, CMAltimeter.isRelativeAltitudeAvailable() {
                 altimeter.startRelativeAltitudeUpdates(to: .main) { [self] data, _ in
                     guard let data else { return }
                     let current = data.relativeAltitude.doubleValue
@@ -227,7 +227,7 @@ struct CardioView: View {
             }
         }
         .onDisappear {
-            if type == .hiking { altimeter.stopRelativeAltitudeUpdates() }
+            if type.tracksElevation { altimeter.stopRelativeAltitudeUpdates() }
             saveDraftIfNeeded()
         }
         .simultaneousGesture(
@@ -320,8 +320,8 @@ struct CardioView: View {
             UserDefaults.standard.setCardioIncrease(type, false)
         }
 
-        let elevation = type == .hiking && elevationGain > 1 ? elevationGain : nil
-        if type == .hiking { altimeter.stopRelativeAltitudeUpdates() }
+        let elevation = type.tracksElevation && elevationGain > 1 ? elevationGain : nil
+        if type.tracksElevation { altimeter.stopRelativeAltitudeUpdates() }
 
         let session = CardioSession(date: end, startDate: start, durationMinutes: minutes, cardioType: type.rawValue, distanceKm: distanceKm)
         session.effortScore = effortScore

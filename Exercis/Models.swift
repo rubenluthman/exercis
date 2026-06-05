@@ -88,6 +88,16 @@ enum CardioType: String, Codable, CaseIterable, Identifiable {
     case burpees             = "burpees"
     case mountainClimbers    = "mountain_climbers"
 
+    var tracksElevation: Bool {
+        switch self {
+        case .hiking, .running, .walking, .roadCycling, .mountainBiking,
+             .crossCountrySkiing, .rucking, .climbing:
+            return true
+        default:
+            return false
+        }
+    }
+
     var displayName: String {
         switch self {
         case .crosstrainer:       return "Crosstrainer"
