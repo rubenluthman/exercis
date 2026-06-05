@@ -57,6 +57,6 @@ Två kategorier: **Rubens beslut** (explicit bekräftade val) och **Claudes reko
 
 - **Tester: PeriodSummarySheet-aggregationer** — volym, antal, tid är komplexa beräkningar utan unit tests.
 
-- **Lokalisering: `sv_SE` hårdkodat** — datumformatering bör använda `Locale.current`.
+- **Lokalisering: `sv_SE` hårdkodat** — datumformatering är avsiktligt hårdkodad till svenska för en svensk single-user-app. Inget att åtgärda om inte appen någonsin ska stödja fler marknader.
 
 - **Lokalisering: övningsnamn** — alla på engelska, odokumenterat val; bör stå i CLAUDE.md.

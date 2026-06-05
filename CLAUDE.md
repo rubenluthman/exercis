@@ -229,7 +229,7 @@ struct WorkoutDraft: Codable {
 
 Laddas från `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~186 övningar med `status == "include"` är aktiva — resten är exkluderade i JSON.
 
-**Övningsnamn är på engelska** — medvetet val. De lokaliseras inte via `.strings`. Engelska används i UI, i loggad historik (`ExerciseLog.name`) och i CSV-export.
+**Övningsnamn är på engelska** — medvetet val. De lokaliseras inte via `.strings` och visas på engelska oavsett enhetsspråk. Lagras på engelska i historik (`ExerciseLog.name`) och CSV-export.
 
 `ExerciseDef` fält: `id` (stabil nyckel, används i `ProgramExercise.exerciseId`), `name` (visas i UI och lagras i `ExerciseLog.name`), `aliases` (gamla namn, migreras vid app-start), `repRange`, `setRange`, `primaryMuscles`, `equipment`, `movement`, `contraindications`, `gifFile/gifSource`, `description`.
 
