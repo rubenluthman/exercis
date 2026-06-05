@@ -49,6 +49,7 @@ ProgramEditorView.swift   ← redigera program (namn, färg, begränsning, övni
 ExercisePickerView.swift  ← övningsväljare med fuzzy search + filterchips (MUSKEL/REDSKAP/RÖRELSE) + dimning
 ProgramCard.swift         ← programkort (används i TrainingView och SettingsView)
 OnboardingView.swift      ← onboarding (steg 1: program med pencil-redigering, steg 2: konditionsformer)
+Previews.swift            ← Canvas-previews för alla huvudvyer med mock-data (används i Xcode Canvas, byggs ej i release)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
 ExerciseLibrary.swift     ← laddar exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton + BodyLimitation/ProgramConstraint/MuscleGroup enums
 ExercisActivityAttributes.swift ← ActivityKit-attribut för Live Activity (programnamn, accentfärg, övning/set-state)
@@ -154,10 +155,13 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 ```swift
 @Model class WorkoutSession {
     var id: UUID; var date: Date; var startDate: Date; var healthKitID: UUID?; var effortScore: Int?
+    var programId: UUID?      // kopplar session till WorkoutProgram för prefill
+    var programName: String?  // denormaliserat — används i CSV-export
     @Relationship(deleteRule: .cascade) var exerciseLogs: [ExerciseLog]
 }
 @Model class ExerciseLog {
     var name: String; var orderIndex: Int; var session: WorkoutSession?
+    // exerciseDefId: String? finns i modellen men används ej än
     @Relationship(deleteRule: .cascade) var sets: [SetLog]
 }
 @Model class SetLog {
