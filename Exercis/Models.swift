@@ -324,8 +324,12 @@ func migrateCardioTypes(context: ModelContext) {
 // MARK: - Seeder: default programs
 
 func seedDefaultProgramsIfNeeded(context: ModelContext) {
+    guard !UserDefaults.standard.bool(forKey: "hasSeededPrograms") else { return }
     let existing = (try? context.fetch(FetchDescriptor<WorkoutProgram>())) ?? []
-    guard existing.isEmpty else { return }
+    guard existing.isEmpty else {
+        UserDefaults.standard.set(true, forKey: "hasSeededPrograms")
+        return
+    }
 
     let defaults: [(name: String, color: String, constraint: String, exercises: [(id: String, name: String)])] = [
         ("Full Body", "paletteIntenseRed", "", [
@@ -390,4 +394,5 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
         }
     }
     try? context.save()
+    UserDefaults.standard.set(true, forKey: "hasSeededPrograms")
 }
