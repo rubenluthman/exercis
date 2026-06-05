@@ -43,7 +43,7 @@ final class WeightFormattingTests: XCTestCase {
         XCTAssertTrue(result.contains("5"), "Should contain the decimal part")
     }
 
-    func testFormatWeightRoundTrip() {
+    func testFormatWeightRoundTrip() throws {
         let value = 82.5
         let formatted = formatWeight(value)
         let parsed = try XCTUnwrap(parseWeight(formatted))
