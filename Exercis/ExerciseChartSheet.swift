@@ -29,11 +29,13 @@ import Charts
 struct ExerciseChartSheet: View {
     let exerciseName: String
     @Query(sort: \WorkoutSession.date) private var allSessions: [WorkoutSession]
+    @State private var showVolume = false
 
     private struct DataPoint: Identifiable {
         let id = UUID()
         let date: Date
         let e1RM: Double
+        let volume: Double
     }
 
     func epley(weight: Double, reps: Int) -> Double {
@@ -45,14 +47,18 @@ struct ExerciseChartSheet: View {
             guard let log = session.exerciseLogs.first(where: { $0.name == exerciseName }) else { return nil }
             let best = log.sets.map { epley(weight: $0.weight, reps: $0.reps) }.max() ?? 0
             guard best > 0 else { return nil }
-            return DataPoint(date: session.date, e1RM: best)
+            let vol = log.sets.reduce(0.0) { $0 + $1.weight * Double($1.reps) }
+            return DataPoint(date: session.date, e1RM: best, volume: vol)
         }
     }
 
-    private var bestE1RM: Double { dataPoints.map(\.e1RM).max() ?? 0 }
-    private var lastE1RM: Double { dataPoints.last?.e1RM ?? 0 }
-    private var yMin: Double     { (dataPoints.map(\.e1RM).min() ?? 0) * 0.95 }
-    private var yMax: Double     { bestE1RM * 1.05 }
+    private var activeValues: [Double] { showVolume ? dataPoints.map(\.volume) : dataPoints.map(\.e1RM) }
+    private var bestE1RM: Double  { dataPoints.map(\.e1RM).max() ?? 0 }
+    private var lastE1RM: Double  { dataPoints.last?.e1RM ?? 0 }
+    private var bestVol: Double   { dataPoints.map(\.volume).max() ?? 0 }
+    private var lastVol: Double   { dataPoints.last?.volume ?? 0 }
+    private var yMin: Double { (activeValues.min() ?? 0) * 0.95 }
+    private var yMax: Double { (activeValues.max() ?? 0) * 1.05 }
 
     private var spansMultipleYears: Bool {
         guard let first = dataPoints.first?.date, let last = dataPoints.last?.date else { return false }
@@ -61,13 +67,31 @@ struct ExerciseChartSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text((ExerciseDef.find(name: exerciseName)?.displayName ?? exerciseName).uppercased())
-                .font(.jost(.bold, size: 13))
-                .kerning(2)
-                .foregroundColor(Color.historyAccent)
-                .padding(.horizontal, 24)
-                .padding(.top, 24)
-                .padding(.bottom, 20)
+            HStack(alignment: .center) {
+                Text((ExerciseDef.find(name: exerciseName)?.displayName ?? exerciseName).uppercased())
+                    .font(.jost(.bold, size: 13))
+                    .kerning(2)
+                    .foregroundColor(Color.historyAccent)
+                Spacer()
+                HStack(spacing: 0) {
+                    Button("1RM") { withAnimation(.easeInOut(duration: 0.22)) { showVolume = false } }
+                        .font(.jost(.semibold, size: 10))
+                        .kerning(1.5)
+                        .foregroundStyle(showVolume ? Color(.secondaryLabel) : Color.historyAccent)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                    Button("VOL") { withAnimation(.easeInOut(duration: 0.22)) { showVolume = true } }
+                        .font(.jost(.semibold, size: 10))
+                        .kerning(1.5)
+                        .foregroundStyle(showVolume ? Color.historyAccent : Color(.secondaryLabel))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                }
+                .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Color.appDivider, lineWidth: 0.5))
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 24)
+            .padding(.bottom, 20)
 
             if dataPoints.count < 2 {
                 Spacer()
@@ -78,15 +102,16 @@ struct ExerciseChartSheet: View {
                 Spacer()
             } else {
                 Chart(dataPoints) { point in
+                    let yVal = showVolume ? point.volume : point.e1RM
                     LineMark(
                         x: .value("Datum", point.date),
-                        y: .value("KG", point.e1RM)
+                        y: .value("KG", yVal)
                     )
                     .foregroundStyle(Color.historyAccent)
 
                     PointMark(
                         x: .value("Datum", point.date),
-                        y: .value("KG", point.e1RM)
+                        y: .value("KG", yVal)
                     )
                     .foregroundStyle(Color.historyAccent)
                     .symbolSize(30)
@@ -132,9 +157,9 @@ struct ExerciseChartSheet: View {
                     .padding(.top, 20)
 
                 HStack(alignment: .top, spacing: 0) {
-                    statBlock(label: "BEST", value: formatWeight(bestE1RM), unit: "kg", alignment: .leading)
-                    statBlock(label: "LATEST", value: formatWeight(lastE1RM), unit: "kg", alignment: .center)
-                    statBlock(label: "SESSIONS", value: "\(dataPoints.count)", alignment: .trailing)
+                    statBlock(label: "BEST",    value: formatWeight(showVolume ? bestVol : bestE1RM), unit: showVolume ? "kg" : "kg", alignment: .leading)
+                    statBlock(label: "LATEST",  value: formatWeight(showVolume ? lastVol : lastE1RM), unit: "kg", alignment: .center)
+                    statBlock(label: "SESSIONS",value: "\(dataPoints.count)", alignment: .trailing)
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)

@@ -21,6 +21,7 @@ struct SettingsView: View {
     @State private var showExportSheet = false
     @State private var editingProgram: WorkoutProgram? = nil
     @State private var showNewProgram = false
+    @State private var showWhatsNew = false
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
@@ -150,7 +151,9 @@ struct SettingsView: View {
                             title: "EXPORT TRAINING DATA",
                             systemImage: "square.and.arrow.up"
                         ) {
-                            exportItems = buildExportItems()
+                            let items = buildExportItems()
+                            guard !items.isEmpty else { return }
+                            exportItems = items
                             showExportSheet = true
                         }
                     }
@@ -169,18 +172,27 @@ struct SettingsView: View {
 
                     sectionBlock {
                         sectionLabel("ABOUT")
-                        HStack {
-                            Text("VERSION")
-                                .font(.jost(.semibold, size: 12))
-                                .kerning(1.5)
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            Text(appVersion)
-                                .font(.jost(.regular, size: 13))
-                                .foregroundStyle(Color(.secondaryLabel))
+                        Button {
+                            showWhatsNew = true
+                        } label: {
+                            HStack {
+                                Text("VERSION")
+                                    .font(.jost(.semibold, size: 12))
+                                    .kerning(1.5)
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Text(appVersion)
+                                    .font(.jost(.regular, size: 13))
+                                    .foregroundStyle(Color(.secondaryLabel))
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 10))
+                                    .foregroundStyle(Color(.tertiaryLabel))
+                            }
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
+                            .contentShape(Rectangle())
                         }
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 16)
+                        .buttonStyle(.plain)
                     }
 
                     ThinDivider()
@@ -188,15 +200,16 @@ struct SettingsView: View {
             }
         }
         .sheet(isPresented: $showExportSheet) {
-            if !exportItems.isEmpty {
-                ShareSheet(items: exportItems)
-            }
+            ShareSheet(items: exportItems)
         }
         .sheet(item: $editingProgram) { program in
             ProgramEditorView(program: program)
         }
         .sheet(isPresented: $showNewProgram) {
             ProgramEditorView(program: nil)
+        }
+        .sheet(isPresented: $showWhatsNew) {
+            WhatsNewSheet()
         }
     }
 

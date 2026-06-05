@@ -159,10 +159,14 @@ struct ProfileView: View {
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
                 .foregroundColor(Color(.secondaryLabel))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text(value)
                     .font(.jost(.semibold, size: 22))
                     .foregroundColor(.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 if let unit {
                     Text(unit)
                         .font(.jost(.semibold, size: 14))
@@ -170,7 +174,6 @@ struct ProfileView: View {
                 }
             }
         }
-        .fixedSize()
         .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .top))
     }
 
