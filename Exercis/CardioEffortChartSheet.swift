@@ -131,7 +131,7 @@ struct CardioEffortChartSheet: View {
                 Spacer()
             }
         }
-        .background(Color.appBackground)
+
         .presentationDragIndicator(.visible)
     }
 

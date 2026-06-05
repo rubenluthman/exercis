@@ -128,7 +128,7 @@ struct EffortChartSheet: View {
                 Spacer()
             }
         }
-        .background(Color.appBackground)
+
         .presentationDragIndicator(.visible)
     }
 

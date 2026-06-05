@@ -64,7 +64,7 @@ struct SessionTimePicker: View {
                 .padding(.top, 16)
                 .padding(.bottom, 8)
         }
-        .background(Color.appBackground)
+
         .presentationDragIndicator(.visible)
         .presentationDetents([.height(330), .large])
     }

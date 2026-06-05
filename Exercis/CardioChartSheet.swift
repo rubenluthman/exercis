@@ -163,7 +163,7 @@ struct CardioChartSheet: View {
                 Spacer()
             }
         }
-        .background(Color.appBackground)
+
         .presentationDragIndicator(.visible)
     }
 

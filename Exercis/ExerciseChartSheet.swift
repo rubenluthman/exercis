@@ -142,7 +142,7 @@ struct ExerciseChartSheet: View {
                 Spacer()
             }
         }
-        .background(Color.appBackground)
+
         .presentationDragIndicator(.visible)
     }
 
