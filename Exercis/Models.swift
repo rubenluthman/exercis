@@ -251,8 +251,9 @@ func migrateExerciseNames(context: ModelContext) {
     guard current < ExerciseDef.migrationVersion else { return }
 
     if current < 2 {
-        let aliasMap = Dictionary(uniqueKeysWithValues:
-            ExerciseDef.all.flatMap { def in def.aliases.map { ($0, def.name) } }
+        let aliasMap = Dictionary(
+            ExerciseDef.all.flatMap { def in def.aliases.map { ($0, def.name) } },
+            uniquingKeysWith: { first, _ in first }
         )
         if !aliasMap.isEmpty {
             let logs = (try? context.fetch(FetchDescriptor<ExerciseLog>())) ?? []
