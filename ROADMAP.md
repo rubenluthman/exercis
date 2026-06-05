@@ -13,11 +13,6 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ## Planerade funktioner
 
-### HealthKit — elevation
-- `CardioSession.elevationGain: Double?` finns i modellen och skickas till HealthKit
-- `CMAltimeter`-integration saknas — elevation matas inte in automatiskt än
-- Kräver CoreMotion-import och läsning av `CMAltitudeData` under aktiv CardioView
-
 ---
 
 ## Beslutade designval (ej byggt än)
