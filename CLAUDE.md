@@ -195,6 +195,8 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 
 Lagras som `String` i `CardioSession` för att undvika migrationsproblem. Gamla VERSALER-rawvärden migreras vid app-start via `migrateCardioTypes(context:)` i Models.swift.
 
+`var tracksElevation: Bool` — `true` för: `hiking`, `running`, `walking`, `road_cycling`, `mountain_biking`, `cross_country_skiing`, `rucking`, `climbing`. Styr om `CMAltimeter` startas i CardioView och om `elevationGain` skickas till HealthKit.
+
 **`WorkoutDraft`** (Codable, sparas i UserDefaults):
 - Innehåller övningsdata, `startTime` och `collapsedExercises: [Int]`
 - Har custom `init(from:)` för bakåtkompatibilitet (nya fält får default-värden vid avkodning av gamla drafts)

@@ -30,7 +30,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 - **iCloud Sync (CloudKit)** — kräver betalt konto
 - **GIF-licens** — byt hasaneyldrm mot licensierad källa (ExerciseDB Pro) innan submission
-- **GIF-filer i git** — finns i historik trots .gitignore, behöver städas
+- **GIF-filer i git** — ~~finns i historik trots .gitignore, behöver städas~~ rensat med git-filter-repo (2026-06-05)
 - **Widgets** — streak och "nästa program"; kräver Widget Extension + App Group
 
 ---
