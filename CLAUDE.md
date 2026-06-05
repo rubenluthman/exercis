@@ -13,7 +13,7 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 - **Autentisering**: Face ID via `LAContext .deviceOwnerAuthentication` – automatisk fallback till enhetens lösenkod. Inget eget lösenord. Auto-triggas vid app-launch; retry-knapp om det misslyckas.
 - **Deployment target**: iOS 17 (icke förhandlingsbart)
 - **Apple Health**: HKWorkout sparas vid varje avslutat styrke- och konditionspass
-- `NSFaceIDUsageDescription`, `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription` krävs i Info.plist
+- `NSFaceIDUsageDescription`, `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription`, `NSUserNotificationsUsageDescription` krävs i Info.plist
 
 ---
 
@@ -30,8 +30,8 @@ Models.swift              ← SwiftData-modeller (WorkoutSession, CardioSession,
 Theme.swift               ← färger, typsnitt, knappstillar, ThinDivider, enableSwipeBack, formatWeight/parseWeight
 LockView.swift            ← inloggningsskärm
 TrainingView.swift        ← startsida (Träning-tab) — valda program + konditionsformer, bara starta pass
-StrengthView.swift        ← logga styrketräningspass (SetFormData, ExerciseFormData, nextField-logik)
-ExerciseSection.swift     ← övningssektion med sets/reps + WorkoutField-enum + UserDefaults-extension
+StrengthView.swift        ← logga styrketräningspass (SetFormData, ExerciseFormData, progressionsförslag, PR-detektion)
+ExerciseSection.swift     ← övningssektion med sets/reps + WorkoutField-enum + ÖKA-badge + progressionsförslag-badge
 GifSheet.swift            ← GIF + övningsinformation (WKWebView, base64-inbäddning, öppnas från ExerciseSection)
 CardioView.swift          ← logga konditionspass (accordion, tid mäts automatiskt, bara KM matas in)
 HistoryView.swift         ← historiklista (blandar styrka och kondition, HistoryEntry-enum)
@@ -43,8 +43,8 @@ EffortChartSheet.swift    ← ansträngningsprogression styrka (Swift Charts, ö
 CardioEffortChartSheet.swift ← ansträngningsprogression kondition (Swift Charts, öppnas från CardioCard)
 PeriodSummarySheet.swift  ← periodsammanfattning månads/årsvy (Swift Charts, öppnas från HistoryView)
 SessionTimePicker.swift   ← delad sheet för start/slut-tid (startändring drar med slut, slut fritt)
-ProfileView.swift         ← profilbild, namn, statistik
-SettingsView.swift        ← inställningar + programhantering + konditionsformer + kroppsbegränsningar
+ProfileView.swift         ← profilbild, namn, toppstatistik, streak (14-dagars dots), senaste pass, personliga rekord (top-8 e1RM), veckosnitt
+SettingsView.swift        ← inställningar + programhantering + konditionsformer + kroppsbegränsningar + träningspåminnelser + dataexport
 ProgramEditorView.swift   ← redigera program (namn, färg, begränsning, övningar, set-antal)
 ExercisePickerView.swift  ← övningsväljare med fuzzy search + filterchips (MUSKEL/REDSKAP/RÖRELSE) + dimning
 ProgramCard.swift         ← programkort (används i TrainingView och SettingsView)
@@ -222,13 +222,26 @@ Lagras som `String` i `CardioSession` för att undvika migrationsproblem. Gamla 
 **`WorkoutDraft`** (Codable, sparas i UserDefaults):
 ```swift
 struct WorkoutDraft: Codable {
-    var exercises: [ExerciseFormData]
+    var exercises: [ExerciseDraft]  // ExerciseDraft: name, sets, shouldIncrease, previousMaxWeight
     var startTime: Date
     var collapsedExercises: [Int]   // default [] vid avkodning av gamla drafts
-    var programId: UUID?            // default nil vid avkodning av gamla drafts
+    var programId: String?          // default nil vid avkodning av gamla drafts
 }
 ```
 - Har custom `init(from:)` för bakåtkompatibilitet — nya fält med default-värden avkodas tyst från äldre JSON
+- `suggestedWeight`/`suggestedReps` sparas **inte** i draft — beräknas om vid prefill från historik
+
+**`ExerciseFormData`** (in-memory, ej Codable):
+```swift
+struct ExerciseFormData {
+    let def: ExerciseDef
+    var sets: [SetFormData]
+    var shouldIncrease: Bool
+    var previousMaxWeight: Double
+    var suggestedWeight: String  // "+2.5 kg om ÖKA, annars samma" — visas som badge i ExerciseSection
+    var suggestedReps: String
+}
+```
 
 **Vikt-inmatning**: acceptera både punkt och komma som decimaltecken (`parseWeight`).
 **Vikt-visning**: formatera med `formatWeight` (NumberFormatter, locale: .current).
@@ -290,7 +303,8 @@ LockView → (Face ID) → MainTabView
 - Set-antal per övning definieras i programmet (1–6, default 3)
 - Kolumnrubriker: **SET, KG, REPS** — layout: SET=maxWidth leading, KG=80pt leading, REPS=120pt trailing
 - **Ihopfällbara sektioner**, **ÖKA-badge** (long press 500ms), **vila-timer** (triggas efter sista reps-fält — konfigureras globalt i SettingsView: 0/30/60/90/120s, `@AppStorage("restTimerSeconds")`, default 90s)
-- **PR-detektion**: jämför e1RM mot historik, visar PR-indikator
+- **PR-detektion**: jämför e1RM mot historik, visar PR-indikator vid KLAR
+- **Progressionsförslag**: badge under set-numret (`→ X kg × Y reps`) i accentfärg; försvinner när man börjar skriva. Förslag = föregående sessions bästa set; +2.5 kg om ÖKA är aktivt
 - **Tangentbordsverktygsfält**: NÄSTA + KLAR i homeAccent
 - **Draft**: sparas i UserDefaults (WorkoutDraft inkl. ihopfällningsläge och programId)
 - **Live Activity**: startas vid pass-start via `LiveActivityManager.shared` — visar aktuell övning, set-nummer och progress på Dynamic Island/Lock Screen. Uppdateras per set, avslutas vid KLAR eller dismiss.
@@ -323,12 +337,27 @@ LockView → (Face ID) → MainTabView
 - X-axeln visar månadsförkortning; om data spänner över flera år visas även tvåsiffrigt år (t.ex. "JAN\n25")
 - Svenska månadsförkortningar — punkter i förkortningarna strimmas bort
 - Statistikrad per sheet:
-  - ExerciseChartSheet: BÄSTA · SENASTE · PASS (enhet: kg, beräknat som e1RM via Epley: `vikt × (1 + reps/30)`)
+  - ExerciseChartSheet: BÄSTA · SENASTE · PASS (enhet: kg); toggle **1RM / VOL** i headern — VOL = sets × reps × kg per session
   - CardioChartSheet: LÄNGST · SENASTE · PASS (enhet: min/km); toggle TID/DISTANS om distansdata finns
   - EffortChartSheet: LÄTTAST · SENASTE · TUFFAST (enhet: /10, visas i grå 14pt); öppnas från ansträngningsraden i HistoryCard (styrkepass)
   - CardioEffortChartSheet: LÄTTAST · SENASTE · TUFFAST per kardioform; öppnas från ansträngningsraden i CardioCard
   - PeriodSummarySheet: STYRKA · VOLYM · KONDITION · TID + **månadsvy**: prickrad (en cirkel per dag, röd=styrka, grön=kondition, gradient=båda, grå=inget); **årsvy**: stapeldiagram per månad. Öppnas från månadsnamn (detent `.height(280)`) respektive årsrubrik (detent `.medium`) i HistoryView. Volym visas i kg (<1000) eller ton (≥1000). Nollvärden visas som `—`.
 - Tomt tillstånd om < 2 datapunkter
+
+### ProfileView (ingen accentfärg)
+- Profilbild (PhotosPicker) + redigerbart namn
+- **Toppstatistik**: STRENGTH · CARDIO · VOLUME · CARDIO TIME i fyra kolumner
+- **Streak**: aktuell streak som 72pt black-siffra + BEST, 14-dagars prickrad (blå=aktiv, grå=vilat, today har kontur)
+- **Senaste pass**: titel (programnamn eller kardioform), undertitel (övningar/minuter), relativ tid + kalenderdag
+- **Personliga rekord**: top-8 e1RM per övning, rankade 1–8, e1RM i historyAccent
+- **Veckosnitt**: AVG/WEEK · THIS WEEK · BEST WEEK
+
+### SettingsView (ingen accentfärg)
+- Sektioner: STRENGTH PROGRAMS · CARDIO TYPES · LIMITATIONS · TRAINING · HEALTH · PRIVACY · REMINDERS · DATA · ABOUT
+- **REMINDERS**: toggle, veckodagsknappar (Mån–Sön), tidväljare (auto-satt från senaste passstart, fallback 17:00)
+- **DATA**: backup-förklaring (iCloud Backup, vad som går förlorat), CSV-export via `UIActivityViewController`
+- **ABOUT → VERSION**: öppnar `WhatsNewSheet` med releasenoter
+- `#if DEBUG`-sektion: RESET ONBOARDING
 
 ---
 
@@ -446,6 +475,7 @@ Se [ROADMAP.md](ROADMAP.md) för alla planerade funktioner, beslutade designval 
 3. **Portrait only**
 4. `NSFaceIDUsageDescription` i Info.plist
 5. `NSHealthShareUsageDescription` och `NSHealthUpdateUsageDescription` i Info.plist
+6. `NSUserNotificationsUsageDescription` i Info.plist (träningspåminnelser)
 6. CloudKit ej aktiverat (kräver betalt Apple Developer-konto)
 7. Jost är **enda** typsnitt – inga system fonts
 8. Accentfärg är **enda** färginslaget utöver systemfärger (`.primary`, `.secondary`, `Color(.systemBackground)`)
