@@ -13,20 +13,6 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ## Planerade funktioner
 
-### TabView-omstrukturering
-Nuvarande: 4 tabbar (Träning · Historik · Profil · Inställningar). Ny struktur: 3 tabbar:
-
-```
-│  💪 Styrka  │  ♥ Kondition  │  📊 Historik  │
-```
-
-- **Styrka** → `ProgramListView` med programkort. Tryck program → `StrengthView` som `.fullScreenCover` (tab-bar dold under aktivt pass). Draft visas som "FORTSÄTT [PROGRAMNAMN]" överst.
-- **Kondition** → användarens kardio-lista. Tryck typ → `CardioView` som `.fullScreenCover`.
-- **Historik** → som nu.
-- **Inställningar** → `gear`-ikon i navigationsbaren, öppnar Settings/Profile som sheet.
-
-LockView ligger kvar som `.fullScreenCover` ovanpå TabView vid app-launch.
-
 ### ExerciseDef → SwiftData
 - `ExerciseDef`: statisk struct → SwiftData `@Model`
 - `ExerciseLog` får `exerciseDefId: String?`
@@ -95,6 +81,7 @@ Se `cardio_types.json` — 26 typer med `id`, `displayName`, `hkActivityType`, `
 - **HIIT** — timer-baserad träning; `HIITView` med nedräkning; HealthKit: `.highIntensityIntervalTraining`
 
 **Claudes förslag (avskrivna):**
+- **TabView-omstrukturering** — 3 tabbar (Styrka / Kondition / Historik) avskrivet. 4-tabbar med samlad Träning-tab (program + kondition på en sida) är rätt struktur, ger gott om plats.
 - **Siri Shortcuts** — saknar tydligt use case för en-användarapp
 - **Apple Watch-app** — Ruben har ingen klocka
 - **HKWorkoutActivity per övning** — segmentlängd = rörelse + vila, går inte att särskilja, ger ingen meningsfull data
@@ -117,4 +104,4 @@ Se `cardio_types.json` — 26 typer med `id`, `displayName`, `hkActivityType`, `
 - [x] CSV-export (2026-06-02)
 - [x] Haptics centraliserade (2026-06-02)
 
-*Senast uppdaterad: 2026-06-05 (GIF-system markerat klart)*
+*Senast uppdaterad: 2026-06-05*
