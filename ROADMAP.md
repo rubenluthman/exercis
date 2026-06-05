@@ -1,77 +1,81 @@
-# Exercis Roadmap
+# Exercis – Roadmap
 
-Allt planerat, beslutat och parkerat på ett ställe.
-Uppdateras löpande under sessioner och vid apprevision.
+Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under sessioner och vid apprevision.
 
-**Arbetsflöde:** när något är klart — flytta det till **Klart**-sektionen längst ner. Stryk inte bara över det där det står.
-
----
-
-
-## Planerade funktioner
-
-*(Inga kvarstående)*
+**Arbetsflöde:** när något är klart — flytta det till **Klart**-sektionen längst ner. Stryk inte bara över det där det står. Håll två kategorier isär: Rubens explicita beslut och Claudes rekommendationer — det ska aldrig vara oklart vilken kategori något tillhör.
 
 ---
 
-## Beslutade designval (ej byggt än)
+## Rubens beslut (ej byggt)
 
-*(Inga kvarstående — alla designval är implementerade)*
-
----
-
-## Inför App Store (kräver Developer-konto)
-
-- **iCloud Sync (CloudKit)** — kräver betalt konto
-- **GIF-licens** — byt hasaneyldrm mot licensierad källa (ExerciseDB Pro) innan submission
-- **GIF-filer i git** — ~~finns i historik trots .gitignore, behöver städas~~ rensat med git-filter-repo (2026-06-05)
-- **Widgets** — streak och "nästa program"; kräver Widget Extension + App Group
+- **Övningsbyte intra-pass** — byt övning mitt i ett pass utan att förstöra strukturen; spara original + ersättning i loggen
+- **Rest-timer per övning** — default lagrad i `ProgramExercise.restSeconds` istället för global AppStorage-inställning
 
 ---
 
-## Parkerat
+## Claudes rekommendationer
+
+### Inför App Store (kräver Developer-konto)
+
+- **CloudKit-sync** — utan det förlorar användaren all data vid telefonbyte utan aktiv backup; första prioritet när betalt konto finns
+- **GIF-licens** — byt hasaneyldrm-källa mot licensierad (ExerciseDB Pro) innan submission
+- **App Group aktivering** — `group.rubenluthman.Exercis` måste aktiveras i Xcode Signing & Capabilities för båda targets (Exercis + ExercisWidget) för att widgeten ska fungera
+
+### Hög prioritet
+
+- **iOS 26 / Knappar** — `primaryButtonStyle` ger glass på iOS 26, fylld rektangel på äldre; bör testas visuellt — glass kan skära sig med den geometriska, minimalistiska stilen
+
+### Lägre prioritet
+
+- **Sheet-bakgrunder** — `.background(Color.appBackground)` på sheets bryter Liquid Glass-genomskinligheten på iOS 26; bör testas visuellt med fullt fokus
+- **CSV-export: komma i övningsnamn** — `CSVExportTests` dokumenterar att ett kommatecken i ett övningsnamn ger fel kolumnantal; fixas med RFC 4180-citering
+- **HealthKit-behörighetsbegäran** — begärs idag per öppning av StrengthView/CardioView; bör konsolideras till en begäran vid app-start
+
+---
+
+## Parkerat (avskrivet)
 
 **Rubens beslut:**
-- **HIIT** — timer-baserad träning; `HIITView` med nedräkning; HealthKit: `.highIntensityIntervalTraining`
+- **HIIT-timer** — oklart use case
+- **4-tab-layout** — final, förhandlas inte
+- **Apple Watch-app** — Ruben har ingen klocka
+- **Siri Shortcuts** — single-user-app, låg prioritet
 
 **Claudes förslag (avskrivna):**
-- **TabView-omstrukturering** — 3 tabbar (Styrka / Kondition / Historik) avskrivet. 4-tabbar med samlad Träning-tab (program + kondition på en sida) är rätt struktur, ger gott om plats.
-- **ExerciseDef → SwiftData `@Model`** — inget praktiskt behov; prefill per program fungerar redan via `programId` på `WorkoutSession`.
-- **HKWorkoutActivity per övning** — segmentlängd = rörelse + vila, går inte att särskilja, ger ingen meningsfull data
-- **Siri Shortcuts** — saknar tydligt use case för en-användarapp
-- **Apple Watch-app** — Ruben har ingen klocka
+- **TabView-omstrukturering** — 3 tabbar avskrivet; nuvarande 4-tabbar med samlad Träning-tab är rätt
+- **ExerciseDef → SwiftData `@Model`** — inget praktiskt behov, prefill fungerar via `programId`
+- **HKWorkoutActivity per övning** — rörelse/vila går inte att särskilja, ger ingen meningsfull data
 - **Swift Packages** (`swift-algorithms`, `swift-collections`) — inte motiverat förrän appen växer
+- **`sv_SE` hårdkodat** — avsiktligt val för svensk single-user-app, inget att åtgärda
 
 ---
 
 ## Klart
 
-- [x] Onboarding — 2 steg (program-grid + konditionscheckboxar), standardprogram seedas (2026-06-05)
-- [x] GIF-system — 155 övningar med GIF (accentfärg + tryckbar), GifSheet med WKWebView + muskelinfo (2026-06-05)
-- [x] Övningsbeskrivningar — 186 granskade, 8 faktafel åtgärdade (2026-06-05)
-- [x] exercises_def.json + cardio_types.json — AI-revision via Gemini + ChatGPT (2026-06-05)
+- [x] Onboarding — 3 steg (program-grid + konditionscheckboxar + Apple Health), standardprogram seedas
+- [x] GIF-system — 155 övningar med GIF (accentfärg + tryckbar), GifSheet med WKWebView + muskelinfo
+- [x] Övningsbeskrivningar — 186 granskade, 8 faktafel åtgärdade
 - [x] Begränsningsfilter — kroppsbegränsningar + programbegränsningar i ExercisePickerView
-- [x] Enhetssystem lbs/miles (2026-06-04)
-- [x] TrainingView — Träning-tab med program + konditionsformer (2026-06-04)
-- [x] Inställningar som egen tab (2026-06-04)
-- [x] Automatisk tidsloggning för kondition (2026-06-04)
-- [x] Aliases + beskrivningar för alla övningar — 186/186 (2026-06-04)
-- [x] CSV-export (2026-06-02)
-- [x] Haptics centraliserade (2026-06-02)
-- [x] Onboarding-dubletter vid reinstall (2026-06-05)
-- [x] Zombie Live Activity vid krasch (2026-06-05)
-- [x] SwiftData-fel synliga i UI (2026-06-05)
-- [x] Lokalisering — engelska basspråk, svenska via sv.lproj (2026-06-05)
-- [x] XCTest-target + första tester (Epley, viktsformatering) (2026-06-05)
-- [x] WorkoutDraft encode/decode + bakåtkompatibilitet (2026-06-05)
-- [x] Migrationstester — CardioType + övningsnamn (2026-06-05)
-- [x] CardioType-mappningstester — tracksElevation + HKWorkoutActivityType (2026-06-05)
-- [x] hkActivityType extraherad till CardioType — enda sanningskälla (2026-06-05)
-- [x] Fix: duplikat-alias-krasch i migrateExerciseNames (2026-06-05)
-- [x] Fix: lokalisering i hjälpfunktioner (Text(LocalizedStringKey)) (2026-06-05)
-- [x] ExerciseLibrary-tester — laddning, find, filtrering, BodyLimitation, ProgramConstraint (2026-06-05)
-- [x] HistoryView-grupperingstester — månader, sortering, årsrubrik (2026-06-05)
-- [x] Fix: duplikat övning Military Press → Seated Military Press i exercises_def.json (2026-06-05)
-
-*Senast uppdaterad: 2026-06-05*
-
+- [x] Enhetssystem lbs/miles
+- [x] TrainingView — Träning-tab med program + konditionsformer
+- [x] Automatisk tidsloggning för kondition
+- [x] CSV-export
+- [x] Haptics centraliserade
+- [x] Lokalisering — engelska basspråk, svenska via sv.lproj
+- [x] SwiftData VersionedSchema v1 + ExercisMigrationPlan
+- [x] `#if DEBUG` OSLog-loggning på alla context.save()
+- [x] XCTest-target — Epley, viktsformatering, CardioType-mappning, WorkoutDraft, ExerciseLibrary, HistoryView-gruppering, HealthKit-kalorier, PR-detektion, ProgramSeeder, CSV-export, PeriodSummary-aggregationer, LiveActivity-färger
+- [x] iOS 26 Tab bar — `tabBarMinimizeBehavior(.onScrollDown)`
+- [x] iOS 26 Knappar — `primaryButtonStyle` adaptiv (glass / fylld rektangel)
+- [x] GifSheet accessibilityLabel — "Animation showing [övningsnamn]"
+- [x] Volymtoggle i ExerciseChartSheet (1RM / VOL)
+- [x] ProfileView — streak, senaste pass, personliga rekord, veckosnitt
+- [x] Progressionsförslag — badge under set-numret (→ X kg × Y reps), +2.5 kg vid ÖKA
+- [x] Träningspåminnelser — REMINDERS-sektion i Settings, veckodagar + autotid från historik
+- [x] Hemskärmswidget — small (streak + nästa program) + medium (+ senaste pass)
+- [x] WhatsNewSheet — releasenoter öppnas från VERSION-raden i Settings
+- [x] Export-bugg åtgärdad — race condition i SettingsView
+- [x] GIF-filer rensade ur git-historik med git-filter-repo
+- [x] Fix: duplikat övning Military Press → Seated Military Press
+- [x] Fix: lokalisering i hjälpfunktioner
+- [x] Fix: duplikat-alias-krasch i migrateExerciseNames
