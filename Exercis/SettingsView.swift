@@ -194,7 +194,7 @@ struct SettingsView: View {
     }
 
     private func sectionLabel(_ title: String) -> some View {
-        Text(title)
+        Text(LocalizedStringKey(title))
             .font(.jost(.medium, size: 10))
             .kerning(1.5)
             .foregroundStyle(Color(.secondaryLabel))
@@ -206,12 +206,12 @@ struct SettingsView: View {
     private func toggleRow(title: String, description: String?, isOn: Binding<Bool>) -> some View {
         HStack(alignment: description != nil ? .top : .center, spacing: 16) {
             VStack(alignment: .leading, spacing: 3) {
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.jost(.semibold, size: 12))
                     .kerning(1.5)
                     .foregroundStyle(.primary)
                 if let description {
-                    Text(description)
+                    Text(LocalizedStringKey(description))
                         .font(.jost(.regular, size: 12))
                         .foregroundStyle(Color(.secondaryLabel))
                         .fixedSize(horizontal: false, vertical: true)
@@ -230,7 +230,7 @@ struct SettingsView: View {
             HStack(spacing: 10) {
                 Image(systemName: systemImage)
                     .font(.jost(.medium, size: 14))
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.jost(.semibold, size: 12))
                     .kerning(1.5)
                 Spacer()

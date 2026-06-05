@@ -144,7 +144,7 @@ struct ExercisePickerView: View {
     private func filterChip(label: String, count: Int, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 4) {
-                Text(count > 0 ? "\(label) \(count)" : label)
+                Text(count > 0 ? "\(String(localized: String.LocalizationValue(label))) \(count)" : String(localized: String.LocalizationValue(label)))
                     .font(.jost(.semibold, size: 11))
                     .kerning(1)
                 Image(systemName: "chevron.down")

@@ -273,7 +273,7 @@ struct PeriodSummarySheet: View {
     @ViewBuilder
     private func statBlock(label: String, value: String, unit: String? = nil, alignment: HorizontalAlignment = .leading) -> some View {
         VStack(alignment: alignment, spacing: 4) {
-            Text(label)
+            Text(LocalizedStringKey(label))
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
                 .foregroundColor(Color(.secondaryLabel))
@@ -297,7 +297,7 @@ struct PeriodSummarySheet: View {
             Circle()
                 .fill(color)
                 .frame(width: 6, height: 6)
-            Text(label)
+            Text(LocalizedStringKey(label))
                 .font(.jost(.medium, size: 9))
                 .kerning(1.5)
                 .foregroundColor(Color(.secondaryLabel))
