@@ -14,7 +14,7 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ~~3. **CSV-export: share sheet**~~ — var redan implementerat via `UIActivityViewController` (2026-06-05)
 
-4. **SwiftData-fel synliga** — byt `try? context.save()` mot `do/try/catch` med en `@State var saveError: Bool` och ett `.alert("Kunde inte spara", ...)` i berörda vyer (StrengthView, CardioView). Single-user OK med tyst fallback, men en synlig varning vid faktiskt fel förhindrar att data tyst försvinner.
+~~4. **SwiftData-fel synliga**~~ — klart (2026-06-05)
 
 5. **Lokalisering** — lägg till `sv.lproj/Localizable.strings` med alla synliga UI-strängar. SwiftUI `Text()` med strängliteraler plockar upp dem automatiskt; icke-SwiftUI-strängar kräver `String(localized:)`. Kartlägg strängar med `grep -r 'Text("' --include="*.swift"`. Engelska är basspråk — svenska-filen är det enda som behöver skapas.
 
