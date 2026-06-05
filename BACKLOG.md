@@ -36,7 +36,6 @@ Två kategorier: **Rubens beslut** (explicit bekräftade val) och **Claudes reko
 
 - **Tillgänglighet: GifSheet** — WKWebView + base64 är osynlig för VoiceOver. Kräver `accessibilityLabel` på övningen.
 
-- **Tillgänglighet: Effort-picker** — om custom: lägg till `accessibilityValue` + `accessibilityAdjustableAction`.
 
 - **`#if DEBUG`-loggning i SwiftData saves** — `try? context.save()` loggar ingenting idag. Tre rader, noll påverkan på release.
 
