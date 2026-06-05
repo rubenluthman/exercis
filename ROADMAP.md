@@ -3,20 +3,14 @@
 Allt planerat, beslutat och parkerat på ett ställe.
 Uppdateras löpande under sessioner och vid apprevision.
 
+**Arbetsflöde:** när något är klart — flytta det till **Klart**-sektionen längst ner. Stryk inte bara över det där det står.
+
 ---
 
 
 ## Planerade funktioner
 
-~~1. **Onboarding-dubletter vid reinstall**~~ — klart (2026-06-05)
-
-~~2. **Zombie Live Activity vid krasch**~~ — klart (2026-06-05)
-
-~~3. **CSV-export: share sheet**~~ — var redan implementerat via `UIActivityViewController` (2026-06-05)
-
-~~4. **SwiftData-fel synliga**~~ — klart (2026-06-05)
-
-~~5. **Lokalisering**~~ — klart (2026-06-05)
+*(Inga kvarstående)*
 
 ---
 
@@ -64,6 +58,11 @@ Uppdateras löpande under sessioner och vid apprevision.
 - [x] Aliases + beskrivningar för alla övningar — 186/186 (2026-06-04)
 - [x] CSV-export (2026-06-02)
 - [x] Haptics centraliserade (2026-06-02)
+- [x] Onboarding-dubletter vid reinstall (2026-06-05)
+- [x] Zombie Live Activity vid krasch (2026-06-05)
+- [x] SwiftData-fel synliga i UI (2026-06-05)
+- [x] Lokalisering — engelska basspråk, svenska via sv.lproj (2026-06-05)
+- [x] XCTest-target + första tester (Epley, viktsformatering) (2026-06-05)
 
 *Senast uppdaterad: 2026-06-05*
 

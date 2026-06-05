@@ -46,7 +46,7 @@ final class WeightFormattingTests: XCTestCase {
     func testFormatWeightRoundTrip() {
         let value = 82.5
         let formatted = formatWeight(value)
-        let parsed = parseWeight(formatted)
+        let parsed = try XCTUnwrap(parseWeight(formatted))
         XCTAssertEqual(parsed, value, accuracy: 0.001)
     }
 }
