@@ -6,11 +6,10 @@ import SwiftData
 final class PeriodSummaryAggregationTests: XCTestCase {
 
     private var container: ModelContainer!
-    private var context: ModelContext!
+    private var context: ModelContext { container.mainContext }
 
     override func setUpWithError() throws {
         container = try makeTestContainer()
-        context = ModelContext(container)
     }
 
     // Mirrors PeriodSummarySheet.totalVolume
@@ -49,8 +48,10 @@ final class PeriodSummaryAggregationTests: XCTestCase {
         let set = SetLog(setNumber: 1, weight: 100, reps: 5)
         set.exerciseLog = log
         context.insert(set)
+        try context.save()
 
-        XCTAssertEqual(totalVolume([session]), 500, accuracy: 0.001)
+        let sessions = try context.fetch(FetchDescriptor<WorkoutSession>())
+        XCTAssertEqual(totalVolume(sessions), 500, accuracy: 0.001)
     }
 
     func testVolumeMultipleSetsAndExercises() throws {
@@ -66,8 +67,10 @@ final class PeriodSummaryAggregationTests: XCTestCase {
         log2.session = session; context.insert(log2)
         let s3 = SetLog(setNumber: 1, weight: 80, reps: 8); s3.exerciseLog = log2; context.insert(s3)
 
+        try context.save()
         // 100×5 + 100×5 + 80×8 = 500 + 500 + 640 = 1640
-        XCTAssertEqual(totalVolume([session]), 1640, accuracy: 0.001)
+        let sessions = try context.fetch(FetchDescriptor<WorkoutSession>())
+        XCTAssertEqual(totalVolume(sessions), 1640, accuracy: 0.001)
     }
 
     func testVolumeAcrossMultipleSessions() throws {
@@ -79,8 +82,10 @@ final class PeriodSummaryAggregationTests: XCTestCase {
         let l2 = ExerciseLog(name: "Squat", orderIndex: 0); l2.session = s2; context.insert(l2)
         let set2 = SetLog(setNumber: 1, weight: 120, reps: 3); set2.exerciseLog = l2; context.insert(set2)
 
+        try context.save()
         // 500 + 360 = 860
-        XCTAssertEqual(totalVolume([s1, s2]), 860, accuracy: 0.001)
+        let sessions = try context.fetch(FetchDescriptor<WorkoutSession>())
+        XCTAssertEqual(totalVolume(sessions), 860, accuracy: 0.001)
     }
 
     // MARK: - Volume text formatting

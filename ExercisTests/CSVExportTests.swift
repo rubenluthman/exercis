@@ -32,11 +32,6 @@ final class CSVExportTests: XCTestCase {
 
     // MARK: - Headers
 
-    func testStrengthCSVHasCorrectHeader() {
-        let rows = ["datum,program,övning,set,kg,reps,e1RM"]
-        XCTAssertEqual(rows.joined(separator: "\n"), "datum,program,övning,set,kg,reps,e1RM")
-    }
-
     func testCardioCSVHasCorrectHeader() {
         let csv = cardioCSV([])
         XCTAssertEqual(csv, "datum,typ,minuter,km,ansträngning")
