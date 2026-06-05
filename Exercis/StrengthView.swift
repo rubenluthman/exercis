@@ -44,7 +44,7 @@ struct StrengthView: View {
     @State private var effortDragOffset: CGFloat = 0
     @State private var didCompleteSession = false
     @State private var restSecondsLeft: Int? = nil
-    @State private var restTimerTask: Task<Void, Never>? = nil
+    private let restTicker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var newPRNames: [String] = []
     @AppStorage("restTimerSeconds") private var restTimerDuration = 90
     @FocusState private var activeField: WorkoutField?
@@ -196,6 +196,17 @@ struct StrengthView: View {
             if !didCompleteSession { LiveActivityManager.shared.end() }
             #endif
         }
+        .onReceive(restTicker) { _ in
+            guard var remaining = restSecondsLeft else { return }
+            if remaining > 0 {
+                remaining -= 1
+                restSecondsLeft = remaining
+                if remaining == 0 {
+                    restSecondsLeft = nil
+                    Haptics.notification(.success)
+                }
+            }
+        }
     }
 
     // MARK: Sub-views
@@ -239,7 +250,6 @@ struct StrengthView: View {
                 let hasAnyData = exerciseForms.contains { $0.sets.contains { !$0.weight.isEmpty || !$0.reps.isEmpty } }
                 if hasAnyData {
                     activeField = nil
-                    restTimerTask?.cancel()
                     restSecondsLeft = nil
                     let saved = UserDefaults.standard.integer(forKey: "workoutEffortScore")
                     lastEffortScore = saved > 0 ? saved : 5
@@ -328,7 +338,7 @@ struct StrengthView: View {
     }
 
     private func saveDraftAndReturn() {
-        restTimerTask?.cancel()
+        restSecondsLeft = nil
         #if canImport(ActivityKit)
         LiveActivityManager.shared.end()
         #endif
@@ -377,7 +387,6 @@ struct StrengthView: View {
                 .monospacedDigit()
             Spacer()
             Button {
-                restTimerTask?.cancel()
                 restSecondsLeft = nil
             } label: {
                 Image(systemName: "xmark")
@@ -393,20 +402,7 @@ struct StrengthView: View {
 
     private func startRestTimer() {
         guard restTimerDuration > 0 else { return }
-        restTimerTask?.cancel()
-        let duration = restTimerDuration
-        restSecondsLeft = duration
-        restTimerTask = Task { @MainActor in
-            while (restSecondsLeft ?? 0) > 0 {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                if Task.isCancelled { return }
-                restSecondsLeft? -= 1
-            }
-            if !Task.isCancelled {
-                restSecondsLeft = nil
-                Haptics.notification(.success)
-            }
-        }
+        restSecondsLeft = restTimerDuration
     }
 
     // MARK: - PR detection

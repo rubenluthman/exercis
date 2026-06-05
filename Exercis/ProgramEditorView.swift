@@ -141,15 +141,14 @@ struct ProgramEditorView: View {
 
     private var colorPicker: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 6), spacing: 12) {
-            ForEach(Color.programPalette.indices, id: \.self) { i in
-                let name = paletteNames[i]
-                let isSelected = colorName == name
+            ForEach(ProgramColor.allCases, id: \.rawValue) { pc in
+                let isSelected = colorName == pc.rawValue
                 Button {
                     Haptics.selection()
-                    colorName = name
+                    colorName = pc.rawValue
                 } label: {
                     Circle()
-                        .fill(Color.programPalette[i])
+                        .fill(pc.color)
                         .frame(width: 36, height: 36)
                         .overlay {
                             if isSelected {
@@ -164,12 +163,6 @@ struct ProgramEditorView: View {
         }
         .padding(.vertical, 4)
     }
-
-    private let paletteNames = [
-        "paletteIntenseRed", "paletteOrange", "paletteYellow", "paletteLime",
-        "paletteGreen", "paletteTeal", "paletteCyan", "paletteLightBlue",
-        "paletteDarkBlue", "palettePurple", "paletteMagenta", "palettePink"
-    ]
 
     // MARK: - Exercise row
 

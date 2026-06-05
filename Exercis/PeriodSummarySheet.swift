@@ -10,27 +10,29 @@ struct SummaryPeriod: Identifiable {
 
 struct PeriodSummarySheet: View {
     let period: SummaryPeriod
-    @Query(sort: \WorkoutSession.date) private var allWorkouts: [WorkoutSession]
-    @Query(sort: \CardioSession.date) private var allCardio: [CardioSession]
+    @Query private var workouts: [WorkoutSession]
+    @Query private var cardio: [CardioSession]
 
     private let cal = Calendar.current
 
-    // MARK: - Filtered data
-
-    private var workouts: [WorkoutSession] {
-        allWorkouts.filter { inPeriod($0.date) }
-    }
-
-    private var cardio: [CardioSession] {
-        allCardio.filter { inPeriod($0.date) }
-    }
-
-    private func inPeriod(_ date: Date) -> Bool {
-        let c = cal.dateComponents([.year, .month], from: date)
+    init(period: SummaryPeriod) {
+        self.period = period
+        let cal = Calendar.current
+        let start: Date
+        let end: Date
         if let month = period.month {
-            return c.year == period.year && c.month == month
+            var c = DateComponents(); c.year = period.year; c.month = month; c.day = 1
+            start = cal.date(from: c) ?? .distantPast
+            end = cal.date(byAdding: .month, value: 1, to: start) ?? .distantFuture
+        } else {
+            var c = DateComponents(); c.year = period.year; c.month = 1; c.day = 1
+            start = cal.date(from: c) ?? .distantPast
+            end = cal.date(byAdding: .year, value: 1, to: start) ?? .distantFuture
         }
-        return c.year == period.year
+        _workouts = Query(filter: #Predicate<WorkoutSession> { $0.date >= start && $0.date < end },
+                          sort: \.date)
+        _cardio   = Query(filter: #Predicate<CardioSession>  { $0.date >= start && $0.date < end },
+                          sort: \.date)
     }
 
     // MARK: - Stats

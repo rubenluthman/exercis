@@ -11,16 +11,41 @@ extension Color {
     static let appBackground = Color(.systemBackground)
     static let appDivider    = Color(.separator)
 
-    // Program color palette — accessorer genereras automatiskt av Xcode från Assets.xcassets
-    // Använd Color.paletteIntenseRed, Color.paletteOrange etc. direkt
-    static let programPalette: [Color] = [
-        Color("paletteIntenseRed"), Color("paletteOrange"),
-        Color("paletteYellow"),     Color("paletteLime"),
-        Color("paletteGreen"),      Color("paletteTeal"),
-        Color("paletteCyan"),       Color("paletteLightBlue"),
-        Color("paletteDarkBlue"),   Color("palettePurple"),
-        Color("paletteMagenta"),    Color("palettePink")
-    ]
+    static let programPalette: [Color] = ProgramColor.allCases.map(\.color)
+}
+
+enum ProgramColor: String, CaseIterable {
+    case intenseRed = "paletteIntenseRed"
+    case orange     = "paletteOrange"
+    case yellow     = "paletteYellow"
+    case lime       = "paletteLime"
+    case green      = "paletteGreen"
+    case teal       = "paletteTeal"
+    case cyan       = "paletteCyan"
+    case lightBlue  = "paletteLightBlue"
+    case darkBlue   = "paletteDarkBlue"
+    case purple     = "palettePurple"
+    case magenta    = "paletteMagenta"
+    case pink       = "palettePink"
+
+    var color: Color { Color(rawValue) }
+
+    var darkHex: String {
+        switch self {
+        case .intenseRed: return "F97775"
+        case .orange:     return "F18435"
+        case .yellow:     return "D59800"
+        case .lime:       return "A7AE00"
+        case .green:      return "63BD5C"
+        case .teal:       return "00C49A"
+        case .cyan:       return "00C0D0"
+        case .lightBlue:  return "00B3F7"
+        case .darkBlue:   return "6DA2FF"
+        case .purple:     return "A98FFF"
+        case .magenta:    return "D37FDF"
+        case .pink:       return "EE76AE"
+        }
+    }
 }
 
 // MARK: - Typography

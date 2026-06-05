@@ -28,21 +28,7 @@ final class LiveActivityManager {
     }
 
     private static func hexForColorName(_ name: String) -> String {
-        switch name {
-        case "paletteIntenseRed": return "F97775"
-        case "paletteOrange":     return "F18435"
-        case "paletteYellow":     return "D59800"
-        case "paletteLime":       return "A7AE00"
-        case "paletteGreen":      return "63BD5C"
-        case "paletteTeal":       return "00C49A"
-        case "paletteCyan":       return "00C0D0"
-        case "paletteLightBlue":  return "00B3F7"
-        case "paletteDarkBlue":   return "6DA2FF"
-        case "palettePurple":     return "A98FFF"
-        case "paletteMagenta":    return "D37FDF"
-        case "palettePink":       return "EE76AE"
-        default:                  return "F97775"
-        }
+        ProgramColor(rawValue: name)?.darkHex ?? "F97775"
     }
 }
 #endif
