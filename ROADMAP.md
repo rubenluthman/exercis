@@ -8,6 +8,16 @@ Uppdateras löpande under sessioner och vid apprevision.
 
 ## Planerade funktioner
 
+- **Lokalisering** — lägg till `sv.lproj/Localizable.strings` med alla synliga UI-strängar. SwiftUI `Text()` med strängliteraler plockar upp dem automatiskt; icke-SwiftUI-strängar kräver `String(localized:)`. Kartlägg strängar med `grep -r 'Text("' --include="*.swift"`. Engelska är basspråk — svenska-filen är det enda som behöver skapas.
+
+- **CSV-export: share sheet** — byt nuvarande export mot `UIActivityViewController` (eller SwiftUI `ShareLink`) så att iOS standard share sheet visas. Ruben kan då spara till Filer, AirDrop, maila etc. Liten förändring i ProfileView/SettingsView.
+
+- **SwiftData-fel synliga** — byt `try? context.save()` mot `do/try/catch` med en `@State var saveError: Bool` och ett `.alert("Kunde inte spara", ...)` i berörda vyer (StrengthView, CardioView). Single-user OK med tyst fallback, men en synlig varning vid faktiskt fel förhindrar att data tyst försvinner.
+
+- **Zombie Live Activity vid krasch** — i `StrengthView.onAppear`: iterera `Activity<ExercisActivityAttributes>.activities`, avsluta alla vars `contentState` inte matchar aktuell session. Förhindrar att en gammal Live Activity sitter kvar på Lock Screen i upp till 8 timmar efter krasch.
+
+- **Onboarding-dubletter vid reinstall** — kontrollera `UserDefaults.standard.bool(forKey: "hasSeededPrograms")` i seedern; om sant, skippa seeding. Sätt nyckeln till `true` efter första seedning. Förhindrar att standardprogram dupliceras om UserDefaults rensas medan SwiftData-databasen finns kvar.
+
 ---
 
 ## Beslutade designval (ej byggt än)
@@ -56,3 +66,4 @@ Uppdateras löpande under sessioner och vid apprevision.
 - [x] Haptics centraliserade (2026-06-02)
 
 *Senast uppdaterad: 2026-06-05*
+
