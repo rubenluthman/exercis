@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
 
+    @AppStorage("onboardingCompleted")     private var onboardingCompleted = true
     @AppStorage("restTimerSeconds")        private var restTimerSeconds = 90
     @AppStorage("useImperialUnits")        private var useImperialUnits = false
     @AppStorage("healthKitSyncEnabled")    private var healthKitSyncEnabled = true
@@ -155,6 +156,16 @@ struct SettingsView: View {
                     }
 
                     ThinDivider()
+
+                    #if DEBUG
+                    sectionBlock {
+                        sectionLabel("DEBUG")
+                        actionRow(title: "RESET ONBOARDING", systemImage: "arrow.counterclockwise") {
+                            onboardingCompleted = false
+                        }
+                    }
+                    ThinDivider()
+                    #endif
 
                     sectionBlock {
                         sectionLabel("ABOUT")

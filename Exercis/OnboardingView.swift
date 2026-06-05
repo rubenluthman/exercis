@@ -14,6 +14,7 @@ struct OnboardingView: View {
     @State private var selectedProgramIds: Set<UUID> = []
     @State private var selectedCardioTypes: Set<String> = []
     @State private var editingProgram: WorkoutProgram? = nil
+    @State private var healthKitDone = false
 
     // Cardio groups for step 2
     private let cardioGroups: [(title: String, types: [CardioType])] = [
@@ -32,8 +33,10 @@ struct OnboardingView: View {
 
             if step == 1 {
                 programStep
-            } else {
+            } else if step == 2 {
                 cardioStep
+            } else {
+                healthStep
             }
         }
         .animation(.easeInOut(duration: 0.22), value: step)
@@ -57,8 +60,10 @@ struct OnboardingView: View {
                 .padding(.top, 40)
 
             Text(step == 1
-                 ? "Välj dina träningsprogram"
-                 : "Vilka konditionsformer tränar du?")
+                 ? "Choose your training programs"
+                 : step == 2
+                 ? "Which cardio types do you train?"
+                 : "Connect Apple Health")
                 .font(.jost(.regular, size: 15))
                 .foregroundStyle(Color(.secondaryLabel))
                 .multilineTextAlignment(.center)
@@ -179,9 +184,53 @@ struct OnboardingView: View {
             }
 
             bottomBar(
-                primary: "KOM IGÅNG",
+                primary: "NEXT",
                 primaryEnabled: true,
-                primaryAction: { completeOnboarding() },
+                primaryAction: { step = 3 },
+                skipAction: { step = 3 }
+            )
+        }
+    }
+
+    // MARK: - Step 3: Apple Health
+
+    private var healthStep: some View {
+        VStack(spacing: 0) {
+            Spacer()
+            VStack(spacing: 24) {
+                Image(systemName: "heart.fill")
+                    .font(.system(size: 52))
+                    .foregroundStyle(Color.homeAccent)
+
+                VStack(spacing: 8) {
+                    Text("APPLE HEALTH")
+                        .font(.jost(.bold, size: 17))
+                        .kerning(2)
+                        .foregroundStyle(.primary)
+
+                    Text("Exercis saves your workouts to Apple Health and reads your body weight to calculate calorie burn.")
+                        .font(.jost(.regular, size: 14))
+                        .foregroundStyle(Color(.secondaryLabel))
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding(.horizontal, 32)
+            Spacer()
+
+            bottomBar(
+                primary: healthKitDone ? "GET STARTED" : "CONNECT HEALTH",
+                primaryEnabled: true,
+                primaryAction: {
+                    if healthKitDone {
+                        completeOnboarding()
+                    } else {
+                        Task {
+                            await HealthKitManager.shared.requestAuthorization()
+                            healthKitDone = true
+                        }
+                    }
+                },
                 skipAction: { completeOnboarding() }
             )
         }
