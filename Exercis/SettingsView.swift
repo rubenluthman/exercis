@@ -167,7 +167,7 @@ struct SettingsView: View {
                                 .font(.system(size: 14))
                                 .foregroundStyle(Color(.tertiaryLabel))
                                 .padding(.top, 1)
-                            Text("Your data is backed up via iCloud Backup when enabled on your device. Export CSV as an extra copy.")
+                            Text("Your data is saved locally and included in iCloud Backup. If you restore from backup, everything is preserved. Setting up a new phone without restoring — or with Backup disabled — will result in data loss. Export CSV as an extra copy.")
                                 .font(.jost(.regular, size: 12))
                                 .foregroundStyle(Color(.secondaryLabel))
                                 .fixedSize(horizontal: false, vertical: true)
