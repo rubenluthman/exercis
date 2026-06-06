@@ -61,7 +61,7 @@ extension ExerciseDef {
         ExerciseLibrary.shared.find(id: id)
     }
 
-    static let migrationVersion = 5
+    static let migrationVersion = 6
 }
 
 // MARK: - JSON Codable

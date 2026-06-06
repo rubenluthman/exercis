@@ -50,7 +50,7 @@ struct ExercisePickerView: View {
         if searchText.isEmpty {
             base = ExerciseDef.all
         } else {
-            let searchStrings = ExerciseDef.all.map { "\($0.displayName) \($0.primaryMuscles.joined(separator: " "))" }
+            let searchStrings = ExerciseDef.all.map { "\($0.displayName) \($0.aliases.joined(separator: " ")) \($0.primaryMuscles.joined(separator: " "))" }
             let results = fuse.search(searchText, in: searchStrings)
             base = results.sorted { $0.score < $1.score }.map { ExerciseDef.all[$0.index] }
         }

@@ -10,15 +10,24 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 ---
 
+## Kräver Apple Developer-konto (TestFlight + App Store)
+
+- **Betalt Apple Developer Program-konto** ($99/år) — förutsättning för allt nedan
+- **CloudKit-sync** — utan det förlorar användaren all data vid telefonbyte/ominstallation; kritiskt redan från första TestFlight-runda eftersom testare ofta byter enhet
+- **GIF-licens** — byt hasaneyldrm-källa mot licensierad (ExerciseDB Pro) innan submission
+- **App Group aktivering** — `group.rubenluthman.Exercis` måste aktiveras i Xcode Signing & Capabilities för båda targets (Exercis + ExercisWidget) för att widgeten ska fungera
+- **Export-efterlevnad** — `ITSAppUsesNonExemptEncryption` i Info.plist måste vara korrekt satt för App Store Connect-uppladdning
+- **Integritetspolicy (privacy policy URL)** — krävs i App Store Connect-metadata p.g.a. HealthKit-data
+- **Granskarinstruktioner för Face ID** — App Review/TestFlight-granskare behöver veta hur de loggar in utan din biometri
+- **Build-nummerhantering** — etablera rutin för unikt build-nummer per uppladdning
+
+---
+
 ## Claudes rekommendationer
 
 ### Kodbas
 
-### Inför App Store (kräver Developer-konto)
-
-- **CloudKit-sync** — utan det förlorar användaren all data vid telefonbyte utan aktiv backup; första prioritet när betalt konto finns
-- **GIF-licens** — byt hasaneyldrm-källa mot licensierad (ExerciseDB Pro) innan submission
-- **App Group aktivering** — `group.rubenluthman.Exercis` måste aktiveras i Xcode Signing & Capabilities för båda targets (Exercis + ExercisWidget) för att widgeten ska fungera
+- **Bygg ut alias-täckning i `exercises_def.json`** — gå igenom samtliga övningar och lägg till `aliases` för alla kända alternativa namn (t.ex. "Lateral Raises"/"Lateral Raise" på "Side Raise"). Kombinera med att `searchStrings` i `ExercisePickerView` även inkluderar `aliases` (se commit som lade till detta) — annars hjälper alias inte vid sökning, bara vid migrering av historisk data.
 
 ---
 

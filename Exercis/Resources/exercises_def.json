@@ -331,7 +331,7 @@
     ],
     "secondaryMuscles": [],
     "equipment": [
-      "machine"
+      "dumbbell"
     ],
     "contraindications": [
       "elbow_flexion_loaded"
@@ -354,7 +354,7 @@
       "Dumbbell Preacher Curl",
       "Scott Curl Dumbbell"
     ],
-    "description": "Sit at a preacher bench and rest the back of your upper arm on the pad. Curl the dumbbell upward until fully flexed, then lower slowly back to full extension."
+    "description": "Sit at a preacher bench and rest the backs of your upper arms on the pad. Curl the dumbbells upward until fully flexed, then lower slowly back to full extension."
   },
   {
     "id": "wger_bench_press_narrow_grip",
@@ -586,8 +586,7 @@
     "gifSource": "hasaneyldrm",
     "gifQuality": "strong",
     "aliases": [
-      "Reverse Crunch",
-      "Hip Raise"
+      "Eccentric Crunch"
     ],
     "description": "Lie on your back with knees bent. Perform a standard crunch upward, then slowly lower your shoulder blades back to the floor over 3 to 5 seconds to emphasize the eccentric portion."
   },
@@ -729,7 +728,7 @@
       "front_deltoid"
     ],
     "equipment": [
-      "cable"
+      "machine"
     ],
     "contraindications": [
       "shoulder_impingement",
@@ -769,7 +768,7 @@
     ],
     "secondaryMuscles": [],
     "equipment": [
-      "cable"
+      "machine"
     ],
     "contraindications": [
       "shoulder_impingement",
@@ -1529,7 +1528,7 @@
     "wgerBaseId": 366,
     "name": "Leg Curls (Sitting)",
     "category": "strength",
-    "movement": "machine",
+    "movement": "flexion",
     "mechanic": "isolation",
     "primaryMuscles": [
       "hamstrings"
@@ -1567,7 +1566,7 @@
     "wgerBaseId": 367,
     "name": "Leg Curls (Standing)",
     "category": "strength",
-    "movement": "machine",
+    "movement": "flexion",
     "mechanic": "isolation",
     "primaryMuscles": [
       "hamstrings"
@@ -1848,8 +1847,7 @@
     "gifQuality": "none",
     "aliases": [
       "Standing Leg Raise",
-      "Captain's Chair",
-      "Knee Raise"
+      "Standing Knee Raise"
     ],
     "description": "Stand upright while holding a stable support for balance. Raise one leg forward in a controlled manner while keeping your torso upright, then lower and repeat before switching sides."
   },
@@ -2012,9 +2010,9 @@
     "gifSource": "hasaneyldrm",
     "gifQuality": "weak",
     "aliases": [
-      "Leg Press",
-      "45 Degree Leg Press",
-      "Machine Leg Press"
+      "Hack Squat",
+      "Machine Hack Squat",
+      "Hackenschmidt Squat"
     ],
     "description": "Step onto the Hackenschmidt machine platform and position your shoulders under the pads with feet shoulder-width apart. Lower your body by bending your knees to 90 degrees, then drive through your feet to press back to the starting position."
   },
@@ -2062,7 +2060,7 @@
     "wgerBaseId": 661,
     "name": "Triceps Machine",
     "category": "strength",
-    "movement": "machine",
+    "movement": "push",
     "mechanic": "isolation",
     "primaryMuscles": [
       "triceps"
@@ -2217,7 +2215,7 @@
       "Prone Row",
       "Bench Row"
     ],
-    "description": "Lie face-down on an incline bench and let the dumbbells hang at arm's length. Row both dumbbells toward your hips by driving your elbows back, fully retracting your shoulder blades."
+    "description": "Lie face-down on a flat bench and let the dumbbells hang at arm's length. Row both dumbbells toward your hips by driving your elbows back, fully retracting your shoulder blades."
   },
   {
     "id": "wger_longpulley_low_row",
@@ -2444,7 +2442,7 @@
     "contraindications": [
       "shoulder_impingement"
     ],
-    "status": "include",
+    "status": "retired",
     "rejectReason": null,
     "repRange": {
       "min": 10,
@@ -2458,11 +2456,7 @@
     "gifFile": "0334-DsgkuIt.gif",
     "gifSource": "hasaneyldrm",
     "gifQuality": "strong",
-    "aliases": [
-      "Lateral Raise",
-      "Side Raise",
-      "Dumbbell Lateral Raise"
-    ],
+    "aliases": [],
     "description": "Stand holding dumbbells at your sides, palms facing inward. With a slight bend in the elbows, raise both dumbbells out to the sides in a wide arc until your arms are parallel to the floor. Hold briefly and lower with control. Avoid using momentum by keeping the movement smooth."
   },
   {
@@ -2629,7 +2623,7 @@
     "wgerBaseId": 365,
     "name": "Leg Curls (Laying)",
     "category": "strength",
-    "movement": "machine",
+    "movement": "flexion",
     "mechanic": "isolation",
     "primaryMuscles": [
       "hamstrings"
@@ -2809,8 +2803,8 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 8,
-      "max": 15
+      "min": 3,
+      "max": 8
     },
     "setRange": {
       "min": 3,
@@ -2925,8 +2919,7 @@
       "triceps"
     ],
     "equipment": [
-      "barbell",
-      "resistance_band"
+      "barbell"
     ],
     "contraindications": [
       "elbow_extension_loaded",
@@ -3033,7 +3026,7 @@
       "Incline Plank Tap",
       "Incline Plank Reach"
     ],
-    "description": "Start in an incline plank with hands on a bench. Alternately reach one hand forward to touch the floor, maintaining plank alignment throughout and minimizing hip rotation."
+    "description": "Start in an incline plank with hands on a bench. Alternately reach one hand forward to touch the bench, maintaining plank alignment throughout and minimizing hip rotation."
   },
   {
     "id": "wger_hanging_leg_raises",
@@ -3242,7 +3235,7 @@
     "wgerBaseId": 369,
     "name": "Leg Extension",
     "category": "strength",
-    "movement": "machine",
+    "movement": "extension",
     "mechanic": "isolation",
     "primaryMuscles": [
       "quadriceps"
@@ -3345,7 +3338,7 @@
       "Chin-Up",
       "Underhand Pull-Up"
     ],
-    "description": "Hang from a bar with an underhand grip at shoulder width. Pull yourself up until your chin is above the bar, then lower under control. The underhand grip places greater demand on the biceps compared to pull-ups."
+    "description": "Hang from a bar with an underhand grip at shoulder width. Pull yourself up until your chin is above the bar, then lower under control."
   },
   {
     "id": "wger_perfect_push_up",
@@ -3364,8 +3357,7 @@
     ],
     "contraindications": [
       "elbow_extension_loaded",
-      "shoulder_impingement",
-      "wrist_extension"
+      "shoulder_impingement"
     ],
     "status": "include",
     "rejectReason": null,
@@ -3393,7 +3385,7 @@
     "wgerBaseId": 614,
     "name": "Squat Jumps",
     "category": "strength",
-    "movement": "squat",
+    "movement": "plyometric",
     "mechanic": "compound",
     "primaryMuscles": [
       "quadriceps"
@@ -3447,7 +3439,7 @@
     ],
     "contraindications": [
       "elbow_extension_loaded",
-      "lumbar_compression"
+      "shoulder_impingement"
     ],
     "status": "include",
     "rejectReason": null,
@@ -3541,8 +3533,7 @@
     "gifSource": "hasaneyldrm",
     "gifQuality": "weak",
     "aliases": [
-      "Lat Pulldown Leaning Back",
-      "Behind Neck Pulldown"
+      "Lat Pulldown Leaning Back"
     ],
     "description": "Sit at a lat pulldown and lean back slightly to 70–80 degrees. Pull the bar down toward your upper chest, leading with your elbows. The slight lean increases the range of motion through the lats."
   },
@@ -3555,7 +3546,7 @@
     "movement": "hinge",
     "mechanic": "compound",
     "primaryMuscles": [
-      "glutes"
+      "full_body"
     ],
     "secondaryMuscles": [
       "quadriceps",
@@ -3735,7 +3726,7 @@
     ],
     "secondaryMuscles": [],
     "equipment": [
-      "machine"
+      "barbell"
     ],
     "contraindications": [
       "elbow_flexion_loaded"
@@ -3885,7 +3876,7 @@
       "Reverse Cable Curl",
       "Pronated Cable Curl"
     ],
-    "description": "Attach a straight bar to a low pulley and grip it with an overhand grip. Curl the bar upward while keeping your elbows at your sides, working the brachialis and brachioradialis."
+    "description": "Attach a straight bar to a low pulley and grip it with an overhand grip. Curl the bar upward while keeping your elbows at your sides."
   },
   {
     "id": "wger_pendelay_rows",
@@ -4011,7 +4002,6 @@
     "gifSource": "hasaneyldrm",
     "gifQuality": "weak",
     "aliases": [
-      "Neutral-Grip Lat Pulldown",
       "Lat Pulldown",
       "Wide Grip Lat Pulldown"
     ],
@@ -4068,8 +4058,7 @@
     ],
     "secondaryMuscles": [],
     "equipment": [
-      "dumbbell",
-      "resistance_band"
+      "dumbbell"
     ],
     "contraindications": [
       "shoulder_impingement",
@@ -4173,7 +4162,7 @@
       "Overhand Barbell Curl",
       "Pronated Curl"
     ],
-    "description": "Hold a barbell with an overhand grip and arms fully extended. Curl the bar upward while keeping the overhand grip, engaging the brachialis and forearm extensors. Lower under control."
+    "description": "Hold a barbell with an overhand grip and arms fully extended. Curl the bar upward while keeping the overhand grip. Lower under control."
   },
   {
     "id": "wger_stifflegged_deadlifts",
@@ -4231,8 +4220,7 @@
     ],
     "secondaryMuscles": [],
     "equipment": [
-      "dumbbell",
-      "resistance_band"
+      "dumbbell"
     ],
     "contraindications": [
       "elbow_extension_loaded",
@@ -4523,7 +4511,7 @@
     ],
     "contraindications": [
       "elbow_extension_loaded",
-      "lumbar_compression"
+      "shoulder_impingement"
     ],
     "status": "include",
     "rejectReason": null,
@@ -5061,11 +5049,9 @@
     "gifQuality": "strong",
     "aliases": [
       "Seated Overhead Press",
-      "Seated Military Press",
-      "Seated OHP",
-      "Military Press"
+      "Seated OHP"
     ],
-    "description": "Stand holding a barbell at shoulder height with a shoulder-width grip. Press the bar overhead to full extension while maintaining a braced torso, then lower under control."
+    "description": "Sit on a bench holding a barbell at shoulder height with a shoulder-width grip. Press the bar overhead to full extension while maintaining a braced torso, then lower under control."
   },
   {
     "id": "wger_upper_external_oblique",
@@ -5073,7 +5059,7 @@
     "wgerBaseId": 688,
     "name": "Upper External Oblique",
     "category": "strength",
-    "movement": "flexion",
+    "movement": "rotation",
     "mechanic": "isolation",
     "primaryMuscles": [
       "obliques"
@@ -5082,7 +5068,9 @@
     "equipment": [
       "bodyweight"
     ],
-    "contraindications": [],
+    "contraindications": [
+      "lumbar_rotation"
+    ],
     "status": "include",
     "rejectReason": null,
     "repRange": {
@@ -5248,7 +5236,7 @@
     "wgerBaseId": null,
     "name": "Depth Jumps",
     "category": "strength",
-    "movement": "squat",
+    "movement": "plyometric",
     "mechanic": "compound",
     "primaryMuscles": [
       "quadriceps"
@@ -5321,7 +5309,7 @@
     "aliases": [
       "Bent Over High Pull"
     ],
-    "description": "Hinge forward and explosively pull a barbell or cable upward toward chin level, leading with the elbows above the hands. Combines a row with an upright pull."
+    "description": "Hinge forward and explosively pull dumbbells upward toward chin level, leading with the elbows above the hands. Combines a row with an upright pull."
   },
   {
     "id": "wger_pause_bench",
@@ -5373,7 +5361,7 @@
     "movement": "hinge",
     "mechanic": "compound",
     "primaryMuscles": [
-      "glutes"
+      "full_body"
     ],
     "secondaryMuscles": [
       "front_deltoid",
@@ -5768,7 +5756,7 @@
       "Axe Hold",
       "Plate Hold"
     ],
-    "description": "Hold a weight plate by the top rim at arm's length, like holding an axe. The offset center of mass challenges grip and forearm strength isometrically."
+    "description": "Hold a dumbbell by one of its heads at arm's length, with the handle pointing forward like an axe. The offset center of mass challenges grip and forearm strength isometrically."
   },
   {
     "id": "wger_car_push",
@@ -5830,7 +5818,7 @@
       "trapezius"
     ],
     "equipment": [
-      "bodyweight"
+      "machine"
     ],
     "contraindications": [],
     "status": "include",
@@ -6025,7 +6013,7 @@
       "bodyweight"
     ],
     "contraindications": [
-      "lumbar_flexion"
+      "lumbar_extension"
     ],
     "status": "include",
     "rejectReason": null,
@@ -6106,7 +6094,7 @@
     ],
     "secondaryMuscles": [],
     "equipment": [
-      "bodyweight"
+      "dumbbell"
     ],
     "contraindications": [
       "elbow_flexion_loaded"
@@ -6129,7 +6117,7 @@
       "Zottman Curl",
       "Z-Curl"
     ],
-    "description": "Start with a supinated grip and curl dumbbells to the top position. At the top, rotate your wrists to a pronated grip and lower the weight slowly. This targets both the biceps on the way up and the brachioradialis on the way down."
+    "description": "Start with a supinated grip and curl dumbbells to the top position. At the top, rotate your wrists to a pronated grip and lower the weight slowly."
   },
   {
     "id": "wger_lateraltofront_raises",
@@ -6284,8 +6272,7 @@
     "gifQuality": "none",
     "aliases": [
       "Cable Wood Chop",
-      "Cable Rotation",
-      "Pallof Press"
+      "Cable Rotation"
     ],
     "description": "Stand sideways to a cable machine and grip the handle with both hands. Rotate your torso away from the machine in a controlled arc, then return under control. Targets the obliques."
   },
@@ -6466,8 +6453,8 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 12,
-      "max": 20
+      "min": 1,
+      "max": 5
     },
     "setRange": {
       "min": 3,
@@ -6517,7 +6504,10 @@
     "gifQuality": "none",
     "aliases": [
       "Side Lateral Raise",
-      "DB Side Raise"
+      "DB Side Raise",
+      "Lateral Raise",
+      "Lateral Raises",
+      "Dumbbell Lateral Raise"
     ],
     "description": "Stand or sit holding dumbbells at your sides. Lift both dumbbells laterally until they reach shoulder height, keeping a slight bend in the elbows. Lower slowly."
   },
@@ -6562,7 +6552,7 @@
       "Loaded Step",
       "Weighted Stair Step"
     ],
-    "description": "Hold a weight and step up onto a box or platform one foot at a time. Control the descent and repeat. Focus on the working leg doing the driving rather than pushing off the trailing foot."
+    "description": "Set a barbell across your upper traps and stand facing a box or platform. Step up with one foot, driving through that leg to lift your body, and bring the trailing foot to the platform. Control the descent back to the floor and repeat."
   },
   {
     "id": "wger_weighted_stepups",
@@ -6579,7 +6569,7 @@
       "glutes"
     ],
     "equipment": [
-      "bodyweight"
+      "dumbbell"
     ],
     "contraindications": [
       "ankle_stability",
@@ -6645,7 +6635,7 @@
       "Decline Sit-Up",
       "Decline Crunch"
     ],
-    "description": "Lie on a decline bench with feet secured and hands behind your head. Sit fully upright, then lower back to the bench under control. The decline increases range of motion compared to flat sit-ups."
+    "description": "Lie on a decline bench with feet secured, holding a barbell over your chest. Sit upright while pressing the barbell straight up overhead, then lower both your torso and the weight under control."
   },
   {
     "id": "wger_dumbbell_side_bends",
@@ -6792,8 +6782,8 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 8,
-      "max": 15
+      "min": 1,
+      "max": 3
     },
     "setRange": {
       "min": 3,
@@ -6824,7 +6814,7 @@
       "triceps"
     ],
     "equipment": [
-      "bodyweight"
+      "barbell"
     ],
     "contraindications": [
       "lumbar_compression",
@@ -6931,7 +6921,7 @@
       "Windshield Wipers Isometric",
       "Isometric Leg Hold"
     ],
-    "description": "Hang from a bar and raise your legs to horizontal. Hold the position isometrically while maintaining tension throughout your core and hip flexors."
+    "description": "Hang from a bar and raise your legs to a horizontal position, then rotate them to one side and hold isometrically. Keep your upper body stable and engage your obliques throughout, then repeat on the opposite side."
   },
   {
     "id": "wger_shotgun_row",
@@ -6949,7 +6939,7 @@
       "rhomboids"
     ],
     "equipment": [
-      "bodyweight"
+      "cable"
     ],
     "contraindications": [
       "elbow_flexion_loaded",
@@ -7278,7 +7268,7 @@
     "movement": "isometric",
     "mechanic": "compound",
     "primaryMuscles": [
-      "latissimus_dorsi"
+      "forearms"
     ],
     "secondaryMuscles": [
       "forearms"
@@ -7293,8 +7283,8 @@
     "status": "include",
     "rejectReason": null,
     "repRange": {
-      "min": 10,
-      "max": 15
+      "min": 1,
+      "max": 1
     },
     "setRange": {
       "min": 3,
@@ -7734,7 +7724,7 @@
     "id": "wger_tricep_push_down_freewieghts",
     "wgerId": 375,
     "wgerBaseId": 1185,
-    "name": "Tricep Push Down Freewieghts",
+    "name": "Cable Triceps Pushdown",
     "category": "strength",
     "movement": "push",
     "mechanic": "isolation",
@@ -7764,7 +7754,8 @@
     "gifQuality": "strong",
     "aliases": [
       "Overhead Tricep Extension",
-      "Tricep Pushdown Dumbbell"
+      "Tricep Pushdown Dumbbell",
+      "Tricep Push Down Freewieghts"
     ],
     "description": "Stand at a high cable pulley with a straight bar or rope attachment. Keeping your elbows fixed at your sides, push the attachment downward until your arms are fully extended, then return under control."
   },
@@ -7869,7 +7860,7 @@
     "contraindications": [
       "intra_abdominal_pressure",
       "lumbar_compression",
-      "lumbar_extension"
+      "lumbar_flexion"
     ],
     "status": "include",
     "rejectReason": null,

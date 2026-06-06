@@ -377,6 +377,21 @@ func migrateExerciseNames(context: ModelContext) {
             }
     }
 
+    if current < 6 {
+        let renames: [String: String] = [
+            "Tricep Push Down Freewieghts": "Cable Triceps Pushdown"
+        ]
+        let logs = (try? context.fetch(FetchDescriptor<ExerciseLog>())) ?? []
+        for log in logs {
+            if let newName = renames[log.name] { log.name = newName }
+        }
+        do { try context.save() } catch {
+                #if DEBUG
+                logger.error("context.save failed: \(error)")
+                #endif
+            }
+    }
+
     UserDefaults.standard.set(ExerciseDef.migrationVersion, forKey: key)
 }
 

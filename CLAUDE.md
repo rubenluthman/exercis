@@ -291,7 +291,7 @@ Laddas från `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~
 
 `ExerciseDef` fält: `id` (stabil nyckel, används i `ProgramExercise.exerciseId`), `name` (visas i UI och lagras i `ExerciseLog.name`), `aliases` (gamla namn, migreras vid app-start), `repRange`, `setRange`, `primaryMuscles`, `equipment`, `movement`, `contraindications`, `gifFile/gifSource`, `description`.
 
-**Nyckel är `id`** i program (`ProgramExercise.exerciseId`) men **`name`** i loggad historik (`ExerciseLog.name`) — viktigt att hålla isär. Byt aldrig `id` eller `name` utan att lägga gamla värdet i `aliases` och bumpa `migrationVersion` (nuvarande: 5).
+**Nyckel är `id`** i program (`ProgramExercise.exerciseId`) men **`name`** i loggad historik (`ExerciseLog.name`) — viktigt att hålla isär. Byt aldrig `id` eller `name` utan att lägga gamla värdet i `aliases` och bumpa `migrationVersion` (nuvarande: 6).
 
 **Pensionering av övning** — när en övning byts ut och gammal data ska bevaras i historik:
 - Sätt `status` till `"retired"` i JSON (eller håll i separat lista) — ingen migration, ingen radering
