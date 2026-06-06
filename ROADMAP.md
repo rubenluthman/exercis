@@ -18,15 +18,6 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - **GIF-licens** — byt hasaneyldrm-källa mot licensierad (ExerciseDB Pro) innan submission
 - **App Group aktivering** — `group.rubenluthman.Exercis` måste aktiveras i Xcode Signing & Capabilities för båda targets (Exercis + ExercisWidget) för att widgeten ska fungera
 
-### Infrastruktur
-
-- **CI saknas** — inget `.github/workflows` eller motsvarande; 1344 rader XCTest körs bara manuellt. Värt att sätta upp ett enkelt GitHub Actions-jobb som kör `xcodebuild test` på push/PR
-
-### Lägre prioritet
-
-- **`en.lproj` är tom och spårlös** — finns på disk (`Exercis/en.lproj/`) men är inte incheckad i git och innehåller inga filer, troligen ett Xcode-restprodukt. Ta bort manuellt i Finder/Xcode (skript kan inte säkert radera mappar i iCloud Drive)
-- **WhatsNewSheet är inte lokaliserad** — "WHAT'S NEW"-rubriken och samtliga releasenotes saknas i `sv.lproj/Localizable.strings` och visas på engelska även på svenska enheter. Avsiktligt val (jämför övningsnamn som hålls på engelska) eller lucka att täppa till? Kräver ett beslut
-
 ---
 
 ## Parkerat (avskrivet)
@@ -72,6 +63,9 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - [x] Träningspåminnelser — REMINDERS-sektion i Settings, veckodagar + autotid från historik
 - [x] Hemskärmswidget — small (streak + nästa program) + medium (+ senaste pass)
 - [x] WhatsNewSheet — releasenoter öppnas från VERSION-raden i Settings
+- [x] WhatsNewSheet lokaliserad — rubrik och releasenotes översatta i sv.lproj/Localizable.strings (LocalizedStringKey)
+- [x] CI — GitHub Actions-jobb (.github/workflows/tests.yml) kör xcodebuild test med Exercis-testplanen på push/PR mot main
+- [x] Tom `en.lproj`-mapp borttagen (Xcode-restprodukt, var inte incheckad i git)
 - [x] Export-bugg åtgärdad — race condition i SettingsView
 - [x] GIF-filer rensade ur git-historik med git-filter-repo
 - [x] Fix: duplikat övning Military Press → Seated Military Press

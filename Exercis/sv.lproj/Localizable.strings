@@ -116,3 +116,13 @@
 
 /* AuthManager */
 "Unlock Exercis" = "Lås upp Exercis";
+
+/* WhatsNewSheet */
+"WHAT'S NEW" = "NYHETER";
+"Close" = "Stäng";
+"Volume chart" = "Volymdiagram";
+"Tap VOL in any exercise chart to switch between estimated 1RM and total volume per session." = "Tryck på VOL i valfritt övningsdiagram för att växla mellan beräknat 1RM och total volym per pass.";
+"Apple Health at onboarding" = "Apple Hälsa vid onboarding";
+"Health permissions are now requested during setup so workouts sync from your very first session." = "Hälsobehörighet begärs nu under installationen så att pass synkas redan från första passet.";
+"Export fixed" = "Export fixad";
+"The data export sheet no longer opens blank." = "Exportvyn öppnas inte längre tom.";

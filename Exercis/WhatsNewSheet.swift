@@ -4,8 +4,8 @@ private struct WhatsNewEntry: Identifiable {
     let id = UUID()
     let icon: String
     let iconColor: Color
-    let title: String
-    let body: String
+    let title: LocalizedStringKey
+    let body: LocalizedStringKey
 }
 
 private let entries: [WhatsNewEntry] = [
