@@ -126,3 +126,16 @@
 "Health permissions are now requested during setup so workouts sync from your very first session." = "Hälsobehörighet begärs nu under installationen så att pass synkas redan från första passet.";
 "Export fixed" = "Export fixad";
 "The data export sheet no longer opens blank." = "Exportvyn öppnas inte längre tom.";
+
+/* OnboardingView */
+"Choose your training programs" = "Välj dina träningsprogram";
+"Which cardio types do you train?" = "Vilka konditionsformer tränar du?";
+"Connect Apple Health" = "Anslut Apple Hälsa";
+"APPLE HEALTH" = "APPLE HÄLSA";
+"Exercis saves your workouts to Apple Health and reads your body weight to calculate calorie burn." = "Exercis sparar dina pass till Apple Hälsa och läser din kroppsvikt för att beräkna kaloriförbrukning.";
+
+/* SettingsView */
+"Your data is saved locally and included in iCloud Backup. If you restore from backup, everything is preserved. Setting up a new phone without restoring — or with Backup disabled — will result in data loss. Export CSV as an extra copy." = "Din data sparas lokalt och ingår i iCloud-backup. Om du återställer från backup bevaras allt. Att sätta upp en ny telefon utan återställning — eller med backup avstängd — leder till dataförlust. Exportera CSV som extra kopia.";
+
+/* StrengthView accessibility */
+"Cancel rest timer" = "Avbryt vilotimer";

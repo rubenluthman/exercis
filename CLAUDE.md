@@ -165,6 +165,12 @@ Alla fria funktioner i Theme.swift är enhetstestade och ska hållas fria från 
 | `cardioCSV(_:)` | Genererar CSV-sträng för konditionspass |
 | `formatWeight(_:)` | Formaterar Double → sträng utan onödiga decimaler |
 | `parseWeight(_:)` | Parsar sträng → Double, accepterar punkt och komma |
+| `displayWeight(_:imperial:)` | Konverterar lagrad kg → visningssträng (lbs vid imperial) |
+| `displayDistance(_:imperial:)` | Konverterar lagrad km → visningssträng (mi vid imperial) |
+| `parseWeightInput(_:imperial:)` | Parsar visad vikt → kg för lagring |
+| `parseDistanceInput(_:imperial:)` | Parsar visad distans → km för lagring |
+| `weightLabel(_:)` | "KG" eller "LBS" beroende på enhetsval |
+| `distanceLabel(_:)` | "KM" eller "MI" beroende på enhetsval |
 
 ---
 
@@ -427,6 +433,14 @@ LockView → (Face ID) → MainTabView
 | `reminderWeekdays` | String (@AppStorage) | SettingsView | Kommaseparerade veckodagar (1=sön, 2=mån…7=lör) |
 | `reminderHour` | Int (@AppStorage) | SettingsView | Timme för påminnelse (24h), sätts automatiskt från senaste passstart |
 | `reminderMinute` | Int (@AppStorage) | SettingsView | Minut för påminnelse |
+| `onboardingCompleted` | Bool (@AppStorage) | ExercisApp/OnboardingView/SettingsView | Om onboarding är genomförd (DEBUG: kan nollställas i SettingsView) |
+| `lockEnabled` | Bool (@AppStorage) | ExercisApp/SettingsView | Om Face ID-lås är aktiverat |
+| `profileName` | String (@AppStorage) | ProfileView | Användarens visningsnamn |
+| `restTimerSeconds` | Int (@AppStorage) | StrengthView/SettingsView | Global vilotimer-längd (0/30/60/90/120s, default 90) |
+| `selectedCardioTypes` | String (@AppStorage) | OnboardingView/TrainingView/SettingsView | Kommaseparerade `CardioType.rawValue` som visas på Träning-tab |
+| `useImperialUnits` | Bool (@AppStorage) | SettingsView + alla vy/kort som visar vikt/distans | Enhetsval KG/KM (false) eller LBS/MI (true) — konvertering vid presentation via `displayWeight`/`displayDistance` |
+| `healthKitSyncEnabled` | Bool (@AppStorage) | SettingsView | Om pass sparas till Apple Health |
+| `healthKitWeightEnabled` | Bool (@AppStorage) | SettingsView | Om kroppsvikt hämtas från Apple Health för kaloriberäkning |
 
 ---
 
@@ -474,12 +488,17 @@ Alla tre system är additive — en övning skuggas om någon av signalerna matc
 
 ---
 
-## Enhetflexibilitet (framtidssäkring)
+## Enhetflexibilitet
 
-Vikt och tid lagras som råtal utan enhet — `Double` för kg, `Double` för minuter. Enheter antas i UI:t (alltid "KG" resp. "MIN"). Om appen framöver ska stödja lbs eller timmar/sekunder:
-- Lagra en `unit`-sträng bredvid värdet, eller konvertera vid presentation
-- Bryt inte befintliga SwiftData-fält (`weight: Double`, `durationMinutes: Double`) — lägg till nya fält med default-värden för att undvika migration
-- `formatWeight` i Theme.swift är den enda formateringsplatsen för vikt — enhetsbyte görs där
+Vikt och distans lagras alltid i metriska bastal — `Double` för kg (`weight`) och km (`distanceKm`). SwiftData-fälten ändras aldrig vid enhetsbyte (ingen migration krävs).
+
+Imperial-stöd är **implementerat** via `useImperialUnits` (@AppStorage, växlas i SettingsView → UNITS: "KG / KM" / "LBS / MI"):
+- Konvertering sker vid presentation, inte i lagringen — `displayWeight(_:imperial:)` / `displayDistance(_:imperial:)` (kg→lbs ×2.20462, km→mi ×0.621371)
+- Inmatning konverteras tillbaka till metriskt vid parsning — `parseWeightInput(_:imperial:)` / `parseDistanceInput(_:imperial:)`
+- Etiketter via `weightLabel(_:)` / `distanceLabel(_:)`
+- Alla fria funktioner finns i Theme.swift, är enhetstestade och fria från SwiftUI/SwiftData-beroenden
+
+Tid lagras fortfarande som råa minuter (`Double`, `durationMinutes`) utan enhetsväxling — bara KG/KM ↔ LBS/MI stöds idag.
 
 ---
 

@@ -433,6 +433,7 @@ struct StrengthView: View {
                     .font(.jost(.medium, size: 11))
                     .frame(width: 44, height: 36)
             }
+            .accessibilityLabel("Cancel rest timer")
         }
         .foregroundStyle(accent)
         .padding(.horizontal, 24)
