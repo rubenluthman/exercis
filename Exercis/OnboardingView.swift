@@ -274,7 +274,7 @@ struct OnboardingView: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 16)
         }
-        .background(Color.appBackground)
+        .background(.regularMaterial)
     }
 
     // MARK: - Completion

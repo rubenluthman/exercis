@@ -138,7 +138,7 @@ struct StrengthView: View {
                             dismiss()
                         }
                     }
-                    .background(Color.appBackground)
+                    .background(.regularMaterial)
                     .clipShape(UnevenRoundedRectangle(topLeadingRadius: 16, topTrailingRadius: 16))
                 }
                 .offset(y: max(0, effortDragOffset))
@@ -201,7 +201,6 @@ struct StrengthView: View {
             editedStart = startTime
             editedEnd = Date()
             initialized = true
-            Task { await HealthKitManager.shared.requestAuthorization() }
             #if canImport(ActivityKit)
             LiveActivityManager.shared.endAllZombies()
             #endif

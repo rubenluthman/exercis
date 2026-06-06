@@ -160,6 +160,7 @@ Alla fria funktioner i Theme.swift är enhetstestade och ska hållas fria från 
 | `computeCurrentStreak(days:)` | Aktuell träningsstreak från `Set<Date>` |
 | `computeBestStreak(days:)` | Bästa streak någonsin från `Set<Date>` |
 | `progressionSuggestion(prevMax:shouldIncrease:bestSetReps:)` | Föreslår nästa vikt (+2.5 kg om ÖKA) och reps |
+| `csvField(_:)` | RFC 4180-citerar ett CSV-fält (komma/citattecken/radbrytning) |
 | `strengthCSV(_:)` | Genererar CSV-sträng för styrkepass |
 | `cardioCSV(_:)` | Genererar CSV-sträng för konditionspass |
 | `formatWeight(_:)` | Formaterar Double → sträng utan onödiga decimaler |

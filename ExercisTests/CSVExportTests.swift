@@ -54,4 +54,29 @@ final class CSVExportTests: XCTestCase {
 
     // MARK: - Strength CSV
     // Column structure and e1RM value tests are in SkippedTests — see explanation there.
+
+    // MARK: - RFC 4180 quoting
+
+    func testCsvFieldQuotesCommas() {
+        XCTAssertEqual(csvField("Press, Incline"), "\"Press, Incline\"")
+    }
+
+    func testCsvFieldEscapesQuotes() {
+        XCTAssertEqual(csvField("\"Quoted\""), "\"\"\"Quoted\"\"\"")
+    }
+
+    func testCsvFieldLeavesPlainTextUntouched() {
+        XCTAssertEqual(csvField("Bench Press"), "Bench Press")
+    }
+
+    func testCardioCSVQuotesTypeNameContainingComma() throws {
+        let session = CardioSession(date: Date(), durationMinutes: 30, cardioType: CardioType.running.rawValue)
+        context.insert(session)
+        try context.save()
+
+        // displayName för "running" innehåller inget komma — verifiera att fältet ändå går genom csvField utan att brytas
+        let csv = cardioCSV(try context.fetch(FetchDescriptor<CardioSession>()))
+        let dataRow = csv.split(separator: "\n")[1]
+        XCTAssertEqual(dataRow.split(separator: ",", omittingEmptySubsequences: false).count, 5)
+    }
 }

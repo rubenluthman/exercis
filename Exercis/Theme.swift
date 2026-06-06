@@ -241,17 +241,24 @@ func progressionSuggestion(prevMax: Double, shouldIncrease: Bool, bestSetReps: I
 
 // MARK: - CSV export
 
+// RFC 4180: kvotera fält som innehåller komma, citattecken eller radbrytning; dubblera inre citattecken
+func csvField(_ value: String) -> String {
+    guard value.contains(",") || value.contains("\"") || value.contains("\n") else { return value }
+    return "\"\(value.replacingOccurrences(of: "\"", with: "\"\""))\""
+}
+
 func strengthCSV(_ sessions: [WorkoutSession]) -> String {
     var rows = ["datum,program,övning,set,kg,reps,e1RM"]
     let fmt = ISO8601DateFormatter()
     fmt.formatOptions = [.withFullDate]
     for session in sessions {
         let date = fmt.string(from: session.date)
-        let program = session.programName ?? ""
+        let program = csvField(session.programName ?? "")
         for log in session.exerciseLogs.sorted(by: { $0.orderIndex < $1.orderIndex }) {
+            let exercise = csvField(log.name)
             for set in log.sets.sorted(by: { $0.setNumber < $1.setNumber }) {
                 let e1rm = set.reps > 0 ? set.weight * (1 + Double(set.reps) / 30) : set.weight
-                rows.append("\(date),\(program),\(log.name),\(set.setNumber),\(formatWeight(set.weight)),\(set.reps),\(String(format: "%.1f", e1rm))")
+                rows.append("\(date),\(program),\(exercise),\(set.setNumber),\(formatWeight(set.weight)),\(set.reps),\(String(format: "%.1f", e1rm))")
             }
         }
     }
@@ -264,7 +271,7 @@ func cardioCSV(_ sessions: [CardioSession]) -> String {
     fmt.formatOptions = [.withFullDate]
     for session in sessions {
         let date = fmt.string(from: session.date)
-        let type_ = CardioType(rawValue: session.cardioType)?.displayName ?? session.cardioType
+        let type_ = csvField(CardioType(rawValue: session.cardioType)?.displayName ?? session.cardioType)
         let km = session.distanceKm.map { formatWeight($0) } ?? ""
         let effort = session.effortScore.map { "\($0)" } ?? ""
         rows.append("\(date),\(type_),\(formatWeight(session.durationMinutes)),\(km),\(effort)")

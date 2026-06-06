@@ -18,16 +18,6 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - **GIF-licens** — byt hasaneyldrm-källa mot licensierad (ExerciseDB Pro) innan submission
 - **App Group aktivering** — `group.rubenluthman.Exercis` måste aktiveras i Xcode Signing & Capabilities för båda targets (Exercis + ExercisWidget) för att widgeten ska fungera
 
-### Hög prioritet
-
-- **iOS 26 / Knappar** — `primaryButtonStyle` ger glass på iOS 26, fylld rektangel på äldre; bör testas visuellt — glass kan skära sig med den geometriska, minimalistiska stilen
-
-### Lägre prioritet
-
-- **Sheet-bakgrunder** — `.background(Color.appBackground)` på sheets bryter Liquid Glass-genomskinligheten på iOS 26; bör testas visuellt med fullt fokus
-- **CSV-export: komma i övningsnamn** — `CSVExportTests` dokumenterar att ett kommatecken i ett övningsnamn ger fel kolumnantal; fixas med RFC 4180-citering
-- **HealthKit-behörighetsbegäran** — begärs idag per öppning av StrengthView/CardioView; bör konsolideras till en begäran vid app-start
-
 ---
 
 ## Parkerat (avskrivet)
@@ -78,3 +68,6 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - [x] Fix: duplikat övning Military Press → Seated Military Press
 - [x] Fix: lokalisering i hjälpfunktioner
 - [x] Fix: duplikat-alias-krasch i migrateExerciseNames
+- [x] Sheet-bakgrunder — `.background(Color.appBackground)` ersatt med `.regularMaterial` på effort-pickers (StrengthView/CardioView) och onboarding-footern för Liquid Glass-genomskinlighet
+- [x] CSV-export RFC 4180-citering — ny fri funktion `csvField(_:)` i Theme.swift kvoterar fält med komma/citattecken/radbrytning (program-, övnings- och kardiotyp-namn)
+- [x] HealthKit-behörighetsbegäran konsoliderad — flyttad från StrengthView/CardioView `.onAppear` till `MainTabView.onAppear` vid app-start

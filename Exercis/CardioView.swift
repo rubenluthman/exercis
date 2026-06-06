@@ -146,7 +146,7 @@ struct CardioView: View {
                             dismiss()
                         }
                     }
-                    .background(Color.appBackground)
+                    .background(.regularMaterial)
                     .clipShape(UnevenRoundedRectangle(topLeadingRadius: 16, topTrailingRadius: 16))
                 }
                 .offset(y: max(0, effortDragOffset))
@@ -224,7 +224,6 @@ struct CardioView: View {
                     distance = displayDistance(km, imperial: imperial)
                 }
             }
-            Task { await HealthKitManager.shared.requestAuthorization() }
 
             if type.tracksElevation, CMAltimeter.isRelativeAltitudeAvailable() {
                 altimeter.startRelativeAltitudeUpdates(to: .main) { [self] data, _ in
