@@ -139,6 +139,7 @@ struct OnboardingView: View {
                         .frame(width: 36, height: 36)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Edit program")
                 .padding(4)
             }
         }

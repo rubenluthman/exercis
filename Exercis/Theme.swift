@@ -107,9 +107,7 @@ struct OutlineButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - iOS 26 glass button (test — revert by swapping back to FilledButtonStyle)
-// Usage: .buttonStyle(FilledButtonStyle(accent: X))  ← original, geometric
-//        .buttonStyle(GlassFilledButtonStyle(accent: X))  ← iOS 26 glass variant
+// MARK: - iOS 26 glass button variant — valt adaptivt av primaryButtonStyle (glass på 26+, fylld rektangel på äldre)
 @available(iOS 26, *)
 struct GlassFilledButtonStyle: ButtonStyle {
     let accent: Color

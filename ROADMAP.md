@@ -18,6 +18,15 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - **GIF-licens** — byt hasaneyldrm-källa mot licensierad (ExerciseDB Pro) innan submission
 - **App Group aktivering** — `group.rubenluthman.Exercis` måste aktiveras i Xcode Signing & Capabilities för båda targets (Exercis + ExercisWidget) för att widgeten ska fungera
 
+### Infrastruktur
+
+- **CI saknas** — inget `.github/workflows` eller motsvarande; 1344 rader XCTest körs bara manuellt. Värt att sätta upp ett enkelt GitHub Actions-jobb som kör `xcodebuild test` på push/PR
+
+### Lägre prioritet
+
+- **`en.lproj` är tom och spårlös** — finns på disk (`Exercis/en.lproj/`) men är inte incheckad i git och innehåller inga filer, troligen ett Xcode-restprodukt. Ta bort manuellt i Finder/Xcode (skript kan inte säkert radera mappar i iCloud Drive)
+- **WhatsNewSheet är inte lokaliserad** — "WHAT'S NEW"-rubriken och samtliga releasenotes saknas i `sv.lproj/Localizable.strings` och visas på engelska även på svenska enheter. Avsiktligt val (jämför övningsnamn som hålls på engelska) eller lucka att täppa till? Kräver ett beslut
+
 ---
 
 ## Parkerat (avskrivet)

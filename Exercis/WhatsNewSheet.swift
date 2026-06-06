@@ -51,8 +51,9 @@ struct WhatsNewSheet: View {
                     Image(systemName: "xmark")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(Color(.secondaryLabel))
-                        .frame(width: 30, height: 30)
+                        .frame(width: 44, height: 44)
                 }
+                .accessibilityLabel("Close")
                 .buttonStyle(.plain)
             }
             .padding(.horizontal, 24)
