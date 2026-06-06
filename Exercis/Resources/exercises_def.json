@@ -2723,7 +2723,7 @@
       "shoulder_impingement",
       "shoulder_instability"
     ],
-    "status": "include",
+    "status": "retired",
     "rejectReason": null,
     "repRange": {
       "min": 6,
@@ -2737,11 +2737,7 @@
     "gifFile": "1326-T2mxWqc.gif",
     "gifSource": "hasaneyldrm",
     "gifQuality": "strong",
-    "aliases": [
-      "Chin-Up",
-      "Underhand Pull-Up",
-      "Supinated Pull-Up"
-    ],
+    "aliases": [],
     "description": "Hang from a bar with a shoulder-width underhand grip. Pull your body upward until your chin clears the bar, squeezing the biceps and lats at the top. Lower with control."
   },
   {
@@ -3336,7 +3332,9 @@
     "gifQuality": "exact",
     "aliases": [
       "Chin-Up",
-      "Underhand Pull-Up"
+      "Underhand Pull-Up",
+      "Chin Ups",
+      "Supinated Pull-Up"
     ],
     "description": "Hang from a bar with an underhand grip at shoulder width. Pull yourself up until your chin is above the bar, then lower under control."
   },
@@ -6271,7 +6269,6 @@
     "gifSource": "none",
     "gifQuality": "none",
     "aliases": [
-      "Cable Wood Chop",
       "Cable Rotation"
     ],
     "description": "Stand sideways to a cable machine and grip the handle with both hands. Rotate your torso away from the machine in a controlled arc, then return under control. Targets the obliques."

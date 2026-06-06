@@ -51,7 +51,7 @@ struct ExerciseDef: Identifiable {
 
 extension ExerciseDef {
     static var all: [ExerciseDef] { ExerciseLibrary.shared.exercises }
-    static var retired: [ExerciseDef] { [] }
+    static var retired: [ExerciseDef] { ExerciseLibrary.shared.retiredExercises }
 
     static func find(name: String) -> ExerciseDef? {
         ExerciseLibrary.shared.find(name: name)
@@ -203,6 +203,7 @@ enum MuscleGroup: String, CaseIterable {
 final class ExerciseLibrary {
     static let shared = ExerciseLibrary()
     private(set) var exercises: [ExerciseDef] = []
+    private(set) var retiredExercises: [ExerciseDef] = []
 
     private init() { load() }
 
@@ -213,35 +214,36 @@ final class ExerciseLibrary {
             let raw = try? JSONDecoder().decode([ExerciseDefJSON].self, from: data)
         else { return }
 
-        exercises = raw
-            .filter { $0.status == "include" }
-            .map { json in
-                ExerciseDef(
-                    id: json.id,
-                    name: json.name,
-                    movement: json.movement,
-                    mechanic: json.mechanic,
-                    primaryMuscles: json.primaryMuscles,
-                    secondaryMuscles: json.secondaryMuscles,
-                    equipment: json.equipment,
-                    contraindications: json.contraindications,
-                    repRangeMin: json.repRange.min,
-                    repRangeMax: json.repRange.max,
-                    setRangeMin: json.setRange.min,
-                    setRangeMax: json.setRange.max,
-                    gifFile: json.gifFile,
-                    gifSource: GifSource(rawValue: json.gifSource ?? "none") ?? .none,
-                    aliases: json.aliases ?? [],
-                    description: json.description
-                )
-            }
+        func makeDef(_ json: ExerciseDefJSON) -> ExerciseDef {
+            ExerciseDef(
+                id: json.id,
+                name: json.name,
+                movement: json.movement,
+                mechanic: json.mechanic,
+                primaryMuscles: json.primaryMuscles,
+                secondaryMuscles: json.secondaryMuscles,
+                equipment: json.equipment,
+                contraindications: json.contraindications,
+                repRangeMin: json.repRange.min,
+                repRangeMax: json.repRange.max,
+                setRangeMin: json.setRange.min,
+                setRangeMax: json.setRange.max,
+                gifFile: json.gifFile,
+                gifSource: GifSource(rawValue: json.gifSource ?? "none") ?? .none,
+                aliases: json.aliases ?? [],
+                description: json.description
+            )
+        }
+
+        exercises = raw.filter { $0.status == "include" }.map(makeDef)
+        retiredExercises = raw.filter { $0.status == "retired" }.map(makeDef)
     }
 
     func find(name: String) -> ExerciseDef? {
-        exercises.first { $0.name == name }
+        exercises.first { $0.name == name } ?? retiredExercises.first { $0.name == name }
     }
 
     func find(id: String) -> ExerciseDef? {
-        exercises.first { $0.id == id }
+        exercises.first { $0.id == id } ?? retiredExercises.first { $0.id == id }
     }
 }
