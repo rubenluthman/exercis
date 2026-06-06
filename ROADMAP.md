@@ -12,6 +12,11 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 ## Claudes rekommendationer
 
+### Kodbas
+
+- **`try!` på produktionens ModelContainer** ([ExercisApp.swift:27](Exercis/ExercisApp.swift#L27)) — om SwiftData-containern misslyckas initiera (skadad store, misslyckad migration, fullt lagringsutrymme) kraschar appen direkt vid uppstart utan återhämtning eller felmeddelande. Värt att fånga felet och visa ett enkelt felmeddelande (eller falla tillbaka på en in-memory-store) istället för hård krasch — särskilt eftersom `ExercisMigrationPlan` nu existerar och framtida schemaändringar ökar risken
+- **`.foregroundColor` vs `.foregroundStyle`-blandning** — 125 förekomster av det sedan iOS 15 föråldrade `.foregroundColor(_:)` mot 103 av `.foregroundStyle(_:)`, spritt över i princip alla vyer (CardioCard, HistoryCard, ProfileView, StrengthView, chart sheets m.fl.). Mekanisk migrering är oftast en 1:1-ersättning för rena `Color`-värden, men bör göras i en samlad insats för att undvika att nya filer fortsätter blanda mönster
+
 ### Inför App Store (kräver Developer-konto)
 
 - **CloudKit-sync** — utan det förlorar användaren all data vid telefonbyte utan aktiv backup; första prioritet när betalt konto finns
@@ -75,3 +80,4 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - [x] CSV-export RFC 4180-citering — ny fri funktion `csvField(_:)` i Theme.swift kvoterar fält med komma/citattecken/radbrytning (program-, övnings- och kardiotyp-namn)
 - [x] HealthKit-behörighetsbegäran konsoliderad — flyttad från StrengthView/CardioView `.onAppear` till `MainTabView.onAppear` vid app-start
 - [x] Apprevision 2026-06-06 — lokaliserade saknade strängar (OnboardingView: programval/kardioval/Apple Health-steg, SettingsView: backup-förklaring), lade till `accessibilityLabel("Cancel rest timer")` på vilotimerns avbryt-knapp (StrengthView), uppdaterade CLAUDE.md: 6 nya fria funktioner för imperial-enheter (`displayWeight`/`displayDistance`/`parseWeightInput`/`parseDistanceInput`/`weightLabel`/`distanceLabel`), 8 saknade UserDefaults-nycklar, samt skrev om "Enhetflexibilitet" från framtidsplan till faktisk implementation
+- [x] Apprevision 2026-06-06 (full, 7 ytor) — lokaliserade ytterligare 9 strängar (ProfileView: STREAK/LAST SESSION/PERSONAL RECORDS m.fl., SettingsView: "Based on your last session start", accessibility-nycklar "Edit program"/"Animation showing %@"); extraherade `ChartEmptyState` ur fyra identiska kopior i chart sheets till Theme.swift; rättade CLAUDE.md: schema-migrationsstatus var stale (`ExercisSchemaV1`/`ExercisMigrationPlan` finns redan, beskrevs som "ej definierat"), tog bort felaktigt krav på `NSUserNotificationsUsageDescription` (existerar inte som Info.plist-nyckel — notiser kräver ingen usage description), la till saknade widget-filer (WidgetDataStore/WidgetSnapshotBuilder) i filstrukturlistan

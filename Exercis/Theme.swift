@@ -146,6 +146,19 @@ struct ThinDivider: View {
     }
 }
 
+struct ChartEmptyState: View {
+    let isEmpty: Bool
+
+    var body: some View {
+        Spacer()
+        Text(isEmpty ? "No logged sessions yet." : "Need at least two sessions to show chart.")
+            .font(.jost(.regular, size: 14))
+            .foregroundColor(Color(.secondaryLabel))
+            .frame(maxWidth: .infinity, alignment: .center)
+        Spacer()
+    }
+}
+
 // MARK: - Navigation
 
 private struct PopGestureEnabler: UIViewControllerRepresentable {

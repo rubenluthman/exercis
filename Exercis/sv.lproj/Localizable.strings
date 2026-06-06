@@ -139,3 +139,18 @@
 
 /* StrengthView accessibility */
 "Cancel rest timer" = "Avbryt vilotimer";
+
+/* ProfileView */
+"STREAK" = "STREAK";
+"LAST SESSION" = "SENASTE PASS";
+"No sessions logged yet." = "Inga pass loggade ännu.";
+"PERSONAL RECORDS" = "PERSONLIGA REKORD";
+"Log some strength sessions to see your records." = "Logga några styrkepass för att se dina rekord.";
+"kg" = "kg";
+
+/* SettingsView */
+"Based on your last session start" = "Baserat på starten av ditt senaste pass";
+
+/* OnboardingView / GifSheet accessibility */
+"Edit program" = "Redigera program";
+"Animation showing %@" = "Animering som visar %@";

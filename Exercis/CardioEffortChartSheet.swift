@@ -59,12 +59,7 @@ struct CardioEffortChartSheet: View {
                 .padding(.bottom, 20)
 
             if dataPoints.count < 2 {
-                Spacer()
-                Text(dataPoints.isEmpty ? "No logged sessions yet." : "Need at least two sessions to show chart.")
-                    .font(.jost(.regular, size: 14))
-                    .foregroundColor(Color(.secondaryLabel))
-                    .frame(maxWidth: .infinity, alignment: .center)
-                Spacer()
+                ChartEmptyState(isEmpty: dataPoints.isEmpty)
             } else {
                 Chart(dataPoints) { point in
                     LineMark(

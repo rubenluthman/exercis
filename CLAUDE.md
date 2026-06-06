@@ -13,7 +13,7 @@ Privat iOS-app för att logga styrketräning och konditionsträning. En använda
 - **Autentisering**: Face ID via `LAContext .deviceOwnerAuthentication` – automatisk fallback till enhetens lösenkod. Inget eget lösenord. Auto-triggas vid app-launch; retry-knapp om det misslyckas.
 - **Deployment target**: iOS 17 (icke förhandlingsbart)
 - **Apple Health**: HKWorkout sparas vid varje avslutat styrke- och konditionspass
-- `NSFaceIDUsageDescription`, `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription`, `NSUserNotificationsUsageDescription` krävs i Info.plist
+- `NSFaceIDUsageDescription`, `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription` krävs i Info.plist (notifikationer kräver ingen usage description-nyckel — `UNUserNotificationCenter.requestAuthorization` visar systemets standarddialog utan Info.plist-sträng)
 
 ---
 
@@ -56,6 +56,8 @@ ReminderManager.swift         ← UNUserNotificationCenter-wrapper; schedule(wee
 WhatsNewSheet.swift           ← releasenoter per version (öppnas från VERSION-raden i SettingsView)
 ExercisActivityAttributes.swift ← ActivityKit-attribut för Live Activity (programnamn, accentfärg, övning/set-state)
 LiveActivityManager.swift ← hanterar start/update/end av Live Activity under styrketräning
+WidgetDataStore.swift     ← skriver WidgetSnapshot till App Group UserDefaults (group.rubenluthman.Exercis)
+WidgetSnapshotBuilder.swift ← bygger WidgetSnapshot från SwiftData (streak, senaste pass, nästa program)
 ```
 
 **Widget-mapp** (`ExercisWidget/`, separat target):
@@ -133,6 +135,10 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 
 ### Dynamic Type
 `Font.jost()` använder `Font.custom(_:size:relativeTo:)` med en storleksbaserad `TextStyle` som referens — Jost skalar automatiskt med användarens textstorleksinställning i iOS.
+
+### ChartEmptyState
+
+Delad vy i Theme.swift — visar "No logged sessions yet." / "Need at least two sessions to show chart." beroende på `isEmpty`. Används av samtliga fyra chart sheets (ExerciseChartSheet, CardioChartSheet, EffortChartSheet, CardioEffortChartSheet) för konsekvent tomt-tillstånd när `< 2` datapunkter finns — extraherad ur fyra identiska kopior vid apprevision.
 
 ### Scroll edge fade
 `View.softScrollEdge()` i Theme.swift — applicerar en 20pt gradient-mask längs toppen av ScrollView (clear→black). Fungerar på iOS 17+. Appliceras på alla `ScrollView` i appen (StrengthView, HistoryView). Masken påverkar endast rendering, inte hit-testing.
@@ -483,7 +489,7 @@ Alla tre system är additive — en övning skuggas om någon av signalerna matc
 - `ModelContainer` konfigureras i `ExercisApp.swift` (CloudKit ej aktiverat)
 - Alla relationer har `deleteRule: .cascade`
 - Sortering i HistoryView: nyast först
-- Inga explicita schema-migrationer definierade — fungerar om nya `@Model`-fält ges default-värden. Vid framtida namnbyten/borttag av fält krävs `VersionedSchema` + `SchemaMigrationPlan`.
+- Schema-versionering finns: `ExercisSchemaV1` (`VersionedSchema`, version 1.0.0) + `ExercisMigrationPlan` (`SchemaMigrationPlan`, tom `stages`-lista) i Models.swift — `ModelContainer` skapas via `Schema(ExercisSchemaV1.models)` och `migrationPlan: ExercisMigrationPlan.self` i ExercisApp.swift. Vid framtida fältnamnbyten/borttag: lägg till `ExercisSchemaV2` + en `MigrationStage` i planen, bumpa `versionIdentifier`
 - `try? context.save()` används genomgående — fel loggas ej (acceptabelt för single-user app)
 
 ---
@@ -515,7 +521,6 @@ Se [ROADMAP.md](ROADMAP.md) för alla planerade funktioner, beslutade designval 
 3. **Portrait only**
 4. `NSFaceIDUsageDescription` i Info.plist
 5. `NSHealthShareUsageDescription` och `NSHealthUpdateUsageDescription` i Info.plist
-6. `NSUserNotificationsUsageDescription` i Info.plist (träningspåminnelser)
 6. CloudKit ej aktiverat (kräver betalt Apple Developer-konto)
 7. Jost är **enda** typsnitt – inga system fonts
 8. Accentfärg är **enda** färginslaget utöver systemfärger (`.primary`, `.secondary`, `Color(.systemBackground)`)

@@ -91,12 +91,7 @@ struct CardioChartSheet: View {
             .padding(.bottom, 20)
 
             if activePoints.count < 2 {
-                Spacer()
-                Text(activePoints.isEmpty ? "No logged sessions yet." : "Need at least two sessions to show chart.")
-                    .font(.jost(.regular, size: 14))
-                    .foregroundColor(Color(.secondaryLabel))
-                    .frame(maxWidth: .infinity, alignment: .center)
-                Spacer()
+                ChartEmptyState(isEmpty: activePoints.isEmpty)
             } else {
                 Chart(activePoints) { point in
                     LineMark(
