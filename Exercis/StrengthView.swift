@@ -180,11 +180,11 @@ struct StrengthView: View {
                     }
                 }
                     .font(.jost(.semibold, size: 13))
-                    .foregroundColor(nextField != nil ? accent : Color(.tertiaryLabel))
+                    .foregroundStyle(nextField != nil ? accent : Color(.tertiaryLabel))
                     .disabled(nextField == nil)
                 Button("DONE") { activeField = nil }
                     .font(.jost(.semibold, size: 13))
-                    .foregroundColor(accent)
+                    .foregroundStyle(accent)
             }
         }
         .sheet(isPresented: $showTimePicker, onDismiss: { hasCustomTime = true }) {
@@ -232,14 +232,14 @@ struct StrengthView: View {
             Text(program.name.uppercased())
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
 
             Button {
                 showTimePicker = true
             } label: {
                 Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
                     .font(.jost(.regular, size: 13))
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
             }
             .buttonStyle(.plain)
 
@@ -249,7 +249,7 @@ struct StrengthView: View {
                 saveDraftAndReturn()
             }
             .font(.jost(.regular, size: 22))
-            .foregroundColor(Color(.secondaryLabel))
+            .foregroundStyle(Color(.secondaryLabel))
             .frame(width: 90, height: 44, alignment: .trailing)
             .accessibilityLabel("Back")
         }
@@ -586,7 +586,7 @@ struct EffortPickerSheet: View {
             Text("EFFORT")
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
-                .foregroundColor(accent)
+                .foregroundStyle(accent)
                 .padding(.horizontal, 24)
                 .padding(.top, newPRs.isEmpty ? 24 : 8)
                 .padding(.bottom, 6)
@@ -594,7 +594,7 @@ struct EffortPickerSheet: View {
             Text("HOW HARD WAS THE WORKOUT?")
                 .font(.jost(.regular, size: 11))
                 .kerning(1.5)
-                .foregroundColor(Color(.secondaryLabel))
+                .foregroundStyle(Color(.secondaryLabel))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 16)
 
@@ -624,7 +624,7 @@ struct EffortPickerSheet: View {
             }
             .font(.jost(.regular, size: 12))
             .kerning(1.5)
-            .foregroundColor(Color(.secondaryLabel))
+            .foregroundStyle(Color(.secondaryLabel))
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
         }

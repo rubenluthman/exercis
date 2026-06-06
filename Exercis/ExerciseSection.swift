@@ -27,20 +27,20 @@ struct ExerciseSection: View {
                     .buttonStyle(.plain)
                     .font(.jost(.semibold, size: 12))
                     .kerning(1.5)
-                    .foregroundColor(accent)
+                    .foregroundStyle(accent)
                     .lineLimit(1)
                     .accessibilityHint("Öppnar övningsanimation")
                 } else {
                     Text((form.def.shortName ?? form.def.displayName).uppercased())
                         .font(.jost(.semibold, size: 12))
                         .kerning(1.5)
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                         .lineLimit(1)
                 }
                 Text("INCREASE")
                     .font(.jost(.medium, size: 9))
                     .kerning(1.5)
-                    .foregroundColor(accent)
+                    .foregroundStyle(accent)
                     .padding(.horizontal, 5)
                     .padding(.vertical, 2)
                     .overlay(
@@ -52,11 +52,11 @@ struct ExerciseSection: View {
                 if isCollapsed {
                     Image(systemName: "chevron.right")
                         .font(.jost(.medium, size: 10))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                 } else {
                     Text(form.def.repRange)
                         .font(.jost(.regular, size: 12))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                         .frame(width: 90, alignment: .trailing)
                 }
             }
@@ -75,7 +75,7 @@ struct ExerciseSection: View {
                 }
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
-                .foregroundColor(Color(.secondaryLabel))
+                .foregroundStyle(Color(.secondaryLabel))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 6)
 
@@ -134,13 +134,13 @@ struct ExerciseSection: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("\(index + 1)")
                     .font(.jost(.semibold, size: 34))
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
 
                 if isSuggestionVisible(index: index) {
                     Text("→ \(form.suggestedWeight) × \(form.suggestedReps)")
                         .font(.jost(.medium, size: 9))
                         .kerning(1)
-                        .foregroundColor(accent)
+                        .foregroundStyle(accent)
                         .padding(.horizontal, 5)
                         .padding(.vertical, 2)
                         .overlay(
@@ -155,7 +155,7 @@ struct ExerciseSection: View {
 
             TextField("", text: $form.sets[index].weight)
                 .font(.jost(.semibold, size: 34))
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.leading)
                 .focused($activeField, equals: .weight(exercise: exerciseIndex, set: index))
@@ -164,14 +164,14 @@ struct ExerciseSection: View {
                     if form.sets[index].weight.isEmpty && activeField != .weight(exercise: exerciseIndex, set: index) {
                         Text("–")
                             .font(.jost(.semibold, size: 34))
-                            .foregroundColor(Color(.tertiaryLabel))
+                            .foregroundStyle(Color(.tertiaryLabel))
                             .allowsHitTesting(false)
                     }
                 }
 
             TextField("", text: $form.sets[index].reps)
                 .font(.jost(.semibold, size: 34))
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
                 .keyboardType(.numberPad)
                 .multilineTextAlignment(.trailing)
                 .focused($activeField, equals: .reps(exercise: exerciseIndex, set: index))
@@ -180,7 +180,7 @@ struct ExerciseSection: View {
                     if form.sets[index].reps.isEmpty && activeField != .reps(exercise: exerciseIndex, set: index) {
                         Text("–")
                             .font(.jost(.semibold, size: 34))
-                            .foregroundColor(Color(.tertiaryLabel))
+                            .foregroundStyle(Color(.tertiaryLabel))
                             .allowsHitTesting(false)
                     }
                 }

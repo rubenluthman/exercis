@@ -82,12 +82,12 @@ struct CardioView: View {
                     VStack(spacing: 4) {
                         Text(elapsedString)
                             .font(.jost(.semibold, size: 72))
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                             .monospacedDigit()
                         Text("TIME")
                             .font(.jost(.medium, size: 10))
                             .kerning(1.5)
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 24)
@@ -100,21 +100,21 @@ struct CardioView: View {
                         ZStack {
                             TextField("", text: $distance)
                                 .font(.jost(.semibold, size: 72))
-                                .foregroundColor(.primary)
+                                .foregroundStyle(.primary)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.center)
                                 .focused($distanceFocused)
                             if distance.isEmpty && !distanceFocused {
                                 Text("–")
                                     .font(.jost(.semibold, size: 72))
-                                    .foregroundColor(Color(.tertiaryLabel))
+                                    .foregroundStyle(Color(.tertiaryLabel))
                                     .allowsHitTesting(false)
                             }
                         }
                         Text(distanceLabel(imperial))
                             .font(.jost(.medium, size: 10))
                             .kerning(1.5)
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 24)
@@ -195,7 +195,7 @@ struct CardioView: View {
                 Spacer()
                 Button("DONE") { distanceFocused = false }
                     .font(.jost(.semibold, size: 13))
-                    .foregroundColor(Color.workoutAccent)
+                    .foregroundStyle(Color.workoutAccent)
             }
         }
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
@@ -260,11 +260,11 @@ struct CardioView: View {
                     Text(type.displayName.uppercased())
                         .font(.jost(.bold, size: 17))
                         .kerning(2)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                     Text("INCREASE")
                         .font(.jost(.medium, size: 9))
                         .kerning(1.5)
-                        .foregroundColor(Color.workoutAccent)
+                        .foregroundStyle(Color.workoutAccent)
                         .padding(.horizontal, 5).padding(.vertical, 2)
                         .overlay(RoundedRectangle(cornerRadius: 2).strokeBorder(Color.workoutAccent, lineWidth: 0.5))
                         .opacity(increaseActive ? 1 : 0)
@@ -272,7 +272,7 @@ struct CardioView: View {
                 if let summary = lastSummary {
                     Text(summary)
                         .font(.jost(.regular, size: 12))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
             }
             Spacer(minLength: 0)
@@ -281,7 +281,7 @@ struct CardioView: View {
             } label: {
                 Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
                     .font(.jost(.regular, size: 13))
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
             }
             .buttonStyle(.plain)
         }

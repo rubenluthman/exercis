@@ -68,7 +68,7 @@ struct CardioChartSheet: View {
                 Text(cardioType)
                     .font(.jost(.bold, size: 13))
                     .kerning(2)
-                    .foregroundColor(Color.historyAccent)
+                    .foregroundStyle(Color.historyAccent)
 
                 Spacer()
 
@@ -77,12 +77,12 @@ struct CardioChartSheet: View {
                         Button("TIME") { withAnimation(.easeInOut(duration: 0.2)) { showDistance = false } }
                             .font(.jost(showDistance ? .regular : .semibold, size: 11))
                             .kerning(1.5)
-                            .foregroundColor(showDistance ? Color(.secondaryLabel) : Color.historyAccent)
+                            .foregroundStyle(showDistance ? Color(.secondaryLabel) : Color.historyAccent)
 
                         Button("DISTANCE") { withAnimation(.easeInOut(duration: 0.2)) { showDistance = true } }
                             .font(.jost(showDistance ? .semibold : .regular, size: 11))
                             .kerning(1.5)
-                            .foregroundColor(showDistance ? Color.historyAccent : Color(.secondaryLabel))
+                            .foregroundStyle(showDistance ? Color.historyAccent : Color(.secondaryLabel))
                     }
                 }
             }
@@ -118,12 +118,12 @@ struct CardioChartSheet: View {
                                     let yr = Calendar.current.component(.year, from: date) % 100
                                     Text("\(month)\n\(String(format: "%02d", yr))")
                                         .font(.jost(.regular, size: 10))
-                                        .foregroundColor(Color(.secondaryLabel))
+                                        .foregroundStyle(Color(.secondaryLabel))
                                         .multilineTextAlignment(.center)
                                 } else {
                                     Text(month)
                                         .font(.jost(.regular, size: 10))
-                                        .foregroundColor(Color(.secondaryLabel))
+                                        .foregroundStyle(Color(.secondaryLabel))
                                 }
                             }
                         }
@@ -136,7 +136,7 @@ struct CardioChartSheet: View {
                             if let v = value.as(Double.self) {
                                 Text(formatWeight(v))
                                     .font(.jost(.regular, size: 10))
-                                    .foregroundColor(Color(.secondaryLabel))
+                                    .foregroundStyle(Color(.secondaryLabel))
                             }
                         }
                     }
@@ -168,15 +168,15 @@ struct CardioChartSheet: View {
             Text(LocalizedStringKey(label))
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
-                .foregroundColor(Color(.secondaryLabel))
+                .foregroundStyle(Color(.secondaryLabel))
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text(value)
                     .font(.jost(.semibold, size: 22))
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                 if let unit {
                     Text(unit)
                         .font(.jost(.semibold, size: 14))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
             }
         }

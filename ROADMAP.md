@@ -14,9 +14,6 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 ### Kodbas
 
-- **`try!` på produktionens ModelContainer** ([ExercisApp.swift:27](Exercis/ExercisApp.swift#L27)) — om SwiftData-containern misslyckas initiera (skadad store, misslyckad migration, fullt lagringsutrymme) kraschar appen direkt vid uppstart utan återhämtning eller felmeddelande. Värt att fånga felet och visa ett enkelt felmeddelande (eller falla tillbaka på en in-memory-store) istället för hård krasch — särskilt eftersom `ExercisMigrationPlan` nu existerar och framtida schemaändringar ökar risken
-- **`.foregroundColor` vs `.foregroundStyle`-blandning** — 125 förekomster av det sedan iOS 15 föråldrade `.foregroundColor(_:)` mot 103 av `.foregroundStyle(_:)`, spritt över i princip alla vyer (CardioCard, HistoryCard, ProfileView, StrengthView, chart sheets m.fl.). Mekanisk migrering är oftast en 1:1-ersättning för rena `Color`-värden, men bör göras i en samlad insats för att undvika att nya filer fortsätter blanda mönster
-
 ### Inför App Store (kräver Developer-konto)
 
 - **CloudKit-sync** — utan det förlorar användaren all data vid telefonbyte utan aktiv backup; första prioritet när betalt konto finns
@@ -59,6 +56,8 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - [x] SwiftData VersionedSchema v1 + ExercisMigrationPlan
 - [x] `#if DEBUG` OSLog-loggning på alla context.save()
 - [x] XCTest-target — Epley, viktsformatering, CardioType-mappning, WorkoutDraft, ExerciseLibrary, HistoryView-gruppering, HealthKit-kalorier, PR-detektion, ProgramSeeder, CSV-export, PeriodSummary-aggregationer, LiveActivity-färger
+- [x] `try!` på produktionens ModelContainer ersatt med graciös fallback — försöker persistent store, faller tillbaka på in-memory-store vid fel och visar en alert ("Couldn't Load Saved Data") istället för att krascha ([ExercisApp.swift:27](Exercis/ExercisApp.swift#L27))
+- [x] `.foregroundColor` → `.foregroundStyle` — samtliga 125 förekomster migrerade mekaniskt (rena `Color`-värden, 1:1-ersättning), nu konsekvent `.foregroundStyle` i hela appen
 - [x] iOS 26 Tab bar — `tabBarMinimizeBehavior(.onScrollDown)`
 - [x] iOS 26 Knappar — `primaryButtonStyle` adaptiv (glass / fylld rektangel)
 - [x] GifSheet accessibilityLabel — "Animation showing [övningsnamn]"

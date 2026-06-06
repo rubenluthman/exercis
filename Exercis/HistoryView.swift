@@ -212,7 +212,7 @@ struct HistoryView: View {
             Text(verbatim: String(year))
                 .font(.jost(.medium, size: 11))
                 .kerning(2)
-                .foregroundColor(Color(.tertiaryLabel))
+                .foregroundStyle(Color(.tertiaryLabel))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 24)
                 .padding(.top, 16)
@@ -232,7 +232,7 @@ struct HistoryView: View {
                 Text(monthName(year: group.year, month: group.month))
                     .font(.jost(.bold, size: 13))
                     .kerning(2)
-                    .foregroundColor(Color.historyAccent)
+                    .foregroundStyle(Color.historyAccent)
             }
             .buttonStyle(.plain)
 
@@ -241,7 +241,7 @@ struct HistoryView: View {
             if isCollapsed {
                 Image(systemName: "chevron.right")
                     .font(.jost(.medium, size: 10))
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
             } else {
                 HStack(spacing: 10) {
                     if group.workoutCount > 0 { Text(String(format: String(localized: "%d STRENGTH"), group.workoutCount)) }
@@ -249,7 +249,7 @@ struct HistoryView: View {
                 }
                 .font(.jost(.regular, size: 11))
                 .kerning(1)
-                .foregroundColor(Color(.secondaryLabel))
+                .foregroundStyle(Color(.secondaryLabel))
             }
         }
         .padding(.horizontal, 24)
@@ -291,7 +291,7 @@ struct HistoryView: View {
         Text("HISTORY")
             .font(.jost(.bold, size: 17))
             .kerning(2)
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 24)
             .padding(.top, 20)
@@ -345,7 +345,7 @@ struct HistoryView: View {
             Spacer()
             Text("No saved workouts yet.")
                 .font(.jost(.regular, size: 14))
-                .foregroundColor(Color(.secondaryLabel))
+                .foregroundStyle(Color(.secondaryLabel))
             Spacer()
         }
     }

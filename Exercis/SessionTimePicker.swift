@@ -11,7 +11,7 @@ struct SessionTimePicker: View {
             Text("TIMESTAMP")
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
-                .foregroundColor(accent)
+                .foregroundStyle(accent)
                 .padding(.horizontal, 24)
                 .padding(.top, 24)
                 .padding(.bottom, 20)
@@ -22,7 +22,7 @@ struct SessionTimePicker: View {
                 Text("START")
                     .font(.jost(.medium, size: 10))
                     .kerning(1.5)
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
                 Spacer()
                 DatePicker("", selection: Binding(
                     get: { start },
@@ -44,7 +44,7 @@ struct SessionTimePicker: View {
                 Text("END")
                     .font(.jost(.medium, size: 10))
                     .kerning(1.5)
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
                 Spacer()
                 DatePicker("", selection: $end, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()

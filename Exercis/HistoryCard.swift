@@ -33,21 +33,21 @@ struct HistoryCard: View {
                     HStack(spacing: 8) {
                         Text(dateText)
                             .font(.jost(.bold, size: 14))
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                         Text(timeText)
                             .font(.jost(.regular, size: 14))
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                     }
                     Spacer()
                     if !isExpanded {
                         Image(systemName: "chevron.right")
                             .font(.jost(.medium, size: 10))
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                     }
                     Button(action: onDelete) {
                         Image(systemName: "xmark")
                             .font(.jost(.medium, size: 11))
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                     }
                     .frame(width: 44, height: 44, alignment: .trailing)
                     .contentShape(Rectangle())
@@ -95,11 +95,11 @@ struct HistoryCard: View {
                         Text("EFFORT")
                             .font(.jost(.medium, size: 10))
                             .kerning(1.5)
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                         Text("\(score)/10")
                             .font(.jost(.semibold, size: 10))
                             .kerning(1.5)
-                            .foregroundColor(Color.historyAccent)
+                            .foregroundStyle(Color.historyAccent)
                     }
                 }
                 .buttonStyle(.plain)
@@ -127,13 +127,13 @@ struct HistoryCard: View {
             .buttonStyle(.plain)
             .font(.jost(.medium, size: 12))
             .kerning(1.5)
-            .foregroundColor(Color.historyAccent)
+            .foregroundStyle(Color.historyAccent)
 
             let compact = compactSets(exercise)
             if !compact.isEmpty {
                 Text(compact)
                     .font(.jost(.regular, size: 14))
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
             }
         }
         .padding(.horizontal, 24)

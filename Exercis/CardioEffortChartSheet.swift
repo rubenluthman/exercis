@@ -53,7 +53,7 @@ struct CardioEffortChartSheet: View {
             Text("EFFORT")
                 .font(.jost(.bold, size: 13))
                 .kerning(2)
-                .foregroundColor(Color.historyAccent)
+                .foregroundStyle(Color.historyAccent)
                 .padding(.horizontal, 24)
                 .padding(.top, 24)
                 .padding(.bottom, 20)
@@ -86,12 +86,12 @@ struct CardioEffortChartSheet: View {
                                     let yr = Calendar.current.component(.year, from: date) % 100
                                     Text("\(month)\n\(String(format: "%02d", yr))")
                                         .font(.jost(.regular, size: 10))
-                                        .foregroundColor(Color(.secondaryLabel))
+                                        .foregroundStyle(Color(.secondaryLabel))
                                         .multilineTextAlignment(.center)
                                 } else {
                                     Text(month)
                                         .font(.jost(.regular, size: 10))
-                                        .foregroundColor(Color(.secondaryLabel))
+                                        .foregroundStyle(Color(.secondaryLabel))
                                 }
                             }
                         }
@@ -104,7 +104,7 @@ struct CardioEffortChartSheet: View {
                             if let v = value.as(Int.self) {
                                 Text("\(v)")
                                     .font(.jost(.regular, size: 10))
-                                    .foregroundColor(Color(.secondaryLabel))
+                                    .foregroundStyle(Color(.secondaryLabel))
                             }
                         }
                     }
@@ -136,15 +136,15 @@ struct CardioEffortChartSheet: View {
             Text(LocalizedStringKey(label))
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
-                .foregroundColor(Color(.secondaryLabel))
+                .foregroundStyle(Color(.secondaryLabel))
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text(value)
                     .font(.jost(.semibold, size: 22))
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                 if let unit {
                     Text(unit)
                         .font(.jost(.semibold, size: 14))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
             }
         }

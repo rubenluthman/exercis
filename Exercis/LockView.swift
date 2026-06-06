@@ -15,7 +15,7 @@ struct LockView: View {
             Text("EXERCIS")
                 .font(.jost(.black, size: 38))
                 .kerning(6)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
 
             Spacer()
 

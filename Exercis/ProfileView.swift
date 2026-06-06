@@ -48,7 +48,7 @@ struct ProfileView: View {
             Text("PROFILE")
                 .font(.jost(.bold, size: 17))
                 .kerning(2)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)
@@ -80,7 +80,7 @@ struct ProfileView: View {
                 Button { editingName = true } label: {
                     Text(name.isEmpty ? "Add name" : name)
                         .font(.jost(.semibold, size: 20))
-                        .foregroundColor(name.isEmpty ? Color(.tertiaryLabel) : .primary)
+                        .foregroundStyle(name.isEmpty ? Color(.tertiaryLabel) : .primary)
                 }
                 .buttonStyle(.plain)
             }
@@ -142,17 +142,17 @@ struct ProfileView: View {
                     Text("STREAK")
                         .font(.jost(.medium, size: 10))
                         .kerning(1.5)
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
 
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text("\(currentStreak)")
                             .font(.jost(.black, size: 72))
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                             .minimumScaleFactor(0.5)
 
                         Text(currentStreak == 1 ? "day" : "days")
                             .font(.jost(.medium, size: 16))
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                             .padding(.bottom, 10)
                     }
                 }
@@ -164,13 +164,13 @@ struct ProfileView: View {
                         Text("BEST")
                             .font(.jost(.medium, size: 10))
                             .kerning(1.5)
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                         Text("\(bestStreak)")
                             .font(.jost(.semibold, size: 22))
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                         Text(currentStreak == bestStreak ? "current best" : "days")
                             .font(.jost(.regular, size: 11))
-                            .foregroundColor(Color(.tertiaryLabel))
+                            .foregroundStyle(Color(.tertiaryLabel))
                     }
                 }
             }
@@ -223,7 +223,7 @@ struct ProfileView: View {
                 Text("LAST SESSION")
                     .font(.jost(.medium, size: 10))
                     .kerning(1.5)
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
                     .padding(.horizontal, 24)
 
                 if let entry = latestEntry {
@@ -231,26 +231,26 @@ struct ProfileView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(entry.title)
                                 .font(.jost(.semibold, size: 18))
-                                .foregroundColor(.primary)
+                                .foregroundStyle(.primary)
                             Text(entry.subtitle)
                                 .font(.jost(.regular, size: 13))
-                                .foregroundColor(Color(.secondaryLabel))
+                                .foregroundStyle(Color(.secondaryLabel))
                         }
                         Spacer()
                         VStack(alignment: .trailing, spacing: 4) {
                             Text(entry.relativeDate)
                                 .font(.jost(.regular, size: 13))
-                                .foregroundColor(Color(.secondaryLabel))
+                                .foregroundStyle(Color(.secondaryLabel))
                             Text(entry.detailLine)
                                 .font(.jost(.regular, size: 12))
-                                .foregroundColor(Color(.tertiaryLabel))
+                                .foregroundStyle(Color(.tertiaryLabel))
                         }
                     }
                     .padding(.horizontal, 24)
                 } else {
                     Text("No sessions logged yet.")
                         .font(.jost(.regular, size: 14))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                         .padding(.horizontal, 24)
                 }
             }
@@ -268,14 +268,14 @@ struct ProfileView: View {
                 Text("PERSONAL RECORDS")
                     .font(.jost(.medium, size: 10))
                     .kerning(1.5)
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
                     .padding(.horizontal, 24)
 
                 let records = topPersonalRecords
                 if records.isEmpty {
                     Text("Log some strength sessions to see your records.")
                         .font(.jost(.regular, size: 14))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                         .padding(.horizontal, 24)
                 } else {
                     VStack(spacing: 0) {
@@ -283,12 +283,12 @@ struct ProfileView: View {
                             HStack(spacing: 0) {
                                 Text("\(i + 1)")
                                     .font(.jost(.medium, size: 11))
-                                    .foregroundColor(Color(.tertiaryLabel))
+                                    .foregroundStyle(Color(.tertiaryLabel))
                                     .frame(width: 20, alignment: .leading)
 
                                 Text(record.name)
                                     .font(.jost(.regular, size: 14))
-                                    .foregroundColor(.primary)
+                                    .foregroundStyle(.primary)
                                     .lineLimit(1)
 
                                 Spacer()
@@ -296,10 +296,10 @@ struct ProfileView: View {
                                 HStack(alignment: .firstTextBaseline, spacing: 3) {
                                     Text(formatWeight(record.e1rm))
                                         .font(.jost(.semibold, size: 17))
-                                        .foregroundColor(Color.historyAccent)
+                                        .foregroundStyle(Color.historyAccent)
                                     Text("kg")
                                         .font(.jost(.regular, size: 11))
-                                        .foregroundColor(Color(.secondaryLabel))
+                                        .foregroundStyle(Color(.secondaryLabel))
                                 }
                             }
                             .padding(.horizontal, 24)
@@ -352,16 +352,16 @@ struct ProfileView: View {
             Text(LocalizedStringKey(label))
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
-                .foregroundColor(Color(.secondaryLabel))
+                .foregroundStyle(Color(.secondaryLabel))
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             Text(value)
                 .font(.jost(.semibold, size: 22))
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
                 .lineLimit(1)
             Text(unit)
                 .font(.jost(.regular, size: 11))
-                .foregroundColor(Color(.tertiaryLabel))
+                .foregroundStyle(Color(.tertiaryLabel))
         }
         .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .top))
     }
@@ -512,19 +512,19 @@ struct ProfileView: View {
             Text(LocalizedStringKey(label))
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
-                .foregroundColor(Color(.secondaryLabel))
+                .foregroundStyle(Color(.secondaryLabel))
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text(value)
                     .font(.jost(.semibold, size: 22))
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 if let unit {
                     Text(unit)
                         .font(.jost(.semibold, size: 14))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
             }
         }

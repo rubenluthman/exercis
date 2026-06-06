@@ -3,6 +3,9 @@ import SwiftData
 
 @main
 struct ExercisApp: App {
+    private let modelContainer: ModelContainer
+    private let modelContainerFailedToLoad: Bool
+
     init() {
         UserDefaults.standard.register(defaults: [
             "healthKitSyncEnabled":   true,
@@ -18,33 +21,52 @@ struct ExercisApp: App {
             UIBarButtonItem.appearance().setTitleTextAttributes([.font: regular], for: .normal)
             UIBarButtonItem.appearance().setTitleTextAttributes([.font: regular], for: .highlighted)
         }
+
+        let schema = Schema(ExercisSchemaV1.models)
+        if let container = try? ModelContainer(for: schema, migrationPlan: ExercisMigrationPlan.self) {
+            modelContainer = container
+            modelContainerFailedToLoad = false
+        } else if let fallback = try? ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true)) {
+            modelContainer = fallback
+            modelContainerFailedToLoad = true
+        } else {
+            fatalError("Unable to create ModelContainer, even in-memory.")
+        }
     }
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(dataStoreUnavailable: modelContainerFailedToLoad)
         }
-        .modelContainer(try! ModelContainer(
-            for: Schema(ExercisSchemaV1.models),
-            migrationPlan: ExercisMigrationPlan.self
-        ))
+        .modelContainer(modelContainer)
     }
 }
 
 // MARK: - RootView
 
 struct RootView: View {
+    let dataStoreUnavailable: Bool
+
     @StateObject private var auth = AuthManager()
     @AppStorage("lockEnabled") private var lockEnabled = true
     @AppStorage("onboardingCompleted") private var onboardingCompleted = false
+    @State private var showingDataStoreWarning = false
 
     var body: some View {
-        if lockEnabled && !auth.isAuthenticated {
-            LockView(auth: auth)
-        } else if !onboardingCompleted {
-            OnboardingView()
-        } else {
-            MainTabView()
+        Group {
+            if lockEnabled && !auth.isAuthenticated {
+                LockView(auth: auth)
+            } else if !onboardingCompleted {
+                OnboardingView()
+            } else {
+                MainTabView()
+            }
+        }
+        .onAppear { showingDataStoreWarning = dataStoreUnavailable }
+        .alert("Couldn't Load Saved Data", isPresented: $showingDataStoreWarning) {
+            Button("Continue", role: .cancel) {}
+        } message: {
+            Text("Exercis couldn't open its database and is running with a temporary, in-memory store. Your sessions and programs won't be saved this time — try restarting the app.")
         }
     }
 }

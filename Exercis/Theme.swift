@@ -82,7 +82,7 @@ struct FilledButtonStyle: ButtonStyle {
         configuration.label
             .font(.jost(.bold, size: fontSize))
             .kerning(1.8)
-            .foregroundColor(.white)
+            .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)
             .background(accent.opacity(configuration.isPressed ? 0.75 : 1))
@@ -97,7 +97,7 @@ struct OutlineButtonStyle: ButtonStyle {
         configuration.label
             .font(.jost(.bold, size: fontSize))
             .kerning(1.8)
-            .foregroundColor(accent.opacity(configuration.isPressed ? 0.65 : 1))
+            .foregroundStyle(accent.opacity(configuration.isPressed ? 0.65 : 1))
             .frame(maxWidth: .infinity)
             .frame(height: 50)
             .overlay(
@@ -153,7 +153,7 @@ struct ChartEmptyState: View {
         Spacer()
         Text(isEmpty ? "No logged sessions yet." : "Need at least two sessions to show chart.")
             .font(.jost(.regular, size: 14))
-            .foregroundColor(Color(.secondaryLabel))
+            .foregroundStyle(Color(.secondaryLabel))
             .frame(maxWidth: .infinity, alignment: .center)
         Spacer()
     }

@@ -28,21 +28,21 @@ struct CardioCard: View {
                     HStack(spacing: 8) {
                         Text(dateText)
                             .font(.jost(.bold, size: 14))
-                            .foregroundColor(.primary)
+                            .foregroundStyle(.primary)
                         Text(timeText)
                             .font(.jost(.regular, size: 14))
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                     }
                     Spacer()
                     if !isExpanded {
                         Image(systemName: "chevron.right")
                             .font(.jost(.medium, size: 10))
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                     }
                     Button(action: onDelete) {
                         Image(systemName: "xmark")
                             .font(.jost(.medium, size: 11))
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                     }
                     .frame(width: 44, height: 44, alignment: .trailing)
                     .contentShape(Rectangle())
@@ -87,11 +87,11 @@ struct CardioCard: View {
                         Text("EFFORT")
                             .font(.jost(.medium, size: 10))
                             .kerning(1.5)
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundStyle(Color(.secondaryLabel))
                         Text("\(score)/10")
                             .font(.jost(.semibold, size: 10))
                             .kerning(1.5)
-                            .foregroundColor(Color.historyAccent)
+                            .foregroundStyle(Color.historyAccent)
                     }
                 }
                 .buttonStyle(.plain)
@@ -104,21 +104,21 @@ struct CardioCard: View {
             .buttonStyle(.plain)
             .font(.jost(.medium, size: 12))
             .kerning(1.5)
-            .foregroundColor(Color.historyAccent)
+            .foregroundStyle(Color.historyAccent)
 
             HStack(spacing: 12) {
                 Text(durationText)
                     .font(.jost(.regular, size: 14))
-                    .foregroundColor(Color(.secondaryLabel))
+                    .foregroundStyle(Color(.secondaryLabel))
                 if let km = session.distanceKm, km > 0 {
                     Text("\(displayDistance(km, imperial: imperial)) \(distanceLabel(imperial))")
                         .font(.jost(.regular, size: 14))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
                 if let elevation = session.elevationGain, elevation > 0 {
                     Text("+\(Int(elevation.rounded())) M")
                         .font(.jost(.regular, size: 14))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
             }
         }
