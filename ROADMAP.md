@@ -2,11 +2,11 @@
 
 Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under sessioner och vid apprevision.
 
-**Arbetsflöde:** när något är klart — flytta det till **Klart**-sektionen längst ner. Stryk inte bara över det där det står. Håll två kategorier isär: Rubens explicita beslut och Claudes rekommendationer — det ska aldrig vara oklart vilken kategori något tillhör.
+**Arbetsflöde:** allt här är gemensamt — vi diskuterar och bestämmer tillsammans om något ska göras, göras senare eller strykas. Ingen uppdelning i "Rubens beslut" vs "Claudes förslag". När något är klart — flytta det till **Klart**-sektionen längst ner. Stryk inte bara över det där det står.
 
 ---
 
-## Rubens beslut (ej byggt)
+## Att göra / diskutera
 
 ---
 
@@ -23,9 +23,7 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 ---
 
-## Claudes rekommendationer
-
-### Kodbas
+## Kodbas
 
 - **Bygg ut alias-täckning i `exercises_def.json`** — gå igenom samtliga övningar och lägg till `aliases` för alla kända alternativa namn (t.ex. "Lateral Raises"/"Lateral Raise" på "Side Raise"). Kombinera med att `searchStrings` i `ExercisePickerView` även inkluderar `aliases` (se commit som lade till detta) — annars hjälper alias inte vid sökning, bara vid migrering av historisk data.
 
@@ -33,15 +31,12 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 ## Parkerat (avskrivet)
 
-**Rubens beslut:**
 - **Övningsbyte intra-pass** — byt övning mitt i ett pass utan att förstöra strukturen; spara original + ersättning i loggen
 - **Rest-timer per övning** — default lagrad i `ProgramExercise.restSeconds` istället för global AppStorage-inställning
 - **HIIT-timer** — oklart use case
 - **4-tab-layout** — final, förhandlas inte
 - **Apple Watch-app** — Ruben har ingen klocka
 - **Siri Shortcuts** — single-user-app, låg prioritet
-
-**Claudes förslag (avskrivna):**
 - **TabView-omstrukturering** — 3 tabbar avskrivet; nuvarande 4-tabbar med samlad Träning-tab är rätt
 - **ExerciseDef → SwiftData `@Model`** — inget praktiskt behov, prefill fungerar via `programId`
 - **HKWorkoutActivity per övning** — rörelse/vila går inte att särskilja, ger ingen meningsfull data
