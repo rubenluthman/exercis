@@ -8,9 +8,6 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 ## Rubens beslut (ej byggt)
 
-- **Övningsbyte intra-pass** — byt övning mitt i ett pass utan att förstöra strukturen; spara original + ersättning i loggen
-- **Rest-timer per övning** — default lagrad i `ProgramExercise.restSeconds` istället för global AppStorage-inställning
-
 ---
 
 ## Claudes rekommendationer
@@ -36,6 +33,8 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 ## Parkerat (avskrivet)
 
 **Rubens beslut:**
+- **Övningsbyte intra-pass** — byt övning mitt i ett pass utan att förstöra strukturen; spara original + ersättning i loggen
+- **Rest-timer per övning** — default lagrad i `ProgramExercise.restSeconds` istället för global AppStorage-inställning
 - **HIIT-timer** — oklart use case
 - **4-tab-layout** — final, förhandlas inte
 - **Apple Watch-app** — Ruben har ingen klocka
