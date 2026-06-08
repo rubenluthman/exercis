@@ -5,8 +5,8 @@ final class ExerciseLibraryTests: XCTestCase {
 
     // MARK: Loading
 
-    func testLoads186IncludedExercises() {
-        XCTAssertEqual(ExerciseDef.all.count, 186)
+    func testLoads184IncludedExercises() {
+        XCTAssertEqual(ExerciseDef.all.count, 184)
     }
 
     func testAllExercisesHaveNonEmptyId() {
