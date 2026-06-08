@@ -198,6 +198,35 @@ enum MuscleGroup: String, CaseIterable {
     }
 }
 
+// MARK: - Muscle display names
+
+extension String {
+    var muscleDisplayName: String {
+        let map: [String: String] = [
+            "abs":             "Abs",
+            "biceps":          "Biceps",
+            "calves":          "Calves",
+            "chest":           "Chest",
+            "erector_spinae":  "Erector Spinae",
+            "forearms":        "Forearms",
+            "front_deltoid":   "Front Delt",
+            "full_body":       "Full Body",
+            "glutes":          "Glutes",
+            "hamstrings":      "Hamstrings",
+            "hip_flexors":     "Hip Flexors",
+            "latissimus_dorsi":"Lats",
+            "obliques":        "Obliques",
+            "quadriceps":      "Quads",
+            "rear_deltoid":    "Rear Delt",
+            "rhomboids":       "Rhomboids",
+            "side_deltoid":    "Side Delt",
+            "trapezius":       "Traps",
+            "triceps":         "Triceps"
+        ]
+        return map[self] ?? replacingOccurrences(of: "_", with: " ").capitalized
+    }
+}
+
 // MARK: - ExerciseLibrary
 
 final class ExerciseLibrary {

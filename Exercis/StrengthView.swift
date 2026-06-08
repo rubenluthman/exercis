@@ -166,6 +166,7 @@ struct StrengthView: View {
                 .transition(.move(edge: .bottom))
             }
         }
+        .toolbar(.hidden, for: .tabBar)
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {

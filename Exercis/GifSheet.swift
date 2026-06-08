@@ -81,7 +81,7 @@ struct GifSheet: View {
                 .font(.jost(.medium, size: 10))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
-            Text(muscles.map { $0.capitalized }.joined(separator: ", "))
+            Text(muscles.map { $0.muscleDisplayName }.joined(separator: ", "))
                 .font(.jost(.regular, size: 15))
                 .foregroundStyle(.primary)
         }

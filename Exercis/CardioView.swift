@@ -189,6 +189,7 @@ struct CardioView: View {
         .sheet(isPresented: $showTimePicker, onDismiss: { hasCustomTime = true }) {
             SessionTimePicker(start: $editedStart, end: $editedEnd, accent: .workoutAccent)
         }
+        .toolbar(.hidden, for: .tabBar)
         .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
