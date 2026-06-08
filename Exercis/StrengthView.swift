@@ -55,6 +55,7 @@ struct StrengthView: View {
     private let restTicker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var newPRNames: [String] = []
     @State private var saveError = false
+    @State private var swapExerciseIndex: Int? = nil
     @AppStorage("restTimerSeconds") private var restTimerDuration = 90
     @FocusState private var activeField: WorkoutField?
 
@@ -101,7 +102,8 @@ struct StrengthView: View {
                                 }
                             },
                             activeField: $activeField,
-                            onEdit: { isDirty = true }
+                            onEdit: { isDirty = true },
+                            onSwapExercise: { swapExerciseIndex = i }
                         )
                         ThinDivider()
                     }
@@ -168,20 +170,26 @@ struct StrengthView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("NEXT") {
-                    Haptics.selection()
-                    if case .reps = activeField { startRestTimer() }
-                    let next = nextField
-                    activeField = next
-                    if case .weight(let ex, let set) = next {
-                        #if canImport(ActivityKit)
-                        LiveActivityManager.shared.update(state: makeActivityState(exerciseIndex: ex, setNumber: set + 1))
-                        #endif
+                if nextField != nil {
+                    Button("NEXT") {
+                        Haptics.selection()
+                        if case .reps = activeField { startRestTimer() }
+                        let next = nextField
+                        if case .weight(let ex, _) = next, collapsedExercises.contains(ex) {
+                            withAnimation(.easeInOut(duration: 0.22)) {
+                                collapsedExercises.remove(ex)
+                            }
+                        }
+                        activeField = next
+                        if case .weight(let ex, let set) = next {
+                            #if canImport(ActivityKit)
+                            LiveActivityManager.shared.update(state: makeActivityState(exerciseIndex: ex, setNumber: set + 1))
+                            #endif
+                        }
                     }
-                }
                     .font(.jost(.semibold, size: 13))
-                    .foregroundStyle(nextField != nil ? accent : Color(.tertiaryLabel))
-                    .disabled(nextField == nil)
+                    .foregroundStyle(accent)
+                }
                 Button("DONE") { activeField = nil }
                     .font(.jost(.semibold, size: 13))
                     .foregroundStyle(accent)
@@ -194,6 +202,43 @@ struct StrengthView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text("An error occurred while saving. Try again or restart the app.")
+        }
+        .sheet(isPresented: Binding(
+            get: { swapExerciseIndex != nil },
+            set: { if !$0 { swapExerciseIndex = nil } }
+        )) {
+            if let idx = swapExerciseIndex {
+                ExercisePickerView(
+                    onSelect: { newDef in
+                        let current = exerciseForms[idx]
+                        let prevMax = sessions
+                            .flatMap { $0.exerciseLogs.filter { $0.name == newDef.name } }
+                            .flatMap { $0.sets }
+                            .map(\.weight).max() ?? 0
+                        let session = sessions.first(where: { $0.programId == program.id })
+                        var sugW = ""
+                        var sugR = ""
+                        if prevMax > 0,
+                           let log = session?.exerciseLogs.first(where: { $0.name == newDef.name }),
+                           let bestSet = log.sets.filter({ $0.weight == prevMax }).max(by: { $0.reps < $1.reps }) {
+                            let suggestion = progressionSuggestion(prevMax: prevMax, shouldIncrease: false, bestSetReps: bestSet.reps)
+                            sugW = displayWeight(suggestion.weight, imperial: imperial)
+                            sugR = suggestion.reps > 0 ? "\(suggestion.reps)" : ""
+                        }
+                        exerciseForms[idx] = ExerciseFormData(
+                            def: newDef,
+                            sets: current.sets,
+                            shouldIncrease: false,
+                            previousMaxWeight: prevMax,
+                            suggestedWeight: sugW,
+                            suggestedReps: sugR
+                        )
+                        isDirty = true
+                        swapExerciseIndex = nil
+                    },
+                    programConstraint: ProgramConstraint(rawValue: program.programConstraint) ?? .none
+                )
+            }
         }
         .onAppear {
             guard !initialized else { return }

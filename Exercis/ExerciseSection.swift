@@ -13,6 +13,7 @@ struct ExerciseSection: View {
     var onToggleCollapse: () -> Void
     @FocusState.Binding var activeField: WorkoutField?
     var onEdit: () -> Void = {}
+    var onSwapExercise: (() -> Void)? = nil
     @State private var showGif = false
     @AppStorage("useImperialUnits") private var imperial = false
 
@@ -54,10 +55,21 @@ struct ExerciseSection: View {
                         .font(.jost(.medium, size: 10))
                         .foregroundStyle(Color(.secondaryLabel))
                 } else {
-                    Text(form.def.repRange)
-                        .font(.jost(.regular, size: 12))
-                        .foregroundStyle(Color(.secondaryLabel))
-                        .frame(width: 90, alignment: .trailing)
+                    HStack(spacing: 10) {
+                        Text(form.def.repRange)
+                            .font(.jost(.regular, size: 12))
+                            .foregroundStyle(Color(.secondaryLabel))
+                        if let swap = onSwapExercise {
+                            Button(action: swap) {
+                                Image(systemName: "arrow.left.arrow.right")
+                                    .font(.system(size: 11))
+                                    .foregroundStyle(Color(.tertiaryLabel))
+                                    .frame(width: 28, height: 28)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Switch exercise")
+                        }
+                    }
                 }
             }
             .padding(.horizontal, 24)
@@ -87,17 +99,29 @@ struct ExerciseSection: View {
             }
         }
         .animation(.easeInOut(duration: 0.22), value: isCollapsed)
-        .onChange(of: form.sets.map(\.weight)) { _, weights in
+        .onChange(of: form.sets.map(\.weight)) { old, new in
             onEdit()
+            if let i = (0..<min(old.count, new.count)).first(where: { old[$0] != new[$0] }) {
+                let oldVal = old[i]
+                for j in (i + 1)..<form.sets.count where form.sets[j].weight == oldVal {
+                    form.sets[j].weight = new[i]
+                }
+            }
             guard form.shouldIncrease else { return }
-            let newMax = weights.compactMap { parseWeight($0) }.max() ?? 0
+            let newMax = new.compactMap { parseWeight($0) }.max() ?? 0
             if newMax > form.previousMaxWeight {
                 form.shouldIncrease = false
                 UserDefaults.standard.setIncrease(form.def.name, false)
             }
         }
-        .onChange(of: form.sets.map(\.reps)) { _, _ in
+        .onChange(of: form.sets.map(\.reps)) { old, new in
             onEdit()
+            if let i = (0..<min(old.count, new.count)).first(where: { old[$0] != new[$0] }) {
+                let oldVal = old[i]
+                for j in (i + 1)..<form.sets.count where form.sets[j].reps == oldVal {
+                    form.sets[j].reps = new[i]
+                }
+            }
         }
         .contentShape(Rectangle())
         .onTapGesture { onToggleCollapse() }
