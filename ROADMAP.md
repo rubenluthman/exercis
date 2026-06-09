@@ -8,6 +8,8 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 ## Att göra / diskutera
 
+- **Uppdatera appikon** — `foreground.png` (vit form på transparent bakgrund) är klar, importera i Icon Composer och generera adaptiv `.icon`-fil för iOS 26 Liquid Glass-ikon med automatiska Default/Dark/Tinted-varianter.
+
 ---
 
 ## Kräver Apple Developer-konto (TestFlight + App Store)
