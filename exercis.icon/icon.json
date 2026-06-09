@@ -16,6 +16,7 @@
     {
       "layers" : [
         {
+          "blend-mode" : "normal",
           "glass" : true,
           "image-name" : "foreground.png",
           "name" : "exercis-stripes"

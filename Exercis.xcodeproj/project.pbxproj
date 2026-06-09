@@ -468,7 +468,7 @@
 		CE17ABB22FC09F14007E1C27 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = exercis;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Exercis/Exercis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -508,7 +508,7 @@
 		CE17ABB32FC09F14007E1C27 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = exercis;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Exercis/Exercis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
