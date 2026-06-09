@@ -83,7 +83,8 @@ struct TrainingView: View {
                 .padding(.horizontal, 24)
             ThinDivider()
             ForEach(trainingPrograms) { program in
-                let isDraft = hasDraft && UserDefaults.standard.loadDraft()?.programId == program.id.uuidString
+                let draftProgramId = UserDefaults.standard.loadDraft()?.programId
+                let isDraft = hasDraft && (draftProgramId == program.id.uuidString || (draftProgramId == nil && trainingPrograms.first?.id == program.id))
                 HStack(spacing: 0) {
                     Button {
                         if isDraft {
