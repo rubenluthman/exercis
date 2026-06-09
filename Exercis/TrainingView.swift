@@ -79,9 +79,8 @@ struct TrainingView: View {
 
     private var programSection: some View {
         VStack(spacing: 0) {
-            sectionLabel("STRENGTH")
+            sectionLabel(String(localized: "STRENGTH"))
                 .padding(.horizontal, 24)
-            ThinDivider()
             ForEach(trainingPrograms) { program in
                 let draftProgramId = UserDefaults.standard.loadDraft()?.programId
                 let isDraft = hasDraft && (draftProgramId == program.id.uuidString || (draftProgramId == nil && trainingPrograms.first?.id == program.id))
@@ -133,9 +132,8 @@ struct TrainingView: View {
 
     private var cardioSection: some View {
         VStack(spacing: 0) {
-            sectionLabel("CARDIO")
+            sectionLabel(String(localized: "CARDIO"))
                 .padding(.horizontal, 24)
-            ThinDivider()
             ForEach(Array(selectedCardioTypes.enumerated()), id: \.element) { _, type in
                 let isDraft = hasCardioDraft && UserDefaults.standard.string(forKey: "cardioDraftType") == type.rawValue
                 HStack(spacing: 0) {
