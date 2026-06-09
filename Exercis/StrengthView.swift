@@ -177,7 +177,7 @@ struct StrengthView: View {
                         if case .reps = activeField { startRestTimer() }
                         let next = nextField
                         if case .weight(let ex, _) = next, collapsedExercises.contains(ex) {
-                            withAnimation(.easeInOut(duration: 0.22)) {
+                            _ = withAnimation(.easeInOut(duration: 0.22)) {
                                 collapsedExercises.remove(ex)
                             }
                         }
