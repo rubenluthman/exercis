@@ -10,7 +10,7 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 - **macOS-companion-app** — enkel macOS-app för att logga pass i efterhand och hantera program när man sitter vid datorn. Behöver inte spegla iOS-appen fullt ut — fokus på programredigering och retroaktiv loggning. Delar SwiftData-modeller och affärslogik med iOS-appen; CloudKit-sync (se nedan) är en förutsättning för att data ska synka mellan enheterna.
 
-- **Uppdatera appikon** — `foreground.png` (vit form på transparent bakgrund) är klar, importera i Icon Composer och generera adaptiv `.icon`-fil för iOS 26 Liquid Glass-ikon med automatiska Default/Dark/Tinted-varianter.
+- **watchOS-app** — snabbloggning av set/reps direkt från klockan under pass. `exercis.icon` har redan `watchOS` i `supported-platforms.circles` så ikonen är redo. Kräver Apple Developer-konto och CloudKit-sync för att data ska synka.
 
 ---
 
@@ -39,7 +39,7 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - **Rest-timer per övning** — default lagrad i `ProgramExercise.restSeconds` istället för global AppStorage-inställning
 - **HIIT-timer** — oklart use case
 - **4-tab-layout** — final, förhandlas inte
-- **Apple Watch-app** — Ruben har ingen klocka
+- **Apple Watch-app (omvärderad)** — flyttad till Att göra; se watchOS-app ovan
 - **Siri Shortcuts** — single-user-app, låg prioritet
 - **TabView-omstrukturering** — 3 tabbar avskrivet; nuvarande 4-tabbar med samlad Träning-tab är rätt
 - **ExerciseDef → SwiftData `@Model`** — inget praktiskt behov, prefill fungerar via `programId`
@@ -87,4 +87,5 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 - [x] CSV-export RFC 4180-citering — ny fri funktion `csvField(_:)` i Theme.swift kvoterar fält med komma/citattecken/radbrytning (program-, övnings- och kardiotyp-namn)
 - [x] HealthKit-behörighetsbegäran konsoliderad — flyttad från StrengthView/CardioView `.onAppear` till `MainTabView.onAppear` vid app-start
 - [x] Apprevision 2026-06-06 — lokaliserade saknade strängar (OnboardingView: programval/kardioval/Apple Health-steg, SettingsView: backup-förklaring), lade till `accessibilityLabel("Cancel rest timer")` på vilotimerns avbryt-knapp (StrengthView), uppdaterade CLAUDE.md: 6 nya fria funktioner för imperial-enheter (`displayWeight`/`displayDistance`/`parseWeightInput`/`parseDistanceInput`/`weightLabel`/`distanceLabel`), 8 saknade UserDefaults-nycklar, samt skrev om "Enhetflexibilitet" från framtidsplan till faktisk implementation
+- [x] Appikon — adaptiv Liquid Glass-ikon via Icon Composer (`exercis.icon`), Default/Dark/Tinted automatiskt, `AppIcon.appiconset` borttaget
 - [x] Apprevision 2026-06-06 (full, 7 ytor) — lokaliserade ytterligare 9 strängar (ProfileView: STREAK/LAST SESSION/PERSONAL RECORDS m.fl., SettingsView: "Based on your last session start", accessibility-nycklar "Edit program"/"Animation showing %@"); extraherade `ChartEmptyState` ur fyra identiska kopior i chart sheets till Theme.swift; rättade CLAUDE.md: schema-migrationsstatus var stale (`ExercisSchemaV1`/`ExercisMigrationPlan` finns redan, beskrevs som "ej definierat"), tog bort felaktigt krav på `NSUserNotificationsUsageDescription` (existerar inte som Info.plist-nyckel — notiser kräver ingen usage description), la till saknade widget-filer (WidgetDataStore/WidgetSnapshotBuilder) i filstrukturlistan
