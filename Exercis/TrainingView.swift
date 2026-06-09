@@ -4,6 +4,7 @@ import SwiftData
 struct TrainingView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
+    @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
     @AppStorage("hasDraft") private var hasDraft = false
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
     @AppStorage("selectedCardioTypes") private var selectedCardioTypesRaw = ""
@@ -136,31 +137,23 @@ struct TrainingView: View {
                 .padding(.horizontal, 24)
             ForEach(Array(selectedCardioTypes.enumerated()), id: \.element) { _, type in
                 let isDraft = hasCardioDraft && UserDefaults.standard.string(forKey: "cardioDraftType") == type.rawValue
+                let lastDuration = cardioSessions.first(where: { $0.cardioType == type.rawValue })?.durationMinutes
                 HStack(spacing: 0) {
                     Button {
                         activeCardioType = type
                     } label: {
-                        HStack {
-                            Text(type.displayName.uppercased())
-                                .font(.jost(.semibold, size: 13))
-                                .kerning(1.5)
-                                .foregroundStyle(Color.workoutAccent)
-                            Spacer()
-                            if isDraft {
-                                Text("CONTINUE")
-                                    .font(.jost(.medium, size: 10))
-                                    .kerning(1.5)
-                                    .foregroundStyle(Color(.secondaryLabel))
-                            }
+                        HStack(spacing: 0) {
+                            CardioTypeCard(type: type, lastDurationMinutes: lastDuration)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 12)
                             if !isDraft {
                                 Image(systemName: "chevron.right")
                                     .font(.jost(.medium, size: 10))
                                     .foregroundStyle(Color(.tertiaryLabel))
+                                    .padding(.trailing, 24)
                             }
                         }
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 18)
-                        .contentShape(Rectangle())
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.plain)
 
