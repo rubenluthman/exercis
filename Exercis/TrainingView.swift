@@ -112,23 +112,17 @@ struct TrainingView: View {
                     .buttonStyle(.plain)
 
                     if isDraft {
-                        VStack(spacing: 2) {
-                            Text("CONTINUE")
-                                .font(.jost(.semibold, size: 10))
-                                .kerning(1.5)
-                                .foregroundStyle(Color(program.colorName))
-                            Button {
-                                UserDefaults.standard.saveDraft(nil)
-                                hasDraft = false
-                            } label: {
-                                Image(systemName: "xmark")
-                                    .font(.jost(.medium, size: 11))
-                                    .foregroundStyle(Color(.tertiaryLabel))
-                                    .frame(width: 44, height: 44)
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("Discard draft")
+                        Button {
+                            UserDefaults.standard.saveDraft(nil)
+                            hasDraft = false
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.jost(.medium, size: 11))
+                                .foregroundStyle(Color(.tertiaryLabel))
+                                .frame(width: 44, height: 44)
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Discard draft")
                         .padding(.trailing, 8)
                     }
                 }
@@ -173,25 +167,19 @@ struct TrainingView: View {
                     .buttonStyle(.plain)
 
                     if isDraft {
-                        VStack(spacing: 2) {
-                            Text("DISCARD")
-                                .font(.jost(.semibold, size: 10))
-                                .kerning(1.5)
+                        Button {
+                            UserDefaults.standard.removeObject(forKey: "cardioDraftType")
+                            UserDefaults.standard.removeObject(forKey: "cardioDraftStartTime_\(type.rawValue)")
+                            UserDefaults.standard.removeObject(forKey: "cardioDraftDistance_\(type.rawValue)")
+                            hasCardioDraft = false
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.jost(.medium, size: 11))
                                 .foregroundStyle(Color(.tertiaryLabel))
-                            Button {
-                                UserDefaults.standard.removeObject(forKey: "cardioDraftType")
-                                UserDefaults.standard.removeObject(forKey: "cardioDraftStartTime_\(type.rawValue)")
-                                UserDefaults.standard.removeObject(forKey: "cardioDraftDistance_\(type.rawValue)")
-                                hasCardioDraft = false
-                            } label: {
-                                Image(systemName: "xmark")
-                                    .font(.jost(.medium, size: 11))
-                                    .foregroundStyle(Color(.tertiaryLabel))
-                                    .frame(width: 44, height: 44)
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("Discard cardio draft")
+                                .frame(width: 44, height: 44)
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Discard cardio draft")
                         .padding(.trailing, 8)
                     }
                 }
