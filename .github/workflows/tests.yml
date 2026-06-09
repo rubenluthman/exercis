@@ -12,14 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Select Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_16.app/Contents/Developer
-
       - name: Run tests
         run: |
           xcodebuild test \
             -project Exercis.xcodeproj \
             -scheme Exercis \
             -testPlan Exercis \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -skipMacroValidation
