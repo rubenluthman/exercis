@@ -121,10 +121,14 @@ struct MainTabView: View {
 
 private extension View {
     @ViewBuilder func minimizeTabBarOnScroll() -> some View {
+#if swift(>=6.2)
         if #available(iOS 26, *) {
             self.tabBarMinimizeBehavior(.onScrollDown)
         } else {
             self
         }
+#else
+        self
+#endif
     }
 }

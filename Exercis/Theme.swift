@@ -108,6 +108,7 @@ struct OutlineButtonStyle: ButtonStyle {
 }
 
 // MARK: - iOS 26 glass button variant — valt adaptivt av primaryButtonStyle (glass på 26+, fylld rektangel på äldre)
+#if swift(>=6.2)
 @available(iOS 26, *)
 struct GlassFilledButtonStyle: ButtonStyle {
     let accent: Color
@@ -123,15 +124,20 @@ struct GlassFilledButtonStyle: ButtonStyle {
             .opacity(configuration.isPressed ? 0.75 : 1)
     }
 }
+#endif
 
 extension View {
     func primaryButtonStyle(accent: Color, fontSize: CGFloat = 15) -> some View {
         Group {
+#if swift(>=6.2)
             if #available(iOS 26, *) {
                 self.buttonStyle(GlassFilledButtonStyle(accent: accent, fontSize: fontSize))
             } else {
                 self.buttonStyle(FilledButtonStyle(accent: accent, fontSize: fontSize))
             }
+#else
+            self.buttonStyle(FilledButtonStyle(accent: accent, fontSize: fontSize))
+#endif
         }
     }
 }
