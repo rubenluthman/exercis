@@ -12,6 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Select Xcode
+        run: |
+          XCODE=$(ls /Applications | grep -E "^Xcode_16" | sort -V | tail -1)
+          sudo xcode-select -switch "/Applications/${XCODE}/Contents/Developer"
+          xcodebuild -version
+
       - name: Run tests
         run: |
           xcodebuild test \
