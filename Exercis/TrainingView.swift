@@ -144,30 +144,57 @@ struct TrainingView: View {
             ThinDivider()
             ForEach(Array(selectedCardioTypes.enumerated()), id: \.element) { _, type in
                 let isDraft = hasCardioDraft && UserDefaults.standard.string(forKey: "cardioDraftType") == type.rawValue
-                Button {
-                    activeCardioType = type
-                } label: {
-                    HStack {
-                        Text(type.displayName.uppercased())
-                            .font(.jost(.semibold, size: 13))
-                            .kerning(1.5)
-                            .foregroundStyle(Color.workoutAccent)
-                        Spacer()
-                        if isDraft {
-                            Text("CONTINUE")
-                                .font(.jost(.medium, size: 10))
+                HStack(spacing: 0) {
+                    Button {
+                        activeCardioType = type
+                    } label: {
+                        HStack {
+                            Text(type.displayName.uppercased())
+                                .font(.jost(.semibold, size: 13))
                                 .kerning(1.5)
-                                .foregroundStyle(Color(.secondaryLabel))
+                                .foregroundStyle(Color.workoutAccent)
+                            Spacer()
+                            if isDraft {
+                                Text("CONTINUE")
+                                    .font(.jost(.medium, size: 10))
+                                    .kerning(1.5)
+                                    .foregroundStyle(Color(.secondaryLabel))
+                            }
+                            if !isDraft {
+                                Image(systemName: "chevron.right")
+                                    .font(.jost(.medium, size: 10))
+                                    .foregroundStyle(Color(.tertiaryLabel))
+                            }
                         }
-                        Image(systemName: "chevron.right")
-                            .font(.jost(.medium, size: 10))
-                            .foregroundStyle(Color(.tertiaryLabel))
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 18)
+                        .contentShape(Rectangle())
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 18)
-                    .contentShape(Rectangle())
+                    .buttonStyle(.plain)
+
+                    if isDraft {
+                        VStack(spacing: 2) {
+                            Text("DISCARD")
+                                .font(.jost(.semibold, size: 10))
+                                .kerning(1.5)
+                                .foregroundStyle(Color(.tertiaryLabel))
+                            Button {
+                                UserDefaults.standard.removeObject(forKey: "cardioDraftType")
+                                UserDefaults.standard.removeObject(forKey: "cardioDraftStartTime_\(type.rawValue)")
+                                UserDefaults.standard.removeObject(forKey: "cardioDraftDistance_\(type.rawValue)")
+                                hasCardioDraft = false
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .font(.jost(.medium, size: 11))
+                                    .foregroundStyle(Color(.tertiaryLabel))
+                                    .frame(width: 44, height: 44)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Discard cardio draft")
+                        }
+                        .padding(.trailing, 8)
+                    }
                 }
-                .buttonStyle(.plain)
                 ThinDivider()
             }
         }
