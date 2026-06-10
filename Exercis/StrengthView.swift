@@ -11,6 +11,7 @@ struct SetFormData: Identifiable {
     let id = UUID()
     var weight: String = ""
     var reps: String = ""
+    var repsUnlocked: Bool = false
 }
 
 struct ExerciseFormData: Identifiable {
@@ -21,6 +22,7 @@ struct ExerciseFormData: Identifiable {
     var previousMaxWeight: Double = 0
     var suggestedWeight: String = ""
     var suggestedReps: String = ""
+    var fixedReps: Int = 0
 }
 
 // MARK: - StrengthView
@@ -63,6 +65,15 @@ struct StrengthView: View {
         guard let current = activeField else { return nil }
         switch current {
         case .weight(let ex, let set):
+            let form = exerciseForms[ex]
+            let skipReps = form.fixedReps > 0 && !form.sets[set].repsUnlocked
+            if skipReps {
+                let nextSet = set + 1
+                if nextSet < form.sets.count { return .weight(exercise: ex, set: nextSet) }
+                let nextEx = ex + 1
+                if nextEx < exerciseForms.count { return .weight(exercise: nextEx, set: 0) }
+                return nil
+            }
             return .reps(exercise: ex, set: set)
         case .reps(let ex, let set):
             let nextSet = set + 1
@@ -90,6 +101,7 @@ struct StrengthView: View {
                             exerciseIndex: i,
                             isCollapsed: collapsedExercises.contains(i),
                             accent: accent,
+                            fixedReps: exerciseForms[i].fixedReps,
                             onToggleCollapse: {
                                 Haptics.selection()
                                 activeField = nil
@@ -169,14 +181,21 @@ struct StrengthView: View {
         .toolbar(.hidden, for: .tabBar)
         .toolbar(.hidden, for: .navigationBar)
         .enableSwipeBack()
-        .animation(.easeInOut(duration: .22), value: showEffortPicker)
+        .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 if nextField != nil {
                     Button("NEXT") {
                         Haptics.selection()
-                        if case .reps = activeField { startRestTimer() }
+                        if case .reps = activeField {
+                            startRestTimer()
+                        } else if case .weight(let ex, let set) = activeField {
+                            let form = exerciseForms[ex]
+                            if form.fixedReps > 0 && !form.sets[set].repsUnlocked {
+                                startRestTimer()
+                            }
+                        }
                         let next = nextField
                         if case .weight(let ex, _) = next, collapsedExercises.contains(ex) {
                             _ = withAnimation(.easeInOut(duration: 0.22)) {
@@ -332,10 +351,23 @@ struct StrengthView: View {
     // MARK: Logic
 
     private func buildForms(from session: WorkoutSession?) {
-        let defs = program.sortedExercises.compactMap { pe in
+        let programExercises = program.sortedExercises
+        let defs = programExercises.compactMap { pe in
             ExerciseDef.find(id: pe.exerciseId) ?? ExerciseDef.find(name: pe.exerciseName)
         }
-        let setCount = program.sortedExercises.first?.setCount ?? 3
+        let setCount = programExercises.first?.setCount ?? 3
+
+        func fixedReps(for def: ExerciseDef) -> Int {
+            guard program.useFixedReps else { return 0 }
+            return programExercises.first(where: {
+                $0.exerciseId == def.id || $0.exerciseName == def.name
+            })?.fixedReps ?? 0
+        }
+
+        func applyFixedReps(_ sets: [SetFormData], fr: Int) -> [SetFormData] {
+            guard fr > 0 else { return sets }
+            return sets.map { s in SetFormData(weight: s.weight, reps: "\(fr)") }
+        }
 
         if hasDraft, let draft = UserDefaults.standard.loadDraft(),
            draft.programId == program.id.uuidString {
@@ -343,6 +375,7 @@ struct StrengthView: View {
             collapsedExercises = Set(draft.collapsedExercises)
             exerciseForms = defs.map { def in
                 let session = sessions.first(where: { $0.programId == program.id })
+                let fr = fixedReps(for: def)
                 if let ex = draft.exercises.first(where: { $0.name == def.name }) {
                     let prevMax = ex.previousMaxWeight
                     var sugW = ""
@@ -354,23 +387,27 @@ struct StrengthView: View {
                         sugW = displayWeight(suggestion.weight, imperial: imperial)
                         sugR = suggestion.reps > 0 ? "\(suggestion.reps)" : ""
                     }
+                    let rawSets = ex.sets.map { SetFormData(weight: $0.weight, reps: $0.reps) }
                     return ExerciseFormData(
                         def: def,
-                        sets: ex.sets.map { SetFormData(weight: $0.weight, reps: $0.reps) },
+                        sets: applyFixedReps(rawSets, fr: fr),
                         shouldIncrease: ex.shouldIncrease,
                         previousMaxWeight: prevMax,
                         suggestedWeight: sugW,
-                        suggestedReps: sugR
+                        suggestedReps: sugR,
+                        fixedReps: fr
                     )
                 }
-                return ExerciseFormData(def: def, sets: Array(repeating: SetFormData(), count: setCount))
+                let emptySets = applyFixedReps(Array(repeating: SetFormData(), count: setCount), fr: fr)
+                return ExerciseFormData(def: def, sets: emptySets, fixedReps: fr)
             }
             return
         }
 
         startTime = Date()
-        exerciseForms = defs.map { def in
-            var sets = Array(repeating: SetFormData(), count: setCount)
+        exerciseForms = zip(defs, programExercises).map { (def, pe) in
+            let fr = program.useFixedReps ? pe.fixedReps : 0
+            var sets = Array(repeating: SetFormData(), count: pe.setCount)
 
             if let session,
                let log = session.exerciseLogs.first(where: { $0.name == def.name }),
@@ -378,8 +415,10 @@ struct StrengthView: View {
                let bestSet = log.sets.filter({ $0.weight == maxWeight }).max(by: { $0.reps < $1.reps }) {
                 let w = displayWeight(bestSet.weight, imperial: imperial)
                 let r = bestSet.reps > 0 ? "\(bestSet.reps)" : ""
-                sets = Array(repeating: SetFormData(weight: w, reps: r), count: setCount)
+                sets = Array(repeating: SetFormData(weight: w, reps: r), count: pe.setCount)
             }
+
+            sets = applyFixedReps(sets, fr: fr)
 
             let increase = UserDefaults.standard.increaseNames().contains(def.name)
             let prevMax = session?.exerciseLogs
@@ -396,7 +435,7 @@ struct StrengthView: View {
                 sugR = suggestion.reps > 0 ? "\(suggestion.reps)" : ""
             }
             return ExerciseFormData(def: def, sets: sets, shouldIncrease: increase, previousMaxWeight: prevMax,
-                                    suggestedWeight: sugW, suggestedReps: sugR)
+                                    suggestedWeight: sugW, suggestedReps: sugR, fixedReps: fr)
         }
     }
 

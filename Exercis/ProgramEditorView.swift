@@ -12,6 +12,7 @@ struct ProgramEditorView: View {
     @State private var name: String
     @State private var colorName: String
     @State private var constraintRaw: String
+    @State private var useFixedReps: Bool
     @State private var exercises: [ExerciseDraft]
     @State private var showPicker = false
     @State private var showDeleteAlert = false
@@ -21,8 +22,9 @@ struct ProgramEditorView: View {
         _name = State(initialValue: program?.name ?? "")
         _colorName = State(initialValue: program?.colorName ?? "paletteIntenseRed")
         _constraintRaw = State(initialValue: program?.programConstraint ?? "")
+        _useFixedReps = State(initialValue: program?.useFixedReps ?? false)
         _exercises = State(initialValue: program?.sortedExercises.map {
-            ExerciseDraft(exerciseId: $0.exerciseId, exerciseName: $0.exerciseName, setCount: $0.setCount)
+            ExerciseDraft(exerciseId: $0.exerciseId, exerciseName: $0.exerciseName, setCount: $0.setCount, fixedReps: $0.fixedReps)
         } ?? [])
     }
 
@@ -43,6 +45,26 @@ struct ProgramEditorView: View {
 
                 Section("Begränsning") {
                     constraintPicker
+                }
+
+                Section {
+                    Toggle(isOn: $useFixedReps) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Locked reps")
+                                .font(.jost(.regular, size: 16))
+                            Text("Set a fixed rep count per exercise")
+                                .font(.jost(.regular, size: 13))
+                                .foregroundStyle(Color(.secondaryLabel))
+                        }
+                    }
+                    .tint(accent)
+                    .onChange(of: useFixedReps) { _, enabled in
+                        if enabled {
+                            for i in exercises.indices where exercises[i].fixedReps == 0 {
+                                exercises[i].fixedReps = 8
+                            }
+                        }
+                    }
                 }
 
                 Section {
@@ -99,7 +121,8 @@ struct ProgramEditorView: View {
                         exercises.append(ExerciseDraft(
                             exerciseId: def.id,
                             exerciseName: def.displayName,
-                            setCount: 3
+                            setCount: 3,
+                            fixedReps: useFixedReps ? 8 : 0
                         ))
                     },
                     programConstraint: ProgramConstraint(rawValue: constraintRaw) ?? .none
@@ -175,42 +198,25 @@ struct ProgramEditorView: View {
                 Text(ex.wrappedValue.exerciseName)
                     .font(.jost(.regular, size: 16))
                     .foregroundStyle(.primary)
-                Text("\(ex.wrappedValue.setCount) set")
-                    .font(.jost(.regular, size: 12))
-                    .foregroundStyle(Color(.secondaryLabel))
+                Group {
+                    if useFixedReps {
+                        Text("\(ex.wrappedValue.setCount) set · \(ex.wrappedValue.fixedReps) reps")
+                    } else {
+                        Text("\(ex.wrappedValue.setCount) set")
+                    }
+                }
+                .font(.jost(.regular, size: 12))
+                .foregroundStyle(Color(.secondaryLabel))
             }
 
             Spacer()
 
             HStack(spacing: 0) {
-                Button {
-                    if ex.wrappedValue.setCount > 1 {
-                        ex.wrappedValue.setCount -= 1
-                    }
-                } label: {
-                    Image(systemName: "minus")
-                        .frame(width: 32, height: 32)
-                        .foregroundStyle(ex.wrappedValue.setCount > 1 ? accent : Color(.tertiaryLabel))
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Decrease set count")
+                setsStepper(ex: ex)
 
-                Text("\(ex.wrappedValue.setCount)")
-                    .font(.jost(.semibold, size: 17))
-                    .foregroundStyle(accent)
-                    .frame(width: 24, alignment: .center)
-
-                Button {
-                    if ex.wrappedValue.setCount < 6 {
-                        ex.wrappedValue.setCount += 1
-                    }
-                } label: {
-                    Image(systemName: "plus")
-                        .frame(width: 32, height: 32)
-                        .foregroundStyle(ex.wrappedValue.setCount < 6 ? accent : Color(.tertiaryLabel))
+                if useFixedReps {
+                    repsStepper(ex: ex)
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Increase set count")
 
                 Image(systemName: "line.3.horizontal")
                     .font(.system(size: 14, weight: .regular))
@@ -219,6 +225,69 @@ struct ProgramEditorView: View {
             }
         }
         .padding(.vertical, 2)
+    }
+
+    private func setsStepper(ex: Binding<ExerciseDraft>) -> some View {
+        HStack(spacing: 0) {
+            Button {
+                if ex.wrappedValue.setCount > 1 { ex.wrappedValue.setCount -= 1 }
+            } label: {
+                Image(systemName: "minus")
+                    .frame(width: 32, height: 32)
+                    .foregroundStyle(ex.wrappedValue.setCount > 1 ? accent : Color(.tertiaryLabel))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Decrease set count")
+
+            Text("\(ex.wrappedValue.setCount)")
+                .font(.jost(.semibold, size: 17))
+                .foregroundStyle(accent)
+                .frame(width: 24, alignment: .center)
+
+            Button {
+                if ex.wrappedValue.setCount < 6 { ex.wrappedValue.setCount += 1 }
+            } label: {
+                Image(systemName: "plus")
+                    .frame(width: 32, height: 32)
+                    .foregroundStyle(ex.wrappedValue.setCount < 6 ? accent : Color(.tertiaryLabel))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Increase set count")
+        }
+    }
+
+    private func repsStepper(ex: Binding<ExerciseDraft>) -> some View {
+        HStack(spacing: 0) {
+            Text("·")
+                .font(.jost(.regular, size: 17))
+                .foregroundStyle(Color(.tertiaryLabel))
+                .frame(width: 12)
+
+            Button {
+                if ex.wrappedValue.fixedReps > 1 { ex.wrappedValue.fixedReps -= 1 }
+            } label: {
+                Image(systemName: "minus")
+                    .frame(width: 28, height: 32)
+                    .foregroundStyle(ex.wrappedValue.fixedReps > 1 ? accent : Color(.tertiaryLabel))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Decrease fixed reps")
+
+            Text("\(ex.wrappedValue.fixedReps)")
+                .font(.jost(.semibold, size: 17))
+                .foregroundStyle(accent)
+                .frame(width: 28, alignment: .center)
+
+            Button {
+                if ex.wrappedValue.fixedReps < 30 { ex.wrappedValue.fixedReps += 1 }
+            } label: {
+                Image(systemName: "plus")
+                    .frame(width: 28, height: 32)
+                    .foregroundStyle(ex.wrappedValue.fixedReps < 30 ? accent : Color(.tertiaryLabel))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Increase fixed reps")
+        }
     }
 
     // MARK: - Logic
@@ -231,18 +300,22 @@ struct ProgramEditorView: View {
             program.name = trimmed
             program.colorName = colorName
             program.programConstraint = constraintRaw
+            program.useFixedReps = useFixedReps
             for ex in program.exercises { context.delete(ex) }
             for (i, draft) in exercises.enumerated() {
-                let pe = ProgramExercise(exerciseId: draft.exerciseId, exerciseName: draft.exerciseName, sortIndex: i, setCount: draft.setCount)
+                let fr = useFixedReps ? draft.fixedReps : 0
+                let pe = ProgramExercise(exerciseId: draft.exerciseId, exerciseName: draft.exerciseName, sortIndex: i, setCount: draft.setCount, fixedReps: fr)
                 pe.program = program
                 context.insert(pe)
             }
         } else {
             let maxSort = (try? context.fetch(FetchDescriptor<WorkoutProgram>()))?.map(\.sortIndex).max() ?? -1
             let program = WorkoutProgram(name: trimmed, colorName: colorName, sortIndex: maxSort + 1, programConstraint: constraintRaw)
+            program.useFixedReps = useFixedReps
             context.insert(program)
             for (i, draft) in exercises.enumerated() {
-                let pe = ProgramExercise(exerciseId: draft.exerciseId, exerciseName: draft.exerciseName, sortIndex: i, setCount: draft.setCount)
+                let fr = useFixedReps ? draft.fixedReps : 0
+                let pe = ProgramExercise(exerciseId: draft.exerciseId, exerciseName: draft.exerciseName, sortIndex: i, setCount: draft.setCount, fixedReps: fr)
                 pe.program = program
                 context.insert(pe)
             }
@@ -272,4 +345,5 @@ struct ExerciseDraft: Identifiable {
     var exerciseId: String
     var exerciseName: String
     var setCount: Int
+    var fixedReps: Int = 0
 }

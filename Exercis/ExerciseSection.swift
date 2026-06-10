@@ -10,6 +10,7 @@ struct ExerciseSection: View {
     var exerciseIndex: Int
     var isCollapsed: Bool
     var accent: Color = .homeAccent
+    var fixedReps: Int = 0
     var onToggleCollapse: () -> Void
     @FocusState.Binding var activeField: WorkoutField?
     var onEdit: () -> Void = {}
@@ -193,21 +194,34 @@ struct ExerciseSection: View {
                     }
                 }
 
-            TextField("", text: $form.sets[index].reps)
-                .font(.jost(.semibold, size: 34))
-                .foregroundStyle(.primary)
-                .keyboardType(.numberPad)
-                .multilineTextAlignment(.trailing)
-                .focused($activeField, equals: .reps(exercise: exerciseIndex, set: index))
-                .frame(width: 120, alignment: .trailing)
-                .overlay(alignment: .trailing) {
-                    if form.sets[index].reps.isEmpty && activeField != .reps(exercise: exerciseIndex, set: index) {
-                        Text("–")
-                            .font(.jost(.semibold, size: 34))
-                            .foregroundStyle(Color(.tertiaryLabel))
-                            .allowsHitTesting(false)
+            if fixedReps > 0 && !form.sets[index].repsUnlocked {
+                Text("\(fixedReps)")
+                    .font(.jost(.semibold, size: 34))
+                    .foregroundStyle(Color(.tertiaryLabel))
+                    .frame(width: 120, alignment: .trailing)
+                    .contentShape(Rectangle())
+                    .onLongPressGesture(minimumDuration: 0.5) {
+                        Haptics.impact(.medium)
+                        form.sets[index].repsUnlocked = true
+                        activeField = .reps(exercise: exerciseIndex, set: index)
                     }
-                }
+            } else {
+                TextField("", text: $form.sets[index].reps)
+                    .font(.jost(.semibold, size: 34))
+                    .foregroundStyle(fixedReps > 0 ? accent : .primary)
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing)
+                    .focused($activeField, equals: .reps(exercise: exerciseIndex, set: index))
+                    .frame(width: 120, alignment: .trailing)
+                    .overlay(alignment: .trailing) {
+                        if form.sets[index].reps.isEmpty && activeField != .reps(exercise: exerciseIndex, set: index) {
+                            Text("–")
+                                .font(.jost(.semibold, size: 34))
+                                .foregroundStyle(Color(.tertiaryLabel))
+                                .allowsHitTesting(false)
+                        }
+                    }
+            }
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 2)

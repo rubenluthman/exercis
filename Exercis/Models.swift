@@ -214,6 +214,7 @@ final class WorkoutProgram {
     var sortIndex: Int = 0
     var isOnTrainingPage: Bool = true
     var programConstraint: String = ""
+    var useFixedReps: Bool = false
 
     @Relationship(deleteRule: .cascade, inverse: \ProgramExercise.program)
     var exercises: [ProgramExercise] = []
@@ -236,13 +237,15 @@ final class ProgramExercise {
     var exerciseName: String = ""
     var sortIndex: Int = 0
     var setCount: Int = 3
+    var fixedReps: Int = 0
     var program: WorkoutProgram?
 
-    init(exerciseId: String, exerciseName: String, sortIndex: Int, setCount: Int = 3) {
+    init(exerciseId: String, exerciseName: String, sortIndex: Int, setCount: Int = 3, fixedReps: Int = 0) {
         self.exerciseId = exerciseId
         self.exerciseName = exerciseName
         self.sortIndex = sortIndex
         self.setCount = setCount
+        self.fixedReps = fixedReps
     }
 }
 
