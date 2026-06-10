@@ -56,9 +56,9 @@ struct SettingsView: View {
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: "plus")
-                                    .font(.jost(.semibold, size: 13))
+                                    .font(.jost(.semibold, size: 15))
                                 Text("NEW PROGRAM")
-                                    .font(.jost(.semibold, size: 12))
+                                    .font(.jost(.semibold, size: 14))
                                     .kerning(1.5)
                             }
                             .foregroundStyle(Color(.secondaryLabel))
@@ -86,7 +86,7 @@ struct SettingsView: View {
                     sectionBlock {
                         sectionLabel("LIMITATIONS")
                         Text("Exercises that stress marked joints are dimmed in the exercise picker.")
-                            .font(.jost(.regular, size: 12))
+                            .font(.jost(.regular, size: 14))
                             .foregroundStyle(Color(.secondaryLabel))
                             .padding(.horizontal, 24)
                             .padding(.bottom, 12)
@@ -164,11 +164,11 @@ struct SettingsView: View {
                         sectionLabel("DATA")
                         HStack(alignment: .top, spacing: 10) {
                             Image(systemName: "icloud")
-                                .font(.system(size: 14))
+                                .font(.system(size: 16))
                                 .foregroundStyle(Color(.tertiaryLabel))
                                 .padding(.top, 1)
                             Text("Your data is saved locally and included in iCloud Backup. If you restore from backup, everything is preserved. Setting up a new phone without restoring — or with Backup disabled — will result in data loss. Export CSV as an extra copy.")
-                                .font(.jost(.regular, size: 12))
+                                .font(.jost(.regular, size: 14))
                                 .foregroundStyle(Color(.secondaryLabel))
                                 .fixedSize(horizontal: false, vertical: true)
                         }
@@ -205,12 +205,12 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Text("VERSION")
-                                    .font(.jost(.semibold, size: 12))
+                                    .font(.jost(.semibold, size: 14))
                                     .kerning(1.5)
                                     .foregroundStyle(.primary)
                                 Spacer()
                                 Text(appVersion)
-                                    .font(.jost(.regular, size: 13))
+                                    .font(.jost(.regular, size: 14))
                                     .foregroundStyle(Color(.secondaryLabel))
                                 Image(systemName: "chevron.right")
                                     .font(.system(size: 10))
@@ -263,7 +263,7 @@ struct SettingsView: View {
 
     private func sectionLabel(_ title: String) -> some View {
         Text(LocalizedStringKey(title))
-            .font(.jost(.medium, size: 10))
+            .font(.jost(.medium, size: 12))
             .kerning(1.5)
             .foregroundStyle(Color(.secondaryLabel))
             .padding(.horizontal, 24)
@@ -275,12 +275,12 @@ struct SettingsView: View {
         HStack(alignment: description != nil ? .top : .center, spacing: 16) {
             VStack(alignment: .leading, spacing: 3) {
                 Text(LocalizedStringKey(title))
-                    .font(.jost(.semibold, size: 12))
+                    .font(.jost(.semibold, size: 14))
                     .kerning(1.5)
                     .foregroundStyle(.primary)
                 if let description {
                     Text(LocalizedStringKey(description))
-                        .font(.jost(.regular, size: 12))
+                        .font(.jost(.regular, size: 13))
                         .foregroundStyle(Color(.secondaryLabel))
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -297,9 +297,9 @@ struct SettingsView: View {
         Button(action: action) {
             HStack(spacing: 10) {
                 Image(systemName: systemImage)
-                    .font(.jost(.medium, size: 14))
+                    .font(.jost(.medium, size: 16))
                 Text(LocalizedStringKey(title))
-                    .font(.jost(.semibold, size: 12))
+                    .font(.jost(.semibold, size: 14))
                     .kerning(1.5)
                 Spacer()
             }
@@ -329,7 +329,7 @@ struct SettingsView: View {
             .labelsHidden()
 
             Text(limitation.displayName)
-                .font(.jost(.semibold, size: 12))
+                .font(.jost(.semibold, size: 14))
                 .kerning(1.5)
                 .foregroundStyle(.primary)
 
@@ -356,11 +356,11 @@ struct SettingsView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(program.name.uppercased())
-                    .font(.jost(.semibold, size: 12))
+                    .font(.jost(.semibold, size: 14))
                     .kerning(1.5)
                     .foregroundStyle(.primary)
                 Text("\(program.sortedExercises.count) ÖVNINGAR · \(program.sortedExercises.first?.setCount ?? 3) SET")
-                    .font(.jost(.medium, size: 10))
+                    .font(.jost(.medium, size: 12))
                     .kerning(1.5)
                     .foregroundStyle(Color(.secondaryLabel))
             }
@@ -371,7 +371,7 @@ struct SettingsView: View {
                 editingProgram = program
             } label: {
                 Image(systemName: "pencil")
-                    .font(.jost(.medium, size: 13))
+                    .font(.jost(.medium, size: 15))
                     .foregroundStyle(Color(.tertiaryLabel))
                     .frame(width: 44, height: 44)
             }
@@ -397,7 +397,7 @@ struct SettingsView: View {
             .labelsHidden()
 
             Text(type.displayName.uppercased())
-                .font(.jost(.semibold, size: 12))
+                .font(.jost(.semibold, size: 14))
                 .kerning(1.5)
                 .foregroundStyle(.primary)
 
@@ -412,7 +412,7 @@ struct SettingsView: View {
     private var unitRow: some View {
         HStack {
             Text("UNITS")
-                .font(.jost(.semibold, size: 12))
+                .font(.jost(.semibold, size: 14))
                 .kerning(1.5)
                 .foregroundStyle(.primary)
             Spacer()
@@ -423,7 +423,7 @@ struct SettingsView: View {
                         useImperialUnits = imperial
                     } label: {
                         Text(label)
-                            .font(.jost(.semibold, size: 11))
+                            .font(.jost(.semibold, size: 12))
                             .kerning(1)
                             .foregroundStyle(useImperialUnits == imperial ? .white : Color(.secondaryLabel))
                             .padding(.horizontal, 9)
@@ -446,7 +446,7 @@ struct SettingsView: View {
     private var timerRow: some View {
         HStack {
             Text("REST TIMER")
-                .font(.jost(.semibold, size: 12))
+                .font(.jost(.semibold, size: 14))
                 .kerning(1.5)
                 .foregroundStyle(.primary)
             Spacer()
@@ -457,7 +457,7 @@ struct SettingsView: View {
                         restTimerSeconds = secs
                     } label: {
                         Text(secs == 0 ? "OFF" : secs < 120 ? "\(secs)s" : "2m")
-                            .font(.jost(.semibold, size: 11))
+                            .font(.jost(.semibold, size: 12))
                             .kerning(1)
                             .foregroundStyle(restTimerSeconds == secs ? .white : Color(.secondaryLabel))
                             .padding(.horizontal, 9)
@@ -531,7 +531,7 @@ struct SettingsView: View {
                     Task { await applyReminders(enabled: reminderEnabled) }
                 } label: {
                     Text(label)
-                        .font(.jost(.medium, size: 10))
+                        .font(.jost(.medium, size: 12))
                         .kerning(1)
                         .foregroundStyle(isOn ? Color.appBackground : Color(.secondaryLabel))
                         .frame(maxWidth: .infinity)
@@ -551,11 +551,11 @@ struct SettingsView: View {
         return HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text("TIME")
-                    .font(.jost(.medium, size: 10))
+                    .font(.jost(.medium, size: 12))
                     .kerning(1.5)
                     .foregroundStyle(Color(.secondaryLabel))
                 Text("Based on your last session start")
-                    .font(.jost(.regular, size: 12))
+                    .font(.jost(.regular, size: 13))
                     .foregroundStyle(Color(.tertiaryLabel))
             }
             Spacer()
