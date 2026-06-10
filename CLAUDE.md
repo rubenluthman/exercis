@@ -10,7 +10,7 @@ This repo is public. Every commit, every file, every decision documented here sh
 
 ---
 
-A personal iOS app for logging strength and cardio workouts. Single user.
+A personal iOS app for logging strength and cardio workouts. Currently single-user by design — see ROADMAP.md for the full list of changes required before multi-user can be introduced.
 
 ---
 
@@ -530,7 +530,7 @@ All three systems are additive — an exercise is dimmed if any signal matches.
 - All relationships have `deleteRule: .cascade`
 - HistoryView sort order: newest first
 - Schema versioning in place: `ExercisSchemaV1` (`VersionedSchema`, version 1.0.0) + `ExercisMigrationPlan` (`SchemaMigrationPlan`, empty `stages` array) in Models.swift — `ModelContainer` created via `Schema(ExercisSchemaV1.models)` and `migrationPlan: ExercisMigrationPlan.self` in ExercisApp.swift. For future field renames/removals: add `ExercisSchemaV2` + a `MigrationStage` to the plan, bump `versionIdentifier`
-- `try? context.save()` used throughout — errors are not logged (acceptable for a single-user app)
+- `try? context.save()` used throughout — errors are not logged (acceptable at current scale)
 
 ---
 

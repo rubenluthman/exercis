@@ -35,13 +35,45 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 ---
 
+## Multi-user prerequisites
+
+The app is intentionally single-user. This section documents every change required before multi-user can be introduced — not a priority, just a complete record so nothing is missed when the time comes.
+
+**Data model (SwiftData migration required for each):**
+- Add `owner: String` (or a `User` model) to `WorkoutSession`, `CardioSession`, `WorkoutProgram` — the three root models; child models (ExerciseLog, SetLog, ProgramExercise) inherit via relationship
+- Scope all `@Query` and `FetchDescriptor` calls with a user predicate — 12+ call sites across the app
+- `seedDefaultProgramsIfNeeded` and `migrateExerciseNames`/`migrateCardioTypes` use global UserDefaults flags — must be keyed per user
+
+**Authentication:**
+- `AuthManager` only knows Face ID on/off for the device owner — needs user identity (login, account switching, or at minimum a user ID passed through the app)
+
+**UserDefaults / AppStorage (19+ keys):**
+- All keys are device-global today — preferences like `restTimerSeconds`, `useImperialUnits`, `dateLocaleIdentifier`, `selectedCardioTypes`, `reminderEnabled`, and all draft/effort/INCREASE keys must be namespaced per user ID
+
+**Profile:**
+- `profileName` stored as a single global AppStorage key
+- Profile image saved as `profile.jpg` — hardcoded filename; would be overwritten by a second user
+
+**CSV export:**
+- Exports all sessions without user filter
+- Filenames are hardcoded — should include a user identifier
+
+**HealthKit:**
+- `fetchBodyMass()` reads "the" user's weight with no user context — fine for single user, ambiguous in a shared-device scenario
+
+**Widget + Live Activity:**
+- `WidgetDataStore` uses a single key `"widgetSnapshot"` — no user namespace
+- `LiveActivityManager` manages one global activity instance
+
+---
+
 ## Out of scope
 
 - **Mid-session exercise swap** — swap an exercise mid-session without breaking the structure; save original + replacement in the log
 - **Per-exercise rest timer** — default stored in `ProgramExercise.restSeconds` instead of a global AppStorage setting
 - **HIIT timer** — unclear use case
 - **4-tab layout** — final, not up for debate
-- **Siri Shortcuts** — single-user app, low priority
+- **Siri Shortcuts** — low priority
 - **TabView restructure** — 3 tabs ruled out; current 4-tab layout with a unified Training tab is correct
 - **ExerciseDef → SwiftData `@Model`** — no practical need, prefill works via `programId`
 - **HKWorkoutActivity per exercise** — no way to distinguish movement from rest, produces no meaningful data
