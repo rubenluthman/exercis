@@ -175,6 +175,8 @@ struct ExercisePickerView: View {
                         .foregroundStyle(Color(.secondaryLabel))
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
             .padding(.vertical, 2)
             .opacity(dimmed ? 0.4 : 1)
         }
