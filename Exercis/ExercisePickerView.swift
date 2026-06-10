@@ -15,6 +15,7 @@ struct ExercisePickerView: View {
     @State private var showMuscleFilter = false
     @State private var showEquipmentFilter = false
     @State private var showMovementFilter = false
+    @State private var gifDef: ExerciseDef?
 
     private let fuse = Fuse(threshold: 0.4)
 
@@ -109,6 +110,9 @@ struct ExercisePickerView: View {
             .sheet(isPresented: $showMovementFilter) {
                 FilterSheet(title: "RÖRELSE", options: movementOptions, selected: $selectedMovements)
             }
+            .sheet(item: $gifDef) { def in
+                GifSheet(def: def)
+            }
             .presentationDragIndicator(.visible)
         }
     }
@@ -162,25 +166,36 @@ struct ExercisePickerView: View {
     // MARK: - Exercise row
 
     private func exerciseRow(_ def: ExerciseDef, dimmed: Bool) -> some View {
-        Button {
-            onSelect(def)
-            dismiss()
-        } label: {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(def.displayName)
-                    .foregroundStyle(.primary)
-                if !def.primaryMuscles.isEmpty {
-                    Text(def.primaryMuscles.map { muscleLabel($0) }.joined(separator: ", "))
-                        .font(.jost(.regular, size: 12))
-                        .foregroundStyle(Color(.secondaryLabel))
+        HStack(spacing: 12) {
+            Button {
+                gifDef = def
+            } label: {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(def.displayName)
+                        .foregroundStyle(.primary)
+                    if !def.primaryMuscles.isEmpty {
+                        Text(def.primaryMuscles.map { muscleLabel($0) }.joined(separator: ", "))
+                            .font(.jost(.regular, size: 12))
+                            .foregroundStyle(Color(.secondaryLabel))
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+                .padding(.vertical, 2)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
-            .padding(.vertical, 2)
-            .opacity(dimmed ? 0.4 : 1)
+            .buttonStyle(.plain)
+
+            Button {
+                onSelect(def)
+                dismiss()
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .font(.system(size: 24))
+                    .foregroundStyle(Color(.secondaryLabel))
+            }
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
+        .opacity(dimmed ? 0.4 : 1)
     }
 
     private func muscleLabel(_ raw: String) -> String {
