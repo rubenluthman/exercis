@@ -171,10 +171,6 @@ struct ProgramEditorView: View {
 
     private func exerciseRow(ex: Binding<ExerciseDraft>) -> some View {
         HStack(spacing: 12) {
-            Image(systemName: "line.3.horizontal")
-                .font(.system(size: 14, weight: .regular))
-                .foregroundStyle(Color(.tertiaryLabel))
-
             VStack(alignment: .leading, spacing: 2) {
                 Text(ex.wrappedValue.exerciseName)
                     .font(.jost(.regular, size: 16))
@@ -215,6 +211,11 @@ struct ProgramEditorView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("Increase set count")
+
+                Image(systemName: "line.3.horizontal")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(Color(.tertiaryLabel))
+                    .frame(width: 32, height: 32)
             }
         }
         .padding(.vertical, 2)
