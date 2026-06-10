@@ -402,7 +402,7 @@
     "id": "wger_triceps_extensions_on_cable",
     "wgerId": 89,
     "wgerBaseId": 659,
-    "name": "Triceps Extensions On Cable",
+    "name": "Triceps Extension On Cable",
     "category": "strength",
     "movement": "push",
     "mechanic": "isolation",
@@ -433,7 +433,8 @@
     "aliases": [
       "Cable Tricep Pushdown",
       "Rope Pushdown",
-      "Cable Rope Pushdown"
+      "Cable Rope Pushdown",
+      "Triceps Extensions On Cable"
     ],
     "description": "Attach a rope to a high pulley. Stand facing the machine and push the rope downward by extending your elbows, flaring the rope ends outward at the bottom. Control the return to the start position."
   },
@@ -441,7 +442,7 @@
     "id": "wger_triceps_extensions_on_cable_with_bar",
     "wgerId": 90,
     "wgerBaseId": 660,
-    "name": "Triceps Extensions On Cable With Bar",
+    "name": "Triceps Extension On Cable With Bar",
     "category": "strength",
     "movement": "push",
     "mechanic": "isolation",
@@ -472,7 +473,8 @@
     "aliases": [
       "Cable Bar Pushdown",
       "Straight Bar Pushdown",
-      "Tricep Bar Pushdown"
+      "Tricep Bar Pushdown",
+      "Triceps Extensions On Cable With Bar"
     ],
     "description": "Attach a straight or V-bar to a high pulley and grip it with an overhand grip. Push the bar straight down by extending the elbows, keeping upper arms fixed at your sides. Return under control."
   },
@@ -673,7 +675,7 @@
     "id": "wger_benchpress_dumbbells",
     "wgerId": 97,
     "wgerBaseId": 75,
-    "name": "Benchpress Dumbbells",
+    "name": "Dumbbell Bench Press",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -707,9 +709,9 @@
     "gifSource": "hasaneyldrm",
     "gifQuality": "strong",
     "aliases": [
-      "Dumbbell Bench Press",
       "DB Bench Press",
-      "Flat DB Press"
+      "Flat DB Press",
+      "Benchpress Dumbbells"
     ],
     "description": "Lie on a flat bench with a dumbbell in each hand held just outside your chest, elbows at roughly 45 degrees to your torso. Press both dumbbells upward and slightly inward until your arms are fully extended, then lower back to chest level with control."
   },
@@ -1397,7 +1399,7 @@
     "id": "wger_leg_presses_wide",
     "wgerId": 114,
     "wgerBaseId": 374,
-    "name": "Leg Presses (Wide)",
+    "name": "Leg Press (Wide)",
     "category": "strength",
     "movement": "squat",
     "mechanic": "compound",
@@ -1432,7 +1434,8 @@
     "gifQuality": "strong",
     "aliases": [
       "Wide Stance Leg Press",
-      "Sumo Leg Press"
+      "Sumo Leg Press",
+      "Leg Presses (Wide)"
     ],
     "description": "Sit in a leg press with feet placed wide on the outer edges of the platform. Lower and press the weight, placing greater emphasis on the inner thigh and glutes."
   },
@@ -1440,7 +1443,7 @@
     "id": "wger_leg_presses_narrow",
     "wgerId": 115,
     "wgerBaseId": 373,
-    "name": "Leg Presses (Narrow)",
+    "name": "Leg Press (Narrow)",
     "category": "strength",
     "movement": "squat",
     "mechanic": "compound",
@@ -1475,7 +1478,8 @@
     "gifQuality": "weak",
     "aliases": [
       "Narrow Stance Leg Press",
-      "Feet Together Leg Press"
+      "Feet Together Leg Press",
+      "Leg Presses (Narrow)"
     ],
     "description": "Sit in a leg press with feet placed close together in the center of the platform. Press the weight upward, emphasizing the outer quad with the narrower stance."
   },
@@ -1939,7 +1943,7 @@
     "id": "wger_biceps_curl_with_cable",
     "wgerId": 129,
     "wgerBaseId": 95,
-    "name": "Biceps Curl With Cable",
+    "name": "Biceps Curls With Cable",
     "category": "strength",
     "movement": "pull",
     "mechanic": "isolation",
@@ -1970,7 +1974,8 @@
     "aliases": [
       "Cable Curl",
       "Cable Bicep Curl",
-      "Low Cable Curl"
+      "Low Cable Curl",
+      "Biceps Curl With Cable"
     ],
     "description": "Stand at a low pulley cable with an underhand grip on the bar. Curl the handle toward your shoulders while keeping your elbows stationary. Lower under control."
   },
@@ -3109,7 +3114,7 @@
     "id": "wger_incline_pushups",
     "wgerId": 168,
     "wgerBaseId": 313,
-    "name": "Incline Pushups",
+    "name": "Incline Push-Ups",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -3143,7 +3148,8 @@
     "gifQuality": "exact",
     "aliases": [
       "Incline Push-Up",
-      "Elevated Push-Up"
+      "Elevated Push-Up",
+      "Incline Pushups"
     ],
     "description": "Place your hands on an elevated surface like a bench, with body in a straight line. Lower your chest toward the surface by bending the elbows, then push back up. Easier than standard push-ups, emphasizes lower chest."
   },
@@ -3342,7 +3348,7 @@
     "id": "wger_perfect_push_up",
     "wgerId": 182,
     "wgerBaseId": null,
-    "name": "Perfect Push Up",
+    "name": "Perfect Push-Up",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -3373,7 +3379,8 @@
     "gifQuality": "weak",
     "aliases": [
       "Rotating Push-Up",
-      "Perfect Pushup"
+      "Perfect Pushup",
+      "Perfect Push Up"
     ],
     "description": "Perform a push-up using rotating handles that allow your wrists to rotate naturally. At the bottom of the rep, rotate the handles outward to externally rotate the shoulders, engaging more chest fibers."
   },
@@ -3462,7 +3469,7 @@
     "id": "wger_lat_pull_down_straight_back",
     "wgerId": 187,
     "wgerBaseId": 355,
-    "name": "Lat Pull Down (Straight Back)",
+    "name": "Lat Pulldown (Straight Back)",
     "category": "strength",
     "movement": "pull",
     "mechanic": "compound",
@@ -3493,7 +3500,8 @@
     "gifQuality": "strong",
     "aliases": [
       "Lat Pulldown Straight Back",
-      "Upright Lat Pulldown"
+      "Upright Lat Pulldown",
+      "Lat Pull Down (Straight Back)"
     ],
     "description": "Sit upright at a lat pulldown station and pull the bar to your upper chest while keeping your torso vertical. Drive your elbows straight down without leaning back. Return under control."
   },
@@ -3501,7 +3509,7 @@
     "id": "wger_lat_pull_down_leaning_back",
     "wgerId": 188,
     "wgerBaseId": 354,
-    "name": "Lat Pull Down (Leaning Back)",
+    "name": "Lat Pulldown (Leaning Back)",
     "category": "strength",
     "movement": "pull",
     "mechanic": "compound",
@@ -3531,7 +3539,8 @@
     "gifSource": "hasaneyldrm",
     "gifQuality": "weak",
     "aliases": [
-      "Lat Pulldown Leaning Back"
+      "Lat Pulldown Leaning Back",
+      "Lat Pull Down (Leaning Back)"
     ],
     "description": "Sit at a lat pulldown and lean back slightly to 70–80 degrees. Pull the bar down toward your upper chest, leading with your elbows. The slight lean increases the range of motion through the lats."
   },
@@ -3796,7 +3805,7 @@
     "id": "wger_push_ups",
     "wgerId": 195,
     "wgerBaseId": null,
-    "name": "Push Ups",
+    "name": "Push-Ups",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -3833,7 +3842,8 @@
     "aliases": [
       "Pushup",
       "Push-Up",
-      "Standard Push-Up"
+      "Standard Push-Up",
+      "Push Ups"
     ],
     "description": "A fundamental bodyweight exercise targeting the chest, triceps, and shoulders. Start in a high plank with hands slightly wider than shoulder-width and body forming a straight line. Lower your chest toward the floor by bending your elbows, then push back to the start."
   },
@@ -3880,7 +3890,7 @@
     "id": "wger_pendelay_rows",
     "wgerId": 202,
     "wgerBaseId": 448,
-    "name": "Pendelay Rows",
+    "name": "Pendlay Rows",
     "category": "strength",
     "movement": "pull",
     "mechanic": "compound",
@@ -3917,7 +3927,8 @@
     "aliases": [
       "Pendlay Row",
       "Strict Barbell Row",
-      "Dead Stop Row"
+      "Dead Stop Row",
+      "Pendelay Rows"
     ],
     "description": "Set a barbell on the floor or just above it. With a flat back parallel to the floor, explosively row the bar to your lower chest, letting it return to a dead stop on the floor between each rep."
   },
@@ -3925,7 +3936,7 @@
     "id": "wger_wall_pushup",
     "wgerId": 203,
     "wgerBaseId": 713,
-    "name": "Wall Pushup",
+    "name": "Wall Push-Up",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -3961,8 +3972,8 @@
     "gifSource": "none",
     "gifQuality": "none",
     "aliases": [
-      "Wall Push-Up",
-      "Standing Push-Up"
+      "Standing Push-Up",
+      "Wall Pushup"
     ],
     "description": "Stand facing a wall and place your hands on it at shoulder height. Bend your elbows to bring your chest toward the wall, then push back to the start. A regression of the standard push-up."
   },
@@ -4290,7 +4301,7 @@
     "id": "wger_underhand_lat_pull_down",
     "wgerId": 212,
     "wgerBaseId": 684,
-    "name": "Underhand Lat Pull Down",
+    "name": "Underhand Lat Pulldown",
     "category": "strength",
     "movement": "pull",
     "mechanic": "compound",
@@ -4324,7 +4335,8 @@
     "aliases": [
       "Reverse Grip Pulldown",
       "Supinated Lat Pulldown",
-      "Underhand Pulldown"
+      "Underhand Pulldown",
+      "Underhand Lat Pull Down"
     ],
     "description": "Grip the lat pulldown bar with a shoulder-width underhand grip. Pull the bar to your upper chest, driving your elbows down. The supinated grip increases bicep involvement."
   },
@@ -4332,7 +4344,7 @@
     "id": "wger_closegrip_lat_pull_down",
     "wgerId": 213,
     "wgerBaseId": 158,
-    "name": "Close-Grip Lat Pull Down",
+    "name": "Close-Grip Lat Pulldown",
     "category": "strength",
     "movement": "pull",
     "mechanic": "compound",
@@ -4364,7 +4376,8 @@
     "aliases": [
       "Close Grip Pulldown",
       "V-Bar Pulldown",
-      "Neutral Grip Lat Pulldown"
+      "Neutral Grip Lat Pulldown",
+      "Close-Grip Lat Pull Down"
     ],
     "description": "Attach a V-bar or close-grip handle to a lat pulldown machine. Pull the handle to your upper chest while keeping your torso upright, squeezing your shoulder blades together at the bottom."
   },
@@ -4414,7 +4427,7 @@
     "id": "wger_straightarm_pull_down_rope_attachment",
     "wgerId": 215,
     "wgerBaseId": 629,
-    "name": "Straight-Arm Pull Down (Rope Attachment)",
+    "name": "Straight-Arm Pulldown (Rope Attachment)",
     "category": "strength",
     "movement": "pull",
     "mechanic": "isolation",
@@ -4446,7 +4459,8 @@
     "gifQuality": "strong",
     "aliases": [
       "Rope Straight Arm Pulldown",
-      "Rope Cable Pullover"
+      "Rope Cable Pullover",
+      "Straight-Arm Pull Down (Rope Attachment)"
     ],
     "description": "Attach a rope to a high pulley. Grip the two ends of the rope with arms extended straight out in front of you. Without bending the elbows, pull the rope downward in an arc toward your thighs by extending through the shoulder joint. Return slowly to the stretched position."
   },
@@ -4454,7 +4468,7 @@
     "id": "wger_straightarm_pull_down_bar_attachment",
     "wgerId": 216,
     "wgerBaseId": 628,
-    "name": "Straight-Arm Pull Down (Bar Attachment)",
+    "name": "Straight-Arm Pulldown (Bar Attachment)",
     "category": "strength",
     "movement": "pull",
     "mechanic": "isolation",
@@ -4486,7 +4500,8 @@
     "gifQuality": "none",
     "aliases": [
       "Straight Arm Pulldown",
-      "Cable Pullover"
+      "Cable Pullover",
+      "Straight-Arm Pull Down (Bar Attachment)"
     ],
     "description": "Stand facing a high cable pulley and grip a straight bar with arms extended. Without bending your elbows, pull the bar down in an arc toward your thighs, engaging the lats. Return under control."
   },
@@ -5093,7 +5108,7 @@
     "id": "wger_decline_pushups",
     "wgerId": 260,
     "wgerBaseId": 188,
-    "name": "Decline Pushups",
+    "name": "Decline Push-Ups",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -5128,7 +5143,8 @@
     "gifQuality": "strong",
     "aliases": [
       "Decline Push-Up",
-      "Feet Elevated Push-Up"
+      "Feet Elevated Push-Up",
+      "Decline Pushups"
     ],
     "description": "Place your feet on an elevated surface and hands on the floor in push-up position. Lower your chest toward the floor, then push back up. The elevation shifts emphasis to the upper chest."
   },
@@ -5953,7 +5969,7 @@
     "id": "wger_side_to_side_push_ups",
     "wgerId": 302,
     "wgerBaseId": 583,
-    "name": "Side To Side Push Ups",
+    "name": "Side-To-Side Push-Ups",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -5988,7 +6004,8 @@
     "gifQuality": "weak",
     "aliases": [
       "Side to Side Push-Up",
-      "Archer Push-Up"
+      "Archer Push-Up",
+      "Side To Side Push Ups"
     ],
     "description": "Start in a wide push-up position. Lower yourself toward one hand while straightening the opposite arm, then push back up and repeat to the other side."
   },
@@ -6471,7 +6488,7 @@
     "id": "wger_side_raise",
     "wgerId": 319,
     "wgerBaseId": 348,
-    "name": "Side Raise",
+    "name": "Side Raises",
     "category": "strength",
     "movement": "push",
     "mechanic": "isolation",
@@ -6504,7 +6521,8 @@
       "DB Side Raise",
       "Lateral Raise",
       "Lateral Raises",
-      "Dumbbell Lateral Raise"
+      "Dumbbell Lateral Raise",
+      "Side Raise"
     ],
     "description": "Stand or sit holding dumbbells at your sides. Lift both dumbbells laterally until they reach shoulder height, keeping a slight bend in the elbows. Lower slowly."
   },
@@ -7633,7 +7651,7 @@
     "id": "wger_pike_push_ups",
     "wgerId": 361,
     "wgerBaseId": 454,
-    "name": "Pike Push Ups",
+    "name": "Pike Push-Ups",
     "category": "strength",
     "movement": "push",
     "mechanic": "compound",
@@ -7669,7 +7687,8 @@
     "gifQuality": "weak",
     "aliases": [
       "Pike Push-Up",
-      "Downward Dog Push-Up"
+      "Downward Dog Push-Up",
+      "Pike Push Ups"
     ],
     "description": "Start in a downward dog position with hips raised high. Bend your elbows to lower the top of your head toward the floor between your hands, then push back up. Primarily targets the shoulders."
   },
@@ -7677,7 +7696,7 @@
     "id": "wger_bentover_dumbbell_rows",
     "wgerId": 362,
     "wgerBaseId": 81,
-    "name": "Bentover Dumbbell Rows",
+    "name": "Bent-Over Dumbbell Rows",
     "category": "strength",
     "movement": "pull",
     "mechanic": "compound",
@@ -7713,7 +7732,8 @@
     "aliases": [
       "Dumbbell Row",
       "DB Bent Over Row",
-      "Two-Arm Dumbbell Row"
+      "Two-Arm Dumbbell Row",
+      "Bentover Dumbbell Rows"
     ],
     "description": "Hinge at the hips holding dumbbells, with your back flat and parallel to the floor. Row both dumbbells toward your hips by driving your elbows back, then lower with control."
   },

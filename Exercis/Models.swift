@@ -392,6 +392,42 @@ func migrateExerciseNames(context: ModelContext) {
             }
     }
 
+    if current < 7 {
+        let renames: [String: String] = [
+            "Lat Pull Down (Straight Back)": "Lat Pulldown (Straight Back)",
+            "Lat Pull Down (Leaning Back)": "Lat Pulldown (Leaning Back)",
+            "Close-Grip Lat Pull Down": "Close-Grip Lat Pulldown",
+            "Underhand Lat Pull Down": "Underhand Lat Pulldown",
+            "Straight-Arm Pull Down (Rope Attachment)": "Straight-Arm Pulldown (Rope Attachment)",
+            "Straight-Arm Pull Down (Bar Attachment)": "Straight-Arm Pulldown (Bar Attachment)",
+            "Push Ups": "Push-Ups",
+            "Incline Pushups": "Incline Push-Ups",
+            "Decline Pushups": "Decline Push-Ups",
+            "Wall Pushup": "Wall Push-Up",
+            "Perfect Push Up": "Perfect Push-Up",
+            "Pike Push Ups": "Pike Push-Ups",
+            "Side To Side Push Ups": "Side-To-Side Push-Ups",
+            "Benchpress Dumbbells": "Dumbbell Bench Press",
+            "Bentover Dumbbell Rows": "Bent-Over Dumbbell Rows",
+            "Pendelay Rows": "Pendlay Rows",
+            "Biceps Curl With Cable": "Biceps Curls With Cable",
+            "Triceps Extensions On Cable": "Triceps Extension On Cable",
+            "Triceps Extensions On Cable With Bar": "Triceps Extension On Cable With Bar",
+            "Leg Presses (Wide)": "Leg Press (Wide)",
+            "Leg Presses (Narrow)": "Leg Press (Narrow)",
+            "Side Raise": "Side Raises"
+        ]
+        let logs = (try? context.fetch(FetchDescriptor<ExerciseLog>())) ?? []
+        for log in logs {
+            if let newName = renames[log.name] { log.name = newName }
+        }
+        do { try context.save() } catch {
+                #if DEBUG
+                logger.error("context.save failed: \(error)")
+                #endif
+            }
+    }
+
     UserDefaults.standard.set(ExerciseDef.migrationVersion, forKey: key)
 }
 
