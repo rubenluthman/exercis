@@ -224,10 +224,6 @@ struct CardioView: View {
                 UserDefaults.standard.removeObject(forKey: draftDistanceKey)
                 hasCardioDraft = false
                 editedStart = Date()
-                if let savedDist = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)"),
-                   let km = parseWeight(savedDist) {
-                    distance = displayDistance(km, imperial: imperial)
-                }
             }
 
             if type.tracksElevation, CMAltimeter.isRelativeAltitudeAvailable() {
