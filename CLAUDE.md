@@ -223,7 +223,7 @@ All free functions in Theme.swift are unit-tested and kept free of SwiftUI/Swift
 - Uppercase labels with letter spacing
 - Thin **0.5pt dividers** via `ThinDivider`
 - UI text is localized via the iOS standard localization system. **English is the base language** (all strings defined in English). Swedish is provided via `.strings` files. SwiftUI `Text()` with string literals localizes automatically; other strings use `String(localized:)`.
-- Dates always formatted with `Locale(identifier: "sv_SE")`
+- Dates formatted with `appLocale()` (Theme.swift) — reads `@AppStorage("dateLocaleIdentifier")`: `""` = system locale, `"sv_SE"` = Swedish, `"en_US"` = English. User-controlled in SettingsView → TRAINING → DATE LANGUAGE.
 - DONE button: filled in accent color, pinned to the bottom of the view (in `safeAreaInset`). Hidden when the effort picker is open.
 - Back button: "←" only, no text, font regular 22pt, `.frame(width: 90, alignment: .trailing)`
 - Horizontal padding: **24pt** consistently on all rows
@@ -484,6 +484,7 @@ LockView → (Face ID) → MainTabView
 | `restTimerSeconds` | Int (@AppStorage) | StrengthView/SettingsView | Global rest timer duration (0/30/60/90/120s, default 90) |
 | `selectedCardioTypes` | String (@AppStorage) | OnboardingView/TrainingView/SettingsView | Comma-separated `CardioType.rawValue`s shown on the Training tab |
 | `useImperialUnits` | Bool (@AppStorage) | SettingsView + all views/cards showing weight/distance | Unit preference: KG/KM (false) or LBS/MI (true) — converted at presentation via `displayWeight`/`displayDistance` |
+| `dateLocaleIdentifier` | String (@AppStorage) | SettingsView / appLocale() in Theme.swift | Date formatting locale: `""` = system, `"sv_SE"` = Swedish, `"en_US"` = English |
 | `healthKitSyncEnabled` | Bool (@AppStorage) | SettingsView | Whether sessions are saved to Apple Health |
 | `healthKitWeightEnabled` | Bool (@AppStorage) | SettingsView | Whether body weight is read from Apple Health for calorie calculation |
 

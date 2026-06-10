@@ -284,7 +284,7 @@ struct CardioView: View {
             Button {
                 showTimePicker = true
             } label: {
-                Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased())
+                Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(appLocale())).uppercased())
                     .font(.jost(.regular, size: 13))
                     .foregroundStyle(Color(.secondaryLabel))
             }

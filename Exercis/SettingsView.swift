@@ -12,6 +12,7 @@ struct SettingsView: View {
     @AppStorage("onboardingCompleted")     private var onboardingCompleted = true
     @AppStorage("restTimerSeconds")        private var restTimerSeconds = 90
     @AppStorage("useImperialUnits")        private var useImperialUnits = false
+    @AppStorage("dateLocaleIdentifier")    private var dateLocaleIdentifier = ""
     @AppStorage("healthKitSyncEnabled")    private var healthKitSyncEnabled = true
     @AppStorage("healthKitWeightEnabled")  private var healthKitWeightEnabled = true
     @AppStorage("lockEnabled")             private var lockEnabled = true
@@ -103,6 +104,8 @@ struct SettingsView: View {
                     sectionBlock {
                         sectionLabel("TRAINING")
                         unitRow
+                        ThinDivider().padding(.leading, 24)
+                        dateLocaleRow
                         ThinDivider().padding(.leading, 24)
                         timerRow
                     }
@@ -430,6 +433,40 @@ struct SettingsView: View {
                             .padding(.vertical, 6)
                             .background(
                                 useImperialUnits == imperial
+                                    ? Color.homeAccent
+                                    : Color(.secondarySystemFill)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.bottom, 16)
+    }
+
+    private var dateLocaleRow: some View {
+        HStack {
+            Text("DATE LANGUAGE")
+                .font(.jost(.semibold, size: 14))
+                .kerning(1.5)
+                .foregroundStyle(.primary)
+            Spacer()
+            HStack(spacing: 4) {
+                ForEach([("", "SYSTEM"), ("sv_SE", "SV"), ("en_US", "EN")], id: \.0) { id, label in
+                    Button {
+                        Haptics.selection()
+                        dateLocaleIdentifier = id
+                    } label: {
+                        Text(label)
+                            .font(.jost(.semibold, size: 12))
+                            .kerning(1)
+                            .foregroundStyle(dateLocaleIdentifier == id ? .white : Color(.secondaryLabel))
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 6)
+                            .background(
+                                dateLocaleIdentifier == id
                                     ? Color.homeAccent
                                     : Color(.secondarySystemFill)
                             )

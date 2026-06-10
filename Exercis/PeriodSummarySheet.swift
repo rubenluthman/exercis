@@ -96,7 +96,7 @@ struct PeriodSummarySheet: View {
         var comps = DateComponents()
         comps.year = period.year; comps.month = i; comps.day = 1
         guard let date = cal.date(from: comps) else { return "" }
-        return date.formatted(.dateTime.month(.abbreviated).locale(Locale(identifier: "sv_SE")))
+        return date.formatted(.dateTime.month(.abbreviated).locale(appLocale()))
             .uppercased().replacingOccurrences(of: ".", with: "")
     }
 
@@ -111,7 +111,7 @@ struct PeriodSummarySheet: View {
             var comps = DateComponents()
             comps.year = period.year; comps.month = month; comps.day = 1
             guard let date = cal.date(from: comps) else { return "" }
-            return date.formatted(.dateTime.month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
+            return date.formatted(.dateTime.month(.wide).locale(appLocale())).uppercased()
         }
         return "\(period.year)"
     }

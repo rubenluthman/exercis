@@ -140,13 +140,13 @@ struct CardioCard: View {
     }
 
     private var dateText: String {
-        let sv = Locale(identifier: "sv_SE")
-        let weekday = session.date.formatted(.dateTime.weekday(.wide).locale(sv))
-        let dayMonth = session.date.formatted(.dateTime.day().month(.wide).locale(sv))
+        let locale = appLocale()
+        let weekday = session.date.formatted(.dateTime.weekday(.wide).locale(locale))
+        let dayMonth = session.date.formatted(.dateTime.day().month(.wide).locale(locale))
         return "\(weekday.capitalized) \(dayMonth)"
     }
 
     private var timeText: String {
-        session.date.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute(.twoDigits).locale(Locale(identifier: "sv_SE")))
+        session.date.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute(.twoDigits).locale(appLocale()))
     }
 }

@@ -333,3 +333,8 @@ func parseDistanceInput(_ text: String, imperial: Bool) -> Double? {
 
 func weightLabel(_ imperial: Bool) -> String { imperial ? "LBS" : "KG" }
 func distanceLabel(_ imperial: Bool) -> String { imperial ? "MI" : "KM" }
+
+func appLocale() -> Locale {
+    let stored = UserDefaults.standard.string(forKey: "dateLocaleIdentifier") ?? ""
+    return stored.isEmpty ? Locale.current : Locale(identifier: stored)
+}

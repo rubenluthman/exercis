@@ -33,7 +33,7 @@ struct SessionTimePicker: View {
                     }
                 ), displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
-                    .environment(\.locale, Locale(identifier: "sv_SE"))
+                    .environment(\.locale, appLocale())
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 16)
@@ -48,7 +48,7 @@ struct SessionTimePicker: View {
                 Spacer()
                 DatePicker("", selection: $end, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
-                    .environment(\.locale, Locale(identifier: "sv_SE"))
+                    .environment(\.locale, appLocale())
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 16)

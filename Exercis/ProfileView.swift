@@ -426,14 +426,14 @@ struct ProfileView: View {
                     title: w.programName ?? String(localized: "Strength"),
                     subtitle: String(localized: "\(w.exerciseLogs.count) exercises"),
                     relativeDate: relDate(w.date),
-                    detailLine: w.date.formatted(.dateTime.month(.abbreviated).day().locale(Locale(identifier: "sv_SE")))
+                    detailLine: w.date.formatted(.dateTime.month(.abbreviated).day().locale(appLocale()))
                 )
             } else {
                 return SessionEntry(
                     title: CardioType(rawValue: c.cardioType)?.displayName ?? c.cardioType,
                     subtitle: formatWeight(c.durationMinutes) + " min",
                     relativeDate: relDate(c.date),
-                    detailLine: c.date.formatted(.dateTime.month(.abbreviated).day().locale(Locale(identifier: "sv_SE")))
+                    detailLine: c.date.formatted(.dateTime.month(.abbreviated).day().locale(appLocale()))
                 )
             }
         } else if let w = lastW {
@@ -441,14 +441,14 @@ struct ProfileView: View {
                 title: w.programName ?? String(localized: "Strength"),
                 subtitle: String(localized: "\(w.exerciseLogs.count) exercises"),
                 relativeDate: relDate(w.date),
-                detailLine: w.date.formatted(.dateTime.month(.abbreviated).day().locale(Locale(identifier: "sv_SE")))
+                detailLine: w.date.formatted(.dateTime.month(.abbreviated).day().locale(appLocale()))
             )
         } else if let c = lastC {
             return SessionEntry(
                 title: CardioType(rawValue: c.cardioType)?.displayName ?? c.cardioType,
                 subtitle: formatWeight(c.durationMinutes) + " min",
                 relativeDate: relDate(c.date),
-                detailLine: c.date.formatted(.dateTime.month(.abbreviated).day().locale(Locale(identifier: "sv_SE")))
+                detailLine: c.date.formatted(.dateTime.month(.abbreviated).day().locale(appLocale()))
             )
         }
         return nil

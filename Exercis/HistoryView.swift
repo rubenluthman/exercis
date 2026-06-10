@@ -354,6 +354,6 @@ struct HistoryView: View {
         var comps = DateComponents()
         comps.year = year; comps.month = month; comps.day = 1
         guard let date = Calendar.current.date(from: comps) else { return "" }
-        return date.formatted(.dateTime.month(.wide).locale(Locale(identifier: "sv_SE"))).uppercased()
+        return date.formatted(.dateTime.month(.wide).locale(appLocale())).uppercased()
     }
 }

@@ -81,7 +81,7 @@ struct CardioEffortChartSheet: View {
                         AxisGridLine().foregroundStyle(Color.appDivider)
                         AxisValueLabel {
                             if let date = value.as(Date.self) {
-                                let month = date.formatted(.dateTime.month(.abbreviated).locale(Locale(identifier: "sv_SE"))).uppercased().replacingOccurrences(of: ".", with: "")
+                                let month = date.formatted(.dateTime.month(.abbreviated).locale(appLocale())).uppercased().replacingOccurrences(of: ".", with: "")
                                 if spansMultipleYears {
                                     let yr = Calendar.current.component(.year, from: date) % 100
                                     Text("\(month)\n\(String(format: "%02d", yr))")
