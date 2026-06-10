@@ -12,6 +12,9 @@ struct TrainingView: View {
     @State private var activeCardioType: CardioType? = nil
     @State private var showDiscardAlert = false
     @State private var pendingProgram: WorkoutProgram? = nil
+    @State private var showDiscardStrengthAlert = false
+    @State private var showDiscardCardioAlert = false
+    @State private var cardioTypeToDiscard: CardioType? = nil
 
     private var trainingPrograms: [WorkoutProgram] {
         programs.filter { $0.isOnTrainingPage }
@@ -66,6 +69,25 @@ struct TrainingView: View {
             }
             Button("Cancel", role: .cancel) { pendingProgram = nil }
         }
+        .alert("Discard active draft?", isPresented: $showDiscardStrengthAlert) {
+            Button("Delete", role: .destructive) {
+                UserDefaults.standard.saveDraft(nil)
+                hasDraft = false
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .alert("Discard active draft?", isPresented: $showDiscardCardioAlert) {
+            Button("Delete", role: .destructive) {
+                if let type = cardioTypeToDiscard {
+                    UserDefaults.standard.removeObject(forKey: "cardioDraftType")
+                    UserDefaults.standard.removeObject(forKey: "cardioDraftStartTime_\(type.rawValue)")
+                    UserDefaults.standard.removeObject(forKey: "cardioDraftDistance_\(type.rawValue)")
+                }
+                hasCardioDraft = false
+                cardioTypeToDiscard = nil
+            }
+            Button("Cancel", role: .cancel) { cardioTypeToDiscard = nil }
+        }
     }
 
     private var headerRow: some View {
@@ -113,8 +135,7 @@ struct TrainingView: View {
 
                     if isDraft {
                         Button {
-                            UserDefaults.standard.saveDraft(nil)
-                            hasDraft = false
+                            showDiscardStrengthAlert = true
                         } label: {
                             Image(systemName: "xmark")
                                 .font(.jost(.medium, size: 11))
@@ -159,10 +180,8 @@ struct TrainingView: View {
 
                     if isDraft {
                         Button {
-                            UserDefaults.standard.removeObject(forKey: "cardioDraftType")
-                            UserDefaults.standard.removeObject(forKey: "cardioDraftStartTime_\(type.rawValue)")
-                            UserDefaults.standard.removeObject(forKey: "cardioDraftDistance_\(type.rawValue)")
-                            hasCardioDraft = false
+                            cardioTypeToDiscard = type
+                            showDiscardCardioAlert = true
                         } label: {
                             Image(systemName: "xmark")
                                 .font(.jost(.medium, size: 11))
