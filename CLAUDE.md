@@ -405,6 +405,8 @@ LockView → (Face ID) → MainTabView
 - **REMINDERS**: toggle, veckodagsknappar (Mån–Sön), tidväljare (auto-satt från senaste passstart, fallback 17:00)
 - **DATA**: backup-förklaring (iCloud Backup, vad som går förlorat), CSV-export via `UIActivityViewController`
 - **ABOUT → VERSION**: öppnar `WhatsNewSheet` med releasenoter
+
+**`WhatsNewSheet.swift` — underhållsregel:** `entries`-arrayen i filen är hårdkodad och uppdateras **inte** automatiskt. Vid varje session där en användarsyn­lig funktion byggs eller fixas: lägg till en ny `WhatsNewEntry` i arrayen (ikon, färg, titel, brödtext) och bumpa appversionsnumret i Xcode om en ny release planeras. Gör det i samma commit som funktionen — inte som eftertanke.
 - `#if DEBUG`-sektion: RESET ONBOARDING
 
 ---
