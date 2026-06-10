@@ -14,9 +14,11 @@
 "ABOUT" = "OM";
 "UNITS" = "ENHETER";
 "REST TIMER" = "VILOTIMER";
+"REMINDERS" = "PÅMINNELSER";
 "VERSION" = "VERSION";
 "NEW PROGRAM" = "NYTT PROGRAM";
 "EXERCISES" = "ÖVNINGAR";
+"DATE LANGUAGE" = "DATUMSPRÅK";
 
 /* Workout UI */
 "SET" = "SET";
@@ -105,6 +107,7 @@
 "The app reads your latest recorded value and uses it only to calculate calorie burn." = "Appen läser ditt senaste registrerade värde och använder det enbart för att beräkna kaloriförbrukning.";
 "FACE ID LOCK" = "FACE ID-LÅS";
 "EXPORT TRAINING DATA" = "EXPORTERA TRÄNINGSDATA";
+"TRAINING REMINDERS" = "TRÄNINGSPÅMINNELSER";
 
 /* GifSheet */
 "PRIMARY MUSCLES" = "PRIMÄRA MUSKLER";
@@ -156,6 +159,11 @@
 "PERSONAL RECORDS" = "PERSONLIGA REKORD";
 "Log some strength sessions to see your records." = "Logga några styrkepass för att se dina rekord.";
 "kg" = "kg";
+"AVG / WEEK" = "SNITT / VECKA";
+"THIS WEEK" = "DENNA VECKA";
+"BEST WEEK" = "BÄSTA VECKA";
+"sessions" = "pass";
+"session" = "pass";
 
 /* SettingsView */
 "Based on your last session start" = "Baserat på starten av ditt senaste pass";

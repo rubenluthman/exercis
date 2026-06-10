@@ -107,7 +107,7 @@ struct OutlineButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - iOS 26 glass button variant — valt adaptivt av primaryButtonStyle (glass på 26+, fylld rektangel på äldre)
+// MARK: - iOS 26 glass button variant — selected adaptively by primaryButtonStyle (glass on 26+, filled rectangle on older)
 #if swift(>=6.2)
 @available(iOS 26, *)
 struct GlassFilledButtonStyle: ButtonStyle {

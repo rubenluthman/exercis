@@ -122,5 +122,6 @@ The app is intentionally single-user. This section documents every change requir
 - ~~App review 2026-06-06 — localized missing strings, added accessibility labels, updated CLAUDE.md~~
 - ~~App icon — adaptive Liquid Glass icon via Icon Composer (`exercis.icon`), Default/Dark/Tinted automatic, `AppIcon.appiconset` removed~~
 - ~~App review 2026-06-06 (full, 7 surfaces) — localized 9 additional strings; extracted `ChartEmptyState` from four identical copies into Theme.swift; corrected stale CLAUDE.md sections~~
+- ~~App review 2026-06-10 — fixed hardcoded Swedish "ÖVNINGAR" in SettingsView; added 10 missing sv.lproj keys (REMINDERS, TRAINING REMINDERS, DATE LANGUAGE, AVG/WEEK, THIS WEEK, BEST WEEK, sessions, session); translated Swedish comment in Theme.swift~~
 - ~~Locked reps mode per workout program~~
 - ~~Repo renamed to `exercis` (lowercase), made public; all documentation translated to English~~

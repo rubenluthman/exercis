@@ -362,7 +362,7 @@ struct SettingsView: View {
                     .font(.jost(.semibold, size: 14))
                     .kerning(1.5)
                     .foregroundStyle(.primary)
-                Text("\(program.sortedExercises.count) ÖVNINGAR · \(program.sortedExercises.first?.setCount ?? 3) SET")
+                Text("\(program.sortedExercises.count) \(String(localized: "EXERCISES")) · \(program.sortedExercises.first?.setCount ?? 3) SET")
                     .font(.jost(.medium, size: 12))
                     .kerning(1.5)
                     .foregroundStyle(Color(.secondaryLabel))
