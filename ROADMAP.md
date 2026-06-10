@@ -46,12 +46,12 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 - **ExerciseDef → SwiftData `@Model`** — no practical need, prefill works via `programId`
 - **HKWorkoutActivity per exercise** — no way to distinguish movement from rest, produces no meaningful data
 - **Swift Packages** (`swift-algorithms`, `swift-collections`) — not justified until the app grows
-- **`sv_SE` locale hardcoded** — intentional choice for a Swedish single-user app, not a bug
 
 ---
 
 ## Done
 
+- ~~User-controlled date language — SYSTEM / SV / EN in SettingsView, `appLocale()` replaces hardcoded `sv_SE` everywhere~~
 - ~~Onboarding — 3 steps (program grid + cardio checkboxes + Apple Health), standard programs seeded~~
 - ~~GIF system — 155 exercises with GIF (accent color + tappable), GifSheet with WKWebView + muscle info~~
 - ~~Exercise descriptions — 186 reviewed, 8 factual errors fixed~~
