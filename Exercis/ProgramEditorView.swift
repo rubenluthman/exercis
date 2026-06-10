@@ -125,7 +125,7 @@ struct ProgramEditorView: View {
                         constraintRaw = c.rawValue
                     } label: {
                         Text(c.displayName)
-                            .font(.jost(.semibold, size: 11))
+                            .font(.jost(.semibold, size: 12))
                             .kerning(1)
                             .foregroundStyle(isSelected ? .white : Color(.label))
                             .padding(.horizontal, 12)

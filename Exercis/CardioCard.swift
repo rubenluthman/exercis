@@ -85,11 +85,11 @@ struct CardioCard: View {
                 } label: {
                     HStack(spacing: 4) {
                         Text("EFFORT")
-                            .font(.jost(.medium, size: 10))
+                            .font(.jost(.medium, size: 11))
                             .kerning(1.5)
                             .foregroundStyle(Color(.secondaryLabel))
                         Text("\(score)/10")
-                            .font(.jost(.semibold, size: 10))
+                            .font(.jost(.semibold, size: 11))
                             .kerning(1.5)
                             .foregroundStyle(Color.historyAccent)
                     }

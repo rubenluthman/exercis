@@ -20,12 +20,12 @@ struct CardioTypeCard: View {
 
                 if let mins = lastDurationMinutes {
                     Text(String(format: String(localized: "LAST: %g MIN"), mins))
-                        .font(.jost(.medium, size: 10))
+                        .font(.jost(.medium, size: 11))
                         .kerning(1.5)
                         .foregroundStyle(Color(.secondaryLabel))
                 } else {
                     Text(String(localized: "NO SESSIONS YET"))
-                        .font(.jost(.medium, size: 10))
+                        .font(.jost(.medium, size: 11))
                         .kerning(1.5)
                         .foregroundStyle(Color(.tertiaryLabel))
                 }

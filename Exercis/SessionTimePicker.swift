@@ -20,7 +20,7 @@ struct SessionTimePicker: View {
 
             HStack {
                 Text("START")
-                    .font(.jost(.medium, size: 10))
+                    .font(.jost(.medium, size: 12))
                     .kerning(1.5)
                     .foregroundStyle(Color(.secondaryLabel))
                 Spacer()
@@ -42,7 +42,7 @@ struct SessionTimePicker: View {
 
             HStack {
                 Text("END")
-                    .font(.jost(.medium, size: 10))
+                    .font(.jost(.medium, size: 12))
                     .kerning(1.5)
                     .foregroundStyle(Color(.secondaryLabel))
                 Spacer()

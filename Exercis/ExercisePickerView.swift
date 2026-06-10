@@ -80,7 +80,7 @@ struct ExercisePickerView: View {
                             ForEach(notRecommended) { def in exerciseRow(def, dimmed: true) }
                         } header: {
                             Text("NOT RECOMMENDED")
-                                .font(.jost(.medium, size: 10))
+                                .font(.jost(.medium, size: 12))
                                 .kerning(1.5)
                                 .foregroundStyle(Color(.secondaryLabel))
                         }
@@ -132,7 +132,7 @@ struct ExercisePickerView: View {
                         selectedMovements = []
                     } label: {
                         Text("CLEAR")
-                            .font(.jost(.regular, size: 11))
+                            .font(.jost(.regular, size: 12))
                             .kerning(1)
                             .foregroundStyle(Color(.secondaryLabel))
                             .padding(.horizontal, 12)
@@ -149,7 +149,7 @@ struct ExercisePickerView: View {
         Button(action: action) {
             HStack(spacing: 4) {
                 Text(count > 0 ? "\(String(localized: String.LocalizationValue(label))) \(count)" : String(localized: String.LocalizationValue(label)))
-                    .font(.jost(.semibold, size: 11))
+                    .font(.jost(.semibold, size: 12))
                     .kerning(1)
                 Image(systemName: "chevron.down")
                     .font(.system(size: 9, weight: .semibold))

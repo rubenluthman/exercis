@@ -85,7 +85,7 @@ struct CardioView: View {
                             .foregroundStyle(.primary)
                             .monospacedDigit()
                         Text("TIME")
-                            .font(.jost(.medium, size: 10))
+                            .font(.jost(.medium, size: 12))
                             .kerning(1.5)
                             .foregroundStyle(Color(.secondaryLabel))
                     }
@@ -112,7 +112,7 @@ struct CardioView: View {
                             }
                         }
                         Text(distanceLabel(imperial))
-                            .font(.jost(.medium, size: 10))
+                            .font(.jost(.medium, size: 12))
                             .kerning(1.5)
                             .foregroundStyle(Color(.secondaryLabel))
                     }

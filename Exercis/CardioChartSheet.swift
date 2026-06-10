@@ -75,12 +75,12 @@ struct CardioChartSheet: View {
                 if hasDistanceData {
                     HStack(spacing: 16) {
                         Button("TIME") { withAnimation(.easeInOut(duration: 0.2)) { showDistance = false } }
-                            .font(.jost(showDistance ? .regular : .semibold, size: 11))
+                            .font(.jost(showDistance ? .regular : .semibold, size: 12))
                             .kerning(1.5)
                             .foregroundStyle(showDistance ? Color(.secondaryLabel) : Color.historyAccent)
 
                         Button("DISTANCE") { withAnimation(.easeInOut(duration: 0.2)) { showDistance = true } }
-                            .font(.jost(showDistance ? .semibold : .regular, size: 11))
+                            .font(.jost(showDistance ? .semibold : .regular, size: 12))
                             .kerning(1.5)
                             .foregroundStyle(showDistance ? Color.historyAccent : Color(.secondaryLabel))
                     }
@@ -166,7 +166,7 @@ struct CardioChartSheet: View {
     private func statBlock(label: String, value: String, unit: String? = nil, alignment: HorizontalAlignment = .leading) -> some View {
         VStack(alignment: alignment, spacing: 4) {
             Text(LocalizedStringKey(label))
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 11))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
             HStack(alignment: .firstTextBaseline, spacing: 2) {

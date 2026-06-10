@@ -195,7 +195,7 @@ struct TrainingView: View {
 
     private func sectionLabel(_ text: String) -> some View {
         Text(text)
-            .font(.jost(.medium, size: 10))
+            .font(.jost(.medium, size: 12))
             .kerning(1.5)
             .foregroundStyle(Color(.secondaryLabel))
             .frame(maxWidth: .infinity, alignment: .leading)

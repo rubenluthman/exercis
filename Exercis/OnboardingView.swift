@@ -154,7 +154,7 @@ struct OnboardingView: View {
                     ForEach(cardioGroups, id: \.title) { group in
                         VStack(alignment: .leading, spacing: 8) {
                             Text(group.title.uppercased())
-                                .font(.jost(.medium, size: 10))
+                                .font(.jost(.medium, size: 12))
                                 .kerning(1.5)
                                 .foregroundStyle(Color(.secondaryLabel))
                                 .padding(.horizontal, 24)

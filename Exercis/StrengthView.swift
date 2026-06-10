@@ -465,7 +465,7 @@ struct StrengthView: View {
         let label = mins > 0 ? "\(mins):\(String(format: "%02d", secs))" : "\(secs)s"
         return HStack {
             Text("REST")
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 12))
                 .kerning(1.5)
             Text("·")
             Text(label)
@@ -616,11 +616,11 @@ struct EffortPickerSheet: View {
             if !newPRs.isEmpty {
                 HStack(spacing: 6) {
                     Image(systemName: "trophy.fill")
-                        .font(.jost(.regular, size: 10))
+                        .font(.jost(.regular, size: 12))
                     Text(newPRs.count == 1
                          ? "NEW RECORD · \(newPRs[0].uppercased())"
                          : "NEW RECORDS · \(newPRs.count) EXERCISES")
-                        .font(.jost(.semibold, size: 10))
+                        .font(.jost(.semibold, size: 12))
                         .kerning(1.5)
                 }
                 .foregroundStyle(accent)
@@ -638,7 +638,7 @@ struct EffortPickerSheet: View {
                 .padding(.bottom, 6)
 
             Text("HOW HARD WAS THE WORKOUT?")
-                .font(.jost(.regular, size: 11))
+                .font(.jost(.regular, size: 12))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
                 .padding(.horizontal, 24)

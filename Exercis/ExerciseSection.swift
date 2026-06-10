@@ -85,7 +85,7 @@ struct ExerciseSection: View {
                     Text("REPS")
                         .frame(width: 120, alignment: .trailing)
                 }
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 11))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
                 .padding(.horizontal, 24)

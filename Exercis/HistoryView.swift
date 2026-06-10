@@ -210,7 +210,7 @@ struct HistoryView: View {
             summaryPeriod = SummaryPeriod(year: year, month: nil)
         } label: {
             Text(verbatim: String(year))
-                .font(.jost(.medium, size: 11))
+                .font(.jost(.medium, size: 12))
                 .kerning(2)
                 .foregroundStyle(Color(.tertiaryLabel))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -247,7 +247,7 @@ struct HistoryView: View {
                     if group.workoutCount > 0 { Text(String(format: String(localized: "%d STRENGTH"), group.workoutCount)) }
                     if group.cardioCount > 0  { Text(String(format: String(localized: "%d CARDIO"), group.cardioCount)) }
                 }
-                .font(.jost(.regular, size: 11))
+                .font(.jost(.regular, size: 12))
                 .kerning(1)
                 .foregroundStyle(Color(.secondaryLabel))
             }

@@ -78,7 +78,7 @@ struct GifSheet: View {
     private func muscleSection(label: String, muscles: [String]) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(LocalizedStringKey(label))
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 12))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
             Text(muscles.map { $0.muscleDisplayName }.joined(separator: ", "))
@@ -90,7 +90,7 @@ struct GifSheet: View {
     private func infoRow(label: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(LocalizedStringKey(label))
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 12))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
             Text(value)

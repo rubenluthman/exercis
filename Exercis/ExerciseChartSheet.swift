@@ -75,13 +75,13 @@ struct ExerciseChartSheet: View {
                 Spacer()
                 HStack(spacing: 0) {
                     Button("1RM") { withAnimation(.easeInOut(duration: 0.22)) { showVolume = false } }
-                        .font(.jost(.semibold, size: 10))
+                        .font(.jost(.semibold, size: 12))
                         .kerning(1.5)
                         .foregroundStyle(showVolume ? Color(.secondaryLabel) : Color.historyAccent)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
                     Button("VOL") { withAnimation(.easeInOut(duration: 0.22)) { showVolume = true } }
-                        .font(.jost(.semibold, size: 10))
+                        .font(.jost(.semibold, size: 12))
                         .kerning(1.5)
                         .foregroundStyle(showVolume ? Color.historyAccent : Color(.secondaryLabel))
                         .padding(.horizontal, 10)
@@ -170,7 +170,7 @@ struct ExerciseChartSheet: View {
     private func statBlock(label: String, value: String, unit: String? = nil, alignment: HorizontalAlignment = .leading) -> some View {
         VStack(alignment: alignment, spacing: 4) {
             Text(LocalizedStringKey(label))
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 11))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
             HStack(alignment: .firstTextBaseline, spacing: 2) {

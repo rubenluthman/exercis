@@ -140,7 +140,7 @@ struct ProfileView: View {
             HStack(alignment: .bottom, spacing: 0) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("STREAK")
-                        .font(.jost(.medium, size: 10))
+                        .font(.jost(.medium, size: 11))
                         .kerning(1.5)
                         .foregroundStyle(Color(.secondaryLabel))
 
@@ -162,7 +162,7 @@ struct ProfileView: View {
                 if currentStreak > 0 {
                     VStack(alignment: .trailing, spacing: 4) {
                         Text("BEST")
-                            .font(.jost(.medium, size: 10))
+                            .font(.jost(.medium, size: 11))
                             .kerning(1.5)
                             .foregroundStyle(Color(.secondaryLabel))
                         Text("\(bestStreak)")
@@ -221,7 +221,7 @@ struct ProfileView: View {
 
             VStack(alignment: .leading, spacing: 14) {
                 Text("LAST SESSION")
-                    .font(.jost(.medium, size: 10))
+                    .font(.jost(.medium, size: 11))
                     .kerning(1.5)
                     .foregroundStyle(Color(.secondaryLabel))
                     .padding(.horizontal, 24)
@@ -266,7 +266,7 @@ struct ProfileView: View {
 
             VStack(alignment: .leading, spacing: 16) {
                 Text("PERSONAL RECORDS")
-                    .font(.jost(.medium, size: 10))
+                    .font(.jost(.medium, size: 11))
                     .kerning(1.5)
                     .foregroundStyle(Color(.secondaryLabel))
                     .padding(.horizontal, 24)
@@ -350,7 +350,7 @@ struct ProfileView: View {
     private func weeklyStatBlock(label: String, value: String, unit: String, alignment: HorizontalAlignment) -> some View {
         VStack(alignment: alignment, spacing: 4) {
             Text(LocalizedStringKey(label))
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 11))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
                 .lineLimit(1)
@@ -510,7 +510,7 @@ struct ProfileView: View {
     private func statBlock(label: String, value: String, unit: String? = nil, alignment: HorizontalAlignment = .leading) -> some View {
         VStack(alignment: alignment, spacing: 4) {
             Text(LocalizedStringKey(label))
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 11))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
                 .lineLimit(1)

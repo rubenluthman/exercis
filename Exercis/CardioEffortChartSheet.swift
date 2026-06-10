@@ -134,7 +134,7 @@ struct CardioEffortChartSheet: View {
     private func statBlock(label: String, value: String, unit: String? = nil, alignment: HorizontalAlignment = .leading) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(LocalizedStringKey(label))
-                .font(.jost(.medium, size: 10))
+                .font(.jost(.medium, size: 11))
                 .kerning(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
             HStack(alignment: .firstTextBaseline, spacing: 2) {
