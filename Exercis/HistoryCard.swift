@@ -54,8 +54,8 @@ struct HistoryCard: View {
                     .accessibilityLabel("Delete workout")
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 8)
-                .padding(.bottom, isExpanded ? 2 : 12)
+                .padding(.top, 4)
+                .padding(.bottom, isExpanded ? 2 : 8)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)

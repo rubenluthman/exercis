@@ -16,6 +16,7 @@ struct ProgramEditorView: View {
     @State private var exercises: [ExerciseDraft]
     @State private var showPicker = false
     @State private var showDeleteAlert = false
+    @State private var showResetAlert = false
 
     init(program: WorkoutProgram?) {
         self.program = program
@@ -94,6 +95,15 @@ struct ProgramEditorView: View {
                     }
                 }
 
+                if !isNew, let pid = program?.id, defaultProgramDef(for: pid) != nil {
+                    Section {
+                        Button("Reset to defaults") {
+                            showResetAlert = true
+                        }
+                        .foregroundStyle(accent)
+                    }
+                }
+
                 if !isNew {
                     Section {
                         Button("Delete Program", role: .destructive) {
@@ -127,6 +137,12 @@ struct ProgramEditorView: View {
                     },
                     programConstraint: ProgramConstraint(rawValue: constraintRaw) ?? .none
                 )
+            }
+            .alert(String(localized: "Reset to defaults?"), isPresented: $showResetAlert) {
+                Button("Reset", role: .destructive) { resetToDefaults() }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This will restore the original exercises, name, color and settings.")
             }
             .alert(String(format: String(localized: "Delete %@?"), program?.name ?? ""), isPresented: $showDeleteAlert) {
                 Button("Delete", role: .destructive) { deleteProgram() }
@@ -326,6 +342,15 @@ struct ProgramEditorView: View {
             #endif
         }
         dismiss()
+    }
+
+    private func resetToDefaults() {
+        guard let program, let def = defaultProgramDef(for: program.id) else { return }
+        name = def.name
+        colorName = def.color
+        constraintRaw = def.constraint
+        useFixedReps = false
+        exercises = def.exercises.map { ExerciseDraft(exerciseId: $0.id, exerciseName: $0.name, setCount: $0.setCount, fixedReps: 0) }
     }
 
     private func deleteProgram() {

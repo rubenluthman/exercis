@@ -114,6 +114,7 @@ struct MainTabView: View {
             migrateExerciseNames(context: context)
             migrateCardioTypes(context: context)
             seedDefaultProgramsIfNeeded(context: context)
+            backfillSeededProgramMapIfNeeded(context: context)
             Task { await HealthKitManager.shared.requestAuthorization() }
         }
     }

@@ -525,10 +525,12 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
         ])
     ]
 
+    var seededMap: [String: String] = [:]
     for (i, def) in defaults.enumerated() {
         let program = WorkoutProgram(name: def.name, colorName: def.color, sortIndex: i, programConstraint: def.constraint)
         program.isOnTrainingPage = false
         context.insert(program)
+        seededMap[program.id.uuidString] = def.name
         for (j, ex) in def.exercises.enumerated() {
             let pe = ProgramExercise(exerciseId: ex.id, exerciseName: ex.name, sortIndex: j)
             pe.program = program
@@ -540,5 +542,88 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
             logger.error("context.save failed: \(error)")
             #endif
         }
+    if let data = try? JSONEncoder().encode(seededMap) {
+        UserDefaults.standard.set(data, forKey: "seededProgramMap")
+    }
     UserDefaults.standard.set(true, forKey: "hasSeededPrograms")
+}
+
+struct DefaultProgramDef {
+    let name: String
+    let color: String
+    let constraint: String
+    let exercises: [(id: String, name: String, setCount: Int)]
+}
+
+let allDefaultProgramDefs: [DefaultProgramDef] = [
+    DefaultProgramDef(name: "Full Body", color: "paletteIntenseRed", constraint: "", exercises: [
+        ("wger_squats",                   "Squats",                          3),
+        ("wger_bench_press",              "Bench Press",                     3),
+        ("wger_romanian_deadlift",        "Romanian Deadlift",               3),
+        ("wger_bent_over_rowing",         "Bent Over Rowing",                3),
+        ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells",       3)
+    ]),
+    DefaultProgramDef(name: "Överkropp", color: "paletteOrange", constraint: "upper", exercises: [
+        ("wger_bench_press",              "Bench Press",                     3),
+        ("wger_bent_over_rowing",         "Bent Over Rowing",                3),
+        ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells",       3),
+        ("wger_pullups",                  "Pull-Ups",                        3),
+        ("wger_lateral_raises",           "Lateral Raises",                  3)
+    ]),
+    DefaultProgramDef(name: "Underkropp", color: "paletteYellow", constraint: "legs", exercises: [
+        ("wger_squats",                 "Squats",                            3),
+        ("wger_romanian_deadlift",      "Romanian Deadlift",                 3),
+        ("wger_leg_presses_wide",       "Leg Presses (Wide)",                3),
+        ("wger_leg_curls_laying",       "Leg Curls (Laying)",                3),
+        ("wger_standing_calf_raises",   "Standing Calf Raises",              3)
+    ]),
+    DefaultProgramDef(name: "Push", color: "paletteLime", constraint: "push", exercises: [
+        ("wger_bench_press",                          "Bench Press",                             3),
+        ("wger_incline_dumbbell_press",               "Incline Dumbbell Press",                  3),
+        ("wger_shoulder_press_dumbbells",             "Shoulder Press, Dumbbells",               3),
+        ("wger_lateral_raises",                       "Lateral Raises",                          3),
+        ("wger_triceps_extensions_on_cable_with_bar", "Triceps Extensions On Cable With Bar",    3)
+    ]),
+    DefaultProgramDef(name: "Pull", color: "paletteGreen", constraint: "pull", exercises: [
+        ("wger_deadlifts",                   "Deadlifts",                         3),
+        ("wger_pullups",                     "Pull-Ups",                          3),
+        ("wger_rowing_seated",               "Rowing, Seated",                    3),
+        ("wger_lat_pull_down_straight_back", "Lat Pull Down (Straight Back)",     3),
+        ("wger_biceps_curls_with_dumbbell",  "Biceps Curls With Dumbbell",        3)
+    ]),
+    DefaultProgramDef(name: "Legs", color: "paletteTeal", constraint: "legs", exercises: [
+        ("wger_squats",             "Squats",                   3),
+        ("wger_romanian_deadlift",  "Romanian Deadlift",        3),
+        ("wger_leg_presses_wide",   "Leg Presses (Wide)",       3),
+        ("wger_leg_extension",      "Leg Extension",            3),
+        ("wger_leg_curls_laying",   "Leg Curls (Laying)",       3)
+    ]),
+    DefaultProgramDef(name: "Bodyweight", color: "paletteCyan", constraint: "bodyweight", exercises: [
+        ("wger_body_squats",         "Body Squats",          3),
+        ("wger_push_ups",            "Push Ups",             3),
+        ("wger_bodyweight_lunges",   "Bodyweight Lunges",    3),
+        ("wger_superman",            "Superman",             3),
+        ("wger_plank",               "Plank",                3)
+    ])
+]
+
+func backfillSeededProgramMapIfNeeded(context: ModelContext) {
+    guard UserDefaults.standard.data(forKey: "seededProgramMap") == nil else { return }
+    let programs = (try? context.fetch(FetchDescriptor<WorkoutProgram>())) ?? []
+    var map: [String: String] = [:]
+    for def in allDefaultProgramDefs {
+        if let match = programs.first(where: { $0.name == def.name }) {
+            map[match.id.uuidString] = def.name
+        }
+    }
+    if let data = try? JSONEncoder().encode(map) {
+        UserDefaults.standard.set(data, forKey: "seededProgramMap")
+    }
+}
+
+func defaultProgramDef(for programId: UUID) -> DefaultProgramDef? {
+    guard let data = UserDefaults.standard.data(forKey: "seededProgramMap"),
+          let map = try? JSONDecoder().decode([String: String].self, from: data),
+          let defaultName = map[programId.uuidString] else { return nil }
+    return allDefaultProgramDefs.first { $0.name == defaultName }
 }
