@@ -16,7 +16,7 @@
     {
       "layers" : [
         {
-          "glass" : true,
+          "glass" : false,
           "image-name" : "foreground.png",
           "name" : "exercis-stripes"
         }

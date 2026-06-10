@@ -140,6 +140,15 @@
 /* StrengthView accessibility */
 "Cancel rest timer" = "Avbryt vilotimer";
 
+/* ProgramEditorView — locked reps */
+"Locked reps" = "Låst reps";
+"Set a fixed rep count per exercise" = "Ange ett fast antal reps per övning";
+"Decrease fixed reps" = "Minska låsta reps";
+"Increase fixed reps" = "Öka låsta reps";
+
+/* ExerciseSection accessibility */
+"Opens exercise animation" = "Öppnar övningsanimation";
+
 /* ProfileView */
 "STREAK" = "STREAK";
 "LAST SESSION" = "SENASTE PASS";
@@ -150,6 +159,9 @@
 
 /* SettingsView */
 "Based on your last session start" = "Baserat på starten av ditt senaste pass";
+
+/* WhatsNewSheet — locked reps body */
+"Enable locked reps on a program to set a fixed rep count per exercise — useful for structured programs like 5×5." = "Aktivera låst reps på ett program för att ange ett fast antal reps per övning — användbart för strukturerade program som 5×5.";
 
 /* OnboardingView / GifSheet accessibility */
 "Edit program" = "Redigera program";

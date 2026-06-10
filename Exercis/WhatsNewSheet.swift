@@ -10,6 +10,12 @@ private struct WhatsNewEntry: Identifiable {
 
 private let entries: [WhatsNewEntry] = [
     WhatsNewEntry(
+        icon: "lock.fill",
+        iconColor: .workoutAccent,
+        title: "Locked reps",
+        body: "Enable locked reps on a program to set a fixed rep count per exercise — useful for structured programs like 5×5."
+    ),
+    WhatsNewEntry(
         icon: "chart.line.uptrend.xyaxis",
         iconColor: .historyAccent,
         title: "Volume chart",

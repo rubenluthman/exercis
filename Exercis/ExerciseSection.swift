@@ -31,7 +31,7 @@ struct ExerciseSection: View {
                     .kerning(1.5)
                     .foregroundStyle(accent)
                     .lineLimit(1)
-                    .accessibilityHint("Öppnar övningsanimation")
+                    .accessibilityHint(String(localized: "Opens exercise animation"))
                 } else {
                     Text((form.def.shortName ?? form.def.displayName).uppercased())
                         .font(.jost(.semibold, size: 12))

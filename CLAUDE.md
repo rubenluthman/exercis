@@ -53,7 +53,7 @@ PeriodSummarySheet.swift  ← monthly/yearly summary (Swift Charts, opened from 
 SessionTimePicker.swift   ← shared sheet for start/end time (changing start drags end along, end adjustable freely)
 ProfileView.swift         ← profile photo, name, top stats, streak (14-day dots), last session, personal records (top-8 e1RM), weekly average
 SettingsView.swift        ← settings + program management + cardio types + body limitations + training reminders + data export
-ProgramEditorView.swift   ← edit program (name, color, constraint, exercises, set count)
+ProgramEditorView.swift   ← edit program (name, color, constraint, exercises, set count, locked reps per exercise)
 ExercisePickerView.swift  ← exercise picker with fuzzy search + filter chips (MUSCLE/EQUIPMENT/MOVEMENT) + dimming
 ProgramCard.swift         ← program card (used in TrainingView and SettingsView)
 CardioTypeCard.swift      ← cardio type card with accent color header and last duration (used in TrainingView)
@@ -249,10 +249,12 @@ All free functions in Theme.swift are unit-tested and kept free of SwiftUI/Swift
     var id: UUID; var name: String; var colorName: String; var sortIndex: Int
     var isOnTrainingPage: Bool = true   // shown on the Training tab
     var programConstraint: String = ""  // ProgramConstraint.rawValue — dims exercises in ExercisePickerView
+    var useFixedReps: Bool = false       // locked reps mode — each exercise uses fixedReps instead of free input
     @Relationship(deleteRule: .cascade) var exercises: [ProgramExercise]
 }
 @Model class ProgramExercise {
     var exerciseId: String; var exerciseName: String; var sortIndex: Int; var setCount: Int
+    var fixedReps: Int = 0              // fixed rep target; 0 = free input (only relevant when useFixedReps is true)
     var program: WorkoutProgram?
 }
 ```
