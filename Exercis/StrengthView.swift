@@ -167,7 +167,9 @@ struct StrengthView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
-        .animation(.easeInOut(duration: 0.22), value: showEffortPicker)
+        .toolbar(.hidden, for: .navigationBar)
+        .enableSwipeBack()
+        .animation(.easeInOut(duration: .22), value: showEffortPicker)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
