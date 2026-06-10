@@ -214,11 +214,15 @@ struct CardioView: View {
             lastEffortScore = saved > 0 ? saved : 5
             editedEnd = Date()
 
-            // Återuppta pågående pass om draft finns
-            if let startInterval = UserDefaults.standard.object(forKey: draftStartKey) as? Double {
+            // Återuppta pågående pass om draft finns (max 24 h gammalt)
+            if let startInterval = UserDefaults.standard.object(forKey: draftStartKey) as? Double,
+               Date().timeIntervalSince1970 - startInterval < 86400 {
                 editedStart = Date(timeIntervalSince1970: startInterval)
                 distance = UserDefaults.standard.string(forKey: draftDistanceKey) ?? ""
             } else {
+                UserDefaults.standard.removeObject(forKey: draftStartKey)
+                UserDefaults.standard.removeObject(forKey: draftDistanceKey)
+                hasCardioDraft = false
                 editedStart = Date()
                 if let savedDist = UserDefaults.standard.string(forKey: "cardioSavedDistance_\(type.rawValue)"),
                    let km = parseWeight(savedDist) {
