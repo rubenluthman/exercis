@@ -1,93 +1,94 @@
 # Exercis – Roadmap
 
-Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under sessioner och vid apprevision.
+Everything planned, decided, and parked in one place. Updated continuously during sessions and app reviews.
 
-**Arbetsflöde:** allt här är gemensamt — vi diskuterar och bestämmer tillsammans om något ska göras, göras senare eller strykas. Ingen uppdelning i "Rubens beslut" vs "Claudes förslag". När något är klart — flytta det till **Klart**-sektionen längst ner. Stryk inte bara över det där det står.
-
----
-
-## Att göra / diskutera
-
-- **macOS-companion-app** — enkel macOS-app för att logga pass i efterhand och hantera program när man sitter vid datorn. Behöver inte spegla iOS-appen fullt ut — fokus på programredigering och retroaktiv loggning. Delar SwiftData-modeller och affärslogik med iOS-appen; CloudKit-sync (se nedan) är en förutsättning för att data ska synka mellan enheterna.
-
-- **watchOS-app** — snabbloggning av set/reps direkt från klockan under pass. `exercis.icon` har redan `watchOS` i `supported-platforms.circles` så ikonen är redo. Kräver Apple Developer-konto och CloudKit-sync för att data ska synka.
+**Workflow:** all items here are shared — we discuss and decide together whether something gets built, deferred, or dropped. When something ships, move it to **Done** at the bottom. Don't just strike it where it stands.
 
 ---
 
-## Kräver Apple Developer-konto (TestFlight + App Store)
+## Up next / under discussion
 
-- **Betalt Apple Developer Program-konto** ($99/år) — förutsättning för allt nedan
-- **CloudKit-sync** — utan det förlorar användaren all data vid telefonbyte/ominstallation; kritiskt redan från första TestFlight-runda eftersom testare ofta byter enhet
-- **GIF-licens** — byt hasaneyldrm-källa mot licensierad (ExerciseDB Pro) innan submission
-- **App Group aktivering** — `group.rubenluthman.Exercis` måste aktiveras i Xcode Signing & Capabilities för båda targets (Exercis + ExercisWidget) för att widgeten ska fungera
-- **Export-efterlevnad** — `ITSAppUsesNonExemptEncryption` i Info.plist måste vara korrekt satt för App Store Connect-uppladdning
-- **Integritetspolicy (privacy policy URL)** — krävs i App Store Connect-metadata p.g.a. HealthKit-data
-- **Granskarinstruktioner för Face ID** — App Review/TestFlight-granskare behöver veta hur de loggar in utan din biometri
-- **Build-nummerhantering** — etablera rutin för unikt build-nummer per uppladdning
+- **macOS companion app** — lightweight macOS app for logging sessions retroactively and managing programs from a desktop. Doesn't need to mirror the iOS app fully — focus on program editing and after-the-fact logging. Shares SwiftData models and business logic with the iOS app; CloudKit sync (see below) is a prerequisite for data to move between devices.
+
+- **watchOS app** — quick set/reps logging directly from the wrist during a session. `exercis.icon` already has `watchOS` in `supported-platforms.circles` so the icon is ready. Requires an Apple Developer account and CloudKit sync.
 
 ---
 
-## Kodbas
+## Requires Apple Developer account (TestFlight + App Store)
 
-- **Global övningsredigering i StrengthView** — ett ställe att byta/lägga till/ta bort övningar för hela passet, i stället för ⇄-knapp per övning. Kan vara en edit-ikon i headern eller långtryck på övningsnamnet.
-
-- **Bygg ut alias-täckning i `exercises_def.json`** — gå igenom samtliga övningar och lägg till `aliases` för alla kända alternativa namn (t.ex. "Lateral Raises"/"Lateral Raise" på "Side Raise"). Kombinera med att `searchStrings` i `ExercisePickerView` även inkluderar `aliases` (se commit som lade till detta) — annars hjälper alias inte vid sökning, bara vid migrering av historisk data.
-
----
-
-## Parkerat (avskrivet)
-
-- **Övningsbyte intra-pass** — byt övning mitt i ett pass utan att förstöra strukturen; spara original + ersättning i loggen
-- **Rest-timer per övning** — default lagrad i `ProgramExercise.restSeconds` istället för global AppStorage-inställning
-- **HIIT-timer** — oklart use case
-- **4-tab-layout** — final, förhandlas inte
-- **Apple Watch-app (omvärderad)** — flyttad till Att göra; se watchOS-app ovan
-- **Siri Shortcuts** — single-user-app, låg prioritet
-- **TabView-omstrukturering** — 3 tabbar avskrivet; nuvarande 4-tabbar med samlad Träning-tab är rätt
-- **ExerciseDef → SwiftData `@Model`** — inget praktiskt behov, prefill fungerar via `programId`
-- **HKWorkoutActivity per övning** — rörelse/vila går inte att särskilja, ger ingen meningsfull data
-- **Swift Packages** (`swift-algorithms`, `swift-collections`) — inte motiverat förrän appen växer
-- **`sv_SE` hårdkodat** — avsiktligt val för svensk single-user-app, inget att åtgärda
+- **Paid Apple Developer Program** ($99/yr) — prerequisite for everything below
+- **CloudKit sync** — without it, users lose all data on device replacement or reinstall; critical from the first TestFlight round since testers often switch devices
+- **GIF license** — replace the hasaneyldrm source with a licensed alternative (ExerciseDB Pro) before submission
+- **App Group activation** — `group.rubenluthman.Exercis` must be enabled in Xcode Signing & Capabilities for both targets (Exercis + ExercisWidget) for the widget to function
+- **Export compliance** — `ITSAppUsesNonExemptEncryption` in Info.plist must be set correctly for App Store Connect upload
+- **Privacy policy URL** — required in App Store Connect metadata due to HealthKit data collection
+- **Face ID instructions for reviewers** — App Review / TestFlight reviewers need to know how to log in without biometrics
+- **Build number management** — establish a process for unique build numbers per upload
 
 ---
 
-## Klart
+## Codebase
 
-- [x] Onboarding — 3 steg (program-grid + konditionscheckboxar + Apple Health), standardprogram seedas
-- [x] GIF-system — 155 övningar med GIF (accentfärg + tryckbar), GifSheet med WKWebView + muskelinfo
-- [x] Övningsbeskrivningar — 186 granskade, 8 faktafel åtgärdade
-- [x] Begränsningsfilter — kroppsbegränsningar + programbegränsningar i ExercisePickerView
-- [x] Enhetssystem lbs/miles
-- [x] TrainingView — Träning-tab med program + konditionsformer
-- [x] Automatisk tidsloggning för kondition
-- [x] CSV-export
-- [x] Haptics centraliserade
-- [x] Lokalisering — engelska basspråk, svenska via sv.lproj
-- [x] SwiftData VersionedSchema v1 + ExercisMigrationPlan
-- [x] `#if DEBUG` OSLog-loggning på alla context.save()
-- [x] XCTest-target — Epley, viktsformatering, CardioType-mappning, WorkoutDraft, ExerciseLibrary, HistoryView-gruppering, HealthKit-kalorier, PR-detektion, ProgramSeeder, CSV-export, PeriodSummary-aggregationer, LiveActivity-färger
-- [x] `try!` på produktionens ModelContainer ersatt med graciös fallback — försöker persistent store, faller tillbaka på in-memory-store vid fel och visar en alert ("Couldn't Load Saved Data") istället för att krascha ([ExercisApp.swift:27](Exercis/ExercisApp.swift#L27))
-- [x] `.foregroundColor` → `.foregroundStyle` — samtliga 125 förekomster migrerade mekaniskt (rena `Color`-värden, 1:1-ersättning), nu konsekvent `.foregroundStyle` i hela appen
-- [x] iOS 26 Tab bar — `tabBarMinimizeBehavior(.onScrollDown)`
-- [x] iOS 26 Knappar — `primaryButtonStyle` adaptiv (glass / fylld rektangel)
-- [x] GifSheet accessibilityLabel — "Animation showing [övningsnamn]"
-- [x] Volymtoggle i ExerciseChartSheet (1RM / VOL)
-- [x] ProfileView — streak, senaste pass, personliga rekord, veckosnitt
-- [x] Progressionsförslag — badge under set-numret (→ X kg × Y reps), +2.5 kg vid ÖKA
-- [x] Träningspåminnelser — REMINDERS-sektion i Settings, veckodagar + autotid från historik
-- [x] Hemskärmswidget — small (streak + nästa program) + medium (+ senaste pass)
-- [x] WhatsNewSheet — releasenoter öppnas från VERSION-raden i Settings
-- [x] WhatsNewSheet lokaliserad — rubrik och releasenotes översatta i sv.lproj/Localizable.strings (LocalizedStringKey)
-- [x] CI — GitHub Actions-jobb (.github/workflows/tests.yml) kör xcodebuild test med Exercis-testplanen på push/PR mot main
-- [x] Tom `en.lproj`-mapp borttagen (Xcode-restprodukt, var inte incheckad i git)
-- [x] Export-bugg åtgärdad — race condition i SettingsView
-- [x] GIF-filer rensade ur git-historik med git-filter-repo
-- [x] Fix: duplikat övning Military Press → Seated Military Press
-- [x] Fix: lokalisering i hjälpfunktioner
-- [x] Fix: duplikat-alias-krasch i migrateExerciseNames
-- [x] Sheet-bakgrunder — `.background(Color.appBackground)` ersatt med `.regularMaterial` på effort-pickers (StrengthView/CardioView) och onboarding-footern för Liquid Glass-genomskinlighet
-- [x] CSV-export RFC 4180-citering — ny fri funktion `csvField(_:)` i Theme.swift kvoterar fält med komma/citattecken/radbrytning (program-, övnings- och kardiotyp-namn)
-- [x] HealthKit-behörighetsbegäran konsoliderad — flyttad från StrengthView/CardioView `.onAppear` till `MainTabView.onAppear` vid app-start
-- [x] Apprevision 2026-06-06 — lokaliserade saknade strängar (OnboardingView: programval/kardioval/Apple Health-steg, SettingsView: backup-förklaring), lade till `accessibilityLabel("Cancel rest timer")` på vilotimerns avbryt-knapp (StrengthView), uppdaterade CLAUDE.md: 6 nya fria funktioner för imperial-enheter (`displayWeight`/`displayDistance`/`parseWeightInput`/`parseDistanceInput`/`weightLabel`/`distanceLabel`), 8 saknade UserDefaults-nycklar, samt skrev om "Enhetflexibilitet" från framtidsplan till faktisk implementation
-- [x] Appikon — adaptiv Liquid Glass-ikon via Icon Composer (`exercis.icon`), Default/Dark/Tinted automatiskt, `AppIcon.appiconset` borttaget
-- [x] Apprevision 2026-06-06 (full, 7 ytor) — lokaliserade ytterligare 9 strängar (ProfileView: STREAK/LAST SESSION/PERSONAL RECORDS m.fl., SettingsView: "Based on your last session start", accessibility-nycklar "Edit program"/"Animation showing %@"); extraherade `ChartEmptyState` ur fyra identiska kopior i chart sheets till Theme.swift; rättade CLAUDE.md: schema-migrationsstatus var stale (`ExercisSchemaV1`/`ExercisMigrationPlan` finns redan, beskrevs som "ej definierat"), tog bort felaktigt krav på `NSUserNotificationsUsageDescription` (existerar inte som Info.plist-nyckel — notiser kräver ingen usage description), la till saknade widget-filer (WidgetDataStore/WidgetSnapshotBuilder) i filstrukturlistan
+- **Global exercise editing in StrengthView** — a single place to swap, add, or remove exercises for the whole session, instead of a per-exercise swap button. Could be an edit icon in the header or a long press on the exercise name.
+
+- **Expand alias coverage in `exercises_def.json`** — go through all exercises and add `aliases` for every known alternative name (e.g. "Lateral Raises"/"Lateral Raise" for "Side Raise"). Pair with including `aliases` in `searchStrings` in `ExercisePickerView` — otherwise aliases only help with history migration, not search.
+
+---
+
+## Out of scope
+
+- **Mid-session exercise swap** — swap an exercise mid-session without breaking the structure; save original + replacement in the log
+- **Per-exercise rest timer** — default stored in `ProgramExercise.restSeconds` instead of a global AppStorage setting
+- **HIIT timer** — unclear use case
+- **4-tab layout** — final, not up for debate
+- **Siri Shortcuts** — single-user app, low priority
+- **TabView restructure** — 3 tabs ruled out; current 4-tab layout with a unified Training tab is correct
+- **ExerciseDef → SwiftData `@Model`** — no practical need, prefill works via `programId`
+- **HKWorkoutActivity per exercise** — no way to distinguish movement from rest, produces no meaningful data
+- **Swift Packages** (`swift-algorithms`, `swift-collections`) — not justified until the app grows
+- **`sv_SE` locale hardcoded** — intentional choice for a Swedish single-user app, not a bug
+
+---
+
+## Done
+
+- ~~Onboarding — 3 steps (program grid + cardio checkboxes + Apple Health), standard programs seeded~~
+- ~~GIF system — 155 exercises with GIF (accent color + tappable), GifSheet with WKWebView + muscle info~~
+- ~~Exercise descriptions — 186 reviewed, 8 factual errors fixed~~
+- ~~Constraint filter — body limitations + program constraints in ExercisePickerView~~
+- ~~Imperial units (lbs/miles)~~
+- ~~TrainingView — Training tab with programs + cardio types~~
+- ~~Automatic time tracking for cardio~~
+- ~~CSV export~~
+- ~~Centralized haptics~~
+- ~~Localization — English base language, Swedish via sv.lproj~~
+- ~~SwiftData VersionedSchema v1 + ExercisMigrationPlan~~
+- ~~`#if DEBUG` OSLog logging on all context.save() calls~~
+- ~~XCTest target — Epley, weight formatting, CardioType mapping, WorkoutDraft, ExerciseLibrary, HistoryView grouping, HealthKit calories, PR detection, ProgramSeeder, CSV export, PeriodSummary aggregations, Live Activity colors~~
+- ~~`try!` on production ModelContainer replaced with graceful fallback — tries persistent store, falls back to in-memory store on failure and shows an alert ("Couldn't Load Saved Data") instead of crashing~~
+- ~~`.foregroundColor` → `.foregroundStyle` — all 125 occurrences migrated, consistently using `.foregroundStyle` throughout~~
+- ~~iOS 26 Tab bar — `tabBarMinimizeBehavior(.onScrollDown)`~~
+- ~~iOS 26 Buttons — `primaryButtonStyle` adaptive (glass / filled rectangle)~~
+- ~~GifSheet accessibilityLabel — "Animation showing [exercise name]"~~
+- ~~Volume toggle in ExerciseChartSheet (1RM / VOL)~~
+- ~~ProfileView — streak, last session, personal records, weekly average~~
+- ~~Progression suggestions — badge below set number (→ X kg × Y reps), +2.5 kg on INCREASE~~
+- ~~Training reminders — REMINDERS section in Settings, weekdays + auto-time from history~~
+- ~~Home screen widget — small (streak + next program) + medium (+ last session)~~
+- ~~WhatsNewSheet — release notes opened from the VERSION row in Settings~~
+- ~~WhatsNewSheet localized — headings and release notes translated in sv.lproj/Localizable.strings~~
+- ~~CI — GitHub Actions job (.github/workflows/tests.yml) runs xcodebuild test with the Exercis test plan on push/PR to main~~
+- ~~Empty `en.lproj` folder removed (Xcode artifact, was not checked into git)~~
+- ~~Export bug fixed — race condition in SettingsView~~
+- ~~GIF files purged from git history with git-filter-repo~~
+- ~~Fix: duplicate exercise Military Press → Seated Military Press~~
+- ~~Fix: localization in helper functions~~
+- ~~Fix: duplicate-alias crash in migrateExerciseNames~~
+- ~~Sheet backgrounds — `.background(Color.appBackground)` replaced with `.regularMaterial` on effort pickers (StrengthView/CardioView) and the onboarding footer for Liquid Glass transparency~~
+- ~~CSV export RFC 4180 quoting — new free function `csvField(_:)` in Theme.swift quotes fields containing commas/quotes/newlines~~
+- ~~HealthKit authorization consolidated — moved from StrengthView/CardioView `.onAppear` to `MainTabView.onAppear` at app launch~~
+- ~~App review 2026-06-06 — localized missing strings, added accessibility labels, updated CLAUDE.md~~
+- ~~App icon — adaptive Liquid Glass icon via Icon Composer (`exercis.icon`), Default/Dark/Tinted automatic, `AppIcon.appiconset` removed~~
+- ~~App review 2026-06-06 (full, 7 surfaces) — localized 9 additional strings; extracted `ChartEmptyState` from four identical copies into Theme.swift; corrected stale CLAUDE.md sections~~
+- ~~Locked reps mode per workout program~~
+- ~~Repo renamed to `exercis` (lowercase), made public; all documentation translated to English~~

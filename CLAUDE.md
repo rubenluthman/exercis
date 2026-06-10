@@ -1,93 +1,101 @@
 # Exercis – Claude Code Context
 
-Privat iOS-app för att logga styrketräning och konditionsträning. En användare.
+## Public project
+This repo is public. Every commit, every file, every decision documented here should be written as if a senior engineer is reading it. That means:
+
+- Commits are clear and complete — a stranger should understand what changed and why from the message alone
+- Code is clean enough to speak for itself — no scaffolding, no leftover experiments, no "will fix later"
+- This file and ROADMAP.md stay accurate and up to date — they are part of the portfolio, not internal notes
+- No "WIP" or "temp" commits reach main
 
 ---
+
+A personal iOS app for logging strength and cardio workouts. Single user.
 
 ---
 
 ## Tech Stack
 
 - **SwiftUI + SwiftData**, iOS 17+, iPhone only, portrait only
-- **iCloud-backup** via standard enhetssäkerhetskopiering (CloudKit-sync ej aktiverat – kräver betalt Apple Developer Program-konto)
-- **Autentisering**: Face ID via `LAContext .deviceOwnerAuthentication` – automatisk fallback till enhetens lösenkod. Inget eget lösenord. Auto-triggas vid app-launch; retry-knapp om det misslyckas.
-- **Deployment target**: iOS 17 (icke förhandlingsbart)
-- **Apple Health**: HKWorkout sparas vid varje avslutat styrke- och konditionspass
-- `NSFaceIDUsageDescription`, `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription` krävs i Info.plist (notifikationer kräver ingen usage description-nyckel — `UNUserNotificationCenter.requestAuthorization` visar systemets standarddialog utan Info.plist-sträng)
+- **iCloud backup** via standard device backup (CloudKit sync not enabled — requires a paid Apple Developer Program account)
+- **Authentication**: Face ID via `LAContext .deviceOwnerAuthentication` — automatic fallback to device passcode. No custom password. Auto-triggers on app launch; retry button on failure.
+- **Deployment target**: iOS 17 (non-negotiable)
+- **Apple Health**: `HKWorkout` saved on every completed strength and cardio session
+- `NSFaceIDUsageDescription`, `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription` required in Info.plist (notifications require no usage description key — `UNUserNotificationCenter.requestAuthorization` shows the system dialog without an Info.plist string)
 
 ---
 
-## Filstruktur
+## File Structure
 
-Alla filer ligger platt i `Exercis/`-mappen.
+All files live flat in the `Exercis/` folder.
 
-**Viktigt:** Projektet använder implicit Swift file discovery — `Sources`-fasen i `project.pbxproj` är tom. Alla `.swift`-filer i `Exercis/`-mappen inkluderas automatiskt i bygget. Nya filer behöver **inte** läggas till manuellt i Xcode.
+**Important:** The project uses implicit Swift file discovery — the `Sources` phase in `project.pbxproj` is empty. All `.swift` files in `Exercis/` are included in the build automatically. New files do **not** need to be added manually in Xcode.
 
 ```
-ExercisApp.swift          ← @main ExercisApp + RootView + MainTabView (4 tabbar)
-AuthManager.swift         ← AuthManager (Face ID/lösenkod)
-Models.swift              ← SwiftData-modeller (WorkoutSession, CardioSession, WorkoutProgram, ProgramExercise, CardioType)
-Theme.swift               ← färger, typsnitt, knappstillar, ThinDivider, enableSwipeBack, formatWeight/parseWeight, fria funktioner för affärslogik
-LockView.swift            ← inloggningsskärm
-TrainingView.swift        ← startsida (Träning-tab) — valda program + konditionsformer, bara starta pass
-StrengthView.swift        ← logga styrketräningspass (SetFormData, ExerciseFormData, progressionsförslag, PR-detektion)
-ExerciseSection.swift     ← övningssektion med sets/reps + WorkoutField-enum + ÖKA-badge + progressionsförslag-badge
-GifSheet.swift            ← GIF + övningsinformation (WKWebView, base64-inbäddning, öppnas från ExerciseSection)
-CardioView.swift          ← logga konditionspass (accordion, tid mäts automatiskt, bara KM matas in)
-HistoryView.swift         ← historiklista (blandar styrka och kondition, HistoryEntry-enum)
-HistoryCard.swift         ← expanderbart kort för styrkepass (övningsnamn klickbara → ExerciseChartSheet)
-CardioCard.swift          ← expanderbart kort för konditionspass (typ klickbar → CardioChartSheet)
-ExerciseChartSheet.swift  ← e1RM-progression per övning (Swift Charts, öppnas från HistoryCard)
-CardioChartSheet.swift    ← durationsprogression per kardioform (Swift Charts, öppnas från CardioCard)
-EffortChartSheet.swift    ← ansträngningsprogression styrka (Swift Charts, öppnas från HistoryCard)
-CardioEffortChartSheet.swift ← ansträngningsprogression kondition (Swift Charts, öppnas från CardioCard)
-PeriodSummarySheet.swift  ← periodsammanfattning månads/årsvy (Swift Charts, öppnas från HistoryView)
-SessionTimePicker.swift   ← delad sheet för start/slut-tid (startändring drar med slut, slut fritt)
-ProfileView.swift         ← profilbild, namn, toppstatistik, streak (14-dagars dots), senaste pass, personliga rekord (top-8 e1RM), veckosnitt
-SettingsView.swift        ← inställningar + programhantering + konditionsformer + kroppsbegränsningar + träningspåminnelser + dataexport
-ProgramEditorView.swift   ← redigera program (namn, färg, begränsning, övningar, set-antal)
-ExercisePickerView.swift  ← övningsväljare med fuzzy search + filterchips (MUSKEL/REDSKAP/RÖRELSE) + dimning
-ProgramCard.swift         ← programkort (används i TrainingView och SettingsView)
-CardioTypeCard.swift      ← konditionsformkort med accentfärgstopp och senaste duration (används i TrainingView)
-OnboardingView.swift      ← onboarding (steg 1: program med pencil-redigering, steg 2: konditionsformer)
-Previews.swift            ← Canvas-previews för alla huvudvyer med mock-data (används i Xcode Canvas, byggs ej i release)
-HealthKitManager.swift    ← sparar HKWorkout till Apple Health
-ExerciseLibrary.swift     ← laddar exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton + BodyLimitation/ProgramConstraint/MuscleGroup enums
-ReminderManager.swift         ← UNUserNotificationCenter-wrapper; schedule(weekdays:hour:minute:), cancel(), suggestedTime(from:)
-WhatsNewSheet.swift           ← releasenoter per version (öppnas från VERSION-raden i SettingsView)
-ExercisActivityAttributes.swift ← ActivityKit-attribut för Live Activity (programnamn, accentfärg, övning/set-state)
-LiveActivityManager.swift ← hanterar start/update/end av Live Activity under styrketräning
-WidgetDataStore.swift     ← skriver WidgetSnapshot till App Group UserDefaults (group.rubenluthman.Exercis)
-WidgetSnapshotBuilder.swift ← bygger WidgetSnapshot från SwiftData (streak, senaste pass, nästa program)
+ExercisApp.swift          ← @main ExercisApp + RootView + MainTabView (4 tabs)
+AuthManager.swift         ← AuthManager (Face ID / passcode)
+Models.swift              ← SwiftData models (WorkoutSession, CardioSession, WorkoutProgram, ProgramExercise, CardioType)
+Theme.swift               ← colors, fonts, button styles, ThinDivider, enableSwipeBack, formatWeight/parseWeight, free business-logic functions
+LockView.swift            ← lock screen
+TrainingView.swift        ← home tab — selected programs + cardio types, launch a session
+StrengthView.swift        ← log a strength session (SetFormData, ExerciseFormData, progression suggestions, PR detection)
+ExerciseSection.swift     ← exercise section with sets/reps + WorkoutField enum + INCREASE badge + progression suggestion badge
+GifSheet.swift            ← GIF + exercise info (WKWebView, base64 embedding, opened from ExerciseSection)
+CardioView.swift          ← log a cardio session (accordion, time tracked automatically, only distance entered manually)
+HistoryView.swift         ← history list (interleaved strength and cardio, HistoryEntry enum)
+HistoryCard.swift         ← expandable card for strength sessions (exercise names tappable → ExerciseChartSheet)
+CardioCard.swift          ← expandable card for cardio sessions (type tappable → CardioChartSheet)
+ExerciseChartSheet.swift  ← e1RM progression per exercise (Swift Charts, opened from HistoryCard)
+CardioChartSheet.swift    ← duration progression per cardio type (Swift Charts, opened from CardioCard)
+EffortChartSheet.swift    ← effort progression for strength (Swift Charts, opened from HistoryCard)
+CardioEffortChartSheet.swift ← effort progression for cardio (Swift Charts, opened from CardioCard)
+PeriodSummarySheet.swift  ← monthly/yearly summary (Swift Charts, opened from HistoryView)
+SessionTimePicker.swift   ← shared sheet for start/end time (changing start drags end along, end adjustable freely)
+ProfileView.swift         ← profile photo, name, top stats, streak (14-day dots), last session, personal records (top-8 e1RM), weekly average
+SettingsView.swift        ← settings + program management + cardio types + body limitations + training reminders + data export
+ProgramEditorView.swift   ← edit program (name, color, constraint, exercises, set count)
+ExercisePickerView.swift  ← exercise picker with fuzzy search + filter chips (MUSCLE/EQUIPMENT/MOVEMENT) + dimming
+ProgramCard.swift         ← program card (used in TrainingView and SettingsView)
+CardioTypeCard.swift      ← cardio type card with accent color header and last duration (used in TrainingView)
+OnboardingView.swift      ← onboarding (step 1: programs with pencil editing, step 2: cardio types)
+Previews.swift            ← Canvas previews for all main views with mock data (used in Xcode Canvas, excluded from release builds)
+HealthKitManager.swift    ← saves HKWorkout to Apple Health
+ExerciseLibrary.swift     ← loads exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton + BodyLimitation/ProgramConstraint/MuscleGroup enums
+ReminderManager.swift     ← UNUserNotificationCenter wrapper; schedule(weekdays:hour:minute:), cancel(), suggestedTime(from:)
+WhatsNewSheet.swift       ← release notes per version (opened from the VERSION row in SettingsView)
+ExercisActivityAttributes.swift ← ActivityKit attributes for Live Activity (program name, accent color, exercise/set state)
+LiveActivityManager.swift ← manages start/update/end of Live Activity during a strength session
+WidgetDataStore.swift     ← writes WidgetSnapshot to App Group UserDefaults (group.rubenluthman.Exercis)
+WidgetSnapshotBuilder.swift ← builds WidgetSnapshot from SwiftData (streak, last session, next program)
 ```
 
-**Widget-mapp** (`ExercisWidget/`, separat target):
+**Widget folder** (`ExercisWidget/`, separate target):
 ```
-ExercisWidgetBundle.swift   ← WidgetBundle-entry för widget-target
-ExercisLiveActivity.swift   ← Live Activity-layout (Dynamic Island + Lock Screen)
-ExercisHomeWidget.swift     ← Hemskärmswidget (small + medium): streak, senaste pass, nästa program
-WidgetShared.swift          ← WidgetSnapshot + WidgetDataStore + ProgramColor (kopia för widget-target)
+ExercisWidgetBundle.swift   ← WidgetBundle entry for the widget target
+ExercisLiveActivity.swift   ← Live Activity layout (Dynamic Island + Lock Screen)
+ExercisHomeWidget.swift     ← Home screen widget (small + medium): streak, last session, next program
+WidgetShared.swift          ← WidgetSnapshot + WidgetDataStore + ProgramColor (copy for widget target)
 ExercisWidget.entitlements  ← App Group: group.rubenluthman.Exercis
 ```
 
 **App Group** (`group.rubenluthman.Exercis`):
-- Måste aktiveras i Xcode för BÅDA targets: Exercis och ExercisWidget (Signing & Capabilities → + → App Groups)
-- `WidgetDataStore` skriver/läser via `UserDefaults(suiteName: "group.rubenluthman.Exercis")`
-- App-target har `WidgetDataStore.swift` + `WidgetSnapshot` + `WidgetSnapshotBuilder.swift`
-- Widget-target har `WidgetShared.swift` (kopia av WidgetSnapshot + WidgetDataStore + ProgramColor)
-- `WidgetShared.swift` ska INTE läggas till app-target (ger redefinition-fel)
+- Must be enabled in Xcode for BOTH targets: Exercis and ExercisWidget (Signing & Capabilities → + → App Groups)
+- `WidgetDataStore` reads/writes via `UserDefaults(suiteName: "group.rubenluthman.Exercis")`
+- App target includes `WidgetDataStore.swift` + `WidgetSnapshot` + `WidgetSnapshotBuilder.swift`
+- Widget target uses `WidgetShared.swift` (copy of WidgetSnapshot + WidgetDataStore + ProgramColor)
+- `WidgetShared.swift` must NOT be added to the app target (causes redefinition errors)
 
 ---
 
 ## Theme.swift
 
-Enda plats för färger, typsnitt, knappstillar och gemensamma UI-komponenter.
+Single source of truth for colors, fonts, button styles, and shared UI components.
 
-### Färger
+### Colors
 
-Alla färger definieras i `Assets.xcassets` som named color sets med automatisk light/dark-variant. `Theme.swift` exponerar dem som `Color`-extensions.
+All colors are defined in `Assets.xcassets` as named color sets with automatic light/dark variants. `Theme.swift` exposes them as `Color` extensions.
 
-**Strukturella accentfärger** — aliases till palettrader:
+**Structural accent colors** — aliases to palette rows:
 ```swift
 Color.homeAccent    // → paletteIntenseRed  light #B73B3F / dark #F97775
 Color.workoutAccent // → paletteGreen       light #23821F / dark #63BD5C
@@ -96,7 +104,7 @@ Color.appBackground // Color(.systemBackground)
 Color.appDivider    // Color(.separator)
 ```
 
-**Programfärgpalett** — OKLCH L=0.5325 C=0.160, 12 kulörer stegade 30°:
+**Program color palette** — OKLCH L=0.5325 C=0.160, 12 hues spaced 30°:
 ```swift
 Color.paletteIntenseRed  // H=22.4°   light #B73B3F / dark #F97775
 Color.paletteOrange      // H=52.4°   light #B04900 / dark #F18435
@@ -111,119 +119,119 @@ Color.palettePurple      // H=292.4°  light #7155BF / dark #A98FFF
 Color.paletteMagenta     // H=322.4°  light #9646A2 / dark #D37FDF
 Color.palettePink        // H=352.4°  light #AE3B75 / dark #EE76AE
 ```
-`Color.programPalette: [Color]` — array med alla 12, används i programväljaren.
+`Color.programPalette: [Color]` — array of all 12, used in the program color picker.
 
-**WCAG-kontrast mot vit bakgrund (ljusläge):** alla ≥4.5:1 (AA) utom teal/cyan (4.4–4.5:1, AA-large — OK för knappar/rubriker, ej liten brödtext).
+**WCAG contrast against white (light mode):** all ≥4.5:1 (AA) except teal/cyan (4.4–4.5:1, AA-large — acceptable for buttons/headings, not small body text).
 
-**⚠️ Yellow och lime på vit bakgrund:** `paletteYellow` (H=82.4°) och `paletteLime` (H=112.4°) är perceptuellt balanserade mot övriga färger i OKLCH, men gul-gröna toner upplevs ofta som "smutsiga" eller nedtonade på vit bakgrund — en egenskap hos det mänskliga synssystemet, inte ett kontrastfel (båda klarar AA). Bör testas visuellt mot vit bakgrund innan de används som programfärger. Om de inte håller estetiskt: höj L något (t.ex. till 0.57) för just dessa två, eller välj bort dem från programpaletten.
+**⚠️ Yellow and lime on white:** `paletteYellow` (H=82.4°) and `paletteLime` (H=112.4°) are perceptually balanced with the rest of the palette in OKLCH, but yellow-green hues tend to look muddy on white backgrounds — a property of human vision, not a contrast failure (both pass AA). Test visually on white before using as program colors. If they don't hold up aesthetically: raise L slightly (e.g. to 0.57) for just these two, or drop them from the program palette.
 
-### Typsnitt: Jost (enda typsnitt)
+### Typeface: Jost (only typeface)
 ```swift
 Font.jost(_ weight: Font.Weight, size: CGFloat)
 ```
 
-| Vikt        | Används till                                      |
-|-------------|---------------------------------------------------|
-| Black 900   | "EXERCIS" på LockView                             |
-| Bold 700    | Sidrubriker (17pt, kerning 2)                     |
-| SemiBold 600| Knappar, accentetiketter, stora siffror (34pt)    |
-| Medium 500  | Section labels, sub-labels, kolumnrubriker (11–12pt, kerning 1.5) |
-| Regular 400 | Brödtext, hints, datum (13–14pt)                  |
+| Weight       | Used for                                           |
+|--------------|----------------------------------------------------|
+| Black 900    | "EXERCIS" on LockView                              |
+| Bold 700     | Screen headings (17pt, kerning 2)                  |
+| SemiBold 600 | Buttons, accent labels, large numbers (34pt)       |
+| Medium 500   | Section labels, sub-labels, column headers (11–12pt, kerning 1.5) |
+| Regular 400  | Body text, hints, dates (13–14pt)                  |
 
-### Textstorlekshierarki
+### Type size hierarchy
 
-| Storlek | Kategori | Exempel |
-|---------|----------|---------|
-| 17pt    | Sidrubriker | "SETTINGS", "HISTORY" |
-| 14–15pt | Primär radtext | Programnamn, kardionamn, toggletitlar |
-| 13–14pt | Brödtext / beskrivningar | Toggle-beskrivningar, iCloud-info |
-| 12pt    | Section labels, åtgärdsrader | "STRENGTH PROGRAMS", "EXPORT TRAINING DATA", "START/END" i SessionTimePicker |
-| 11pt    | Stat-undertexter (under stora siffror) | "STREAK", "BEST", "SESSIONS", "EFFORT" |
-| 9pt     | Badge-piller | "INCREASE", progressionsförslag (pill-format, behåller 9pt) |
-| 10pt    | Chart-axeletiketter | Månadsförkortningar och Y-axelvärden i diagram |
+| Size    | Category                            | Examples                                                    |
+|---------|-------------------------------------|-------------------------------------------------------------|
+| 17pt    | Screen headings                     | "SETTINGS", "HISTORY"                                       |
+| 14–15pt | Primary row text                    | Program names, cardio names, toggle titles                  |
+| 13–14pt | Body / descriptions                 | Toggle descriptions, iCloud info                            |
+| 12pt    | Section labels, action rows         | "STRENGTH PROGRAMS", "EXPORT TRAINING DATA", "START/END" in SessionTimePicker |
+| 11pt    | Stat captions (below large numbers) | "STREAK", "BEST", "SESSIONS", "EFFORT"                      |
+| 9pt     | Badge pills                         | "INCREASE", progression suggestions (pill format, stays 9pt)|
+| 10pt    | Chart axis labels                   | Month abbreviations and Y-axis values in charts             |
 
-**Regel:** inget UI-text under 11pt utom badge-piller (9pt) och chart-axlar (10pt).
+**Rule:** no UI text below 11pt except badge pills (9pt) and chart axes (10pt).
 
-### Knappstillar
-- `FilledButtonStyle(accent:)` — fylld, vit text, höjd 50pt, `clipShape(RoundedRectangle(cornerRadius: 4))`
-- `OutlineButtonStyle(accent:)` — kontur i accentfärg, höjd 50pt
+### Button styles
+- `FilledButtonStyle(accent:)` — filled, white text, height 50pt, `clipShape(RoundedRectangle(cornerRadius: 4))`
+- `OutlineButtonStyle(accent:)` — accent-colored border, height 50pt
 
 ### Dynamic Type
-`Font.jost()` använder `Font.custom(_:size:relativeTo:)` med en storleksbaserad `TextStyle` som referens — Jost skalar automatiskt med användarens textstorleksinställning i iOS.
+`Font.jost()` uses `Font.custom(_:size:relativeTo:)` with a size-appropriate `TextStyle` as reference — Jost scales automatically with the user's iOS text size setting.
 
 ### ChartEmptyState
 
-Delad vy i Theme.swift — visar "No logged sessions yet." / "Need at least two sessions to show chart." beroende på `isEmpty`. Används av samtliga fyra chart sheets (ExerciseChartSheet, CardioChartSheet, EffortChartSheet, CardioEffortChartSheet) för konsekvent tomt-tillstånd när `< 2` datapunkter finns — extraherad ur fyra identiska kopior vid apprevision.
+Shared view in Theme.swift — shows "No logged sessions yet." or "Need at least two sessions to show chart." based on `isEmpty`. Used by all four chart sheets (ExerciseChartSheet, CardioChartSheet, EffortChartSheet, CardioEffortChartSheet) for a consistent empty state when fewer than 2 data points exist — extracted from four identical copies during an app review.
 
 ### Scroll edge fade
-`View.softScrollEdge()` i Theme.swift — applicerar en 20pt gradient-mask längs toppen av ScrollView (clear→black). Fungerar på iOS 17+. Appliceras på alla `ScrollView` i appen (StrengthView, HistoryView). Masken påverkar endast rendering, inte hit-testing.
+`View.softScrollEdge()` in Theme.swift — applies a 20pt gradient mask along the top of a ScrollView (clear→black). Works on iOS 17+. Applied to all `ScrollView`s in the app (StrengthView, HistoryView). The mask affects rendering only, not hit-testing.
 
 ### Haptic feedback
-| Händelse | Typ |
-|----------|-----|
-| Pass sparat (KLAR/HOPPA ÖVER/drag-dismiss) | `.success` notification |
-| Pass raderat | `.warning` notification |
-| Long press ÖKA-badge | `.impact(.medium)` |
-| NÄSTA fältnavigering (styrka + kondition) | `.selection` |
-| Expand/collapse sektion eller månad | `.selection` |
+| Event | Type |
+|-------|------|
+| Session saved (DONE / SKIP / drag-dismiss) | `.success` notification |
+| Session deleted | `.warning` notification |
+| Long press INCREASE badge | `.impact(.medium)` |
+| NEXT field navigation (strength + cardio) | `.selection` |
+| Expand/collapse section or month | `.selection` |
 
-### Navigationsbrygga
-`enableSwipeBack()` — View-extension som via UIKit-bridge återaktiverar `interactivePopGestureRecognizer` (behövs eftersom `.toolbar(.hidden, for: .navigationBar)` inaktiverar swipe-back i iOS 17).
+### Navigation bridge
+`enableSwipeBack()` — View extension that re-enables `interactivePopGestureRecognizer` via a UIKit bridge (needed because `.toolbar(.hidden, for: .navigationBar)` disables swipe-back in iOS 17).
 
-### Fria funktioner för affärslogik (testbara)
+### Free business-logic functions (unit-testable)
 
-Alla fria funktioner i Theme.swift är enhetstestade och ska hållas fria från SwiftUI/SwiftData-beroenden.
+All free functions in Theme.swift are unit-tested and kept free of SwiftUI/SwiftData dependencies.
 
-| Funktion | Syfte |
-|----------|-------|
-| `epleyE1RM(weight:reps:)` | Epley-formel för beräknat 1RM |
-| `estimatedCalories(met:bodyMass:seconds:)` | Kaloriberäkning via MET |
-| `computeCurrentStreak(days:)` | Aktuell träningsstreak från `Set<Date>` |
-| `computeBestStreak(days:)` | Bästa streak någonsin från `Set<Date>` |
-| `progressionSuggestion(prevMax:shouldIncrease:bestSetReps:)` | Föreslår nästa vikt (+2.5 kg om ÖKA) och reps |
-| `csvField(_:)` | RFC 4180-citerar ett CSV-fält (komma/citattecken/radbrytning) |
-| `strengthCSV(_:)` | Genererar CSV-sträng för styrkepass |
-| `cardioCSV(_:)` | Genererar CSV-sträng för konditionspass |
-| `formatWeight(_:)` | Formaterar Double → sträng utan onödiga decimaler |
-| `parseWeight(_:)` | Parsar sträng → Double, accepterar punkt och komma |
-| `displayWeight(_:imperial:)` | Konverterar lagrad kg → visningssträng (lbs vid imperial) |
-| `displayDistance(_:imperial:)` | Konverterar lagrad km → visningssträng (mi vid imperial) |
-| `parseWeightInput(_:imperial:)` | Parsar visad vikt → kg för lagring |
-| `parseDistanceInput(_:imperial:)` | Parsar visad distans → km för lagring |
-| `weightLabel(_:)` | "KG" eller "LBS" beroende på enhetsval |
-| `distanceLabel(_:)` | "KM" eller "MI" beroende på enhetsval |
-
----
-
-## Design-regler
-
-- Systemanpassad bakgrund (`Color(.systemBackground)`), primär text (`.primary`) — anpassar sig till mörkt läge automatiskt
-- Accentfärgen är det **enda** färginslaget – används på rubriker, övningsnamn, knappar och detaljer
-- Inga emojis, inga ikoner utöver SF Symbols (chevron, xmark)
-- Versaliserade etiketter med spärr (letter spacing)
-- Tunna **0.5 pt avdelare** via `ThinDivider`
-- UI-text lokaliseras via iOS standard-lokaliseringssystem. **Engelska är basspråket** (alla strängar definieras på engelska). Svenska tillhandahålls via `.strings`-filer. SwiftUI `Text()` med strängliteraler lokaliserar automatiskt; övriga strängar använder `String(localized:)`.
-- Datum formateras alltid med `Locale(identifier: "sv_SE")`
-- KLAR-knapp: fylld i accentfärg, längst ner i vyn (i safeAreaInset). Döljs när effort-picker öppnas.
-- Tillbaka-knapp: bara "←" utan text, font regular 22pt, `.frame(width: 90, alignment: .trailing)`
-- Horizontal padding: **24pt** genomgående på alla rader
+| Function | Purpose |
+|----------|---------|
+| `epleyE1RM(weight:reps:)` | Epley formula for estimated 1RM |
+| `estimatedCalories(met:bodyMass:seconds:)` | Calorie estimate via MET |
+| `computeCurrentStreak(days:)` | Current training streak from `Set<Date>` |
+| `computeBestStreak(days:)` | All-time best streak from `Set<Date>` |
+| `progressionSuggestion(prevMax:shouldIncrease:bestSetReps:)` | Suggests next weight (+2.5 kg if INCREASE) and reps |
+| `csvField(_:)` | RFC 4180-quotes a CSV field (comma/quote/newline) |
+| `strengthCSV(_:)` | Generates CSV string for a strength session |
+| `cardioCSV(_:)` | Generates CSV string for a cardio session |
+| `formatWeight(_:)` | Formats Double → string without trailing zeros |
+| `parseWeight(_:)` | Parses string → Double, accepts both period and comma |
+| `displayWeight(_:imperial:)` | Converts stored kg → display string (lbs if imperial) |
+| `displayDistance(_:imperial:)` | Converts stored km → display string (mi if imperial) |
+| `parseWeightInput(_:imperial:)` | Parses displayed weight → kg for storage |
+| `parseDistanceInput(_:imperial:)` | Parses displayed distance → km for storage |
+| `weightLabel(_:)` | "KG" or "LBS" based on unit preference |
+| `distanceLabel(_:)` | "KM" or "MI" based on unit preference |
 
 ---
 
-## Datamodeller (SwiftData)
+## Design Rules
 
-**Cascade delete på alla relationer.**
+- System-adaptive background (`Color(.systemBackground)`), primary text (`.primary`) — adapts to dark mode automatically
+- The accent color is the **only** color used — applied to headings, exercise names, buttons, and details
+- No emoji, no icons beyond SF Symbols (chevron, xmark)
+- Uppercase labels with letter spacing
+- Thin **0.5pt dividers** via `ThinDivider`
+- UI text is localized via the iOS standard localization system. **English is the base language** (all strings defined in English). Swedish is provided via `.strings` files. SwiftUI `Text()` with string literals localizes automatically; other strings use `String(localized:)`.
+- Dates always formatted with `Locale(identifier: "sv_SE")`
+- DONE button: filled in accent color, pinned to the bottom of the view (in `safeAreaInset`). Hidden when the effort picker is open.
+- Back button: "←" only, no text, font regular 22pt, `.frame(width: 90, alignment: .trailing)`
+- Horizontal padding: **24pt** consistently on all rows
+
+---
+
+## Data Models (SwiftData)
+
+**Cascade delete on all relationships.**
 
 ```swift
 @Model class WorkoutSession {
     var id: UUID; var date: Date; var startDate: Date; var healthKitID: UUID?; var effortScore: Int?
-    var programId: UUID?      // kopplar session till WorkoutProgram för prefill
-    var programName: String?  // denormaliserat — används i CSV-export
+    var programId: UUID?      // links session to WorkoutProgram for prefill
+    var programName: String?  // denormalized — used in CSV export
     @Relationship(deleteRule: .cascade) var exerciseLogs: [ExerciseLog]
 }
 @Model class ExerciseLog {
     var name: String; var orderIndex: Int; var session: WorkoutSession?
-    // exerciseDefId: String? finns i modellen men används ej än
+    // exerciseDefId: String? exists in the model but is not used yet
     @Relationship(deleteRule: .cascade) var sets: [SetLog]
 }
 @Model class SetLog {
@@ -239,8 +247,8 @@ Alla fria funktioner i Theme.swift är enhetstestade och ska hållas fria från 
 ```swift
 @Model class WorkoutProgram {
     var id: UUID; var name: String; var colorName: String; var sortIndex: Int
-    var isOnTrainingPage: Bool = true   // visas på Träning-tab
-    var programConstraint: String = ""  // ProgramConstraint.rawValue — skuggar övningar i ExercisePickerView
+    var isOnTrainingPage: Bool = true   // shown on the Training tab
+    var programConstraint: String = ""  // ProgramConstraint.rawValue — dims exercises in ExercisePickerView
     @Relationship(deleteRule: .cascade) var exercises: [ProgramExercise]
 }
 @Model class ProgramExercise {
@@ -249,297 +257,297 @@ Alla fria funktioner i Theme.swift är enhetstestade och ska hållas fria från 
 }
 ```
 
-**`CardioType` enum** (i Models.swift, `Identifiable`):
+**`CardioType` enum** (in Models.swift, `Identifiable`):
 
-26 cases i lowercase rawValue — grupperade i kommentarer:
-- **Maskiner**: `crosstrainer`, `cycling_stationary`, `rowing_machine`, `treadmill_run`, `treadmill_walk`, `stair_climber`, `ski_erg`, `assault_bike`
-- **Utomhus**: `running`, `walking`, `hiking`, `road_cycling`, `mountain_biking`, `swimming`
-- **Nordiska**: `cross_country_skiing`, `ice_skating`
-- **Vatten**: `kayaking`, `canoeing`
-- **Övrigt**: `climbing`, `boxing`, `battle_ropes`, `sled`, `rucking`
+26 cases with lowercase rawValues — grouped by category:
+- **Machines**: `crosstrainer`, `cycling_stationary`, `rowing_machine`, `treadmill_run`, `treadmill_walk`, `stair_climber`, `ski_erg`, `assault_bike`
+- **Outdoor**: `running`, `walking`, `hiking`, `road_cycling`, `mountain_biking`, `swimming`
+- **Nordic**: `cross_country_skiing`, `ice_skating`
+- **Water**: `kayaking`, `canoeing`
+- **Other**: `climbing`, `boxing`, `battle_ropes`, `sled`, `rucking`
 - **Calisthenics cardio**: `jump_rope`, `burpees`, `mountain_climbers`
 
-Lagras som `String` i `CardioSession` för att undvika migrationsproblem. Gamla VERSALER-rawvärden migreras vid app-start via `migrateCardioTypes(context:)` i Models.swift.
+Stored as `String` in `CardioSession` to avoid migration issues. Legacy uppercase rawValues are migrated on app launch via `migrateCardioTypes(context:)` in Models.swift.
 
-`var tracksElevation: Bool` — `true` för: `hiking`, `running`, `walking`, `road_cycling`, `mountain_biking`, `cross_country_skiing`, `rucking`, `climbing`. Styr om `CMAltimeter` startas i CardioView och om `elevationGain` skickas till HealthKit.
+`var tracksElevation: Bool` — `true` for: `hiking`, `running`, `walking`, `road_cycling`, `mountain_biking`, `cross_country_skiing`, `rucking`, `climbing`. Controls whether `CMAltimeter` is started in CardioView and whether `elevationGain` is sent to HealthKit.
 
-`var met: Double` — MET-värde (Metabolic Equivalent of Task) per typ, används av `estimatedCalories` för kaloriberäkning till HealthKit.
+`var met: Double` — MET value (Metabolic Equivalent of Task) per type, used by `estimatedCalories` for calorie calculation to HealthKit.
 
-`var hkActivityType: HKWorkoutActivityType` — mappning till HealthKit-aktivitetstyp.
+`var hkActivityType: HKWorkoutActivityType` — mapping to HealthKit activity type.
 
-**`WorkoutDraft`** (Codable, sparas i UserDefaults):
+**`WorkoutDraft`** (Codable, persisted in UserDefaults):
 ```swift
 struct WorkoutDraft: Codable {
     var exercises: [ExerciseDraft]  // ExerciseDraft: name, sets, shouldIncrease, previousMaxWeight
     var startTime: Date
-    var collapsedExercises: [Int]   // default [] vid avkodning av gamla drafts
-    var programId: String?          // default nil vid avkodning av gamla drafts
+    var collapsedExercises: [Int]   // defaults to [] when decoding older drafts
+    var programId: String?          // defaults to nil when decoding older drafts
 }
 ```
-- Har custom `init(from:)` för bakåtkompatibilitet — nya fält med default-värden avkodas tyst från äldre JSON
-- `suggestedWeight`/`suggestedReps` sparas **inte** i draft — beräknas om vid prefill från historik
+- Has a custom `init(from:)` for backwards compatibility — new fields with defaults decode silently from older JSON
+- `suggestedWeight`/`suggestedReps` are **not** persisted in the draft — recalculated from history on prefill
 
-**`ExerciseFormData`** (in-memory, ej Codable):
+**`ExerciseFormData`** (in-memory, not Codable):
 ```swift
 struct ExerciseFormData {
     let def: ExerciseDef
     var sets: [SetFormData]
     var shouldIncrease: Bool
     var previousMaxWeight: Double
-    var suggestedWeight: String  // "+2.5 kg om ÖKA, annars samma" — visas som badge i ExerciseSection
+    var suggestedWeight: String  // "+2.5 kg if INCREASE, otherwise same" — shown as badge in ExerciseSection
     var suggestedReps: String
 }
 ```
 
-**Vikt-inmatning**: acceptera både punkt och komma som decimaltecken (`parseWeight`).
-**Vikt-visning**: formatera med `formatWeight` (NumberFormatter, locale: .current).
+**Weight input**: accepts both period and comma as decimal separator (`parseWeight`).
+**Weight display**: formatted with `formatWeight` (NumberFormatter, locale: .current).
 
-**ModelContainer** registrerar `[WorkoutSession.self, CardioSession.self, WorkoutProgram.self]` — relaterade modeller (ExerciseLog, SetLog, ProgramExercise) inkluderas automatiskt via `@Relationship`.
-
----
-
-## Övningar
-
-Laddas från `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~186 övningar med `status == "include"` är aktiva — resten är exkluderade i JSON.
-
-**Övningsnamn är på engelska** — medvetet val. De lokaliseras inte via `.strings` och visas på engelska oavsett enhetsspråk. Lagras på engelska i historik (`ExerciseLog.name`) och CSV-export.
-
-`ExerciseDef` fält: `id` (stabil nyckel, används i `ProgramExercise.exerciseId`), `name` (visas i UI och lagras i `ExerciseLog.name`), `aliases` (gamla namn, migreras vid app-start), `repRange`, `setRange`, `primaryMuscles`, `equipment`, `movement`, `contraindications`, `gifFile/gifSource`, `description`.
-
-**Nyckel är `id`** i program (`ProgramExercise.exerciseId`) men **`name`** i loggad historik (`ExerciseLog.name`) — viktigt att hålla isär. Byt aldrig `id` eller `name` utan att lägga gamla värdet i `aliases` och bumpa `migrationVersion` (nuvarande: 6).
-
-**Pensionering av övning** — när en övning byts ut och gammal data ska bevaras i historik:
-- Sätt `status` till `"retired"` i JSON (eller håll i separat lista) — ingen migration, ingen radering
-- `ExerciseDef.find(name:)` söker aktiva + pensionerade, så historik visas korrekt
-
-**Aktiv radering** kräver explicit delete-steg i `migrateExerciseNames`.
-
-Övningsnamnet i StrengthView är en **klickbar rubrik** som öppnar GIF/info via `GifSheet`. I HistoryView är namnen klickbara och öppnar `ExerciseChartSheet` (e1RM-progression via Epley-formeln).
+**ModelContainer** registers `[WorkoutSession.self, CardioSession.self, WorkoutProgram.self]` — related models (ExerciseLog, SetLog, ProgramExercise) are included automatically via `@Relationship`.
 
 ---
 
-## Skärmar & Navigation
+## Exercises
+
+Loaded from `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~186 exercises with `status == "include"` are active — the rest are excluded in the JSON.
+
+**Exercise names are in English** — intentional. They are not localized via `.strings` and display in English regardless of device language. Stored in English in history (`ExerciseLog.name`) and CSV export.
+
+`ExerciseDef` fields: `id` (stable key, used in `ProgramExercise.exerciseId`), `name` (shown in UI and stored in `ExerciseLog.name`), `aliases` (old names, migrated on launch), `repRange`, `setRange`, `primaryMuscles`, `equipment`, `movement`, `contraindications`, `gifFile/gifSource`, `description`.
+
+**Key is `id`** in programs (`ProgramExercise.exerciseId`) but **`name`** in logged history (`ExerciseLog.name`) — important distinction. Never change `id` or `name` without adding the old value to `aliases` and bumping `migrationVersion` (current: 6).
+
+**Retiring an exercise** — when an exercise is replaced and old data must be preserved in history:
+- Set `status` to `"retired"` in the JSON — no migration, no deletion
+- `ExerciseDef.find(name:)` searches active + retired, so history displays correctly
+
+**Hard deletion** requires an explicit delete step in `migrateExerciseNames`.
+
+Exercise names in StrengthView are **tappable headings** that open the GIF/info via `GifSheet`. In HistoryView, names are tappable and open `ExerciseChartSheet` (e1RM progression via the Epley formula).
+
+---
+
+## Screens & Navigation
 
 ```
 LockView → (Face ID) → MainTabView
-                         ├── TrainingView (Träning) → StrengthView (navigationDestination)
-                         │                          → CardioView (navigationDestination)
-                         ├── HistoryView (Historik)
-                         ├── ProfileView (Profil)
-                         └── SettingsView (Inställningar) → ProgramEditorView (sheet)
+                         ├── TrainingView (Training) → StrengthView (navigationDestination)
+                         │                           → CardioView (navigationDestination)
+                         ├── HistoryView (History)
+                         ├── ProfileView (Profile)
+                         └── SettingsView (Settings) → ProgramEditorView (sheet)
 ```
 
-- 4 tabbar: **Träning · Historik · Profil · Inställningar**
-- `navigationDestination(item:)` för StrengthView och CardioView — swipe-back via `enableSwipeBack()`
-- **KLAR** sparar och returnerar via dismiss; **←** (swipe-back) sparar draft via `onDisappear`
+- 4 tabs: **Training · History · Profile · Settings**
+- `navigationDestination(item:)` for StrengthView and CardioView — swipe-back via `enableSwipeBack()`
+- **DONE** saves and returns via dismiss; **←** (swipe-back) saves a draft via `onDisappear`
 
-### LockView (ingen accentfärg)
-- "EXERCIS" Jost Black 900, centrerat vertikalt
-- `faceid` SF Symbol (~40pt) som retry-knapp, `.secondary` färg — visas bara om Face ID misslyckades
-- `auth.authenticate()` triggas i `.onAppear` och via retry-ikonen
+### LockView (no accent color)
+- "EXERCIS" Jost Black 900, centered vertically
+- `faceid` SF Symbol (~40pt) as retry button, `.secondary` color — shown only if Face ID failed
+- `auth.authenticate()` triggered in `.onAppear` and via the retry icon
 
-### TrainingView (Träning-tab, accentfärg per program/workoutAccent)
-- Visar valda styrkeprogram (filter: `isOnTrainingPage == true`) under STYRKA
-- Visar valda konditionsformer (från `selectedCardioTypes` AppStorage) under KONDITION
-- Tryck på program → navigerar till StrengthView; tryck på konditionsform → navigerar till CardioView med `initialType`
-- Draft-indikator: pencil-ikon på program med aktiv draft; "FORTSÄTT"-text på konditionsform med aktiv draft
-- Tomt tillstånd om inget är konfigurerat
+### TrainingView (Training tab, accent color per program / workoutAccent)
+- Shows selected strength programs (filter: `isOnTrainingPage == true`) under STRENGTH
+- Shows selected cardio types (from `selectedCardioTypes` AppStorage) under CARDIO
+- Tap program → navigates to StrengthView; tap cardio type → navigates to CardioView with `initialType`
+- Draft indicator: pencil icon on programs with an active draft; "CONTINUE" text on cardio types with an active draft
+- Empty state if nothing is configured
 
-### StrengthView — Styrketräning (accentfärg: homeAccent/programfärg)
-- Header: "STYRKETRÄNING" 17pt bold, kerning 2 + förkortat datum 13pt
-- Formuläret **förifyller automatiskt** per program från senaste session med samma `programId`
-- Set-antal per övning definieras i programmet (1–6, default 3)
-- Kolumnrubriker: **SET, KG, REPS** — layout: SET=maxWidth leading, KG=80pt leading, REPS=120pt trailing
-- **Ihopfällbara sektioner**, **ÖKA-badge** (long press 500ms), **vila-timer** (triggas efter sista reps-fält — konfigureras globalt i SettingsView: 0/30/60/90/120s, `@AppStorage("restTimerSeconds")`, default 90s)
-- **PR-detektion**: jämför e1RM mot historik, visar PR-indikator vid KLAR
-- **Progressionsförslag**: badge under set-numret (`→ X kg × Y reps`) i accentfärg; försvinner när man börjar skriva. Förslag = föregående sessions bästa set; +2.5 kg om ÖKA är aktivt
-- **Tangentbordsverktygsfält**: NÄSTA + KLAR i homeAccent
-- **Draft**: sparas i UserDefaults (WorkoutDraft inkl. ihopfällningsläge och programId)
-- **Live Activity**: startas vid pass-start via `LiveActivityManager.shared` — visar aktuell övning, set-nummer och progress på Dynamic Island/Lock Screen. Uppdateras per set, avslutas vid KLAR eller dismiss.
-- Datum klickbart → `SessionTimePicker`
+### StrengthView — Strength training (accent color: homeAccent / program color)
+- Header: "STRENGTH TRAINING" 17pt bold, kerning 2 + abbreviated date 13pt
+- Form **auto-prefills** per program from the most recent session with the same `programId`
+- Set count per exercise defined in the program (1–6, default 3)
+- Column headers: **SET, KG, REPS** — layout: SET=maxWidth leading, KG=80pt leading, REPS=120pt trailing
+- **Collapsible sections**, **INCREASE badge** (long press 500ms), **rest timer** (triggered after the last reps field — configured globally in SettingsView: 0/30/60/90/120s, `@AppStorage("restTimerSeconds")`, default 90s)
+- **PR detection**: compares e1RM against history, shows a PR indicator on DONE
+- **Progression suggestions**: badge below the set number (`→ X kg × Y reps`) in accent color; disappears once you start typing. Suggestion = best set from the previous session; +2.5 kg if INCREASE is active
+- **Keyboard toolbar**: NEXT + DONE in homeAccent
+- **Draft**: saved to UserDefaults (WorkoutDraft including collapse state and programId)
+- **Live Activity**: started on session begin via `LiveActivityManager.shared` — shows current exercise, set number, and progress on Dynamic Island / Lock Screen. Updated per set, ended on DONE or dismiss.
+- Date tappable → `SessionTimePicker`
 
-### CardioView — Konditionsträning (accentfärg: workoutAccent)
-- Öppnas med `initialType: CardioType?` — öppnar rätt accordion direkt
-- **Accordion med valda konditionstyper** — separerade av ThinDivider
-- **Tid mäts automatiskt**: start = när CardioView öppnas, slut = KLAR. Inget manuellt tidsinmatning.
-- Enda manuell input: **KM** (distans) för typer med distans
-- **Tangentbordsverktygsfält**: bara KLAR (ett fält = ingen NÄSTA)
-- **Draft**: sparar aktiv typ + eventuell distans till UserDefaults
-- Datum klickbart → `SessionTimePicker` (startändring drar med slutet, slut fritt — stödjer pass över midnatt)
-- KLAR → effort-picker → sparar `CardioSession`, loggar till HealthKit
+### CardioView — Cardio training (accent color: workoutAccent)
+- Opened with `initialType: CardioType?` — scrolls to the correct accordion directly
+- **Accordion of selected cardio types** — separated by ThinDivider
+- **Time tracked automatically**: start = when CardioView opens, end = DONE. No manual time entry.
+- Only manual input: **distance** (for types that track distance)
+- **Keyboard toolbar**: DONE only (one field = no NEXT)
+- **Draft**: saves active type + optional distance to UserDefaults
+- Date tappable → `SessionTimePicker` (changing start drags end along, end adjustable freely — supports sessions past midnight)
+- DONE → effort picker → saves `CardioSession`, logs to HealthKit
 
-### HistoryView (accentfärg: historyAccent)
-- Header: "HISTORIK" 17pt bold + "←" 90pt trailing
-- `HistoryEntry`-enum (`.workout` / `.cardio`) blandar och sorterar nyast först
-- **Månadsgrupper** (`MonthGroup`): poster grupperas per år/månad, rubrik i historyAccent med antal styrka/kondition. Ihopfällbara — senaste månaden öppen, övriga stängda vid första öppning. Årsrubrik (`HistoryRow.year`) visas bara om data spänner flera år — klickbar, öppnar årssammanfattning.
-- Varje rad utfällbar (HistoryCard / CardioCard) — senaste posten öppnas automatiskt
-- Radera via ×-knapp eller kontextmeny — visar `.alert("Ta bort pass?")` med destructive-knapp
-- Delete hanterar även HealthKit-borttagning via `HealthKitManager.deleteWorkout(uuid:)`
-- Styrkeövningar visas i historyAccent; konditionstyp visas i **historyAccent** (inte workoutAccent — allt i historikläget är blått)
-- **Klickbara namn**: övningsnamn i HistoryCard öppnar `ExerciseChartSheet`; kardiotyp i CardioCard öppnar `CardioChartSheet`
+### HistoryView (accent color: historyAccent)
+- Header: "HISTORY" 17pt bold + "←" 90pt trailing
+- `HistoryEntry` enum (`.workout` / `.cardio`) interleaved, sorted newest first
+- **Month groups** (`MonthGroup`): entries grouped by year/month, heading in historyAccent with strength/cardio counts. Collapsible — most recent month open, others closed on first load. Year heading (`HistoryRow.year`) shown only if data spans multiple years — tappable, opens yearly summary.
+- Each row expandable (HistoryCard / CardioCard) — most recent entry opens automatically
+- Delete via × button or context menu — shows `.alert("Delete session?")` with a destructive action
+- Delete also removes the HealthKit entry via `HealthKitManager.deleteWorkout(uuid:)`
+- Strength exercises shown in historyAccent; cardio type shown in **historyAccent** (not workoutAccent — everything in the history context is blue)
+- **Tappable names**: exercise names in HistoryCard open `ExerciseChartSheet`; cardio type in CardioCard opens `CardioChartSheet`
 
-### ExerciseChartSheet / CardioChartSheet / EffortChartSheet (accentfärg: historyAccent)
-- Öppnas som `.sheet` med `.presentationDetents([.medium, .large])` från HistoryCard/CardioCard
-- Hämtar all data via `@Query` (ärver modelContainer från miljön)
-- Linjediagram (Swift Charts) med punktmarkeringar i accentfärg
-- X-axeln visar månadsförkortning; om data spänner över flera år visas även tvåsiffrigt år (t.ex. "JAN\n25")
-- Svenska månadsförkortningar — punkter i förkortningarna strimmas bort
-- Statistikrad per sheet:
-  - ExerciseChartSheet: BÄSTA · SENASTE · PASS (enhet: kg); toggle **1RM / VOL** i headern — VOL = sets × reps × kg per session
-  - CardioChartSheet: LÄNGST · SENASTE · PASS (enhet: min/km); toggle TID/DISTANS om distansdata finns
-  - EffortChartSheet: LÄTTAST · SENASTE · TUFFAST (enhet: /10, visas i grå 14pt); öppnas från ansträngningsraden i HistoryCard (styrkepass)
-  - CardioEffortChartSheet: LÄTTAST · SENASTE · TUFFAST per kardioform; öppnas från ansträngningsraden i CardioCard
-  - PeriodSummarySheet: STYRKA · VOLYM · KONDITION · TID + **månadsvy**: prickrad (en cirkel per dag, röd=styrka, grön=kondition, gradient=båda, grå=inget); **årsvy**: stapeldiagram per månad. Öppnas från månadsnamn (detent `.height(280)`) respektive årsrubrik (detent `.medium`) i HistoryView. Volym visas i kg (<1000) eller ton (≥1000). Nollvärden visas som `—`.
-- Tomt tillstånd om < 2 datapunkter
+### ExerciseChartSheet / CardioChartSheet / EffortChartSheet (accent color: historyAccent)
+- Presented as `.sheet` with `.presentationDetents([.medium, .large])` from HistoryCard/CardioCard
+- Fetches all data via `@Query` (inherits modelContainer from the environment)
+- Line chart (Swift Charts) with point markers in accent color
+- X-axis shows month abbreviations; if data spans multiple years, a two-digit year is appended (e.g. "JAN\n25")
+- Swedish month abbreviations — periods in abbreviations are stripped
+- Stats row per sheet:
+  - ExerciseChartSheet: BEST · LATEST · SESSIONS (unit: kg); toggle **1RM / VOL** in the header — VOL = sets × reps × kg per session
+  - CardioChartSheet: LONGEST · LATEST · SESSIONS (unit: min/km); toggle TIME/DISTANCE if distance data exists
+  - EffortChartSheet: EASIEST · LATEST · HARDEST (unit: /10, shown in gray 14pt); opened from the effort row in HistoryCard (strength sessions)
+  - CardioEffortChartSheet: EASIEST · LATEST · HARDEST per cardio type; opened from the effort row in CardioCard
+  - PeriodSummarySheet: STRENGTH · VOLUME · CARDIO · TIME + **monthly view**: dot row (one circle per day, red=strength, green=cardio, gradient=both, gray=none); **yearly view**: bar chart per month. Opened from the month heading (detent `.height(280)`) and year heading (detent `.medium`) in HistoryView. Volume shown in kg (<1000) or tonnes (≥1000). Zero values shown as `—`.
+- Empty state if fewer than 2 data points
 
-### ProfileView (ingen accentfärg)
-- Profilbild (PhotosPicker) + redigerbart namn
-- **Toppstatistik**: STRENGTH · CARDIO · VOLUME · CARDIO TIME i fyra kolumner
-- **Streak**: aktuell streak som 72pt black-siffra + BEST, 14-dagars prickrad (blå=aktiv, grå=vilat, today har kontur)
-- **Senaste pass**: titel (programnamn eller kardioform), undertitel (övningar/minuter), relativ tid + kalenderdag
-- **Personliga rekord**: top-8 e1RM per övning, rankade 1–8, e1RM i historyAccent
-- **Veckosnitt**: AVG/WEEK · THIS WEEK · BEST WEEK
+### ProfileView (no accent color)
+- Profile photo (PhotosPicker) + editable name
+- **Top stats**: STRENGTH · CARDIO · VOLUME · CARDIO TIME in four columns
+- **Streak**: current streak as 72pt black number + BEST, 14-day dot row (blue=active, gray=rest, today has an outline)
+- **Last session**: title (program name or cardio type), subtitle (exercises/minutes), relative time + calendar date
+- **Personal records**: top-8 e1RM per exercise, ranked 1–8, e1RM in historyAccent
+- **Weekly average**: AVG/WEEK · THIS WEEK · BEST WEEK
 
-### SettingsView (ingen accentfärg)
-- Sektioner: STRENGTH PROGRAMS · CARDIO TYPES · LIMITATIONS · TRAINING · HEALTH · PRIVACY · REMINDERS · DATA · ABOUT
-- **REMINDERS**: toggle, veckodagsknappar (Mån–Sön), tidväljare (auto-satt från senaste passstart, fallback 17:00)
-- **DATA**: backup-förklaring (iCloud Backup, vad som går förlorat), CSV-export via `UIActivityViewController`
-- **ABOUT → VERSION**: öppnar `WhatsNewSheet` med releasenoter
+### SettingsView (no accent color)
+- Sections: STRENGTH PROGRAMS · CARDIO TYPES · LIMITATIONS · TRAINING · HEALTH · PRIVACY · REMINDERS · DATA · ABOUT
+- **REMINDERS**: toggle, weekday buttons (Mon–Sun), time picker (auto-set from last session start, fallback 17:00)
+- **DATA**: iCloud Backup explanation (what is and isn't backed up), CSV export via `UIActivityViewController`
+- **ABOUT → VERSION**: opens `WhatsNewSheet` with release notes
 
-**`WhatsNewSheet.swift` — underhållsregel:** `entries`-arrayen i filen är hårdkodad och uppdateras **inte** automatiskt. Vid varje session där en användarsyn­lig funktion byggs eller fixas: lägg till en ny `WhatsNewEntry` i arrayen (ikon, färg, titel, brödtext) och bumpa appversionsnumret i Xcode om en ny release planeras. Gör det i samma commit som funktionen — inte som eftertanke.
-- `#if DEBUG`-sektion: RESET ONBOARDING
+**`WhatsNewSheet.swift` — maintenance rule:** the `entries` array in the file is hardcoded and does **not** update automatically. Any time a user-visible feature is built or fixed: add a new `WhatsNewEntry` (icon, color, title, body) and bump the app version number in Xcode if a new release is planned. Do this in the same commit as the feature — not as an afterthought.
+- `#if DEBUG` section: RESET ONBOARDING
 
 ---
 
 ## Apple Health
 
-`HealthKitManager` (singleton `struct`) sparar `HKWorkoutBuilder` till Apple Health:
+`HealthKitManager` (singleton `struct`) saves an `HKWorkoutBuilder` to Apple Health:
 
-| Pass | ActivityType | Tid |
-|------|-------------|-----|
-| Styrketräning | `.traditionalStrengthTraining` | start = när StrengthView öppnas, slut = KLAR |
-| crosstrainer | `.elliptical` | slut = nu, start = nu − minuter |
-| cycling_stationary, road_cycling, mountain_biking, assault_bike | `.cycling` | slut = nu, start = nu − minuter |
-| rowing_machine, ski_erg, kayaking, canoeing | `.rowing` | slut = nu, start = nu − minuter |
-| hiking, rucking, crosstrainer, stair_climber | `.hiking` | slut = nu, start = nu − minuter |
-| running, treadmill_run | `.running` | slut = nu, start = nu − minuter |
-| walking, treadmill_walk | `.walking` | slut = nu, start = nu − minuter |
-| sled | `.functionalStrengthTraining` | slut = nu, start = nu − minuter |
+| Session | ActivityType | Time |
+|---------|-------------|------|
+| Strength training | `.traditionalStrengthTraining` | start = when StrengthView opens, end = DONE |
+| crosstrainer | `.elliptical` | end = now, start = now − minutes |
+| cycling_stationary, road_cycling, mountain_biking, assault_bike | `.cycling` | end = now, start = now − minutes |
+| rowing_machine, ski_erg, kayaking, canoeing | `.rowing` | end = now, start = now − minutes |
+| hiking, rucking, crosstrainer, stair_climber | `.hiking` | end = now, start = now − minutes |
+| running, treadmill_run | `.running` | end = now, start = now − minutes |
+| walking, treadmill_walk | `.walking` | end = now, start = now − minutes |
+| sled | `.functionalStrengthTraining` | end = now, start = now − minutes |
 
-- Begär tillstånd vid varje StrengthView/CardioView-öppning (`requestAuthorization()`) — iOS hanterar "redan beviljat" automatiskt
-- Alla anrop guards med `HKHealthStore.isHealthDataAvailable()` — no-op på simulator
-- `healthKitID: UUID?` sparas på session-objektet för att möjliggöra radering
-- Kalorier beräknas via `estimatedCalories(met:bodyMass:seconds:)` — MET hämtas från `CardioType.met`, kroppsvikt läses från HealthKit (fallback 75 kg)
-- **iOS 18+**: ansträngningspoäng sparas som `HKQuantityType(.workoutEffortScore)` via `store.relateWorkoutEffortSample(_:with:activity:)` — gäller både styrke- och konditionspass
-
----
-
-## UserDefaults-nycklar
-
-| Nyckel | Typ | Ägare | Syfte |
-|--------|-----|-------|-------|
-| `hasDraft` | Bool (@AppStorage) | TrainingView/StrengthView | Om styrke-draft finns |
-| `hasCardioDraft` | Bool (@AppStorage) | TrainingView/CardioView | Om konditions-draft finns |
-| `workoutDraft` | Data | UserDefaults | WorkoutDraft (JSON) inkl. ihopfällningsläge |
-| `cardioDraftType` | String | UserDefaults | Typ för aktiv konditions-draft |
-| `cardioDraftStartTime_{TYPE}` | Double | UserDefaults | Starttid (timeIntervalSince1970) för pausat konditionspass |
-| `cardioDraftDistance_{TYPE}` | String | UserDefaults | Distans (km) för pausat konditionspass |
-| `cardioSavedDuration_{TYPE}` | String | UserDefaults | Senast sparad duration per kardioform (beräknad från tid) |
-| `cardioSavedDistance_{TYPE}` | String | UserDefaults | Senast sparad distans per kardioform |
-| `cardioEffortScore_{TYPE}` | Int | UserDefaults | Senast sparad ansträngning per kardioform (startvärde i picker) |
-| `workoutEffortScore` | Int | UserDefaults | Senast sparad ansträngning för styrkepass (startvärde i picker) |
-| `increaseExercises` | [String] | UserDefaults | Övningsnamn med aktiv ÖKA-badge (styrka) |
-| `increaseCardioTypes` | [String] | UserDefaults | Kardioformer med aktiv ÖKA-badge |
-| `exerciseNameMigrationVersion` | Int | UserDefaults | Version för körd namnmigration (bumpa vid övningsändringar) |
-| `bodyLimitations` | String (@AppStorage) | SettingsView/ExercisePickerView | Kommaseparerade BodyLimitation.rawValue — skuggar övningar som belastar valda leder |
-| `reminderEnabled` | Bool (@AppStorage) | SettingsView | Om träningspåminnelser är aktiva |
-| `reminderWeekdays` | String (@AppStorage) | SettingsView | Kommaseparerade veckodagar (1=sön, 2=mån…7=lör) |
-| `reminderHour` | Int (@AppStorage) | SettingsView | Timme för påminnelse (24h), sätts automatiskt från senaste passstart |
-| `reminderMinute` | Int (@AppStorage) | SettingsView | Minut för påminnelse |
-| `onboardingCompleted` | Bool (@AppStorage) | ExercisApp/OnboardingView/SettingsView | Om onboarding är genomförd (DEBUG: kan nollställas i SettingsView) |
-| `lockEnabled` | Bool (@AppStorage) | ExercisApp/SettingsView | Om Face ID-lås är aktiverat |
-| `profileName` | String (@AppStorage) | ProfileView | Användarens visningsnamn |
-| `restTimerSeconds` | Int (@AppStorage) | StrengthView/SettingsView | Global vilotimer-längd (0/30/60/90/120s, default 90) |
-| `selectedCardioTypes` | String (@AppStorage) | OnboardingView/TrainingView/SettingsView | Kommaseparerade `CardioType.rawValue` som visas på Träning-tab |
-| `useImperialUnits` | Bool (@AppStorage) | SettingsView + alla vy/kort som visar vikt/distans | Enhetsval KG/KM (false) eller LBS/MI (true) — konvertering vid presentation via `displayWeight`/`displayDistance` |
-| `healthKitSyncEnabled` | Bool (@AppStorage) | SettingsView | Om pass sparas till Apple Health |
-| `healthKitWeightEnabled` | Bool (@AppStorage) | SettingsView | Om kroppsvikt hämtas från Apple Health för kaloriberäkning |
+- Authorization requested on every StrengthView/CardioView open (`requestAuthorization()`) — iOS handles "already granted" silently
+- All calls guarded with `HKHealthStore.isHealthDataAvailable()` — no-op on simulator
+- `healthKitID: UUID?` saved on the session object to enable deletion
+- Calories calculated via `estimatedCalories(met:bodyMass:seconds:)` — MET from `CardioType.met`, body weight read from HealthKit (fallback 75 kg)
+- **iOS 18+**: effort score saved as `HKQuantityType(.workoutEffortScore)` via `store.relateWorkoutEffortSample(_:with:activity:)` — applies to both strength and cardio sessions
 
 ---
 
-## Begränsningssystem (ExercisePickerView)
+## UserDefaults Keys
 
-Övningsväljaren har två oberoende signaler som skuggar övningar (opacity 0.4) och samlar dem under "EJ REKOMMENDERAT" längst ner i listan:
+| Key | Type | Owner | Purpose |
+|-----|------|-------|---------|
+| `hasDraft` | Bool (@AppStorage) | TrainingView/StrengthView | Whether a strength draft exists |
+| `hasCardioDraft` | Bool (@AppStorage) | TrainingView/CardioView | Whether a cardio draft exists |
+| `workoutDraft` | Data | UserDefaults | WorkoutDraft (JSON) including collapse state |
+| `cardioDraftType` | String | UserDefaults | Type of the active cardio draft |
+| `cardioDraftStartTime_{TYPE}` | Double | UserDefaults | Start time (timeIntervalSince1970) for a paused cardio session |
+| `cardioDraftDistance_{TYPE}` | String | UserDefaults | Distance (km) for a paused cardio session |
+| `cardioSavedDuration_{TYPE}` | String | UserDefaults | Last saved duration per cardio type (calculated from time) |
+| `cardioSavedDistance_{TYPE}` | String | UserDefaults | Last saved distance per cardio type |
+| `cardioEffortScore_{TYPE}` | Int | UserDefaults | Last saved effort per cardio type (initial value in picker) |
+| `workoutEffortScore` | Int | UserDefaults | Last saved effort for strength sessions (initial value in picker) |
+| `increaseExercises` | [String] | UserDefaults | Exercise names with an active INCREASE badge |
+| `increaseCardioTypes` | [String] | UserDefaults | Cardio types with an active INCREASE badge |
+| `exerciseNameMigrationVersion` | Int | UserDefaults | Version of the last-run name migration (bump on exercise changes) |
+| `bodyLimitations` | String (@AppStorage) | SettingsView/ExercisePickerView | Comma-separated BodyLimitation.rawValues — dims exercises that load the selected joints |
+| `reminderEnabled` | Bool (@AppStorage) | SettingsView | Whether training reminders are enabled |
+| `reminderWeekdays` | String (@AppStorage) | SettingsView | Comma-separated weekdays (1=Sun, 2=Mon…7=Sat) |
+| `reminderHour` | Int (@AppStorage) | SettingsView | Reminder hour (24h), auto-set from last session start |
+| `reminderMinute` | Int (@AppStorage) | SettingsView | Reminder minute |
+| `onboardingCompleted` | Bool (@AppStorage) | ExercisApp/OnboardingView/SettingsView | Whether onboarding has been completed (DEBUG: can be reset in SettingsView) |
+| `lockEnabled` | Bool (@AppStorage) | ExercisApp/SettingsView | Whether Face ID lock is enabled |
+| `profileName` | String (@AppStorage) | ProfileView | User's display name |
+| `restTimerSeconds` | Int (@AppStorage) | StrengthView/SettingsView | Global rest timer duration (0/30/60/90/120s, default 90) |
+| `selectedCardioTypes` | String (@AppStorage) | OnboardingView/TrainingView/SettingsView | Comma-separated `CardioType.rawValue`s shown on the Training tab |
+| `useImperialUnits` | Bool (@AppStorage) | SettingsView + all views/cards showing weight/distance | Unit preference: KG/KM (false) or LBS/MI (true) — converted at presentation via `displayWeight`/`displayDistance` |
+| `healthKitSyncEnabled` | Bool (@AppStorage) | SettingsView | Whether sessions are saved to Apple Health |
+| `healthKitWeightEnabled` | Bool (@AppStorage) | SettingsView | Whether body weight is read from Apple Health for calorie calculation |
 
-**Kroppsbegränsningar** (globala, `@AppStorage("bodyLimitations")`):
-- Sätts i SettingsView → BEGRÄNSNINGAR med toggles per led
-- `BodyLimitation` enum i ExerciseLibrary.swift: KNÄ / AXEL / RYGG / ARMBÅGE / HANDLED / HÖFT
-- Varje led mappar till specifika `contraindications`-taggar i exercises_def.json
+---
 
-**Programbegränsningar** (per program, `WorkoutProgram.programConstraint`):
-- Sätts i ProgramEditorView → Begränsning med chip-väljare
-- `ProgramConstraint` enum: INGEN / PUSH / PULL / BEN / ÖVERKROPP / KROPPSVIKT
-- Standardprogram får rätt constraint från seeder (t.ex. Push → "push", Bodyweight → "bodyweight")
-- Skickas in till ExercisePickerView som parameter
+## Exercise Picker Constraint System
 
-**Filterchips** (sessionella, nollställs vid stängning):
-- MUSKEL → `MuscleGroup` enum (6 grupper → primaryMuscles-mappning)
-- REDSKAP → equipment-råvärden
-- RÖRELSE → movement-råvärden
-- Öppnar FilterSheet (`.sheet`, `.medium`/`.large` detents) med checkboxar
+The exercise picker has two independent signals that dim exercises (opacity 0.4) and move them under "NOT RECOMMENDED" at the bottom of the list:
 
-Alla tre system är additive — en övning skuggas om någon av signalerna matchar.
+**Body limitations** (global, `@AppStorage("bodyLimitations")`):
+- Set in SettingsView → LIMITATIONS with toggles per joint
+- `BodyLimitation` enum in ExerciseLibrary.swift: KNEE / SHOULDER / BACK / ELBOW / WRIST / HIP
+- Each joint maps to specific `contraindications` tags in exercises_def.json
+
+**Program constraints** (per program, `WorkoutProgram.programConstraint`):
+- Set in ProgramEditorView → Constraint with a chip picker
+- `ProgramConstraint` enum: NONE / PUSH / PULL / LEGS / UPPER BODY / BODYWEIGHT
+- Seeded programs get the right constraint (e.g. Push → "push", Bodyweight → "bodyweight")
+- Passed into ExercisePickerView as a parameter
+
+**Filter chips** (session-scoped, reset on dismiss):
+- MUSCLE → `MuscleGroup` enum (6 groups → primaryMuscles mapping)
+- EQUIPMENT → equipment raw values
+- MOVEMENT → movement raw values
+- Opens FilterSheet (`.sheet`, `.medium`/`.large` detents) with checkboxes
+
+All three systems are additive — an exercise is dimmed if any signal matches.
 
 ---
 
 ## AuthManager.swift
 
 - `ObservableObject` + `@Published var isAuthenticated: Bool`
-- Wrappa `LAContext` med `.deviceOwnerAuthentication` (Face ID → lösenkod automatiskt)
-- Svarar på `DispatchQueue.main.async` i completion (LAContext kallar bakgrundstråd)
-- Används som `@StateObject` i RootView
+- Wraps `LAContext` with `.deviceOwnerAuthentication` (Face ID → passcode automatically)
+- Calls back on `DispatchQueue.main.async` in the completion handler (LAContext calls back on a background thread)
+- Used as `@StateObject` in RootView
 
 ---
 
-## Viktiga SwiftData-noter
+## SwiftData Notes
 
-- `ModelContainer` konfigureras i `ExercisApp.swift` (CloudKit ej aktiverat)
-- Alla relationer har `deleteRule: .cascade`
-- Sortering i HistoryView: nyast först
-- Schema-versionering finns: `ExercisSchemaV1` (`VersionedSchema`, version 1.0.0) + `ExercisMigrationPlan` (`SchemaMigrationPlan`, tom `stages`-lista) i Models.swift — `ModelContainer` skapas via `Schema(ExercisSchemaV1.models)` och `migrationPlan: ExercisMigrationPlan.self` i ExercisApp.swift. Vid framtida fältnamnbyten/borttag: lägg till `ExercisSchemaV2` + en `MigrationStage` i planen, bumpa `versionIdentifier`
-- `try? context.save()` används genomgående — fel loggas ej (acceptabelt för single-user app)
-
----
-
-## Enhetflexibilitet
-
-Vikt och distans lagras alltid i metriska bastal — `Double` för kg (`weight`) och km (`distanceKm`). SwiftData-fälten ändras aldrig vid enhetsbyte (ingen migration krävs).
-
-Imperial-stöd är **implementerat** via `useImperialUnits` (@AppStorage, växlas i SettingsView → UNITS: "KG / KM" / "LBS / MI"):
-- Konvertering sker vid presentation, inte i lagringen — `displayWeight(_:imperial:)` / `displayDistance(_:imperial:)` (kg→lbs ×2.20462, km→mi ×0.621371)
-- Inmatning konverteras tillbaka till metriskt vid parsning — `parseWeightInput(_:imperial:)` / `parseDistanceInput(_:imperial:)`
-- Etiketter via `weightLabel(_:)` / `distanceLabel(_:)`
-- Alla fria funktioner finns i Theme.swift, är enhetstestade och fria från SwiftUI/SwiftData-beroenden
-
-Tid lagras fortfarande som råa minuter (`Double`, `durationMinutes`) utan enhetsväxling — bara KG/KM ↔ LBS/MI stöds idag.
+- `ModelContainer` configured in `ExercisApp.swift` (CloudKit not enabled)
+- All relationships have `deleteRule: .cascade`
+- HistoryView sort order: newest first
+- Schema versioning in place: `ExercisSchemaV1` (`VersionedSchema`, version 1.0.0) + `ExercisMigrationPlan` (`SchemaMigrationPlan`, empty `stages` array) in Models.swift — `ModelContainer` created via `Schema(ExercisSchemaV1.models)` and `migrationPlan: ExercisMigrationPlan.self` in ExercisApp.swift. For future field renames/removals: add `ExercisSchemaV2` + a `MigrationStage` to the plan, bump `versionIdentifier`
+- `try? context.save()` used throughout — errors are not logged (acceptable for a single-user app)
 
 ---
 
-## Planerade funktioner och expansion
+## Unit Flexibility
 
-Se [ROADMAP.md](ROADMAP.md) för alla planerade funktioner, beslutade designval och parkerade förslag.
+Weight and distance are always stored in metric base units — `Double` for kg (`weight`) and km (`distanceKm`). SwiftData fields never change on unit switch (no migration required).
+
+Imperial support is **implemented** via `useImperialUnits` (@AppStorage, toggled in SettingsView → UNITS: "KG / KM" / "LBS / MI"):
+- Conversion happens at presentation, not in storage — `displayWeight(_:imperial:)` / `displayDistance(_:imperial:)` (kg→lbs ×2.20462, km→mi ×0.621371)
+- Input is converted back to metric on parse — `parseWeightInput(_:imperial:)` / `parseDistanceInput(_:imperial:)`
+- Labels via `weightLabel(_:)` / `distanceLabel(_:)`
+- All free functions live in Theme.swift, are unit-tested, and have no SwiftUI/SwiftData dependencies
+
+Time is still stored as raw minutes (`Double`, `durationMinutes`) with no unit switching — only KG/KM ↔ LBS/MI is supported today.
 
 ---
 
-## Krav som inte får brytas
+## Planned Features
+
+See [ROADMAP.md](ROADMAP.md) for all planned features, decided design choices, and parked proposals.
+
+---
+
+## Hard Rules
 
 1. Deployment target **iOS 17**
-2. **iPhone only** (iPad stöds inte)
+2. **iPhone only** (iPad not supported)
 3. **Portrait only**
-4. `NSFaceIDUsageDescription` i Info.plist
-5. `NSHealthShareUsageDescription` och `NSHealthUpdateUsageDescription` i Info.plist
-6. CloudKit ej aktiverat (kräver betalt Apple Developer-konto)
-7. Jost är **enda** typsnitt – inga system fonts
-8. Accentfärg är **enda** färginslaget utöver systemfärger (`.primary`, `.secondary`, `Color(.systemBackground)`)
-9. Vikt lagras alltid som `Double`
-10. UI-text lokaliseras — engelska som basspråk, svenska via `.strings`
+4. `NSFaceIDUsageDescription` in Info.plist
+5. `NSHealthShareUsageDescription` and `NSHealthUpdateUsageDescription` in Info.plist
+6. CloudKit not enabled (requires a paid Apple Developer account)
+7. Jost is the **only** typeface — no system fonts
+8. Accent color is the **only** color beyond system colors (`.primary`, `.secondary`, `Color(.systemBackground)`)
+9. Weight always stored as `Double`
+10. UI text is localized — English as base language, Swedish via `.strings`

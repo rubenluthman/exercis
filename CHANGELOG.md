@@ -3,76 +3,75 @@
 ---
 
 ## v0.3.0 — 2026-06-04
-*Navigation, konditionsloggning och övningsdatabas omarbetade.*
+*Navigation, cardio logging, and the exercise database overhauled.*
 
-**Nytt**
-- TrainingView — ny startsida (Träning-tab) visar användarens valda program och konditionsformer; tryck för att starta direkt
-- 4-tabbars navigation: Träning · Historik · Profil · Inställningar
-- Programhantering i Inställningar — toggle vilka program som visas på Träning-sidan, redigera innehåll
-- Konditionsformer i Inställningar — toggle vilka typer som visas
-- Automatisk tidsloggning för kondition — tid mäts från att vyn öppnas till KLAR; ingen manuell inmatning
-- SessionTimePicker: ändring av startdatum drar automatiskt med slutdatum (bevarar passlängd); stödjer pass över midnatt
-- Fuzzy search i övningsväljaren via Fuse.swift — hittar rätt även vid stavfel
-- Aliases och beskrivningar för alla 186 övningar i exercises_def.json
-- Övningsbeskrivning visas i GifSheet info-vy (⓪-knapp)
-- Claude Code-versionsnotis vid session-start om ny version installerats
+**New**
+- TrainingView — new home screen (Training tab) shows the user's selected programs and cardio types; tap to start a session directly
+- 4-tab navigation: Training · History · Profile · Settings
+- Program management in Settings — toggle which programs appear on the Training tab, edit content
+- Cardio types in Settings — toggle which types are shown
+- Automatic time tracking for cardio — duration measured from when the view opens to DONE; no manual entry
+- SessionTimePicker: changing the start time automatically drags the end time along (preserving session length); supports sessions past midnight
+- Fuzzy search in the exercise picker via Fuse.swift — finds the right exercise even with typos
+- Aliases and descriptions for all 186 exercises in exercises_def.json
+- Exercise description shown in GifSheet info view
 
-**Förbättringar**
-- Swipe-back fungerar från styrkepass och konditionspass (navigationDestination istället för fullScreenCover/sheet)
-- GIF-laddning via base64-inbäddning i WKWebView — kringgår iOS filsystemsbegränsningar
-- Datamigration v5: gamla övningsnamn (Barbell Back Squat, Neutral-Grip Incline Dumbbell Bench Press, Neutral-Grip Lat Pulldown) migreras till korrekt ExerciseDef-namn
-- Portrait-only och iPhone-only rättat i build settings
+**Improvements**
+- Swipe-back works from both strength and cardio sessions (navigationDestination instead of fullScreenCover/sheet)
+- GIF loading via base64 embedding in WKWebView — works around iOS file system restrictions
+- Data migration v5: legacy exercise names (Barbell Back Squat, Neutral-Grip Incline Dumbbell Bench Press, Neutral-Grip Lat Pulldown) migrated to correct ExerciseDef names
+- Portrait-only and iPhone-only enforced in build settings
 
-**Bakom kulisserna**
-- `WorkoutProgram` fick `isOnTrainingPage: Bool`-fält
-- `CardioType` implementerar `Identifiable`
-- `CardioField`-enum förenklad (duration-case borttagna)
-- GIFs tillagda i .gitignore
-- ExerciseDef: `aliases` och `description`-fält tillagda i JSON-schema och Swift-laddare
+**Under the hood**
+- `WorkoutProgram` gained `isOnTrainingPage: Bool` field
+- `CardioType` implements `Identifiable`
+- `CardioField` enum simplified (duration cases removed)
+- GIFs added to .gitignore
+- ExerciseDef: `aliases` and `description` fields added to JSON schema and Swift loader
 
 ---
 
 ## v0.2.0 — 2026-06-01
-*Den stora ombyggnaden. Appen gick från ett personligt träningsverktyg till en generaliserbar plattform för alla.*
+*The big rebuild. The app went from a personal training tool to a generalizable platform.*
 
-**Nytt**
-- Träningsprogram — sju inbyggda (Full Body, Överkropp, Underkropp, Push, Pull, Legs, Bodyweight) med egna färger ur en kuraterad 12-kulörig OKLCH-palett
-- Onboarding — nyinstallation väljer program och konditionsformer innan första passet
-- TabView ersätter HomeView — Styrka, Kondition och Historik som permanenta tabbar; inställningar nås via kugghjul i navigationsbaren
-- Övningsbibliotek — 180+ övningar inlästa från JSON med muskler, utrustning, rörelsemönster och GIF-animation
-- 26 konditionsformer (maskiner, utomhus, nordiska, vatten, övrigt, calisthenics) — användaren väljer sina i onboarding
-- Profilvy med avatar, namn och livstidsstatistik
-- Inställningar — HealthKit-toggles, Face ID-toggle
+**New**
+- Workout programs — seven built-in (Full Body, Upper Body, Lower Body, Push, Pull, Legs, Bodyweight) with individual colors from a curated 12-hue OKLCH palette
+- Onboarding — new installs choose programs and cardio types before the first session
+- TabView replaces HomeView — Strength, Cardio, and History as permanent tabs; settings accessed via gear icon in the nav bar
+- Exercise library — 180+ exercises loaded from JSON with muscles, equipment, movement patterns, and GIF animations
+- 26 cardio types (machines, outdoor, Nordic, water, other, calisthenics) — user selects their own in onboarding
+- Profile view with avatar, name, and lifetime statistics
+- Settings — HealthKit toggles, Face ID toggle
 
-**Förbättringar**
-- Styrkepassets accentfärg följer det aktiva programmets färg istället för en fast appfärg
-- Prefill från senaste session per program (inte globalt senaste pass)
-- Konditionstyper filtreras efter användarens val från onboarding
+**Improvements**
+- Strength session accent color follows the active program's color instead of a fixed app color
+- Prefill from the most recent session per program (not globally the last session)
+- Cardio types filtered to the user's selection from onboarding
 
-**Bakom kulisserna**
-- `ExerciseDef` gick från hårdkodad struct till JSON-driven `ExerciseLibrary`
-- Ny `WorkoutProgram`-modell med `ProgramExercise` junction-entitet
-- CardioType-enum utökad med 22 nya typer; raw values migrerade från svenska till språkneutrala ID:n
+**Under the hood**
+- `ExerciseDef` moved from a hardcoded struct to a JSON-driven `ExerciseLibrary`
+- New `WorkoutProgram` model with `ProgramExercise` junction entity
+- CardioType enum extended with 22 new types; raw values migrated from Swedish to language-neutral IDs
 
 ---
 
 ## v0.1.0 — 2026-05-27
-*Ursprungsversionen. Byggd exklusivt för Rubens eget träningsprogram.*
+*Initial version. Built for a single, fixed training program.*
 
-Appen hette ursprungligen "Träning" — döptes om till "Exercis" samma kväll.
+The app was originally called "Träning" — renamed to "Exercis" the same evening.
 
-- Fem fasta övningar: Barbell Back Squat, Incline Dumbbell Bench Press, Romanian Deadlift, Seated Cable Row, Lat Pulldown
-- Tre konditionsformer: Crosstrainer, Cykel, Roddmaskin (Vandring tillkom kort efter)
-- Logga styrkepass med vikt och reps per set — prefill från senaste passet
-- Historik med månadsgrupper, expanderbara kort och progression per övning (e1RM via Epley-formeln)
-- Ansträngningspoäng (1–10) per pass
-- Apple Health-integration — sparar HKWorkout med kaloriberäkning via MET × kroppsvikt
-- Face ID-lås vid app-start
-- Periodsammanfattning — månads- och årsvy med stapeldiagram
-- Draft-system — påbörjat pass återupptas automatiskt
-- Sessionstidsredigering — justera start/slut i efterhand
-- OKLCH-palett med 12 kulörer implementerad (2026-05-28)
+- Five fixed exercises: Barbell Back Squat, Incline Dumbbell Bench Press, Romanian Deadlift, Seated Cable Row, Lat Pulldown
+- Three cardio types: Cross Trainer, Bike, Rowing Machine (Hiking added shortly after)
+- Log strength sessions with weight and reps per set — prefill from the previous session
+- History with month groups, expandable cards, and per-exercise progression (e1RM via the Epley formula)
+- Effort score (1–10) per session
+- Apple Health integration — saves HKWorkout with calorie estimate via MET × body weight
+- Face ID lock on app launch
+- Period summary — monthly and yearly view with bar charts
+- Draft system — an interrupted session resumes automatically
+- Session time editing — adjust start/end after the fact
+- OKLCH palette with 12 hues implemented (2026-05-28)
 
 ---
 
-*Underhålls av Claude Code. Formuleringar diskuteras med Ruben vid behov.*
+*Maintained with Claude Code.*
