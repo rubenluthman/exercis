@@ -240,6 +240,8 @@ struct FilterSheet: View {
                                 .foregroundStyle(Color.homeAccent)
                         }
                     }
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
             }
