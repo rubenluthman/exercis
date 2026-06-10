@@ -29,6 +29,8 @@ Allt planerat, beslutat och parkerat på ett ställe. Uppdateras löpande under 
 
 ## Kodbas
 
+- **Global övningsredigering i StrengthView** — ett ställe att byta/lägga till/ta bort övningar för hela passet, i stället för ⇄-knapp per övning. Kan vara en edit-ikon i headern eller långtryck på övningsnamnet.
+
 - **Bygg ut alias-täckning i `exercises_def.json`** — gå igenom samtliga övningar och lägg till `aliases` för alla kända alternativa namn (t.ex. "Lateral Raises"/"Lateral Raise" på "Side Raise"). Kombinera med att `searchStrings` i `ExercisePickerView` även inkluderar `aliases` (se commit som lade till detta) — annars hjälper alias inte vid sökning, bara vid migrering av historisk data.
 
 ---
