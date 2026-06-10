@@ -87,6 +87,18 @@ ExercisWidget.entitlements  ← App Group: group.rubenluthman.Exercis
 
 ---
 
+## App Icon
+
+Adaptive icon via Icon Composer (`Exercis/exercis.icon`). Produces automatic Default/Dark/Tinted variants.
+
+**Layer setup:**
+- `foreground` layer (`foreground.png`): white stripes shape on transparent background. **Glass effect intentionally disabled** (`glass: false`) — the stripes looked better without the Liquid Glass treatment applied to the foreground.
+- Background layer: solid accent color managed by Icon Composer.
+
+Do not re-enable `glass: true` on the foreground layer without testing visually — the decision to disable it was intentional.
+
+---
+
 ## Theme.swift
 
 Single source of truth for colors, fonts, button styles, and shared UI components.
