@@ -123,11 +123,25 @@ Font.jost(_ weight: Font.Weight, size: CGFloat)
 
 | Vikt        | Används till                                      |
 |-------------|---------------------------------------------------|
-| Black 900   | "EXERCIS" på LockView och HomeView                |
+| Black 900   | "EXERCIS" på LockView                             |
 | Bold 700    | Sidrubriker (17pt, kerning 2)                     |
 | SemiBold 600| Knappar, accentetiketter, stora siffror (34pt)    |
-| Medium 500  | Kolumnrubriker, sekundär text (10pt, kerning 1.5) |
+| Medium 500  | Section labels, sub-labels, kolumnrubriker (11–12pt, kerning 1.5) |
 | Regular 400 | Brödtext, hints, datum (13–14pt)                  |
+
+### Textstorlekshierarki
+
+| Storlek | Kategori | Exempel |
+|---------|----------|---------|
+| 17pt    | Sidrubriker | "SETTINGS", "HISTORY" |
+| 14–15pt | Primär radtext | Programnamn, kardionamn, toggletitlar |
+| 13–14pt | Brödtext / beskrivningar | Toggle-beskrivningar, iCloud-info |
+| 12pt    | Section labels, åtgärdsrader | "STRENGTH PROGRAMS", "EXPORT TRAINING DATA", "START/END" i SessionTimePicker |
+| 11pt    | Stat-undertexter (under stora siffror) | "STREAK", "BEST", "SESSIONS", "EFFORT" |
+| 9pt     | Badge-piller | "INCREASE", progressionsförslag (pill-format, behåller 9pt) |
+| 10pt    | Chart-axeletiketter | Månadsförkortningar och Y-axelvärden i diagram |
+
+**Regel:** inget UI-text under 11pt utom badge-piller (9pt) och chart-axlar (10pt).
 
 ### Knappstillar
 - `FilledButtonStyle(accent:)` — fylld, vit text, höjd 50pt, `clipShape(RoundedRectangle(cornerRadius: 4))`
