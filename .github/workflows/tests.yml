@@ -25,5 +25,5 @@ jobs:
             -project Exercis.xcodeproj \
             -scheme Exercis \
             -testPlan Exercis \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination 'platform=iOS Simulator,OS=latest,name=iPhone 16 Plus' \
             -skipMacroValidation
