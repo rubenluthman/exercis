@@ -48,6 +48,7 @@ SettingsView.swift        ← inställningar + programhantering + konditionsform
 ProgramEditorView.swift   ← redigera program (namn, färg, begränsning, övningar, set-antal)
 ExercisePickerView.swift  ← övningsväljare med fuzzy search + filterchips (MUSKEL/REDSKAP/RÖRELSE) + dimning
 ProgramCard.swift         ← programkort (används i TrainingView och SettingsView)
+CardioTypeCard.swift      ← konditionsformkort med accentfärgstopp och senaste duration (används i TrainingView)
 OnboardingView.swift      ← onboarding (steg 1: program med pencil-redigering, steg 2: konditionsformer)
 Previews.swift            ← Canvas-previews för alla huvudvyer med mock-data (används i Xcode Canvas, byggs ej i release)
 HealthKitManager.swift    ← sparar HKWorkout till Apple Health
