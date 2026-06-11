@@ -582,6 +582,8 @@ Time is still stored as raw minutes (`Double`, `durationMinutes`) with no unit s
 
 ## Planned Features
 
+See [ARCHITECTURE.md](ARCHITECTURE.md) for design decisions and architectural rationale.
+
 See [ROADMAP.md](ROADMAP.md) for all planned features, decided design choices, and parked proposals.
 
 ---
