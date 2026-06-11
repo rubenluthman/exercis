@@ -31,8 +31,6 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 ## Codebase
 
-- **Expand alias coverage in `exercises_def.json`** — go through all exercises and add `aliases` for every known alternative name (e.g. "Lateral Raises"/"Lateral Raise" for "Side Raise"). Pair with including `aliases` in `searchStrings` in `ExercisePickerView` — otherwise aliases only help with history migration, not search.
-
 - **Missing GIF: `wger_french_press_skullcrusher_szbar`** — `gifId: null`, `gifQuality: none`. Exercise is active (`status: include`) and visible in the picker, but no animation plays. Find a replacement source (hasaneyldrm or ExerciseDB has "Skull Crusher EZ Bar"). Low urgency — app handles it gracefully, user just sees no GIF.
 
 ---
@@ -85,6 +83,7 @@ The app is intentionally single-user. This section documents every change requir
 
 ## Done
 
+- ~~Expand alias coverage in `exercises_def.json` — 1 261 alternative names added across all exercises via three pipeline passes (ChatGPT, Gemini, Claude Opus); aliases included in ExercisePickerView search~~
 - ~~User-controlled date language — SYSTEM / SV / EN in SettingsView, `appLocale()` replaces hardcoded `sv_SE` everywhere~~
 - ~~Onboarding — 3 steps (program grid + cardio checkboxes + Apple Health), standard programs seeded~~
 - ~~GIF system — 155 exercises with GIF (accent color + tappable), GifSheet with WKWebView + muscle info~~

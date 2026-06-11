@@ -10,6 +10,12 @@ private struct WhatsNewEntry: Identifiable {
 
 private let entries: [WhatsNewEntry] = [
     WhatsNewEntry(
+        icon: "magnifyingglass",
+        iconColor: .workoutAccent,
+        title: "Better exercise search",
+        body: "Over 1 200 alternative names added across all exercises — search now finds exercises by their common names, abbreviations, and variations."
+    ),
+    WhatsNewEntry(
         icon: "lock.fill",
         iconColor: .workoutAccent,
         title: "Locked reps",
