@@ -31,6 +31,8 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 - **Expand alias coverage in `exercises_def.json`** — go through all exercises and add `aliases` for every known alternative name (e.g. "Lateral Raises"/"Lateral Raise" for "Side Raise"). Pair with including `aliases` in `searchStrings` in `ExercisePickerView` — otherwise aliases only help with history migration, not search.
 
+- **Missing GIF: `wger_french_press_skullcrusher_szbar`** — `gifId: null`, `gifQuality: none`. Exercise is active (`status: include`) and visible in the picker, but no animation plays. Find a replacement source (hasaneyldrm or ExerciseDB has "Skull Crusher EZ Bar"). Low urgency — app handles it gracefully, user just sees no GIF.
+
 ---
 
 ## Multi-user prerequisites

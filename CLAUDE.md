@@ -322,17 +322,26 @@ struct ExerciseFormData {
 
 ## Exercises
 
-Loaded from `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~186 exercises with `status == "include"` are active — the rest are excluded in the JSON.
+Loaded from `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~184 exercises with `status == "include"` are active.
 
 **Exercise names are in English** — intentional. They are not localized via `.strings` and display in English regardless of device language. Stored in English in history (`ExerciseLog.name`) and CSV export.
 
-`ExerciseDef` fields: `id` (stable key, used in `ProgramExercise.exerciseId`), `name` (shown in UI and stored in `ExerciseLog.name`), `aliases` (old names, migrated on launch), `repRange`, `setRange`, `primaryMuscles`, `equipment`, `movement`, `contraindications`, `gifFile/gifSource`, `description`.
+`ExerciseDef` fields: `id` (stable key, used in `ProgramExercise.exerciseId`), `name` (shown in UI and stored in `ExerciseLog.name`), `aliases` (old names, migrated on launch; also searched in ExercisePickerView), `repRange`, `setRange`, `primaryMuscles`, `equipment`, `movement`, `contraindications`, `gifFile/gifSource`, `description`.
+
+**Traceability fields** — kept for source tracking, never read by app code:
+- `wgerId` / `wgerBaseId` — IDs in the [wger](https://wger.de) open exercise database the data was originally imported from
+- `gifId` — numeric ID in the hasaneyldrm GIF source; matches the prefix of `gifFile` (e.g. `gifId: "0031"` → `gifFile: "0031-25GPyDY.gif"`). Useful if sourcing replacement media from the same repo.
+- `rejectReason` — present on `status: reject` entries; documents why the exercise was excluded (`not_english`, `insufficient_data`, `not_gym_relevant`). Rejected entries are kept in the file to prevent re-importing them in future updates.
+
+**`status` values:**
+- `include` — active, shown in the exercise picker
+- `retired` — replaced by another exercise; kept so history entries with the old name still resolve correctly. `ExerciseDef.find(name:)` searches active + retired.
+- `reject` — excluded from the app; kept for import traceability. Never loaded by `ExerciseLibrary`.
 
 **Key is `id`** in programs (`ProgramExercise.exerciseId`) but **`name`** in logged history (`ExerciseLog.name`) — important distinction. Never change `id` or `name` without adding the old value to `aliases` and bumping `migrationVersion` (current: 6).
 
 **Retiring an exercise** — when an exercise is replaced and old data must be preserved in history:
 - Set `status` to `"retired"` in the JSON — no migration, no deletion
-- `ExerciseDef.find(name:)` searches active + retired, so history displays correctly
 
 **Hard deletion** requires an explicit delete step in `migrateExerciseNames`.
 

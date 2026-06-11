@@ -2746,39 +2746,6 @@
     "description": "Hang from a bar with a shoulder-width underhand grip. Pull your body upward until your chin clears the bar, squeezing the biceps and lats at the top. Lower with control."
   },
   {
-    "id": "wger_wyciskanie_skos",
-    "wgerId": 159,
-    "wgerBaseId": null,
-    "name": "Wyciskanie Skos",
-    "category": "strength",
-    "movement": "push",
-    "mechanic": "isolation",
-    "primaryMuscles": [
-      "chest"
-    ],
-    "secondaryMuscles": [
-      "triceps"
-    ],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "not_english",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
-  },
-  {
     "id": "wger_pistol_squat",
     "wgerId": 160,
     "wgerBaseId": 456,
@@ -3269,37 +3236,6 @@
       "Machine Leg Extension"
     ],
     "description": "Sit in a leg extension machine with the pad resting on your lower shins. Extend both legs until straight, contracting the quadriceps at the top. Lower under control."
-  },
-  {
-    "id": "wger_trazioni_alla_sbarra_presa_inversa",
-    "wgerId": 179,
-    "wgerBaseId": null,
-    "name": "Trazioni Alla Sbarra Presa Inversa",
-    "category": "strength",
-    "movement": "pull",
-    "mechanic": "isolation",
-    "primaryMuscles": [
-      "latissimus_dorsi"
-    ],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "not_english",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
   },
   {
     "id": "wger_chinups",
@@ -4848,93 +4784,6 @@
     "description": "Rest on your forearms and toes with your body forming a straight line from head to heels. Brace your core and glutes to prevent your hips from sagging or rising. Hold for time."
   },
   {
-    "id": "wger_propadanje",
-    "wgerId": 246,
-    "wgerBaseId": null,
-    "name": "Propadanje",
-    "category": "strength",
-    "movement": "push",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "not_english",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
-  },
-  {
-    "id": "wger_bend",
-    "wgerId": 247,
-    "wgerBaseId": null,
-    "name": "Bendž",
-    "category": "strength",
-    "movement": "push",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "not_english",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
-  },
-  {
-    "id": "wger_razboj",
-    "wgerId": 248,
-    "wgerBaseId": null,
-    "name": "Razboj",
-    "category": "strength",
-    "movement": "push",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "not_english",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
-  },
-  {
     "id": "wger_kettlebell_swings",
     "wgerId": 249,
     "wgerBaseId": 331,
@@ -5147,64 +4996,6 @@
       "Decline Pushups"
     ],
     "description": "Place your feet on an elevated surface and hands on the floor in push-up position. Lower your chest toward the floor, then push back up. The elevation shifts emphasis to the upper chest."
-  },
-  {
-    "id": "wger_glute",
-    "wgerId": 262,
-    "wgerBaseId": null,
-    "name": "Glute",
-    "category": "strength",
-    "movement": "push",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "insufficient_data",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
-  },
-  {
-    "id": "wger_roman_chair",
-    "wgerId": 263,
-    "wgerBaseId": 505,
-    "name": "Roman Chair",
-    "category": "strength",
-    "movement": "isometric",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "insufficient_data",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
   },
   {
     "id": "wger_cable_external_rotation",
@@ -5895,37 +5686,6 @@
     "description": "Set an adjustable bench to 45–60 degrees. Sit back with arms hanging straight down, fully extended, holding a dumbbell in each hand. Curl the dumbbells upward without moving your upper arms, achieving a greater stretch at the bottom than a standing curl. Lower under control."
   },
   {
-    "id": "wger_pelvic_tilting_medium_risk",
-    "wgerId": 299,
-    "wgerBaseId": null,
-    "name": "Pelvic Tilting Medium Risk",
-    "category": "strength",
-    "movement": "push",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [
-      "abs"
-    ],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "not_gym_relevant",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
-  },
-  {
     "id": "wger_dumbbell_goblet_squat",
     "wgerId": 300,
     "wgerBaseId": 203,
@@ -6331,35 +6091,6 @@
       "DB Upright Row"
     ],
     "description": "Hold dumbbells in front of your thighs. Pull them upward close to your body, leading with your elbows until they reach mid-chest height, then lower with control."
-  },
-  {
-    "id": "wger_lying_rotator_cuff_exercise",
-    "wgerId": 312,
-    "wgerBaseId": 406,
-    "name": "Lying Rotator Cuff Exercise",
-    "category": "strength",
-    "movement": "push",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "dumbbell"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "not_gym_relevant",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
   },
   {
     "id": "wger_body_squats",
@@ -7316,38 +7047,6 @@
     "description": "Hang from a pull-up bar with a shoulder-width grip and arms fully extended. Relax your shoulders to allow full decompression of the spine. Hold for time to build grip strength and shoulder mobility."
   },
   {
-    "id": "wger_fentes_avant",
-    "wgerId": 348,
-    "wgerBaseId": null,
-    "name": "Fentes Avant",
-    "category": "strength",
-    "movement": "squat",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [
-      "knee_compression",
-      "knee_flexion_loaded"
-    ],
-    "status": "reject",
-    "rejectReason": "not_english",
-    "repRange": {
-      "min": 8,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
-  },
-  {
     "id": "wger_dumbbell_split_squat",
     "wgerId": 349,
     "wgerBaseId": 1366,
@@ -7390,38 +7089,6 @@
       "Static Lunge"
     ],
     "description": "Hold dumbbells at your sides and take a staggered stance. Lower your rear knee toward the floor, keeping your front shin vertical, then push back up. Both feet remain stationary throughout."
-  },
-  {
-    "id": "wger_aalex_gambe_alte_al_muro",
-    "wgerId": 350,
-    "wgerBaseId": null,
-    "name": "Aalex Gambe Alte Al Muro",
-    "category": "strength",
-    "movement": "squat",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [
-      "knee_compression",
-      "knee_flexion_loaded"
-    ],
-    "status": "reject",
-    "rejectReason": "not_english",
-    "repRange": {
-      "min": 8,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
   },
   {
     "id": "wger_romanian_deadlift",
@@ -7898,35 +7565,6 @@
       "Elevated Deadlift"
     ],
     "description": "Stand on a small platform or plate to increase the range of motion of a conventional deadlift. Pull the bar from below your standard starting position, building strength off the floor."
-  },
-  {
-    "id": "wger_standing_rope_forearm",
-    "wgerId": 382,
-    "wgerBaseId": 623,
-    "name": "Standing Rope Forearm",
-    "category": "strength",
-    "movement": "push",
-    "mechanic": "isolation",
-    "primaryMuscles": [],
-    "secondaryMuscles": [],
-    "equipment": [
-      "bodyweight"
-    ],
-    "contraindications": [],
-    "status": "reject",
-    "rejectReason": "insufficient_data",
-    "repRange": {
-      "min": 10,
-      "max": 15
-    },
-    "setRange": {
-      "min": 3,
-      "max": 4
-    },
-    "gifId": null,
-    "gifFile": null,
-    "gifSource": "none",
-    "gifQuality": "none"
   },
   {
     "id": "wger_hollow_hold",
