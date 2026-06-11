@@ -2932,7 +2932,7 @@
     "contraindications": [
       "shoulder_impingement"
     ],
-    "status": "retired",
+    "status": "include",
     "rejectReason": null,
     "repRange": {
       "min": 10,

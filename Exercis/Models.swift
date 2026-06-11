@@ -479,7 +479,8 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
             ("wger_bench_press",              "Bench Press"),
             ("wger_romanian_deadlift",        "Romanian Deadlift"),
             ("wger_bent_over_rowing",         "Bent Over Rowing"),
-            ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells")
+            ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells"),
+            ("wger_pullups",                  "Pull-Ups")
         ]),
         ("Överkropp", "paletteOrange", "upper", [
             ("wger_bench_press",              "Bench Press"),
@@ -503,11 +504,11 @@ func seedDefaultProgramsIfNeeded(context: ModelContext) {
             ("wger_triceps_extensions_on_cable_with_bar", "Triceps Extensions On Cable With Bar")
         ]),
         ("Pull", "paletteGreen", "pull", [
-            ("wger_deadlifts",                   "Deadlifts"),
-            ("wger_pullups",                     "Pull-Ups"),
-            ("wger_rowing_seated",               "Rowing, Seated"),
-            ("wger_lat_pull_down_straight_back", "Lat Pull Down (Straight Back)"),
-            ("wger_biceps_curls_with_dumbbell",  "Biceps Curls With Dumbbell")
+            ("wger_deadlifts",                  "Deadlifts"),
+            ("wger_pullups",                    "Pull-Ups"),
+            ("wger_rowing_seated",              "Rowing, Seated"),
+            ("wger_rear_delt_raises",           "Rear Delt Raises"),
+            ("wger_biceps_curls_with_dumbbell", "Biceps Curls With Dumbbell")
         ]),
         ("Legs", "paletteTeal", "legs", [
             ("wger_squats",             "Squats"),
@@ -561,7 +562,8 @@ let allDefaultProgramDefs: [DefaultProgramDef] = [
         ("wger_bench_press",              "Bench Press",                     3),
         ("wger_romanian_deadlift",        "Romanian Deadlift",               3),
         ("wger_bent_over_rowing",         "Bent Over Rowing",                3),
-        ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells",       3)
+        ("wger_shoulder_press_dumbbells", "Shoulder Press, Dumbbells",       3),
+        ("wger_pullups",                  "Pull-Ups",                        3)
     ]),
     DefaultProgramDef(name: "Överkropp", color: "paletteOrange", constraint: "upper", exercises: [
         ("wger_bench_press",              "Bench Press",                     3),
@@ -585,11 +587,11 @@ let allDefaultProgramDefs: [DefaultProgramDef] = [
         ("wger_triceps_extensions_on_cable_with_bar", "Triceps Extensions On Cable With Bar",    3)
     ]),
     DefaultProgramDef(name: "Pull", color: "paletteGreen", constraint: "pull", exercises: [
-        ("wger_deadlifts",                   "Deadlifts",                         3),
-        ("wger_pullups",                     "Pull-Ups",                          3),
-        ("wger_rowing_seated",               "Rowing, Seated",                    3),
-        ("wger_lat_pull_down_straight_back", "Lat Pull Down (Straight Back)",     3),
-        ("wger_biceps_curls_with_dumbbell",  "Biceps Curls With Dumbbell",        3)
+        ("wger_deadlifts",                  "Deadlifts",                     3),
+        ("wger_pullups",                    "Pull-Ups",                      3),
+        ("wger_rowing_seated",              "Rowing, Seated",                3),
+        ("wger_rear_delt_raises",           "Rear Delt Raises",              3),
+        ("wger_biceps_curls_with_dumbbell", "Biceps Curls With Dumbbell",   3)
     ]),
     DefaultProgramDef(name: "Legs", color: "paletteTeal", constraint: "legs", exercises: [
         ("wger_squats",             "Squats",                   3),
