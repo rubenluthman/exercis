@@ -4,12 +4,11 @@
 
 Exercis is a personal workout logger for iPhone. It records strength and cardio
 sessions, tracks progression over time, and surfaces personal records and
-streaks. It is built for one user — the developer — and is deliberately
-single-user by design.
+streaks. It currently has one user — the developer.
 
 The app is offline-first. All data lives on device in SwiftData. There is no
 server, no account system, and no sync infrastructure beyond standard iCloud
-device backup. This is a deliberate constraint, not an oversight.
+device backup.
 
 ## Stack
 
@@ -118,7 +117,4 @@ Exercis is a personal training log. It is not:
 - An App Store product (built for personal use; no analytics, no IAP, no
   review prompts)
 
-Every absent feature is a deliberate decision. The single-user constraint in
-particular eliminates an entire class of complexity — conflict resolution,
-user accounts, privacy boundaries between users — that would be the dominant
-engineering concern in a multi-user version.
+Every absent feature is a deliberate decision, not an oversight.
