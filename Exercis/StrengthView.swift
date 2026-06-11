@@ -123,7 +123,7 @@ struct StrengthView: View {
             .scrollDismissesKeyboard(.interactively)
             .softScrollEdge()
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                if !showEffortPicker {
+                if !showEffortPicker && activeField == nil {
                     klarBar
                 }
             }
