@@ -12,6 +12,8 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 - **macOS companion app** — lightweight macOS app for logging sessions retroactively and managing programs from a desktop. Doesn't need to mirror the iOS app fully — focus on program editing and after-the-fact logging. Shares SwiftData models and business logic with the iOS app; CloudKit sync (see below) is a prerequisite for data to move between devices.
 
+- **Siri Shortcuts** — trigger common actions (start a session, log cardio) via Siri or the Shortcuts app. Requires `AppIntents` framework.
+
 - **watchOS app** — quick set/reps logging directly from the wrist during a session. `exercis.icon` already has `watchOS` in `supported-platforms.circles` so the icon is ready. Requires an Apple Developer account and CloudKit sync.
 
 ---
@@ -71,13 +73,14 @@ The app is intentionally single-user. This section documents every change requir
 
 - **Mid-session exercise swap** — swap an exercise mid-session without breaking the structure; save original + replacement in the log
 - **Per-exercise rest timer** — default stored in `ProgramExercise.restSeconds` instead of a global AppStorage setting
-- **HIIT timer** — unclear use case
-- **4-tab layout** — final, not up for debate
-- **Siri Shortcuts** — low priority
-- **TabView restructure** — 3 tabs ruled out; current 4-tab layout with a unified Training tab is correct
 - **ExerciseDef → SwiftData `@Model`** — no practical need, prefill works via `programId`
 - **HKWorkoutActivity per exercise** — no way to distinguish movement from rest, produces no meaningful data
-- **Swift Packages** (`swift-algorithms`, `swift-collections`) — not justified until the app grows
+
+---
+
+## Long-term
+
+- **HIIT** — structured HIIT as its own program type, distinct from strength and cardio; timer-driven with configurable intervals and rounds
 
 ---
 
