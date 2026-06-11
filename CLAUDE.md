@@ -322,7 +322,7 @@ struct ExerciseFormData {
 
 ## Exercises
 
-Loaded from `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~184 exercises with `status == "include"` are active.
+Loaded from `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~185 exercises with `status == "include"` are active.
 
 **Exercise names are in English** — intentional. They are not localized via `.strings` and display in English regardless of device language. Stored in English in history (`ExerciseLog.name`) and CSV export.
 
