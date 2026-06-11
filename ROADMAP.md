@@ -29,8 +29,6 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 ## Codebase
 
-- **Global exercise editing in StrengthView** — a single place to swap, add, or remove exercises for the whole session, instead of a per-exercise swap button. Could be an edit icon in the header or a long press on the exercise name.
-
 - **Expand alias coverage in `exercises_def.json`** — go through all exercises and add `aliases` for every known alternative name (e.g. "Lateral Raises"/"Lateral Raise" for "Side Raise"). Pair with including `aliases` in `searchStrings` in `ExercisePickerView` — otherwise aliases only help with history migration, not search.
 
 ---
@@ -125,3 +123,4 @@ The app is intentionally single-user. This section documents every change requir
 - ~~App review 2026-06-10 — fixed hardcoded Swedish "ÖVNINGAR" in SettingsView; added 10 missing sv.lproj keys (REMINDERS, TRAINING REMINDERS, DATE LANGUAGE, AVG/WEEK, THIS WEEK, BEST WEEK, sessions, session); translated Swedish comment in Theme.swift~~
 - ~~Locked reps mode per workout program~~
 - ~~Repo renamed to `exercis` (lowercase), made public; all documentation translated to English~~
+- ~~Global exercise editing in StrengthView — pencil icon in session header opens a sheet with reorder, delete, and add exercise~~
