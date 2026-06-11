@@ -10,7 +10,7 @@ This repo is public. Every commit, every file, every decision documented here sh
 
 ---
 
-A personal iOS app for logging strength and cardio workouts. Currently single-user by design — see ROADMAP.md for the full list of changes required before multi-user can be introduced.
+A personal iOS app for logging strength and cardio workouts. Currently one user — the developer.
 
 ---
 
@@ -549,10 +549,8 @@ All three systems are additive — an exercise is dimmed if any signal matches.
 
 ## AuthManager.swift
 
-- `ObservableObject` + `@Published var isAuthenticated: Bool`
-- Wraps `LAContext` with `.deviceOwnerAuthentication` (Face ID → passcode automatically)
-- Calls back on `DispatchQueue.main.async` in the completion handler (LAContext calls back on a background thread)
-- Used as `@StateObject` in RootView
+- `ObservableObject` + `@Published var isAuthenticated: Bool`, used as `@StateObject` in RootView
+- Completion handler calls back on `DispatchQueue.main.async` — LAContext calls back on a background thread
 
 ---
 
@@ -567,8 +565,6 @@ All three systems are additive — an exercise is dimmed if any signal matches.
 ---
 
 ## Unit Flexibility
-
-Weight and distance are always stored in metric base units — `Double` for kg (`weight`) and km (`distanceKm`). SwiftData fields never change on unit switch (no migration required).
 
 Imperial support is **implemented** via `useImperialUnits` (@AppStorage, toggled in SettingsView → UNITS: "KG / KM" / "LBS / MI"):
 - Conversion happens at presentation, not in storage — `displayWeight(_:imperial:)` / `displayDistance(_:imperial:)` (kg→lbs ×2.20462, km→mi ×0.621371)
