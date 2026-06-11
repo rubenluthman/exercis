@@ -31,7 +31,7 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 ## Codebase
 
-- **Missing GIF: `wger_french_press_skullcrusher_szbar`** — `gifId: null`, `gifQuality: none`. Exercise is active (`status: include`) and visible in the picker, but no animation plays. Find a replacement source (hasaneyldrm or ExerciseDB has "Skull Crusher EZ Bar"). Low urgency — app handles it gracefully, user just sees no GIF.
+- **31 exercises without GIFs** — active exercises with no `gifFile` entry. App handles it gracefully (no animation shown). Source is hasaneyldrm/exercises-dataset; these exercises simply weren't in that library. Full list: Axe Hold, Bent High Pulls, Body Squats, Butterfly Narrow Grip, Cable External Rotation, Cable Woodchoppers, Car Push, Close-Grip Bench Press, Deadhang, Depth Jumps, Duck Walks, French Press (Skullcrusher) Sz-Bar, Full Sit Outs, Hand Grip, Hercules Pillars, High Knee Jumps, High Pull, Hollow Hold, Incline Plank With Alternate Floor Touch, Leg Raises Standing, Mgm Machine, Shotgun Row, Side Raises, Smith Machine Close-Grip Bench Press, Straight-Arm Pulldown (Bar Attachment), Triceps Bench Press One Barbell, Trunk Rotation With Cable, Upper External Oblique, Wall Push-Up, Yolk Walks, Z Curls.
 
 ---
 
