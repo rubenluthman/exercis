@@ -253,7 +253,7 @@ struct HistoryView: View {
             }
         }
         .padding(.horizontal, 24)
-        .padding(.top, 20)
+        .padding(.top, 12)
         .padding(.bottom, 2)
         .contentShape(Rectangle())
         .onTapGesture {

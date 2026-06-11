@@ -37,7 +37,12 @@ struct CardioView: View {
     @State private var lastAltitude: Double? = nil
 
     private var elapsedString: String {
-        let elapsed = max(0, now.timeIntervalSince(editedStart))
+        let elapsed: TimeInterval
+        if hasCustomTime {
+            elapsed = max(0, editedEnd.timeIntervalSince(editedStart))
+        } else {
+            elapsed = max(0, now.timeIntervalSince(editedStart))
+        }
         let h = Int(elapsed) / 3600
         let m = Int(elapsed) % 3600 / 60
         let s = Int(elapsed) % 60
@@ -175,6 +180,7 @@ struct CardioView: View {
             if !showEffortPicker {
                 Button("DONE") {
                     distanceFocused = false
+                    if !hasCustomTime { editedEnd = now }
                     let saved = UserDefaults.standard.integer(forKey: "cardioEffortScore_\(type.rawValue)")
                     lastEffortScore = saved > 0 ? saved : 5
                     showEffortPicker = true
@@ -255,36 +261,46 @@ struct CardioView: View {
     // MARK: - Header
 
     private var headerRow: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(type.displayName.uppercased())
-                        .font(.jost(.bold, size: 17))
-                        .kerning(2)
-                        .foregroundStyle(.primary)
-                    Text("INCREASE")
-                        .font(.jost(.medium, size: 9))
-                        .kerning(1.5)
-                        .foregroundStyle(Color.workoutAccent)
-                        .padding(.horizontal, 5).padding(.vertical, 2)
-                        .overlay(RoundedRectangle(cornerRadius: 2).strokeBorder(Color.workoutAccent, lineWidth: 0.5))
-                        .opacity(increaseActive ? 1 : 0)
-                }
-                if let summary = lastSummary {
-                    Text(summary)
-                        .font(.jost(.regular, size: 12))
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(type.displayName.uppercased())
+                    .font(.jost(.bold, size: 17))
+                    .kerning(2)
+                    .foregroundStyle(.primary)
+
+                Text("INCREASE")
+                    .font(.jost(.medium, size: 9))
+                    .kerning(1.5)
+                    .foregroundStyle(Color.workoutAccent)
+                    .padding(.horizontal, 5).padding(.vertical, 2)
+                    .overlay(RoundedRectangle(cornerRadius: 2).strokeBorder(Color.workoutAccent, lineWidth: 0.5))
+                    .opacity(increaseActive ? 1 : 0)
+
+                Button {
+                    showTimePicker = true
+                } label: {
+                    Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(appLocale())).uppercased())
+                        .font(.jost(.regular, size: 13))
                         .foregroundStyle(Color(.secondaryLabel))
                 }
+                .buttonStyle(.plain)
+
+                Spacer()
+
+                Button("←") {
+                    dismiss()
+                }
+                .font(.jost(.regular, size: 22))
+                .foregroundStyle(Color(.secondaryLabel))
+                .frame(width: 54, height: 44, alignment: .trailing)
+                .accessibilityLabel("Back")
             }
-            Spacer(minLength: 0)
-            Button {
-                showTimePicker = true
-            } label: {
-                Text(editedEnd.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(appLocale())).uppercased())
-                    .font(.jost(.regular, size: 13))
+
+            if let summary = lastSummary {
+                Text(summary)
+                    .font(.jost(.regular, size: 12))
                     .foregroundStyle(Color(.secondaryLabel))
             }
-            .buttonStyle(.plain)
         }
         .padding(.horizontal, 24)
         .padding(.top, 20)

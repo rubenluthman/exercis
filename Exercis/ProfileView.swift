@@ -20,6 +20,7 @@ struct ProfileView: View {
                 VStack(spacing: 40) {
                     avatarSection
                     statsRow
+                    recentPRSection
                     streakSection
                     lastSessionSection
                     personalRecordsSection
@@ -127,7 +128,63 @@ struct ProfileView: View {
             statBlock(label: "VOLUME",   value: volumeText.0, unit: volumeText.1, alignment: .center)
             statBlock(label: "CARDIO TIME", value: cardioTimeText.0, unit: cardioTimeText.1, alignment: .center)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, 16)
+    }
+
+    // MARK: - Recent PRs
+
+    private var recentPRSection: some View {
+        VStack(spacing: 0) {
+            ThinDivider()
+                .padding(.bottom, 24)
+
+            VStack(alignment: .leading, spacing: 16) {
+                Text("RECENT RECORDS")
+                    .font(.jost(.medium, size: 11))
+                    .kerning(1.5)
+                    .foregroundStyle(Color(.secondaryLabel))
+                    .padding(.horizontal, 24)
+
+                let prs = recentPRs
+                if prs.isEmpty {
+                    Text("Log some strength sessions to see your records.")
+                        .font(.jost(.regular, size: 14))
+                        .foregroundStyle(Color(.secondaryLabel))
+                        .padding(.horizontal, 24)
+                } else {
+                    VStack(spacing: 0) {
+                        ForEach(Array(prs.enumerated()), id: \.offset) { i, pr in
+                            HStack(spacing: 0) {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(pr.name)
+                                        .font(.jost(.regular, size: 14))
+                                        .foregroundStyle(.primary)
+                                        .lineLimit(1)
+                                    Text(pr.date.formatted(.dateTime.month(.abbreviated).day().locale(appLocale())))
+                                        .font(.jost(.regular, size: 11))
+                                        .foregroundStyle(Color(.tertiaryLabel))
+                                }
+                                Spacer()
+                                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                                    Text(formatWeight(pr.e1rm))
+                                        .font(.jost(.semibold, size: 17))
+                                        .foregroundStyle(Color.historyAccent)
+                                    Text("kg")
+                                        .font(.jost(.regular, size: 11))
+                                        .foregroundStyle(Color(.secondaryLabel))
+                                }
+                            }
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 10)
+
+                            if i < prs.count - 1 {
+                                ThinDivider().padding(.leading, 24)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - Streak
@@ -137,47 +194,43 @@ struct ProfileView: View {
             ThinDivider()
                 .padding(.bottom, 24)
 
-            HStack(alignment: .bottom, spacing: 0) {
-                VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .top, spacing: 0) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("STREAK")
                         .font(.jost(.medium, size: 11))
                         .kerning(1.5)
                         .foregroundStyle(Color(.secondaryLabel))
-
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text("\(currentStreak)")
-                            .font(.jost(.black, size: 72))
-                            .foregroundStyle(.primary)
-                            .minimumScaleFactor(0.5)
-
-                        Text(currentStreak == 1 ? "day" : "days")
-                            .font(.jost(.medium, size: 16))
-                            .foregroundStyle(Color(.secondaryLabel))
-                            .padding(.bottom, 10)
-                    }
-                }
-
-                Spacer()
-
-                if currentStreak > 0 {
-                    VStack(alignment: .trailing, spacing: 4) {
-                        Text("BEST")
-                            .font(.jost(.medium, size: 11))
-                            .kerning(1.5)
-                            .foregroundStyle(Color(.secondaryLabel))
-                        Text("\(bestStreak)")
                             .font(.jost(.semibold, size: 22))
                             .foregroundStyle(.primary)
-                        Text(currentStreak == bestStreak ? "current best" : "days")
+                        Text(currentStreak == 1 ? "day" : "days")
                             .font(.jost(.regular, size: 11))
                             .foregroundStyle(Color(.tertiaryLabel))
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("BEST")
+                        .font(.jost(.medium, size: 11))
+                        .kerning(1.5)
+                        .foregroundStyle(Color(.secondaryLabel))
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text("\(bestStreak)")
+                            .font(.jost(.semibold, size: 22))
+                            .foregroundStyle(.primary)
+                        Text(bestStreak == 1 ? "day" : "days")
+                            .font(.jost(.regular, size: 11))
+                            .foregroundStyle(Color(.tertiaryLabel))
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .padding(.horizontal, 24)
 
             streakDots
-                .padding(.top, 20)
+                .padding(.top, 16)
         }
     }
 
@@ -457,6 +510,38 @@ struct ProfileView: View {
     private struct PREntry {
         let name: String
         let e1rm: Double
+    }
+
+    private struct RecentPR {
+        let name: String
+        let e1rm: Double
+        let date: Date
+    }
+
+    private var recentPRs: [RecentPR] {
+        var bestPerExercise: [String: (e1rm: Double, date: Date)] = [:]
+        for session in workoutSessions.sorted(by: { $0.date < $1.date }) {
+            for log in session.exerciseLogs {
+                for set in log.sets {
+                    guard set.reps > 0, set.weight > 0 else { continue }
+                    let e1rm = epleyE1RM(weight: set.weight, reps: set.reps)
+                    if e1rm > (bestPerExercise[log.name]?.e1rm ?? 0) {
+                        bestPerExercise[log.name] = (e1rm, session.date)
+                    }
+                }
+            }
+        }
+        return bestPerExercise
+            .map { name, value in
+                RecentPR(
+                    name: ExerciseDef.find(name: name)?.displayName ?? name,
+                    e1rm: value.e1rm,
+                    date: value.date
+                )
+            }
+            .sorted { $0.date > $1.date }
+            .prefix(5)
+            .map { $0 }
     }
 
     private var topPersonalRecords: [PREntry] {

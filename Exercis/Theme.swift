@@ -191,6 +191,13 @@ extension View {
             }
         )
     }
+
+    func selectAllOnFocus() -> some View {
+        onReceive(NotificationCenter.default.publisher(for: UITextField.textDidBeginEditingNotification)) { notification in
+            guard let textField = notification.object as? UITextField else { return }
+            DispatchQueue.main.async { textField.selectAll(nil) }
+        }
+    }
 }
 
 // MARK: - Haptics

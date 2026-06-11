@@ -287,7 +287,7 @@ struct StrengthView: View {
             } label: {
                 Image(systemName: "pencil")
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(accent)
+                    .foregroundStyle(Color(.secondaryLabel))
                     .frame(width: 36, height: 44)
             }
             .accessibilityLabel("Edit exercises")

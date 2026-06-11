@@ -172,6 +172,7 @@ struct ExerciseSection: View {
                 .multilineTextAlignment(.leading)
                 .focused($activeField, equals: .weight(exercise: exerciseIndex, set: index))
                 .frame(width: 80, alignment: .leading)
+                .selectAllOnFocus()
                 .overlay(alignment: .leading) {
                     if form.sets[index].weight.isEmpty && activeField != .weight(exercise: exerciseIndex, set: index) {
                         Text("–")
@@ -200,6 +201,7 @@ struct ExerciseSection: View {
                     .multilineTextAlignment(.trailing)
                     .focused($activeField, equals: .reps(exercise: exerciseIndex, set: index))
                     .frame(width: 120, alignment: .trailing)
+                    .selectAllOnFocus()
                     .overlay(alignment: .trailing) {
                         if form.sets[index].reps.isEmpty && activeField != .reps(exercise: exerciseIndex, set: index) {
                             Text("–")

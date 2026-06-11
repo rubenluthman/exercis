@@ -29,7 +29,7 @@ import Charts
 struct ExerciseChartSheet: View {
     let exerciseName: String
     @Query(sort: \WorkoutSession.date) private var allSessions: [WorkoutSession]
-    @State private var showVolume = false
+    @AppStorage("chartShowVolume") private var showVolume = false
 
     private struct DataPoint: Identifiable {
         let id = UUID()
