@@ -10,11 +10,7 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 - **App icon redesign** — simplify the icon to three stripes only (remove the outer stripes that fade into the edges). The three remaining stripes should be wider with more white space between them, and still bleed edge to edge. Needs to be done in a dedicated design tool (e.g. Figma or Sketch) — not directly in Icon Composer.
 
-- **macOS companion app** — lightweight macOS app for logging sessions retroactively and managing programs from a desktop. Doesn't need to mirror the iOS app fully — focus on program editing and after-the-fact logging. Shares SwiftData models and business logic with the iOS app; CloudKit sync (see below) is a prerequisite for data to move between devices.
-
-- **Siri Shortcuts** — trigger common actions (start a session, log cardio) via Siri or the Shortcuts app. Requires `AppIntents` framework.
-
-- **watchOS app** — quick set/reps logging directly from the wrist during a session. `exercis.icon` already has `watchOS` in `supported-platforms.circles` so the icon is ready. Requires an Apple Developer account and CloudKit sync.
+- **Siri Shortcuts** — trigger common actions (start a session, log cardio) via Siri or the Shortcuts app. Requires `AppIntents` framework (the only Siri integration path as of iOS 27 — SiriKit is deprecated).
 
 ---
 
@@ -28,6 +24,8 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 - **Privacy policy URL** — required in App Store Connect metadata due to HealthKit data collection
 - **Face ID instructions for reviewers** — App Review / TestFlight reviewers need to know how to log in without biometrics
 - **Build number management** — establish a process for unique build numbers per upload
+- **macOS companion app** — lightweight macOS app for logging sessions retroactively and managing programs from a desktop. Shares SwiftData models and business logic with the iOS app; CloudKit sync is a prerequisite for data to move between devices.
+- **watchOS app** — quick set/reps logging directly from the wrist during a session. `exercis.icon` already has `watchOS` in `supported-platforms.circles` so the icon is ready. Requires CloudKit sync.
 
 ---
 
