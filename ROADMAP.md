@@ -8,6 +8,8 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 ## Up next / under discussion
 
+- **App icon redesign** — simplify the icon to three stripes only (remove the outer stripes that fade into the edges). The three remaining stripes should be wider with more white space between them, and still bleed edge to edge. Needs to be done in a dedicated design tool (e.g. Figma or Sketch) — not directly in Icon Composer.
+
 - **macOS companion app** — lightweight macOS app for logging sessions retroactively and managing programs from a desktop. Doesn't need to mirror the iOS app fully — focus on program editing and after-the-fact logging. Shares SwiftData models and business logic with the iOS app; CloudKit sync (see below) is a prerequisite for data to move between devices.
 
 - **watchOS app** — quick set/reps logging directly from the wrist during a session. `exercis.icon` already has `watchOS` in `supported-platforms.circles` so the icon is ready. Requires an Apple Developer account and CloudKit sync.
