@@ -331,6 +331,25 @@ Loaded from `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~1
 **Traceability fields** — kept for source tracking, never read by app code:
 - `wgerId` / `wgerBaseId` — IDs in the [wger](https://wger.de) open exercise database the data was originally imported from
 - `gifId` — numeric ID in the hasaneyldrm GIF source; matches the prefix of `gifFile` (e.g. `gifId: "0031"` → `gifFile: "0031-25GPyDY.gif"`). Useful if sourcing replacement media from the same repo.
+
+**GIF assets are not committed** (`Exercis/Resources/GIFs/` is in `.gitignore`). On a new machine, restore them by cloning the source repo and running the copy script:
+```bash
+git clone --depth 1 https://github.com/hasaneyldrm/exercises-dataset.git .tmp/exercises-dataset
+python3 -c "
+import json, shutil, os
+src = '.tmp/exercises-dataset/videos'
+dst = 'Exercis/Resources/GIFs'
+os.makedirs(dst, exist_ok=True)
+with open('Exercis/Resources/exercises_def.json') as f:
+    data = json.load(f)
+for ex in data:
+    if ex.get('gifFile') and ex.get('status') == 'include':
+        s = os.path.join(src, ex['gifFile'])
+        if os.path.exists(s):
+            shutil.copy2(s, os.path.join(dst, ex['gifFile']))
+"
+rm -rf .tmp
+```
 - `rejectReason` — present on `status: reject` entries; documents why the exercise was excluded (`not_english`, `insufficient_data`, `not_gym_relevant`). Rejected entries are kept in the file to prevent re-importing them in future updates.
 
 **`status` values:**
