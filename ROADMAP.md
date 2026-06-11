@@ -10,7 +10,7 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 - **App icon redesign** — simplify the icon to three stripes only (remove the outer stripes that fade into the edges). The three remaining stripes should be wider with more white space between them, and still bleed edge to edge. Needs to be done in a dedicated design tool (e.g. Figma or Sketch) — not directly in Icon Composer.
 
-- **Siri Shortcuts** — trigger common actions (start a session, log cardio) via Siri or the Shortcuts app. Requires `AppIntents` framework (the only Siri integration path as of iOS 27 — SiriKit is deprecated).
+- **Siri integration via App Intents** — trigger common actions (start a session, log cardio) via Siri or the Shortcuts app. `AppIntents` is the only integration path as of iOS 27 — SiriKit is formally deprecated with a ~2–3 year support window (approx. iOS 29 / fall 2028). The new Gemini-powered Siri routes exclusively through App Intents; apps without it are invisible to Siri.
 
 ---
 
