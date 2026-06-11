@@ -14,7 +14,6 @@ struct ExerciseSection: View {
     var onToggleCollapse: () -> Void
     @FocusState.Binding var activeField: WorkoutField?
     var onEdit: () -> Void = {}
-    var onSwapExercise: (() -> Void)? = nil
     @State private var showGif = false
     @AppStorage("useImperialUnits") private var imperial = false
 
@@ -56,21 +55,9 @@ struct ExerciseSection: View {
                         .font(.jost(.medium, size: 10))
                         .foregroundStyle(Color(.secondaryLabel))
                 } else {
-                    HStack(spacing: 10) {
-                        Text(form.def.repRange)
-                            .font(.jost(.regular, size: 12))
-                            .foregroundStyle(Color(.secondaryLabel))
-                        if let swap = onSwapExercise {
-                            Button(action: swap) {
-                                Image(systemName: "arrow.left.arrow.right")
-                                    .font(.system(size: 11))
-                                    .foregroundStyle(Color(.tertiaryLabel))
-                                    .frame(width: 28, height: 28)
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("Switch exercise")
-                        }
-                    }
+                    Text(form.def.repRange)
+                        .font(.jost(.regular, size: 12))
+                        .foregroundStyle(Color(.secondaryLabel))
                 }
             }
             .padding(.horizontal, 24)

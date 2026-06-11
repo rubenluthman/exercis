@@ -57,7 +57,7 @@ struct StrengthView: View {
     private let restTicker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var newPRNames: [String] = []
     @State private var saveError = false
-    @State private var swapExerciseIndex: Int? = nil
+    @State private var showEditExercises = false
     @AppStorage("restTimerSeconds") private var restTimerDuration = 90
     @FocusState private var activeField: WorkoutField?
 
@@ -114,8 +114,7 @@ struct StrengthView: View {
                                 }
                             },
                             activeField: $activeField,
-                            onEdit: { isDirty = true },
-                            onSwapExercise: { swapExerciseIndex = i }
+                            onEdit: { isDirty = true }
                         )
                         ThinDivider()
                     }
@@ -225,42 +224,13 @@ struct StrengthView: View {
         } message: {
             Text("An error occurred while saving. Try again or restart the app.")
         }
-        .sheet(isPresented: Binding(
-            get: { swapExerciseIndex != nil },
-            set: { if !$0 { swapExerciseIndex = nil } }
-        )) {
-            if let idx = swapExerciseIndex {
-                ExercisePickerView(
-                    onSelect: { newDef in
-                        let current = exerciseForms[idx]
-                        let prevMax = sessions
-                            .flatMap { $0.exerciseLogs.filter { $0.name == newDef.name } }
-                            .flatMap { $0.sets }
-                            .map(\.weight).max() ?? 0
-                        let session = sessions.first(where: { $0.programId == program.id })
-                        var sugW = ""
-                        var sugR = ""
-                        if prevMax > 0,
-                           let log = session?.exerciseLogs.first(where: { $0.name == newDef.name }),
-                           let bestSet = log.sets.filter({ $0.weight == prevMax }).max(by: { $0.reps < $1.reps }) {
-                            let suggestion = progressionSuggestion(prevMax: prevMax, shouldIncrease: false, bestSetReps: bestSet.reps)
-                            sugW = displayWeight(suggestion.weight, imperial: imperial)
-                            sugR = suggestion.reps > 0 ? "\(suggestion.reps)" : ""
-                        }
-                        exerciseForms[idx] = ExerciseFormData(
-                            def: newDef,
-                            sets: current.sets,
-                            shouldIncrease: false,
-                            previousMaxWeight: prevMax,
-                            suggestedWeight: sugW,
-                            suggestedReps: sugR
-                        )
-                        isDirty = true
-                        swapExerciseIndex = nil
-                    },
-                    programConstraint: ProgramConstraint(rawValue: program.programConstraint) ?? .none
-                )
-            }
+        .sheet(isPresented: $showEditExercises, onDismiss: { isDirty = true }) {
+            ExerciseEditSheet(
+                exercises: $exerciseForms,
+                accent: accent,
+                programConstraint: ProgramConstraint(rawValue: program.programConstraint) ?? .none,
+                buildForm: makeForm(for:)
+            )
         }
         .onAppear {
             guard !initialized else { return }
@@ -312,12 +282,22 @@ struct StrengthView: View {
 
             Spacer()
 
+            Button {
+                showEditExercises = true
+            } label: {
+                Image(systemName: "pencil")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(accent)
+                    .frame(width: 36, height: 44)
+            }
+            .accessibilityLabel("Edit exercises")
+
             Button("←") {
                 saveDraftAndReturn()
             }
             .font(.jost(.regular, size: 22))
             .foregroundStyle(Color(.secondaryLabel))
-            .frame(width: 90, height: 44, alignment: .trailing)
+            .frame(width: 54, height: 44, alignment: .trailing)
             .accessibilityLabel("Back")
         }
         .padding(.horizontal, 24)
@@ -462,6 +442,32 @@ struct StrengthView: View {
             UserDefaults.standard.saveDraft(nil)
             hasDraft = false
         }
+    }
+
+    private func makeForm(for def: ExerciseDef) -> ExerciseFormData {
+        let prevMax = sessions
+            .flatMap { $0.exerciseLogs.filter { $0.name == def.name } }
+            .flatMap { $0.sets }
+            .map(\.weight).max() ?? 0
+        let session = sessions.first(where: { $0.programId == program.id })
+        var sugW = ""
+        var sugR = ""
+        if prevMax > 0,
+           let log = session?.exerciseLogs.first(where: { $0.name == def.name }),
+           let bestSet = log.sets.filter({ $0.weight == prevMax }).max(by: { $0.reps < $1.reps }) {
+            let suggestion = progressionSuggestion(prevMax: prevMax, shouldIncrease: false, bestSetReps: bestSet.reps)
+            sugW = displayWeight(suggestion.weight, imperial: imperial)
+            sugR = suggestion.reps > 0 ? "\(suggestion.reps)" : ""
+        }
+        let setCount = exerciseForms.first?.sets.count ?? 3
+        return ExerciseFormData(
+            def: def,
+            sets: Array(repeating: SetFormData(), count: setCount),
+            shouldIncrease: false,
+            previousMaxWeight: prevMax,
+            suggestedWeight: sugW,
+            suggestedReps: sugR
+        )
     }
 
     private func saveDraftAndReturn() {
@@ -714,6 +720,90 @@ struct EffortPickerSheet: View {
             .foregroundStyle(Color(.secondaryLabel))
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
+        }
+    }
+}
+
+// MARK: - ExerciseEditSheet
+
+private struct ExerciseEditSheet: View {
+    @Binding var exercises: [ExerciseFormData]
+    let accent: Color
+    let programConstraint: ProgramConstraint
+    let buildForm: (ExerciseDef) -> ExerciseFormData
+    @Environment(\.dismiss) private var dismiss
+    @State private var editableForms: [ExerciseFormData] = []
+    @State private var showPicker = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(String(localized: "EXERCISES"))
+                    .font(.jost(.bold, size: 17))
+                    .kerning(2)
+                    .foregroundStyle(accent)
+                Spacer()
+                Button(String(localized: "DONE")) {
+                    exercises = editableForms
+                    dismiss()
+                }
+                .font(.jost(.semibold, size: 13))
+                .kerning(1.5)
+                .foregroundStyle(accent)
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
+            .padding(.bottom, 16)
+
+            ThinDivider()
+
+            List {
+                ForEach(editableForms) { form in
+                    Text(form.def.displayName)
+                        .font(.jost(.medium, size: 15))
+                        .foregroundStyle(.primary)
+                        .listRowBackground(Color.appBackground)
+                        .listRowSeparatorTint(Color.appDivider)
+                }
+                .onMove { from, to in
+                    editableForms.move(fromOffsets: from, toOffset: to)
+                }
+                .onDelete { offsets in
+                    editableForms.remove(atOffsets: offsets)
+                }
+
+                Button {
+                    showPicker = true
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "plus")
+                        Text(String(localized: "ADD EXERCISE"))
+                            .kerning(1.5)
+                    }
+                    .font(.jost(.medium, size: 12))
+                    .foregroundStyle(accent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(height: 44)
+                }
+                .buttonStyle(.plain)
+                .listRowBackground(Color.appBackground)
+                .listRowSeparator(.hidden)
+            }
+            .listStyle(.plain)
+            .tint(accent)
+            .environment(\.editMode, .constant(.active))
+            .background(Color.appBackground)
+        }
+        .background(Color.appBackground)
+        .onAppear { editableForms = exercises }
+        .sheet(isPresented: $showPicker) {
+            ExercisePickerView(
+                onSelect: { def in
+                    editableForms.append(buildForm(def))
+                    showPicker = false
+                },
+                programConstraint: programConstraint
+            )
         }
     }
 }
