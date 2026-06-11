@@ -437,7 +437,11 @@ LockView → (Face ID) → MainTabView
 - **DATA**: iCloud Backup explanation (what is and isn't backed up), CSV export via `UIActivityViewController`
 - **ABOUT → VERSION**: opens `WhatsNewSheet` with release notes
 
-**`WhatsNewSheet.swift` — maintenance rule:** the `entries` array in the file is hardcoded and does **not** update automatically. Any time a user-visible feature is built or fixed: add a new `WhatsNewEntry` (icon, color, title, body) and bump the app version number in Xcode if a new release is planned. Do this in the same commit as the feature — not as an afterthought.
+**`WhatsNewSheet.swift` — maintenance rule:** the `entries` array is hardcoded and does **not** update automatically. Before every commit, ask: did this change anything a user would notice? If yes:
+1. Add a `WhatsNewEntry` (icon, color, title, body) at the top of `entries` in the same commit — not as an afterthought.
+2. Assess the version bump using SemVer (`MAJOR.MINOR.PATCH`): bug fix → PATCH, new user-visible feature → MINOR, breaking change → MAJOR. Update `MARKETING_VERSION` in `project.pbxproj` accordingly.
+
+Do not skip this because the change "feels small" — that judgment belongs here, not silently.
 - `#if DEBUG` section: RESET ONBOARDING
 
 ---
