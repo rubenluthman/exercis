@@ -38,7 +38,11 @@
       "Standing BB Curl",
       "BB Bicep Curl",
       "Straight Bar Curl",
-      "Standing Bicep Curl"
+      "Standing Bicep Curl",
+      "Barbell Biceps Curl",
+      "BB Biceps Curl",
+      "Standing Barbell Biceps Curl",
+      "Straight Bar Bicep Curl"
     ],
     "description": "Stand holding a barbell with an underhand grip, arms fully extended. Curl the bar toward your shoulders by flexing the elbows, keeping your upper arms stationary. Lower under control back to the start."
   },
@@ -79,7 +83,11 @@
       "EZ-Bar Bicep Curl",
       "Curl Bar Curl",
       "EZ Bar Biceps Curl",
-      "EZ-Bar Curl"
+      "EZ-Bar Curl",
+      "Cambered Bar Curl",
+      "SZ Bar Curl",
+      "SZ-Bar Curl",
+      "EZ Bar Biceps Curls"
     ],
     "description": "Hold an EZ-bar at the angled grip positions with an underhand grip. Curl the bar toward your chin while keeping your elbows fixed at your sides. Return slowly to the starting position."
   },
@@ -121,7 +129,11 @@
       "Alternating Dumbbell Curl",
       "Alternating DB Curl",
       "DB Bicep Curl",
-      "Alternating Curl"
+      "Alternating Curl",
+      "Dumbbell Bicep Curl",
+      "Dumbbell Biceps Curl",
+      "DB Biceps Curl",
+      "Alternating DB Bicep Curl"
     ],
     "description": "Stand or sit holding a dumbbell in each hand with arms fully extended. Curl one or both dumbbells upward by flexing the elbow, rotating the wrist to a supinated position at the top. Lower with control."
   },
@@ -165,7 +177,11 @@
       "Parallel Bar Dips",
       "Chest Dips",
       "Tricep Dips",
-      "Bodyweight Dips"
+      "Bodyweight Dips",
+      "Parallel Bar Dip",
+      "Chest Dip",
+      "Tricep Dip",
+      "Bodyweight Dip"
     ],
     "description": "Support yourself on parallel bars with arms straight. Lower your body by bending your elbows until your upper arms are parallel to the floor, then push back up to the start. Lean forward to emphasize the chest, stay upright for triceps focus."
   },
@@ -207,7 +223,11 @@
     "gifQuality": "strong",
     "aliases": [
       "Bench Dip",
-      "Tricep Bench Dip"
+      "Tricep Bench Dip",
+      "Bench Dips",
+      "Tricep Bench Dips",
+      "Box Dip",
+      "Box Dips"
     ],
     "description": "Place your hands on one bench and your heels on another, with your body suspended between them. Bend your elbows to lower your hips toward the floor, then push back up. Keep your back close to the front bench."
   },
@@ -247,7 +267,11 @@
       "Skull Crusher EZ Bar",
       "Lying Triceps Extension",
       "French Press EZ Bar",
-      "Skullcrusher"
+      "Skullcrusher",
+      "EZ Bar Skullcrusher",
+      "Lying EZ Bar Extension",
+      "Skull Crushers",
+      "Lying Tricep Extension"
     ],
     "description": "Lie on a bench holding an EZ-bar with an overhand grip above your forehead. Bend at the elbows to lower the bar toward your forehead, then extend back to the start keeping your upper arms vertical."
   },
@@ -287,7 +311,11 @@
       "Dumbbell Skull Crusher",
       "Lying Dumbbell Tricep Extension",
       "DB Skull Crusher",
-      "Lying DB Tricep Extension"
+      "Lying DB Tricep Extension",
+      "Dumbbell Skullcrusher",
+      "Dumbbell Skull Crushers",
+      "DB Skullcrusher",
+      "Lying Dumbbell Triceps Extension"
     ],
     "description": "Lie on a bench holding dumbbells with arms extended above you. Bend at the elbows to lower the dumbbells toward your temples, then extend back up. Keep your upper arms perpendicular to the floor throughout."
   },
@@ -328,7 +356,10 @@
       "Neutral Grip Curl",
       "DB Hammer Curl",
       "DB Hammer Curls",
-      "Hammer Curls"
+      "Hammer Curls",
+      "Dumbbell Hammer Curl",
+      "Dumbbell Hammer Curls",
+      "Neutral Grip Bicep Curl"
     ],
     "description": "Hold dumbbells at your sides with a neutral grip, thumbs pointing forward. Curl the dumbbells upward without rotating your wrists, keeping the neutral grip throughout. Lower under control."
   },
@@ -368,7 +399,10 @@
       "Dumbbell Preacher Curl",
       "Scott Curl Dumbbell",
       "DB Preacher Curl",
-      "Scott Curl DB"
+      "Scott Curl DB",
+      "Dumbbell Scott Curl",
+      "DB Scott Curl",
+      "Single Arm Preacher Curl"
     ],
     "description": "Sit at a preacher bench and rest the backs of your upper arms on the pad. Curl the dumbbells upward until fully flexed, then lower slowly back to full extension."
   },
@@ -413,7 +447,10 @@
       "Narrow Grip Bench",
       "Bench Press",
       "Close-Grip Bench",
-      "CGBP"
+      "CGBP",
+      "Close Grip Barbell Press",
+      "Close Grip BB Press",
+      "Narrow Barbell Bench Press"
     ],
     "description": "Lie on a flat bench and grip the bar with hands about shoulder-width apart or narrower. Lower the bar to your lower chest while keeping elbows closer to your sides, then press back up. Primarily targets the triceps with secondary chest involvement."
   },
@@ -455,7 +492,11 @@
       "Cable Rope Pushdown",
       "Triceps Extensions On Cable",
       "Cable Pushdown",
-      "Tricep Pushdown"
+      "Tricep Pushdown",
+      "Cable Triceps Pushdown",
+      "Rope Tricep Pushdown",
+      "Rope Triceps Extension",
+      "Cable Rope Extension"
     ],
     "description": "Attach a rope to a high pulley. Stand facing the machine and push the rope downward by extending your elbows, flaring the rope ends outward at the bottom. Control the return to the start position."
   },
@@ -497,7 +538,11 @@
       "Tricep Bar Pushdown",
       "Triceps Extensions On Cable With Bar",
       "Cable Pushdown",
-      "Tricep Pushdown"
+      "Tricep Pushdown",
+      "V Bar Pushdown",
+      "V-Bar Pushdown",
+      "Cable V-Bar Pushdown",
+      "Straight Bar Tricep Pushdown"
     ],
     "description": "Attach a straight or V-bar to a high pulley and grip it with an overhand grip. Push the bar straight down by extending the elbows, keeping upper arms fixed at your sides. Return under control."
   },
@@ -536,7 +581,10 @@
     "aliases": [
       "Crunch",
       "Ab Crunch",
-      "Abdominal Crunch"
+      "Abdominal Crunch",
+      "Crunches",
+      "Floor Crunch",
+      "Floor Crunches"
     ],
     "description": "Lie on your back with knees bent and hands behind your head. Curl your shoulder blades off the floor by contracting your abs, without pulling on your neck. Lower under control."
   },
@@ -574,7 +622,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Cable Crunch",
-      "Kneeling Cable Crunch"
+      "Kneeling Cable Crunch",
+      "Cable Crunches",
+      "Kneeling Cable Crunches",
+      "Rope Cable Crunch"
     ],
     "description": "Kneel facing away from a high pulley and hold the rope behind your head. Flex your torso downward by crunching your abs, bringing your elbows toward your knees. Return to upright."
   },
@@ -611,7 +662,9 @@
     "gifSource": "hasaneyldrm",
     "gifQuality": "strong",
     "aliases": [
-      "Eccentric Crunch"
+      "Eccentric Crunch",
+      "Eccentric Crunches",
+      "Negative Crunch"
     ],
     "description": "Lie on your back with knees bent. Perform a standard crunch upward, then slowly lower your shoulder blades back to the floor over 3 to 5 seconds to emphasize the eccentric portion."
   },
@@ -649,7 +702,10 @@
     "gifQuality": "weak",
     "aliases": [
       "Machine Crunch",
-      "Ab Machine"
+      "Ab Machine",
+      "Machine Crunches",
+      "Seated Machine Crunch",
+      "Ab Crunch Machine"
     ],
     "description": "Sit at an ab crunch machine and grip the handles. Flex forward at the waist by contracting the abs, bringing your elbows toward your knees. Return under control."
   },
@@ -691,7 +747,10 @@
     "aliases": [
       "Sit-Up",
       "Full Sit-Up",
-      "Sit Ups"
+      "Sit Ups",
+      "Situp",
+      "Floor Sit-Up",
+      "Floor Sit Ups"
     ],
     "description": "Lie on your back with knees bent and feet secured or held down. Place your hands across your chest or behind your head. Contract your core and flex at the hips to raise your entire torso toward your knees, then lower under control back to the floor."
   },
@@ -740,7 +799,10 @@
       "Benchpress DBs",
       "Dumbbell Bench Press",
       "Flat Dumbbell Press",
-      "DB Bench"
+      "DB Bench",
+      "Dumbbell Chest Press",
+      "DB Chest Press",
+      "Flat Dumbbell Bench Press"
     ],
     "description": "Lie on a flat bench with a dumbbell in each hand held just outside your chest, elbows at roughly 45 degrees to your torso. Press both dumbbells upward and slightly inward until your arms are fully extended, then lower back to chest level with control."
   },
@@ -782,7 +844,10 @@
     "aliases": [
       "Pec Deck",
       "Chest Fly Machine",
-      "Pec Fly Machine"
+      "Pec Fly Machine",
+      "Pec Deck Fly",
+      "Machine Pec Fly",
+      "Seated Machine Fly"
     ],
     "description": "Sit at a pec deck machine with forearms on the pads or handles at chest height. Bring your arms together in front of you by squeezing your chest, then return under control."
   },
@@ -821,7 +886,9 @@
     "gifQuality": "none",
     "aliases": [
       "Narrow Grip Pec Deck",
-      "Close Grip Chest Fly Machine"
+      "Close Grip Chest Fly Machine",
+      "Close Grip Pec Deck",
+      "Inner Chest Press Machine"
     ],
     "description": "Sit at a pec deck machine with a narrower grip setting. Squeeze your forearms or handles together in front of your chest, emphasizing the inner chest."
   },
@@ -867,7 +934,10 @@
       "Decline Barbell Press",
       "Bench Press",
       "Decline BB Press",
-      "Decline BB Bench"
+      "Decline BB Bench",
+      "Decline Barbell Bench Press",
+      "Barbell Decline Press",
+      "BB Decline Bench Press"
     ],
     "description": "Lie on a decline bench with feet secured and grip the barbell wider than shoulder-width. Lower the bar to your lower chest, then press back up to full extension. Targets the lower pectoral fibers."
   },
@@ -912,7 +982,10 @@
       "Decline Dumbbell Press",
       "Decline DB Press",
       "Bench Press",
-      "Decline Dumbbell Bench"
+      "Decline Dumbbell Bench",
+      "Decline Dumbbell Bench Press",
+      "Decline DB Bench Press",
+      "DB Decline Press"
     ],
     "description": "Lie on a decline bench holding dumbbells at your lower chest. Press the dumbbells upward until arms are extended, then lower with control. Emphasizes the lower chest."
   },
@@ -951,7 +1024,10 @@
     "aliases": [
       "Calf Raise",
       "Standing Calf Raise",
-      "Gastrocnemius Raise"
+      "Gastrocnemius Raise",
+      "Standing Calf Raises",
+      "Standing Calf Press",
+      "Bodyweight Calf Raise"
     ],
     "description": "Stand on the edge of a step or calf raise machine with heels hanging off. Rise onto your toes as high as possible, hold briefly, then lower your heels below the platform for a full stretch."
   },
@@ -989,7 +1065,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Seated Calf Raise",
-      "Soleus Raise"
+      "Soleus Raise",
+      "Seated Calf Raises",
+      "Sitting Calf Raise",
+      "Machine Seated Calf Raise"
     ],
     "description": "Sit on a seated calf raise machine with the pad on your thighs. Push up onto your toes by plantarflexing the ankle, pause at the top, then lower heels for a full stretch. Emphasizes the soleus over the gastrocnemius."
   },
@@ -1027,7 +1106,10 @@
     "gifQuality": "weak",
     "aliases": [
       "Hack Machine Calf Raise",
-      "Machine Standing Calf Raise"
+      "Machine Standing Calf Raise",
+      "Hack Squat Calf Raise",
+      "Hack Squat Calf Raises",
+      "Hackenschmidt Calf Raise"
     ],
     "description": "Stand on a Hackenschmidt or hack squat machine with heels off the edge of the platform. Rise onto your toes, squeezing the calves at the top, then lower for a full stretch."
   },
@@ -1075,7 +1157,10 @@
       "Barbell Deadlift",
       "BB Deadlift",
       "Conventional DL",
-      "DL"
+      "DL",
+      "Barbell Deadlifts",
+      "BB Deadlifts",
+      "Conventional Deadlifts"
     ],
     "description": "Stand with a barbell over your mid-foot, hip-width stance. Hinge down to grip the bar and set your back flat. Drive through your legs and extend your hips to lift the bar to lockout, then lower with control."
   },
@@ -1121,7 +1206,10 @@
     "aliases": [
       "T-Bar Row",
       "Landmine Row",
-      "Row"
+      "Row",
+      "T Bar Row",
+      "Chest Supported T-Bar Row",
+      "Machine T-Bar Row"
     ],
     "description": "Straddle a T-bar machine or landmine bar and grip the handle with both hands. Hinge at the hips and pull the bar toward your chest, squeezing the shoulder blades together. Lower under control."
   },
@@ -1168,7 +1256,10 @@
       "Overhand Pull-Up",
       "Wide Grip Pull-Up",
       "Pullup",
-      "Pullups"
+      "Pullups",
+      "Overhand Pullup",
+      "Wide Grip Pullup",
+      "Dead Hang Pull-Up"
     ],
     "description": "Hang from a bar with an overhand grip wider than shoulder-width. Pull your body upward until your chin clears the bar, leading with your elbows. Lower under control back to a dead hang."
   },
@@ -1214,7 +1305,10 @@
       "Seated Cable Row",
       "Cable Row",
       "Low Row",
-      "Row"
+      "Row",
+      "Seated Cable Rows",
+      "Seated Row",
+      "Cable Seated Row"
     ],
     "description": "Sit at a cable row station with feet on the platform and a slight bend in the knees. Pull the handle toward your lower ribcage, driving your elbows back and squeezing your shoulder blades. Return under control."
   },
@@ -1260,7 +1354,10 @@
       "Barbell Row",
       "BB Row",
       "Overhand Row",
-      "Row"
+      "Row",
+      "Bent Over Barbell Row",
+      "BB Bent Over Row",
+      "Barbell Bent Over Row"
     ],
     "description": "Hold a barbell with a pronated grip, bend your knees slightly, and hinge your torso forward until nearly parallel to the floor. Row the bar toward your lower ribcage by driving your elbows back and retracting your shoulder blades. Lower under control and repeat."
   },
@@ -1306,7 +1403,10 @@
       "Underhand Barbell Row",
       "Supinated Row",
       "Row",
-      "Underhand BB Row"
+      "Underhand BB Row",
+      "Reverse Grip Barbell Row",
+      "Underhand Bent Over Row",
+      "Supinated Barbell Row"
     ],
     "description": "Hinge forward with a flat back and grip the barbell with an underhand grip. Pull the bar toward your lower abdomen, driving your elbows back. The underhand grip increases bicep involvement and shifts the row angle."
   },
@@ -1353,7 +1453,10 @@
       "Barbell Squat",
       "BB Back Squat",
       "BB Squat",
-      "Squat"
+      "Squat",
+      "Back Squats",
+      "Barbell Back Squats",
+      "Barbell Squats"
     ],
     "description": "Set a barbell in a rack just below shoulder height. Step under it so the bar sits across your upper traps, unrack, and step back with a shoulder-width stance. Descend by breaking at the hips and knees simultaneously until your thighs are parallel or below, then drive back up through your heels."
   },
@@ -1398,7 +1501,10 @@
       "Stationary Lunge",
       "Dumbbell Stationary Lunge",
       "DB Stationary Lunge",
-      "Static DB Lunge"
+      "Static DB Lunge",
+      "Dumbbell Static Lunge",
+      "DB Standing Lunge",
+      "Dumbbell Lunge Standing"
     ],
     "description": "Hold dumbbells at your sides and take a large step forward. Lower your rear knee toward the floor, keeping your front knee over your ankle, then push back to the starting position."
   },
@@ -1442,7 +1548,10 @@
       "Walking Lunge",
       "Dumbbell Walking Lunge",
       "DB Walking Lunge",
-      "Walking DB Lunge"
+      "Walking DB Lunge",
+      "Walking Lunges",
+      "Dumbbell Walking Lunges",
+      "DB Walking Lunges"
     ],
     "description": "Hold dumbbells at your sides. Step forward into a lunge and lower your rear knee close to the floor, then bring your rear foot forward to step into the next lunge. Continue alternating legs as you travel forward."
   },
@@ -1486,7 +1595,9 @@
     "aliases": [
       "Wide Stance Leg Press",
       "Sumo Leg Press",
-      "Leg Presses (Wide)"
+      "Leg Presses (Wide)",
+      "Wide Leg Press",
+      "Wide Stance Press"
     ],
     "description": "Sit in a leg press with feet placed wide on the outer edges of the platform. Lower and press the weight, placing greater emphasis on the inner thigh and glutes."
   },
@@ -1530,7 +1641,9 @@
     "aliases": [
       "Narrow Stance Leg Press",
       "Feet Together Leg Press",
-      "Leg Presses (Narrow)"
+      "Leg Presses (Narrow)",
+      "Narrow Leg Press",
+      "Close Stance Leg Press"
     ],
     "description": "Sit in a leg press with feet placed close together in the center of the platform. Press the weight upward, emphasizing the outer quad with the narrower stance."
   },
@@ -1574,7 +1687,10 @@
     "aliases": [
       "Good Morning",
       "Barbell Good Morning",
-      "BB Good Morning"
+      "BB Good Morning",
+      "Good Mornings",
+      "Barbell Good Mornings",
+      "BB Good Morning Exercise"
     ],
     "description": "Stand with a barbell across your upper back and feet shoulder-width apart. Hinge at the hips with a slight knee bend until your torso is nearly parallel to the floor, then drive back up through your hips."
   },
@@ -1612,7 +1728,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Seated Leg Curl",
-      "Seated Hamstring Curl"
+      "Seated Hamstring Curl",
+      "Seated Leg Curls",
+      "Seated Hamstring Curls",
+      "Seated Machine Leg Curl"
     ],
     "description": "Sit at a leg curl machine with the pad resting on top of your lower legs. Flex your knees by pulling your heels downward, contracting the hamstrings. Return under control."
   },
@@ -1650,7 +1769,10 @@
     "gifQuality": "weak",
     "aliases": [
       "Standing Leg Curl",
-      "One-Leg Curl"
+      "One-Leg Curl",
+      "Standing Leg Curls",
+      "Single Leg Curl",
+      "Standing Hamstring Curl"
     ],
     "description": "Stand at a standing leg curl machine and place the pad behind one ankle. Curl your heel toward your glute by flexing the hamstring, then lower with control. Work each leg independently."
   },
@@ -1698,7 +1820,10 @@
       "BB Overhead Press",
       "BB Shoulder Press",
       "OHP",
-      "Military Press"
+      "Military Press",
+      "Barbell Press",
+      "Overhead Press Barbell",
+      "BB Military Press"
     ],
     "description": "Hold a barbell at shoulder height with elbows forward and slightly below the bar. Press overhead to full extension, then lower back to the start. Can be performed seated or standing."
   },
@@ -1738,7 +1863,10 @@
     "aliases": [
       "Cable Fly",
       "Cable Chest Fly",
-      "Cable Crossover"
+      "Cable Crossover",
+      "Cable Flyes",
+      "Cable Chest Flyes",
+      "Standing Cable Fly"
     ],
     "description": "Stand between two cable stations with handles set at chest height. Pull both handles together in front of your chest in a wide arc, squeezing at the center. Control the return to the stretched position."
   },
@@ -1787,7 +1915,10 @@
       "DB Shoulder Press",
       "Dumbbell OHP",
       "Dumbbell Overhead Press",
-      "OHP"
+      "OHP",
+      "DB Shoulder Press Standing",
+      "Dumbbell Overhead Shoulder Press",
+      "Dumbbell Press"
     ],
     "description": "Sit or stand holding dumbbells at shoulder height with palms facing forward. Press both dumbbells overhead until arms are fully extended, then lower back to shoulder height."
   },
@@ -1829,7 +1960,10 @@
     "aliases": [
       "Reverse Pec Deck",
       "Rear Delt Machine Fly",
-      "Reverse Fly Machine"
+      "Reverse Fly Machine",
+      "Reverse Pec Deck Fly",
+      "Machine Reverse Fly",
+      "Rear Delt Fly Machine"
     ],
     "description": "Sit facing the pad of a pec deck machine and grip the handles from the front. Open your arms outward in a reverse fly motion, squeezing the rear delts and rhomboids."
   },
@@ -1870,7 +2004,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Lying Leg Raise",
-      "Floor Leg Raise"
+      "Floor Leg Raise",
+      "Lying Leg Raises",
+      "Floor Leg Raises",
+      "Lying Leg Lift"
     ],
     "description": "Lie flat on your back with legs extended. Keeping legs straight or slightly bent, raise them to 90 degrees, then lower slowly without letting your heels touch the floor."
   },
@@ -1911,7 +2048,10 @@
     "gifQuality": "none",
     "aliases": [
       "Standing Leg Raise",
-      "Standing Knee Raise"
+      "Standing Knee Raise",
+      "Standing Leg Raises",
+      "Standing Knee Raises",
+      "Vertical Leg Raise"
     ],
     "description": "Stand upright while holding a stable support for balance. Raise one leg forward in a controlled manner while keeping your torso upright, then lower and repeat before switching sides."
   },
@@ -1954,7 +2094,10 @@
     "aliases": [
       "EZ Bar Upright Row",
       "Upright Row EZ Bar",
-      "Row"
+      "Row",
+      "EZ-Bar Upright Row",
+      "SZ Bar Upright Row",
+      "Cambered Bar Upright Row"
     ],
     "description": "Hold an EZ-bar in front of your thighs with an overhand grip. Pull the bar straight up toward your chest by raising your elbows to shoulder height, then lower under control."
   },
@@ -1996,7 +2139,10 @@
     "aliases": [
       "Back Extension",
       "Hyperextension",
-      "Lower Back Extension"
+      "Lower Back Extension",
+      "Back Extensions",
+      "Hyperextensions",
+      "45 Degree Back Extension"
     ],
     "description": "Position yourself face-down on a hyperextension bench with your hips at the top pad. Lower your torso toward the floor, then raise back up until your body forms a straight line. Avoid hyperextending beyond neutral."
   },
@@ -2036,7 +2182,10 @@
       "Cable Curl",
       "Cable Bicep Curl",
       "Low Cable Curl",
-      "Biceps Curl With Cable"
+      "Biceps Curl With Cable",
+      "Cable Biceps Curl",
+      "Standing Cable Curl",
+      "Cable Bicep Curls"
     ],
     "description": "Stand at a low pulley cable with an underhand grip on the bar. Curl the handle toward your shoulders while keeping your elbows stationary. Lower under control."
   },
@@ -2079,7 +2228,9 @@
       "Hack Squat",
       "Machine Hack Squat",
       "Hackenschmidt Squat",
-      "Squat"
+      "Squat",
+      "Hack Squats",
+      "Linear Hack Squat"
     ],
     "description": "Step onto the Hackenschmidt machine platform and position your shoulders under the pads with feet shoulder-width apart. Lower your body by bending your knees to 90 degrees, then drive through your feet to press back to the starting position."
   },
@@ -2117,7 +2268,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Cable Hammer Curl",
-      "Rope Hammer Curl"
+      "Rope Hammer Curl",
+      "Cable Hammer Curls",
+      "Rope Hammer Curls",
+      "Cable Rope Hammer Curl"
     ],
     "description": "Attach a rope to a low pulley cable. Stand facing the machine and curl the rope upward with a neutral grip, keeping elbows at your sides. Squeeze at the top and lower with control."
   },
@@ -2155,7 +2309,10 @@
     "gifQuality": "weak",
     "aliases": [
       "Machine Tricep Extension",
-      "Tricep Press Machine"
+      "Tricep Press Machine",
+      "Machine Triceps Extension",
+      "Seated Tricep Machine",
+      "Triceps Pressdown Machine"
     ],
     "description": "Sit at a triceps machine and grip the handles with elbows bent. Push the handles downward by fully extending your elbows, then return under control."
   },
@@ -2202,7 +2359,10 @@
       "Assisted Chin-Up",
       "Chinup",
       "Pullup",
-      "Pullups"
+      "Pullups",
+      "Assisted Pull-Ups",
+      "Machine Pullup",
+      "Assisted Pullup"
     ],
     "description": "Use an assisted pull-up machine with a counterweight to reduce the load. Grip the handles and pull your body upward until your chin clears the bar, then lower with control."
   },
@@ -2240,7 +2400,10 @@
     "gifQuality": "none",
     "aliases": [
       "Multi-Gym Machine",
-      "Cable Machine"
+      "Cable Machine",
+      "Multi Gym Machine",
+      "Functional Trainer",
+      "Cable Crossover Machine"
     ],
     "description": "Perform an exercise on a multi-gym cable machine. The specific movement depends on attachment and cable position selected."
   },
@@ -2284,7 +2447,10 @@
       "Chest Supported Row",
       "Prone Row",
       "Bench Row",
-      "Row"
+      "Row",
+      "Prone Barbell Row",
+      "Lying Bench Row",
+      "Prone Bench Row"
     ],
     "description": "Lie face-down on a flat bench and let the dumbbells hang at arm's length. Row both dumbbells toward your hips by driving your elbows back, fully retracting your shoulder blades."
   },
@@ -2327,7 +2493,9 @@
     "aliases": [
       "Long Pulley Row",
       "Cable Seated Row",
-      "Row"
+      "Row",
+      "Low Row Cable",
+      "Seated Low Cable Row"
     ],
     "description": "Sit at a long cable pulley station with your legs slightly bent. Pull the handle toward your abdomen by driving your elbows back, squeezing the shoulder blades. Extend your arms fully on the return."
   },
@@ -2370,7 +2538,9 @@
     "aliases": [
       "Narrow Grip Cable Row",
       "Close Grip Seated Row",
-      "Row"
+      "Row",
+      "Close Grip Cable Row",
+      "Narrow Cable Row"
     ],
     "description": "Sit at a cable pulley using a close-grip attachment. Row the handle toward your lower ribcage by retracting your shoulder blades and driving your elbows back. Return to full extension."
   },
@@ -2412,7 +2582,10 @@
       "Chest Fly",
       "Flat Dumbbell Fly",
       "DB Fly",
-      "Flat DB Fly"
+      "Flat DB Fly",
+      "Dumbbell Flyes",
+      "DB Chest Fly",
+      "Flat Dumbbell Flyes"
     ],
     "description": "Lie on a flat bench with dumbbells held above your chest, elbows slightly bent. Lower the dumbbells in a wide arc until you feel a stretch in your chest, then bring them back together above you."
   },
@@ -2452,7 +2625,9 @@
     "aliases": [
       "Decline Dumbbell Fly",
       "Decline Chest Fly",
-      "Decline DB Fly"
+      "Decline DB Fly",
+      "Decline Dumbbell Flyes",
+      "Decline DB Chest Fly"
     ],
     "description": "Lie on a decline bench holding dumbbells above your lower chest. Lower the dumbbells in a wide arc until you feel a stretch, then bring them back up in the same arc. Targets the lower chest."
   },
@@ -2495,7 +2670,9 @@
     "aliases": [
       "Smith Machine Upright Row",
       "Machine Upright Row",
-      "Row"
+      "Row",
+      "Smith Upright Row",
+      "Smith Machine Wide Row"
     ],
     "description": "Set a Smith machine bar at thigh height and grip it with a shoulder-width overhand grip. Pull the bar straight up toward your chest by leading with your elbows until they reach shoulder height, then lower."
   },
@@ -2572,7 +2749,9 @@
     "gifQuality": "strong",
     "aliases": [
       "Cable Lateral Raise",
-      "One-Arm Cable Lateral Raise"
+      "One-Arm Cable Lateral Raise",
+      "One Arm Cable Raise",
+      "Cable Side Raise"
     ],
     "description": "Stand beside a low cable pulley and grip the handle with the far hand across your body. Raise your arm out to the side until parallel to the floor, then lower with control."
   },
@@ -2611,7 +2790,10 @@
     "aliases": [
       "Barbell Shrug",
       "Trap Shrug",
-      "BB Shrug"
+      "BB Shrug",
+      "Barbell Shrugs",
+      "BB Shrugs",
+      "Standing Barbell Shrug"
     ],
     "description": "Stand holding a barbell in front of your thighs. Elevate your shoulders straight upward as high as possible, squeezing your traps at the top. Lower under control without rolling the shoulders."
   },
@@ -2649,7 +2831,10 @@
     "gifQuality": "exact",
     "aliases": [
       "Dumbbell Shrug",
-      "DB Shrug"
+      "DB Shrug",
+      "Dumbbell Shrugs",
+      "DB Shrugs",
+      "Standing Dumbbell Shrug"
     ],
     "description": "Stand holding dumbbells at your sides. Shrug both shoulders straight upward toward your ears, squeezing the traps at the top. Lower slowly and repeat."
   },
@@ -2692,7 +2877,9 @@
     "aliases": [
       "Machine Shoulder Press",
       "Machine OHP",
-      "OHP"
+      "OHP",
+      "Machine Overhead Press",
+      "Seated Machine Overhead Press"
     ],
     "description": "Sit at a shoulder press machine and grip the handles at shoulder height. Press the handles upward to full arm extension, then return under control."
   },
@@ -2731,7 +2918,10 @@
     "aliases": [
       "Lying Leg Curl",
       "Prone Leg Curl",
-      "Hamstring Curl"
+      "Hamstring Curl",
+      "Lying Leg Curls",
+      "Prone Leg Curls",
+      "Lying Hamstring Curl"
     ],
     "description": "Lie face-down on a leg curl machine with the pad behind your ankles. Curl your heels toward your glutes by flexing the hamstrings, then lower under control."
   },
@@ -2776,7 +2966,9 @@
     "aliases": [
       "Smith Machine Shoulder Press",
       "Multi-Press OHP",
-      "OHP"
+      "OHP",
+      "Smith Machine Overhead Press",
+      "Smith Press OHP"
     ],
     "description": "Sit under a Smith machine bar set at shoulder height. Unrack and press the bar overhead along its fixed track, then lower back to shoulder height."
   },
@@ -2861,7 +3053,10 @@
       "Single Leg Squat",
       "Pistol",
       "One-Leg Squat",
-      "Squat"
+      "Squat",
+      "Pistol Squats",
+      "One Legged Squat",
+      "Single-Leg Squat"
     ],
     "description": "Stand on one leg with the other leg extended forward. Lower yourself to full depth on the standing leg while keeping the extended leg off the floor, then drive back up."
   },
@@ -2907,7 +3102,10 @@
       "Block Pull",
       "Conventional DL",
       "DL",
-      "Pin Pull"
+      "Pin Pull",
+      "Rack Deadlifts",
+      "Rack Pulls",
+      "Block Pulls"
     ],
     "description": "Set a barbell on rack pins at knee height or above. Grip and deadlift the bar from this elevated position to lockout, then lower back to the pins. Allows heavier loading of the upper pull and lockout."
   },
@@ -2947,7 +3145,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Tricep Dip",
-      "Bodyweight Dip"
+      "Bodyweight Dip",
+      "Triceps Dip",
+      "Tricep Dips",
+      "Parallel Bar Tricep Dip"
     ],
     "description": "Support yourself on parallel bars and lower your body by bending at the elbows while keeping your torso upright. Push back to the start by extending your arms. Keeping the body vertical places maximal stress on the triceps."
   },
@@ -2991,7 +3192,10 @@
       "Incline Barbell Press",
       "Incline BB Press",
       "Bench Press",
-      "Incline Press"
+      "Incline Press",
+      "Incline Barbell Bench Press",
+      "Incline BB Bench Press",
+      "Barbell Incline Press"
     ],
     "description": "Lie on an incline bench set to 30–45 degrees and grip the barbell slightly wider than shoulder-width. Lower the bar to your upper chest, then press back up to full extension. Emphasizes the upper chest."
   },
@@ -3033,7 +3237,10 @@
     "aliases": [
       "Barbell High Pull",
       "Snatch High Pull",
-      "BB High Pull"
+      "BB High Pull",
+      "High Pulls",
+      "Barbell High Pulls",
+      "Olympic High Pull"
     ],
     "description": "Grip a barbell at hip height and pull it explosively upward toward your chin while rising onto your toes, leading with your elbows. Used to develop the pulling power for Olympic lifts."
   },
@@ -3074,7 +3281,9 @@
     "gifQuality": "none",
     "aliases": [
       "Incline Plank Tap",
-      "Incline Plank Reach"
+      "Incline Plank Reach",
+      "Incline Plank Shoulder Taps",
+      "Elevated Plank Touch"
     ],
     "description": "Start in an incline plank with hands on a bench. Alternately reach one hand forward to touch the bench, maintaining plank alignment throughout and minimizing hip rotation."
   },
@@ -3116,7 +3325,10 @@
     "aliases": [
       "Hanging Leg Raise",
       "Hanging Knee Raise",
-      "HLR"
+      "HLR",
+      "Hanging Leg Lifts",
+      "Hanging Knee Raises",
+      "Hanging Knee Lift"
     ],
     "description": "Hang from a pull-up bar with an overhand grip and arms fully extended. Keeping legs straight or slightly bent, raise them until they are parallel to the floor or higher by contracting your abs and hip flexors. Lower under control without swinging."
   },
@@ -3155,7 +3367,10 @@
     "aliases": [
       "Wood Chop",
       "Cable Wood Chop",
-      "Diagonal Chop"
+      "Diagonal Chop",
+      "Cable Woodchops",
+      "Woodchops",
+      "Cable Wood Chop Exercise"
     ],
     "description": "Set a cable pulley to chest height or higher. Stand with your side to the machine and grip the handle with both hands. Keep your hips stable and facing forward as you pull the handle diagonally across your body in a chopping motion, rotating through the core. Return under control."
   },
@@ -3198,7 +3413,10 @@
     "aliases": [
       "Incline Push-Up",
       "Elevated Push-Up",
-      "Incline Pushups"
+      "Incline Pushups",
+      "Hands Elevated Pushup",
+      "Box Pushup",
+      "Box Push-Ups"
     ],
     "description": "Place your hands on an elevated surface like a bench, with body in a straight line. Lower your chest toward the surface by bending the elbows, then push back up. Easier than standard push-ups, emphasizes lower chest."
   },
@@ -3236,7 +3454,10 @@
     "gifQuality": "weak",
     "aliases": [
       "Sprinter Crunch",
-      "Bicycle Crunch"
+      "Bicycle Crunch",
+      "Sprinter Situp",
+      "Sprinter Ab Crunch",
+      "Sprinter Sit-Up"
     ],
     "description": "Lie on your back and alternately crunch up while bringing one knee toward your chest and the opposite elbow toward it. Rotate to each side in a controlled cycling motion."
   },
@@ -3276,7 +3497,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Oblique Crunch",
-      "Side Crunch"
+      "Side Crunch",
+      "Side Crunches",
+      "Oblique Crunches",
+      "Lateral Crunch"
     ],
     "description": "Lie on your back with knees rolled to one side. Crunch your upper body upward and slightly toward your raised knees, contracting the obliques. Lower and repeat on both sides."
   },
@@ -3316,7 +3540,10 @@
       "Quad Extension",
       "Knee Extension",
       "Machine Leg Extension",
-      "Leg Extensions"
+      "Leg Extensions",
+      "Seated Leg Extension",
+      "Seated Leg Extensions",
+      "Seated Quad Extension"
     ],
     "description": "Sit in a leg extension machine with the pad resting on your lower shins. Extend both legs until straight, contracting the quadriceps at the top. Lower under control."
   },
@@ -3363,7 +3590,10 @@
       "Chinup",
       "Pullup",
       "Pullups",
-      "Chinups"
+      "Chinups",
+      "Underhand Chin-Up",
+      "Supinated Pullup",
+      "Underhand Pullup"
     ],
     "description": "Hang from a bar with an underhand grip at shoulder width. Pull yourself up until your chin is above the bar, then lower under control."
   },
@@ -3403,7 +3633,9 @@
     "aliases": [
       "Rotating Push-Up",
       "Perfect Pushup",
-      "Perfect Push Up"
+      "Perfect Push Up",
+      "Rotating Pushups",
+      "Push-Up Bars Pushup"
     ],
     "description": "Perform a push-up using rotating handles that allow your wrists to rotate naturally. At the bottom of the rep, rotate the handles outward to externally rotate the shoulders, engaging more chest fibers."
   },
@@ -3445,7 +3677,10 @@
       "Jump Squat",
       "Squat Jump",
       "Explosive Squat",
-      "Squat"
+      "Squat",
+      "Jump Squats",
+      "Squat Jumps Exercise",
+      "Plyometric Squat"
     ],
     "description": "Perform a bodyweight squat and at the top of the movement, explode upward into a jump. Land softly, absorbing the impact by bending the knees, and immediately descend into the next rep."
   },
@@ -3486,7 +3721,9 @@
     "gifQuality": "none",
     "aliases": [
       "Close Grip Bench Tricep Press",
-      "Bench Press"
+      "Bench Press",
+      "Close Grip Bench Press",
+      "Narrow Grip Bench Press"
     ],
     "description": "Lie on a bench holding a barbell with a narrow grip directly above your chest. Lower the bar to your chest by bending the elbows close to your sides, then press back up focusing on tricep engagement."
   },
@@ -3526,7 +3763,9 @@
     "aliases": [
       "Lat Pulldown Straight Back",
       "Upright Lat Pulldown",
-      "Lat Pull Down (Straight Back)"
+      "Lat Pull Down (Straight Back)",
+      "Vertical Lat Pulldown",
+      "Straight Back Pulldown"
     ],
     "description": "Sit upright at a lat pulldown station and pull the bar to your upper chest while keeping your torso vertical. Drive your elbows straight down without leaning back. Return under control."
   },
@@ -3565,7 +3804,9 @@
     "gifQuality": "weak",
     "aliases": [
       "Lat Pulldown Leaning Back",
-      "Lat Pull Down (Leaning Back)"
+      "Lat Pull Down (Leaning Back)",
+      "Leaning Back Lat Pulldown",
+      "Leaning Lat Pulldown"
     ],
     "description": "Sit at a lat pulldown and lean back slightly to 70–80 degrees. Pull the bar down toward your upper chest, leading with your elbows. The slight lean increases the range of motion through the lats."
   },
@@ -3608,7 +3849,10 @@
     "gifQuality": "exact",
     "aliases": [
       "Power Clean",
-      "Clean"
+      "Clean",
+      "Power Cleans",
+      "Barbell Power Clean",
+      "BB Power Clean"
     ],
     "description": "Start with a barbell over mid-foot. Explosively pull the bar upward by extending your hips and knees, then drop under the bar and catch it in a front rack position. Stand to complete the rep."
   },
@@ -3654,7 +3898,10 @@
     "gifQuality": "weak",
     "aliases": [
       "Push Press",
-      "Leg Drive Press"
+      "Leg Drive Press",
+      "Push Presses",
+      "Barbell Push Press",
+      "BB Push Press"
     ],
     "description": "Hold a barbell at shoulder height, dip slightly at the knees, then explosively drive your legs to propel the bar overhead. Lock out the arms at the top. The leg drive allows heavier pressing loads."
   },
@@ -3700,7 +3947,10 @@
       "Front Squat",
       "Barbell Front Squat",
       "BB Front Squat",
-      "Squat"
+      "Squat",
+      "Front Squats Barbell",
+      "Barbell Front Squats",
+      "BB Front Squats"
     ],
     "description": "Hold a barbell in a front rack position across your shoulders. Squat down with an upright torso until your thighs are parallel to the floor, then drive back up. Requires significant ankle and thoracic mobility."
   },
@@ -3744,7 +3994,10 @@
       "Flat Bench Press",
       "Barbell Bench Press",
       "BB Bench Press",
-      "Bench Press"
+      "Bench Press",
+      "Barbell Bench Press Flat",
+      "BB Bench",
+      "Flat Barbell Bench"
     ],
     "description": "Lie on a flat bench with feet flat on the floor and grip the barbell slightly wider than shoulder-width. Lower the bar to your mid-chest with control, then press it back up to full arm extension."
   },
@@ -3783,7 +4036,10 @@
     "aliases": [
       "Preacher Curl",
       "Scott Curl",
-      "EZ Bar Preacher Curl"
+      "EZ Bar Preacher Curl",
+      "Preacher Bicep Curl",
+      "Preacher Curls EZ Bar",
+      "Barbell Preacher Curl"
     ],
     "description": "Place an EZ-bar on the preacher bench rest. Lean over the pad and grip the bar with an underhand grip, resting the backs of your upper arms against the pad. Curl the bar up to full flexion, then lower slowly to full extension without letting the arms go slack."
   },
@@ -3826,7 +4082,10 @@
     "aliases": [
       "Dumbbell Pullover",
       "Cross-Bench Pullover",
-      "DB Pullover"
+      "DB Pullover",
+      "Dumbbell Pullovers",
+      "Cross Bench Pullover",
+      "DB Chest Pullover"
     ],
     "description": "Grasp a dumbbell with both palms flat against the underside of the top plate and thumbs wrapped around the handle. Lie across a bench with only your shoulders supported and hips lowered. Lower the dumbbell in an arc behind your head until you feel a stretch in your chest and lats, then pull it back."
   },
@@ -3872,7 +4131,10 @@
       "Pushup",
       "Push-Up",
       "Standard Push-Up",
-      "Push Ups"
+      "Push Ups",
+      "Pushups",
+      "Floor Push-Ups",
+      "Hand Push-Up"
     ],
     "description": "A fundamental bodyweight exercise targeting the chest, triceps, and shoulders. Start in a high plank with hands slightly wider than shoulder-width and body forming a straight line. Lower your chest toward the floor by bending your elbows, then push back to the start."
   },
@@ -3911,7 +4173,9 @@
     "gifQuality": "weak",
     "aliases": [
       "Reverse Cable Curl",
-      "Pronated Cable Curl"
+      "Pronated Cable Curl",
+      "Reverse Grip Cable Curl",
+      "Overhand Cable Curls"
     ],
     "description": "Attach a straight bar to a low pulley and grip it with an overhand grip. Curl the bar upward while keeping your elbows at your sides."
   },
@@ -3959,7 +4223,10 @@
       "Dead Stop Row",
       "Pendelay Rows",
       "Row",
-      "Strict BB Row"
+      "Strict BB Row",
+      "Barbell Pendlay Row",
+      "Pendlay Barbell Row",
+      "Strict Row"
     ],
     "description": "Set a barbell on the floor or just above it. With a flat back parallel to the floor, explosively row the bar to your lower chest, letting it return to a dead stop on the floor between each rep."
   },
@@ -4004,7 +4271,10 @@
     "gifQuality": "none",
     "aliases": [
       "Standing Push-Up",
-      "Wall Pushup"
+      "Wall Pushup",
+      "Wall Pushups",
+      "Standing Wall Pushup",
+      "Vertical Pushup"
     ],
     "description": "Stand facing a wall and place your hands on it at shoulder height. Bend your elbows to bring your chest toward the wall, then push back to the start. A regression of the standard push-up."
   },
@@ -4043,7 +4313,9 @@
     "gifQuality": "weak",
     "aliases": [
       "Lat Pulldown",
-      "Wide Grip Lat Pulldown"
+      "Wide Grip Lat Pulldown",
+      "Wide Lat Pulldown",
+      "Wide Grip Pulldowns"
     ],
     "description": "Sit at a lat pulldown station and grip the bar wider than shoulder-width with arms fully extended, feeling a stretch in your lats. Keep your shoulders depressed — do not shrug — as you pull the bar to your upper chest by driving your elbows straight down. Return under control to the fully extended position."
   },
@@ -4081,7 +4353,10 @@
     "gifQuality": "strong",
     "aliases": [
       "One-Arm Preacher Curl",
-      "Single Arm Scott Curl"
+      "Single Arm Scott Curl",
+      "Dumbbell Single Arm Curl",
+      "Single Arm Preacher Curls",
+      "One-Arm Preacher Curls"
     ],
     "description": "Rest the back of one upper arm on the preacher pad and hold a dumbbell. Curl the weight up to full flexion and lower slowly, working each arm independently."
   },
@@ -4121,7 +4396,9 @@
     "aliases": [
       "Incline Dumbbell Fly",
       "Incline Chest Fly",
-      "Incline DB Fly"
+      "Incline DB Fly",
+      "Incline DB Chest Fly",
+      "Incline Dumbbell Flyes"
     ],
     "description": "Lie on an incline bench holding dumbbells above your upper chest. Lower the dumbbells outward in a wide arc until you feel a deep stretch, then squeeze them back together above you."
   },
@@ -4161,7 +4438,10 @@
     "aliases": [
       "Cable Crossover Fly",
       "High Cable Fly",
-      "High to Low Cable Fly"
+      "High to Low Cable Fly",
+      "Cable Crossover Flyes",
+      "Standing Cable Crossover",
+      "High Cable Crossovers"
     ],
     "description": "Set cables above shoulder height and stand in the center. Pull the handles together and downward in an arc, crossing them slightly at the bottom. Return to the start position under control."
   },
@@ -4202,7 +4482,10 @@
       "Reverse Curl",
       "Overhand Barbell Curl",
       "Pronated Curl",
-      "Overhand BB Curl"
+      "Overhand BB Curl",
+      "Reverse Barbell Curl",
+      "Reverse BB Curl",
+      "Reverse Grip Curl"
     ],
     "description": "Hold a barbell with an overhand grip and arms fully extended. Curl the bar upward while keeping the overhand grip. Lower under control."
   },
@@ -4247,7 +4530,10 @@
       "SLDL",
       "Straight Leg Deadlift",
       "Conventional DL",
-      "DL"
+      "DL",
+      "Stiff Legged Deadlift",
+      "Straight Leg Deadlifts",
+      "Barbell Stiff Leg Deadlift"
     ],
     "description": "Hold a barbell and hinge at the hips with legs nearly straight. Lower the bar toward the floor while maintaining a flat back, feeling a stretch in the hamstrings, then return to standing by extending the hips."
   },
@@ -4291,7 +4577,10 @@
       "Incline DB Press",
       "Bench Press",
       "Incline DB Bench Press",
-      "Incline Dumbbell Press"
+      "Incline Dumbbell Press",
+      "Incline Dumbbell Bench",
+      "Incline DB Chest Press",
+      "Dumbbell Incline Press"
     ],
     "description": "Lie on an incline bench holding dumbbells at chest height with palms facing forward or toward each other. Press the dumbbells upward and slightly inward until fully extended, then lower back to the start."
   },
@@ -4331,7 +4620,10 @@
     "aliases": [
       "Chest Press Machine",
       "Machine Press",
-      "Hammer Strength Chest Press"
+      "Hammer Strength Chest Press",
+      "Leverage Chest Press",
+      "Plate Loaded Chest Press",
+      "Machine Chest Press"
     ],
     "description": "Sit at a chest press machine with back flat against the pad and handles at chest level. Press the handles forward until arms are extended, then return under control."
   },
@@ -4374,7 +4666,10 @@
       "Reverse Grip Pulldown",
       "Supinated Lat Pulldown",
       "Underhand Pulldown",
-      "Underhand Lat Pull Down"
+      "Underhand Lat Pull Down",
+      "Reverse Grip Lat Pulldown",
+      "Underhand Pulldowns",
+      "Underhand Grip Lat Pulldown"
     ],
     "description": "Grip the lat pulldown bar with a shoulder-width underhand grip. Pull the bar to your upper chest, driving your elbows down. The supinated grip increases bicep involvement."
   },
@@ -4415,7 +4710,10 @@
       "Close Grip Pulldown",
       "V-Bar Pulldown",
       "Neutral Grip Lat Pulldown",
-      "Close-Grip Lat Pull Down"
+      "Close-Grip Lat Pull Down",
+      "Narrow Grip Lat Pulldown",
+      "V Bar Lat Pulldown",
+      "V-Bar Lat Pulldown"
     ],
     "description": "Attach a V-bar or close-grip handle to a lat pulldown machine. Pull the handle to your upper chest while keeping your torso upright, squeezing your shoulder blades together at the bottom."
   },
@@ -4458,7 +4756,10 @@
       "Hammer Strength Row",
       "Iso Row",
       "Machine ISO Row",
-      "Row"
+      "Row",
+      "Plate Loaded Iso Row",
+      "Leverage Iso Row",
+      "Iso Row Machine"
     ],
     "description": "Sit at an iso-lateral row machine and pull each handle independently toward your torso. Drive your elbow back and fully retract the shoulder blade, then return under control."
   },
@@ -4499,7 +4800,10 @@
     "aliases": [
       "Rope Straight Arm Pulldown",
       "Rope Cable Pullover",
-      "Straight-Arm Pull Down (Rope Attachment)"
+      "Straight-Arm Pull Down (Rope Attachment)",
+      "Straight Arm Rope Pulldown",
+      "Cable Rope Pullover",
+      "Rope Pullover"
     ],
     "description": "Attach a rope to a high pulley. Grip the two ends of the rope with arms extended straight out in front of you. Without bending the elbows, pull the rope downward in an arc toward your thighs by extending through the shoulder joint. Return slowly to the stretched position."
   },
@@ -4540,7 +4844,9 @@
     "aliases": [
       "Straight Arm Pulldown",
       "Cable Pullover",
-      "Straight-Arm Pull Down (Bar Attachment)"
+      "Straight-Arm Pull Down (Bar Attachment)",
+      "Straight Arm Cable Pulldown",
+      "Straight Arm Bar Pulldown"
     ],
     "description": "Stand facing a high cable pulley and grip a straight bar with arms extended. Without bending your elbows, pull the bar down in an arc toward your thighs, engaging the lats. Return under control."
   },
@@ -4582,7 +4888,10 @@
     "aliases": [
       "Close Grip Bench",
       "Narrow Bench Press",
-      "Bench Press"
+      "Bench Press",
+      "Close Grip Barbell Bench",
+      "CG Bench Press",
+      "Close Grip BB Bench"
     ],
     "description": "Lie on a flat bench with hands placed close together on the bar. Lower the bar to your lower chest with elbows tucked in, then press back up driving through the triceps."
   },
@@ -4623,7 +4932,10 @@
     "aliases": [
       "Smith Machine Close Grip Bench",
       "Machine Narrow Bench Press",
-      "Bench Press"
+      "Bench Press",
+      "Smith Close Grip Bench",
+      "Smith Narrow Bench Press",
+      "Smith CG Bench Press"
     ],
     "description": "Lie under a Smith machine bar and grip it with hands close together. Lower the bar to your lower chest with elbows tucked, then press back up. The fixed track removes balance demands and isolates the triceps."
   },
@@ -4668,7 +4980,10 @@
     "aliases": [
       "20-Rep Squat",
       "Breathing Squat",
-      "Squat"
+      "Squat",
+      "20 Rep Squat",
+      "High Rep Squat",
+      "Breathing Squats"
     ],
     "description": "Perform a high-rep barbell squat set, typically 20 reps, taking several deep breaths between each rep. The extended set builds significant leg mass and cardiovascular conditioning."
   },
@@ -4716,7 +5031,10 @@
       "Arnold Dumbbell Press",
       "Rotating Shoulder Press",
       "Arnold DB Press",
-      "OHP"
+      "OHP",
+      "Arnold Overhead Press",
+      "Arnold Press Dumbbell",
+      "Seated Arnold Press"
     ],
     "description": "Start with dumbbells at chin height, palms facing you. As you press upward, rotate your palms outward so they face forward at the top. Reverse the rotation on the way down."
   },
@@ -4764,7 +5082,10 @@
       "Standing Press",
       "OHP",
       "Barbell OHP",
-      "BB OHP"
+      "BB OHP",
+      "Standing Barbell Military Press",
+      "Standing Barbell Overhead Press",
+      "Standing Overhead Press"
     ],
     "description": "Stand holding a barbell at collarbone height with a slightly wider than shoulder-width grip. Press the bar overhead to full arm extension, moving your head slightly back as the bar passes. Lower under control."
   },
@@ -4809,7 +5130,10 @@
       "Dumbbell Front Raise",
       "Barbell Front Raise",
       "BB Front Raise",
-      "DB Front Raise"
+      "DB Front Raise",
+      "Front Raise Dumbbell",
+      "DB Front Raises",
+      "Front Shoulder Raise"
     ],
     "description": "Hold dumbbells or a barbell in front of your thighs. Raise the weight straight forward to shoulder height with arms slightly bent, then lower under control."
   },
@@ -4851,7 +5175,10 @@
     "aliases": [
       "Rear Delt Fly",
       "Bent Over Rear Delt Raise",
-      "Reverse Fly"
+      "Reverse Fly",
+      "Rear Delt Flyes",
+      "Bent Over Lateral Raise",
+      "Rear Delt Dumbbell Fly"
     ],
     "description": "Hinge forward at the hips with a flat back, holding dumbbells hanging below you. Raise both dumbbells out to the sides in a reverse fly motion until your arms are parallel to the floor. Squeeze the rear delts at the top."
   },
@@ -4890,7 +5217,10 @@
     "aliases": [
       "Plank Hold",
       "Prone Plank",
-      "Forearm Plank"
+      "Forearm Plank",
+      "Planks",
+      "Front Plank",
+      "Pillar Hold"
     ],
     "description": "Rest on your forearms and toes with your body forming a straight line from head to heels. Brace your core and glutes to prevent your hips from sagging or rising. Hold for time."
   },
@@ -4934,7 +5264,9 @@
     "aliases": [
       "KB Swing",
       "Russian Swing",
-      "American Swing"
+      "American Swing",
+      "Kettlebell Swing",
+      "KB Swings"
     ],
     "description": "Stand with feet hip-width and a kettlebell between your feet. Hinge at the hips and swing the kettlebell back between your legs, then explosively drive your hips forward to swing it up to chest height."
   },
@@ -4978,7 +5310,9 @@
     "aliases": [
       "Seated Row Machine",
       "Horizontal Row Machine",
-      "Row"
+      "Row",
+      "Seated Low Row Machine",
+      "Plate Loaded Low Row"
     ],
     "description": "Sit at a row machine with your chest against the pad. Pull the handles toward your body by retracting your shoulder blades and driving your elbows back. Return under control."
   },
@@ -5024,7 +5358,9 @@
     "aliases": [
       "Seated Overhead Press",
       "Seated OHP",
-      "OHP"
+      "OHP",
+      "Seated Overhead Barbell Press",
+      "Seated BB Military Press"
     ],
     "description": "Sit on a bench holding a barbell at shoulder height with a shoulder-width grip. Press the bar overhead to full extension while maintaining a braced torso, then lower under control."
   },
@@ -5062,7 +5398,10 @@
     "gifQuality": "none",
     "aliases": [
       "Oblique Twist",
-      "Russian Twist"
+      "Russian Twist",
+      "Russian Twists",
+      "Seated Russian Twist",
+      "Weighted Russian Twist"
     ],
     "description": "Sit on the floor with knees bent, lean back slightly, and rotate your torso from side to side. For added difficulty, hold a weight and touch it to the floor on each side."
   },
@@ -5106,7 +5445,9 @@
     "aliases": [
       "Decline Push-Up",
       "Feet Elevated Push-Up",
-      "Decline Pushups"
+      "Decline Pushups",
+      "Feet Elevated Pushups",
+      "Hands Declined Pushups"
     ],
     "description": "Place your feet on an elevated surface and hands on the floor in push-up position. Lower your chest toward the floor, then push back up. The elevation shifts emphasis to the upper chest."
   },
@@ -5144,7 +5485,9 @@
     "gifQuality": "none",
     "aliases": [
       "External Rotation Cable",
-      "Shoulder External Rotation"
+      "Shoulder External Rotation",
+      "Standing Cable External Rotation",
+      "Shoulder Cable External Rotation"
     ],
     "description": "Stand beside a cable at elbow height with your elbow bent at 90 degrees close to your side. Rotate your forearm outward away from your body, then return under control. Targets the rotator cuff."
   },
@@ -5188,7 +5531,9 @@
     "aliases": [
       "Depth Jump",
       "Drop Jump",
-      "Box Drop Jump"
+      "Box Drop Jump",
+      "Depth Jump Exercise",
+      "Plyometric Depth Jump"
     ],
     "description": "Step off a box and immediately upon landing, jump upward as explosively as possible. The goal is to minimize ground contact time. Develops reactive strength and power."
   },
@@ -5225,7 +5570,9 @@
     "gifSource": "none",
     "gifQuality": "none",
     "aliases": [
-      "Bent Over High Pull"
+      "Bent Over High Pull",
+      "Bent Over High Pulls",
+      "Barbell Bent High Pull"
     ],
     "description": "Hinge forward and explosively pull dumbbells upward toward chin level, leading with the elbows above the hands. Combines a row with an upright pull."
   },
@@ -5267,7 +5614,10 @@
     "aliases": [
       "Pause Bench Press",
       "Paused Bench Press",
-      "Bench Press"
+      "Bench Press",
+      "Paused Bench",
+      "Pause Barbell Bench Press",
+      "Dead Stop Bench Press"
     ],
     "description": "Perform a standard bench press but pause for 1–2 seconds with the bar touching your chest before pressing. This eliminates the stretch-shortening reflex and increases chest and tricep recruitment."
   },
@@ -5314,7 +5664,10 @@
     "aliases": [
       "Barbell Snatch",
       "Olympic Snatch",
-      "BB Snatch"
+      "BB Snatch",
+      "Snatches",
+      "Olympic Snatch Lift",
+      "Barbell Snatch Lift"
     ],
     "description": "Pull a barbell from the floor to overhead in one explosive movement, catching it with arms locked out and landing in a squat or power position. A highly technical Olympic lift requiring significant mobility and coordination."
   },
@@ -5354,7 +5707,10 @@
       "Dumbbell Tricep Extension",
       "Single Dumbbell Overhead Extension",
       "DB Tricep Extension",
-      "Single DB Overhead Extension"
+      "Single DB Overhead Extension",
+      "Dumbbell Overhead Tricep Extension",
+      "DB Overhead Triceps Extension",
+      "Overhead Dumbbell Extension"
     ],
     "description": "Hold a dumbbell overhead with both hands gripping one end. Lower the dumbbell behind your head by bending the elbows, then press back up keeping your upper arms vertical."
   },
@@ -5392,7 +5748,10 @@
     "gifQuality": "exact",
     "aliases": [
       "Concentration Curl",
-      "Seated Concentration Curl"
+      "Seated Concentration Curl",
+      "Concentration Curls",
+      "Dumbbell Concentration Curls",
+      "One Arm Concentration Curl"
     ],
     "description": "Sit on a bench with your legs apart, bracing your elbow against the inside of your thigh. Curl the dumbbell up toward your shoulder, then lower under control."
   },
@@ -5431,7 +5790,10 @@
     "aliases": [
       "Dumbbell Side Bend",
       "Lateral Trunk Flexion",
-      "DB Side Bend"
+      "DB Side Bend",
+      "Dumbbell Side Bends",
+      "DB Side Bend Exercise",
+      "Standing Side Bend"
     ],
     "description": "Stand holding a dumbbell in one hand with arm at your side. Bend laterally toward the dumbbell side, then contract your opposite oblique to return upright. Keep your hips stationary."
   },
@@ -5470,7 +5832,10 @@
     "aliases": [
       "Tricep Kickback",
       "Dumbbell Kickback",
-      "DB Kickback"
+      "DB Kickback",
+      "Dumbbell Tricep Kickback",
+      "DB Tricep Kickbacks",
+      "Dumbbell Tricep Kickbacks"
     ],
     "description": "Hinge forward with a flat back and upper arm parallel to the floor. Extend your forearm backward until your arm is fully straight, squeezing the triceps at the top. Return slowly to the bent position."
   },
@@ -5513,7 +5878,10 @@
     "gifQuality": "strong",
     "aliases": [
       "L-Sit",
-      "L Hold"
+      "L Hold",
+      "L Sit",
+      "L-Sits",
+      "L Sit Hold"
     ],
     "description": "Support your body on parallel bars or the floor with arms straight and legs extended horizontally to form an L shape. Hold the position by engaging your core and hip flexors."
   },
@@ -5556,7 +5924,10 @@
     "aliases": [
       "Farmer's Walk",
       "Farmer's Carry",
-      "Heavy Carry"
+      "Heavy Carry",
+      "Farmers Walk",
+      "Farmer Carries",
+      "Farmers Carry"
     ],
     "description": "Hold heavy dumbbells or kettlebells at your sides and walk a set distance. Keep your shoulders back, core braced, and maintain an upright posture throughout. Builds grip, core, and whole-body stability."
   },
@@ -5599,7 +5970,9 @@
     "aliases": [
       "Duck Walk",
       "Squat Walk",
-      "Squat"
+      "Squat",
+      "Duck Walk Exercise",
+      "Low Squat Walk"
     ],
     "description": "Lower into a deep squat position and walk forward while staying low, keeping your torso upright. Develops hip mobility, quad strength, and stability in the deep squat position."
   },
@@ -5640,7 +6013,10 @@
     "gifQuality": "none",
     "aliases": [
       "Yoke Walk",
-      "Yoke Carry"
+      "Yoke Carry",
+      "Yoke Walks",
+      "Heavy Yoke Carry",
+      "Strongman Yoke Walk"
     ],
     "description": "Place a heavy yoke across your upper back and walk a set distance. The unstable load challenges your core and balance far more than a standard barbell squat."
   },
@@ -5679,7 +6055,9 @@
     "gifQuality": "none",
     "aliases": [
       "Axe Hold",
-      "Plate Hold"
+      "Plate Hold",
+      "Plate Isometric Hold",
+      "Straight Arm Plate Hold"
     ],
     "description": "Hold a dumbbell by one of its heads at arm's length, with the handle pointing forward like an axe. The offset center of mass challenges grip and forearm strength isometrically."
   },
@@ -5723,7 +6101,9 @@
     "aliases": [
       "Sled Push",
       "Car Push",
-      "Loaded Push"
+      "Loaded Push",
+      "Car Pushing",
+      "Weighted Vehicle Push"
     ],
     "description": "Push a heavy vehicle or sled from behind by driving through your legs and maintaining a rigid torso. An intense lower-body and conditioning exercise."
   },
@@ -5762,7 +6142,9 @@
     "gifQuality": "none",
     "aliases": [
       "Hercules Hold",
-      "Static Hold"
+      "Static Hold",
+      "Hercules Pillar Hold",
+      "Strongman Hercules Hold"
     ],
     "description": "Grip two loading pin handles attached to weights and hold them as long as possible. Tests grip strength and mental toughness."
   },
@@ -5802,7 +6184,10 @@
       "Incline Dumbbell Curl",
       "Incline Curl",
       "Incline Bicep Curl",
-      "Incline DB Curl"
+      "Incline DB Curl",
+      "Incline Dumbbell Bicep Curl",
+      "Incline DB Bicep Curl",
+      "Seated Incline Dumbbell Curl"
     ],
     "description": "Set an adjustable bench to 45–60 degrees. Sit back with arms hanging straight down, fully extended, holding a dumbbell in each hand. Curl the dumbbells upward without moving your upper arms, achieving a greater stretch at the bottom than a standing curl. Lower under control."
   },
@@ -5843,7 +6228,10 @@
     "aliases": [
       "Goblet Squat",
       "KB Goblet Squat",
-      "Squat"
+      "Squat",
+      "Dumbbell Goblet Squats",
+      "Goblet Squats",
+      "DB Goblet Squat"
     ],
     "description": "Hold a dumbbell or kettlebell vertically at your chest. Squat down until your elbows touch the inside of your knees, then drive back up. Excellent for teaching squat mechanics."
   },
@@ -5887,7 +6275,9 @@
     "aliases": [
       "Side to Side Push-Up",
       "Archer Push-Up",
-      "Side To Side Push Ups"
+      "Side To Side Push Ups",
+      "Archer Pushups",
+      "Side To Side Pushups"
     ],
     "description": "Start in a wide push-up position. Lower yourself toward one hand while straightening the opposite arm, then push back up and repeat to the other side."
   },
@@ -5928,7 +6318,10 @@
     "gifQuality": "exact",
     "aliases": [
       "Flutter Kick",
-      "Scissor Kick"
+      "Scissor Kick",
+      "Flutter Kick Exercise",
+      "Leg Flutter Kicks",
+      "Ab Flutter Kicks"
     ],
     "description": "Lie on your back with hands under your lower back for support. Raise both legs slightly off the floor and alternate kicking them up and down in a small, controlled flutter motion."
   },
@@ -5974,7 +6367,10 @@
     "gifQuality": "none",
     "aliases": [
       "High Knee Run",
-      "Running in Place"
+      "Running in Place",
+      "High Knees",
+      "High Knee Jump",
+      "High Knee Running"
     ],
     "description": "Run in place, driving your knees as high as possible with each step. Maintain an upright torso and pump your arms. Used for cardiovascular conditioning and hip flexor development."
   },
@@ -6012,7 +6408,10 @@
     "gifQuality": "none",
     "aliases": [
       "Zottman Curl",
-      "Z-Curl"
+      "Z-Curl",
+      "Zottman Curls",
+      "Dumbbell Zottman Curl",
+      "DB Zottman Curl"
     ],
     "description": "Start with a supinated grip and curl dumbbells to the top position. At the top, rotate your wrists to a pronated grip and lower the weight slowly."
   },
@@ -6051,7 +6450,9 @@
     "gifQuality": "exact",
     "aliases": [
       "Lateral to Front Raise",
-      "Combo Raise"
+      "Combo Raise",
+      "Front To Lateral Raise",
+      "Lateral Front Raise Combo"
     ],
     "description": "Hold dumbbells and raise them out to the side, then transition the movement into a front raise at the top. Lower forward and return to the sides."
   },
@@ -6091,7 +6492,9 @@
     "gifQuality": "strong",
     "aliases": [
       "Bear Crawl",
-      "Bear Walk"
+      "Bear Walk",
+      "Bear Crawls",
+      "Bear Crawl Exercise"
     ],
     "description": "Start on all fours with knees hovering just off the floor. Move forward by advancing opposite hand and foot simultaneously while keeping your back flat. Builds coordination and full-body strength."
   },
@@ -6129,7 +6532,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Seated Calf Press",
-      "Leg Press Calf Raise"
+      "Leg Press Calf Raise",
+      "Leg Press Calf Press",
+      "Leg Press Calf Raises",
+      "Machine Calf Press"
     ],
     "description": "Sit in a leg press machine and place only the balls of your feet on the lower edge of the platform. Press upward by plantarflexing the ankle, squeezing the calves at the top. Lower the heels for a full stretch."
   },
@@ -6168,7 +6574,9 @@
     "gifSource": "none",
     "gifQuality": "none",
     "aliases": [
-      "Cable Rotation"
+      "Cable Rotation",
+      "Cable Trunk Rotation",
+      "Cable Torso Rotation"
     ],
     "description": "Stand sideways to a cable machine and grip the handle with both hands. Rotate your torso away from the machine in a controlled arc, then return under control. Targets the obliques."
   },
@@ -6211,7 +6619,10 @@
     "aliases": [
       "Dumbbell Upright Row",
       "DB Upright Row",
-      "Row"
+      "Row",
+      "Dumbbell Upright Rows",
+      "DB Upright Rows",
+      "Standing Dumbbell Upright Row"
     ],
     "description": "Hold dumbbells in front of your thighs. Pull them upward close to your body, leading with your elbows until they reach mid-chest height, then lower with control."
   },
@@ -6253,7 +6664,10 @@
     "aliases": [
       "Bodyweight Squat",
       "Air Squat",
-      "Squat"
+      "Squat",
+      "Bodyweight Squats",
+      "Air Squats",
+      "Free Squat"
     ],
     "description": "Stand with feet shoulder-width apart and arms extended forward for balance. Sit back and down until your thighs are parallel to the floor, then drive back up through your heels."
   },
@@ -6289,7 +6703,10 @@
     "gifQuality": "none",
     "aliases": [
       "Grip Squeeze",
-      "Hand Gripper"
+      "Hand Gripper",
+      "Hand Grip Strengthener",
+      "Grip Strengthener",
+      "Forearm Gripper"
     ],
     "description": "Hold a hand gripper or grip trainer and squeeze it fully closed, then release under control. Repeated reps build grip strength and forearm endurance."
   },
@@ -6334,7 +6751,10 @@
     "gifQuality": "strong",
     "aliases": [
       "TGU",
-      "Turkish Get-Up"
+      "Turkish Get-Up",
+      "Turkish Get Up",
+      "Turkish Get Ups",
+      "Kettlebell Turkish Get Up"
     ],
     "description": "Lie on your back holding a kettlebell or dumbbell overhead in one hand. Follow a specific sequence of movements to stand up while keeping the weight overhead, then reverse the sequence back to the ground."
   },
@@ -6378,7 +6798,10 @@
       "Dumbbell Lateral Raise",
       "Side Raise",
       "DB Lateral Raise",
-      "Dumbbell Side Raise"
+      "Dumbbell Side Raise",
+      "Dumbbell Lateral Raises",
+      "Side Lateral Raises",
+      "DB Lateral Raises"
     ],
     "description": "Stand or sit holding dumbbells at your sides. Lift both dumbbells laterally until they reach shoulder height, keeping a slight bend in the elbows. Lower slowly."
   },
@@ -6421,7 +6844,10 @@
     "gifQuality": "weak",
     "aliases": [
       "Loaded Step",
-      "Weighted Stair Step"
+      "Weighted Stair Step",
+      "Weighted Step Up",
+      "Loaded Step Up",
+      "Weighted Bench Step"
     ],
     "description": "Set a barbell across your upper traps and stand facing a box or platform. Step up with one foot, driving through that leg to lift your body, and bring the trailing foot to the platform. Control the descent back to the floor and repeat."
   },
@@ -6465,7 +6891,10 @@
       "Step-Up",
       "Dumbbell Step-Up",
       "Weighted Step-Up",
-      "DB Step-Up"
+      "DB Step-Up",
+      "Dumbbell Step Ups",
+      "DB Step Ups",
+      "Weighted Step Ups"
     ],
     "description": "Hold dumbbells and place one foot on a bench or box. Drive through the elevated foot to step up, bringing the other foot to the platform. Step back down and repeat, alternating legs."
   },
@@ -6505,7 +6934,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Decline Sit-Up",
-      "Decline Crunch"
+      "Decline Crunch",
+      "Decline Bench Situp",
+      "Decline Press Sit-Ups",
+      "Decline Weighted Situp"
     ],
     "description": "Lie on a decline bench with feet secured, holding a barbell over your chest. Sit upright while pressing the barbell straight up overhead, then lower both your torso and the weight under control."
   },
@@ -6543,7 +6975,10 @@
     "gifQuality": "exact",
     "aliases": [
       "Side Bend",
-      "Oblique Side Bend"
+      "Oblique Side Bend",
+      "Dumbbell Side Bend",
+      "DB Side Bends",
+      "Side Bend Dumbbell"
     ],
     "description": "Stand holding dumbbells at your sides. Bend your torso sideways toward one dumbbell, then use your obliques to pull back to upright. Work both sides evenly."
   },
@@ -6585,7 +7020,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Side Plank Hold",
-      "Lateral Plank"
+      "Lateral Plank",
+      "Side Planks",
+      "Lateral Plank Hold",
+      "Side Bridge"
     ],
     "description": "Lie on your side and prop yourself up on one forearm and the side of your foot. Lift your hips so your body forms a straight line, and hold. Works the lateral core and obliques."
   },
@@ -6625,7 +7063,10 @@
     "gifQuality": "none",
     "aliases": [
       "Sit Out",
-      "Sprawl"
+      "Sprawl",
+      "Sit Outs",
+      "Kick Outs",
+      "Sitout"
     ],
     "description": "Starting in a push-up position, rotate your body by sweeping one leg under and through while extending the opposite arm, finishing with your back to the ground. Rotate back and repeat to the other side."
   },
@@ -6669,7 +7110,10 @@
       "Dynamic Effort Deadlift",
       "Speed Pull",
       "Conventional DL",
-      "DL"
+      "DL",
+      "Speed Deadlifts",
+      "Dynamic Effort Deadlifts",
+      "Speed Pulls"
     ],
     "description": "Perform deadlifts at 50–70% of your max weight, focusing on moving the bar as explosively as possible off the floor. Used to build rate of force development and improve bar speed."
   },
@@ -6713,7 +7157,10 @@
     "aliases": [
       "Diagonal Press",
       "Landmine Press",
-      "OHP"
+      "OHP",
+      "Landmine Shoulder Press",
+      "Landmine Press Standing",
+      "Diagonal Landmine Press"
     ],
     "description": "Hold a weight at shoulder height and press it upward and diagonally outward at an angle, rather than straight overhead. This variation reduces shoulder impingement risk."
   },
@@ -6754,7 +7201,10 @@
     "gifQuality": "weak",
     "aliases": [
       "Superman Hold",
-      "Back Extension Bodyweight"
+      "Back Extension Bodyweight",
+      "Supermans",
+      "Superman Exercise",
+      "Prone Superman"
     ],
     "description": "Lie face-down on the floor with arms extended overhead. Simultaneously lift your arms, chest, and legs off the floor by contracting your lower back and glutes. Hold briefly and lower."
   },
@@ -6794,7 +7244,9 @@
     "gifQuality": "exact",
     "aliases": [
       "Windshield Wipers Isometric",
-      "Isometric Leg Hold"
+      "Isometric Leg Hold",
+      "Isometric Windshield Wipers",
+      "Static Windshield Wipers"
     ],
     "description": "Hang from a bar and raise your legs to a horizontal position, then rotate them to one side and hold isometrically. Keep your upper body stable and engage your obliques throughout, then repeat on the opposite side."
   },
@@ -6837,7 +7289,10 @@
     "aliases": [
       "Single Arm Cable Row",
       "One Arm Row",
-      "Row"
+      "Row",
+      "Single Arm Cable Rows",
+      "One Arm Cable Row",
+      "Shotgun Cable Row"
     ],
     "description": "Stand beside a cable stack and grip a single handle. Row the handle toward your hip by driving your elbow back while rotating your torso slightly. Return to the start with control."
   },
@@ -6882,7 +7337,10 @@
       "Incline DB Row",
       "Prone Incline Row",
       "Incline Dumbbell Row",
-      "Row"
+      "Row",
+      "Incline Dumbbell Rows",
+      "Incline DB Rows",
+      "Chest Supported Dumbbell Row"
     ],
     "description": "Lie face-down on an incline bench at 45 degrees, holding dumbbells. Row both dumbbells toward your hips by driving your elbows upward and back, squeezing your shoulder blades at the top."
   },
@@ -6921,7 +7379,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Body Up",
-      "Planche Lean"
+      "Planche Lean",
+      "Body Ups",
+      "Planche Leans",
+      "Forearm Pushup"
     ],
     "description": "Assume a forearm plank position, supporting your bodyweight on your toes and forearms with your body in a straight line. Push yourself up to a high plank position by extending one arm at a time, then lower back to the forearms. Alternate the leading arm each rep."
   },
@@ -6963,7 +7424,9 @@
     "aliases": [
       "Goblet Squat Hold",
       "Braced Squat",
-      "Squat"
+      "Squat",
+      "Braced Squats",
+      "Goblet Squat Isometric Hold"
     ],
     "description": "Hold a weight at your chest and squat to full depth, holding the bottom position. Use your elbows to push your knees outward to improve squat depth and hip mobility."
   },
@@ -7009,7 +7472,10 @@
       "Ab Wheel Rollout",
       "Barbell Rollout",
       "Rollout",
-      "BB Rollout"
+      "BB Rollout",
+      "Barbell Rollouts",
+      "BB Ab Rollout",
+      "Barbell Ab Wheel Rollout"
     ],
     "description": "Kneel holding a barbell loaded with round plates. Roll the bar forward, extending your body toward the floor while keeping your core braced, then pull back to the starting position."
   },
@@ -7048,7 +7514,10 @@
     "aliases": [
       "Barbell Overhead Tricep Extension",
       "Standing Tricep Extension",
-      "BB Overhead Tricep Extension"
+      "BB Overhead Tricep Extension",
+      "Barbell Overhead Triceps Extension",
+      "BB Overhead Triceps Extension",
+      "Lying Barbell Tricep Extension"
     ],
     "description": "Hold a barbell overhead with a narrow grip and arms extended. Lower the bar behind your head by bending the elbows, then press back up to full extension. Keep upper arms vertical and close to your head."
   },
@@ -7091,7 +7560,10 @@
     "gifQuality": "exact",
     "aliases": [
       "Two-Hand KB Swing",
-      "Double Kettlebell Swing"
+      "Double Kettlebell Swing",
+      "Two Handed Kettlebell Swing",
+      "Two Hand KB Swing",
+      "Dual Kettlebell Swing"
     ],
     "description": "Stand with feet hip-width and grip a kettlebell with both hands. Hinge and swing the bell between your legs, then drive your hips forward to swing it to shoulder height. Use hip power rather than arm strength."
   },
@@ -7137,7 +7609,10 @@
       "Bulgarian Split Squat",
       "Rear Foot Elevated Split Squat",
       "RFESS",
-      "Squat"
+      "Squat",
+      "Bulgarian Split Squats",
+      "RFESS Squats",
+      "Rear Foot Split Squat"
     ],
     "description": "Place your rear foot on an elevated surface and step forward into a lunge position. Lower your rear knee toward the floor by bending your front knee, then drive back up through the front heel."
   },
@@ -7178,7 +7653,10 @@
     "gifQuality": "none",
     "aliases": [
       "Dead Hang",
-      "Passive Hang"
+      "Passive Hang",
+      "Dead Hangs",
+      "Bar Dead Hang",
+      "Passive Hangs"
     ],
     "description": "Hang from a pull-up bar with a shoulder-width grip and arms fully extended. Relax your shoulders to allow full decompression of the spine. Hold for time to build grip strength and shoulder mobility."
   },
@@ -7224,7 +7702,9 @@
       "Dumbbell Lunge",
       "Static Lunge",
       "DB Lunge",
-      "Squat"
+      "Squat",
+      "Dumbbell Split Squats",
+      "DB Split Squat"
     ],
     "description": "Hold dumbbells at your sides and take a staggered stance. Lower your rear knee toward the floor, keeping your front shin vertical, then push back up. Both feet remain stationary throughout."
   },
@@ -7271,7 +7751,10 @@
       "Stiff-Leg Deadlift Barbell",
       "Conventional DL",
       "DL",
-      "Stiff-Leg Deadlift BB"
+      "Stiff-Leg Deadlift BB",
+      "Romanian Deadlifts",
+      "Barbell Romanian Deadlift",
+      "BB Romanian Deadlift"
     ],
     "description": "Hold a barbell at hip height with a shoulder-width overhand grip. Keeping a neutral spine and slight knee bend, hinge at the hips and lower the bar along your legs until you feel a strong hamstring stretch. Drive your hips forward to return to the starting position."
   },
@@ -7319,7 +7802,10 @@
     "aliases": [
       "Burpee",
       "Squat Thrust",
-      "Squat"
+      "Squat",
+      "Burpee Exercise",
+      "Full Burpee",
+      "Standard Burpees"
     ],
     "description": "From standing, squat down and place your hands on the floor. Jump your feet back into a push-up position, perform a push-up, jump your feet forward, then explosively jump upward with arms overhead."
   },
@@ -7367,7 +7853,10 @@
     "aliases": [
       "Overhead Squat",
       "OHS",
-      "Squat"
+      "Squat",
+      "Overhead Barbell Squat",
+      "BB Overhead Squat",
+      "Overhead Squats"
     ],
     "description": "Hold a barbell or PVC pipe overhead with a wide snatch grip and arms locked out. Squat to full depth while keeping the bar over your mid-foot, then stand back up. Tests mobility throughout the entire kinetic chain."
   },
@@ -7410,7 +7899,10 @@
     "gifQuality": "strong",
     "aliases": [
       "Handstand Hold",
-      "Wall Handstand"
+      "Wall Handstand",
+      "Handstand Against Wall",
+      "Wall Handstand Hold",
+      "Handstand Wall Hold"
     ],
     "description": "Kick up into a handstand against a wall. Hold the inverted position with arms straight, body tight, and toes pointing up. Develops shoulder strength and body awareness."
   },
@@ -7453,7 +7945,10 @@
     "gifQuality": "exact",
     "aliases": [
       "Ring Dip",
-      "Gymnastic Ring Dip"
+      "Gymnastic Ring Dip",
+      "Gymnastic Ring Dips",
+      "Ring Dip Exercise",
+      "Wooden Ring Dips"
     ],
     "description": "Support yourself on gymnastics rings with arms straight. Lower your body by bending at the elbows while stabilizing the rings, then press back up. The rings make this significantly harder than bar dips."
   },
@@ -7498,7 +7993,10 @@
     "aliases": [
       "Pike Push-Up",
       "Downward Dog Push-Up",
-      "Pike Push Ups"
+      "Pike Push Ups",
+      "Pike Pushups",
+      "Pike Press",
+      "Elevating Pike Push-Up"
     ],
     "description": "Start in a downward dog position with hips raised high. Bend your elbows to lower the top of your head toward the floor between your hands, then push back up. Primarily targets the shoulders."
   },
@@ -7548,7 +8046,10 @@
       "DB Row",
       "Dumbbell Bent Over Row",
       "Row",
-      "Two-Arm DB Row"
+      "Two-Arm DB Row",
+      "Bent Over Dumbbell Row",
+      "Bent Over DB Row",
+      "Dumbbell Bent Over Rows"
     ],
     "description": "Hinge at the hips holding dumbbells, with your back flat and parallel to the floor. Row both dumbbells toward your hips by driving your elbows back, then lower with control."
   },
@@ -7588,7 +8089,10 @@
       "Overhead Tricep Extension",
       "Tricep Pushdown Dumbbell",
       "Tricep Push Down Freewieghts",
-      "Tricep Pushdown DB"
+      "Tricep Pushdown DB",
+      "Cable Tricep Pushdown",
+      "Standing Cable Tricep Extension",
+      "Cable Triceps Push Down"
     ],
     "description": "Stand at a high cable pulley with a straight bar or rope attachment. Keeping your elbows fixed at your sides, push the attachment downward until your arms are fully extended, then return under control."
   },
@@ -7629,7 +8133,10 @@
     "aliases": [
       "Glute Bridge",
       "Hip Bridge",
-      "Hip Raise"
+      "Hip Raise",
+      "Lying Hip Raise",
+      "Lying Hip Raises",
+      "Lying Glute Bridge"
     ],
     "description": "Lie on your back with knees bent and feet flat on the floor. Drive your hips upward by squeezing your glutes until your body forms a straight line, then lower with control."
   },
@@ -7667,7 +8174,9 @@
     "gifQuality": "weak",
     "aliases": [
       "Machine Calf Extension",
-      "Calf Extension Machine"
+      "Calf Extension Machine",
+      "Life Fitness Calf Press",
+      "Seated Machine Calf Extension"
     ],
     "description": "Sit at a calf extension machine with feet on the footplate. Push through the balls of your feet to extend the ankles fully, then lower under control for a complete calf stretch."
   },
@@ -7713,7 +8222,10 @@
       "Deficit Deadlift",
       "Elevated Deadlift",
       "Conventional DL",
-      "DL"
+      "DL",
+      "Deficit Deadlifts",
+      "Barbell Deficit Deadlift",
+      "BB Deficit Deadlift"
     ],
     "description": "Stand on a small platform or plate to increase the range of motion of a conventional deadlift. Pull the bar from below your standard starting position, building strength off the floor."
   },
@@ -7752,7 +8264,10 @@
     "gifQuality": "none",
     "aliases": [
       "Hollow Body Hold",
-      "Hollow Position"
+      "Hollow Position",
+      "Hollow Holds",
+      "Hollow Rock",
+      "Hollow Body Position"
     ],
     "description": "Lie on your back and simultaneously raise your legs and shoulder blades off the floor, pressing your lower back into the ground. Hold a compressed position with arms extended overhead or at your sides."
   },
@@ -7792,7 +8307,10 @@
       "Overhead Tricep Press",
       "Seated Overhead Extension",
       "Dumbbell Overhead Tricep Extension",
-      "DB Overhead Tricep Extension"
+      "DB Overhead Tricep Extension",
+      "Seated Dumbbell Tricep Extension",
+      "Seated DB Triceps Extension",
+      "Dumbbell Seated Tricep Press"
     ],
     "description": "Sit on a bench holding a dumbbell or barbell overhead with arms fully extended. Lower the weight behind your head by bending the elbows, then press back up. Keep your elbows close to your head throughout."
   },
@@ -7836,7 +8354,10 @@
     "aliases": [
       "Bodyweight Lunge",
       "Lunge",
-      "Forward Lunge"
+      "Forward Lunge",
+      "Bodyweight Walking Lunge",
+      "Bodyweight Lunges Walking",
+      "BW Lunge"
     ],
     "description": "Stand upright and step one foot forward into a lunge position. Lower your rear knee toward the floor, then push through your front heel to return to standing. Alternate legs."
   }
