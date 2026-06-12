@@ -118,22 +118,27 @@ Color.appBackground // Color(.systemBackground)
 Color.appDivider    // Color(.separator)
 ```
 
-**Program color palette** — OKLCH L=0.5325 C=0.160, 12 hues spaced 30°:
+**Program color palette** — OKLCH L=0.5325 C=0.160, 17 hues at 15–30° intervals. `paletteGreen` (H=142.4°) is reserved for `workoutAccent` (cardio) and excluded from the program picker.
 ```swift
 Color.paletteIntenseRed  // H=22.4°   light #B73B3F / dark #F97775
+Color.paletteVermillion  // H=37.4°   light #B64019 / dark #F77C57
 Color.paletteOrange      // H=52.4°   light #B04900 / dark #F18435
+Color.paletteAmber       // H=67.4°   light #A75400 / dark #E58E00
 Color.paletteYellow      // H=82.4°   light #995F00 / dark #D59800
 Color.paletteLime        // H=112.4°  light #707400 / dark #A7AE00
-Color.paletteGreen       // H=142.4°  light #23821F / dark #63BD5C
+Color.paletteChartreuse  // H=127.4°  light #527C00 / dark #89B639
+Color.paletteSeafoam     // H=157.4°  light #008645 / dark #28C27C
 Color.paletteTeal        // H=172.4°  light #008862 / dark #00C49A
 Color.paletteCyan        // H=202.4°  light #008494 / dark #00C0D0
 Color.paletteLightBlue   // H=232.4°  light #0078B8 / dark #00B3F7
+Color.paletteIndigo      // H=247.4°  light #0070C3 / dark #40ABFF
 Color.paletteDarkBlue    // H=262.4°  light #3767C8 / dark #6DA2FF
 Color.palettePurple      // H=292.4°  light #7155BF / dark #A98FFF
+Color.paletteViolet      // H=307.4°  light #864DB3 / dark #C087F2
 Color.paletteMagenta     // H=322.4°  light #9646A2 / dark #D37FDF
 Color.palettePink        // H=352.4°  light #AE3B75 / dark #EE76AE
 ```
-`Color.programPalette: [Color]` — array of all 12, used in the program color picker.
+`Color.programPalette: [Color]` — array of all 17, used in the program color picker (excludes paletteGreen).
 
 **WCAG contrast against white (light mode):** all ≥4.5:1 (AA) except teal/cyan (4.4–4.5:1, AA-large — acceptable for buttons/headings, not small body text).
 
