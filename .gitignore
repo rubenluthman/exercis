@@ -23,3 +23,6 @@ DerivedData/
 
 # GIF assets (replace with licensed source before App Store)
 Exercis/Resources/GIFs/
+
+# Local Claude Code config (machine-specific)
+.claude/*.local.md
