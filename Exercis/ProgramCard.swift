@@ -19,7 +19,8 @@ struct ProgramCard: View {
                         .font(.jost(.bold, size: 15))
                         .kerning(1.5)
                         .foregroundStyle(accent)
-                        .lineLimit(2)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                         .fixedSize(horizontal: false, vertical: true)
 
                     if showCheckmark {

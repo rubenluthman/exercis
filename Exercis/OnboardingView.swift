@@ -479,10 +479,22 @@ struct OnboardingView: View {
         VStack(spacing: 0) {
             ThinDivider()
             HStack(spacing: 16) {
-                Button("HOPPA ÖVER") { skipAction() }
-                    .font(.jost(.regular, size: 13))
-                    .kerning(1.5)
-                    .foregroundStyle(Color(.secondaryLabel))
+                if step > 1 {
+                    Button {
+                        withAnimation { step -= 1 }
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(Color(.secondaryLabel))
+                            .frame(width: 44, height: 50)
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    Button("HOPPA ÖVER") { skipAction() }
+                        .font(.jost(.regular, size: 13))
+                        .kerning(1.5)
+                        .foregroundStyle(Color(.secondaryLabel))
+                }
 
                 Button(primary) { primaryAction() }
                     .primaryButtonStyle(accent: .homeAccent)
