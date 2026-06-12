@@ -29,6 +29,7 @@ struct ExerciseFormData: Identifiable {
 
 struct StrengthView: View {
     let program: WorkoutProgram
+    var rotationId: UUID? = nil
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @Query(sort: [SortDescriptor(\WorkoutSession.date, order: .reverse)])
@@ -614,6 +615,15 @@ struct StrengthView: View {
 
         session.effortScore = effortScore
         do { try context.save() } catch { saveError = true; return }
+
+        if let rotationId {
+            let desc = FetchDescriptor<ProgramRotation>()
+            if let rotation = (try? context.fetch(desc))?.first(where: { $0.id == rotationId }),
+               !rotation.programIds.isEmpty {
+                rotation.currentIndex = (rotation.currentIndex + 1) % rotation.programIds.count
+                try? context.save()
+            }
+        }
 
         let snapshot = buildWidgetSnapshot(
             workoutSessions: Array(sessions),

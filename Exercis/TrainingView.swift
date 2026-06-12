@@ -1,17 +1,27 @@
 import SwiftUI
 import SwiftData
 
+struct StrengthLaunch: Identifiable, Hashable {
+    let id = UUID()
+    let program: WorkoutProgram
+    let rotationId: UUID?
+
+    static func == (lhs: StrengthLaunch, rhs: StrengthLaunch) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
+}
+
 struct TrainingView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
+    @Query(sort: \ProgramRotation.sortIndex) private var rotations: [ProgramRotation]
     @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
     @AppStorage("hasDraft") private var hasDraft = false
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
     @AppStorage("selectedCardioTypes") private var selectedCardioTypesRaw = ""
-    @State private var activeProgram: WorkoutProgram? = nil
+    @State private var activeLaunch: StrengthLaunch? = nil
     @State private var activeCardioType: CardioType? = nil
+    @State private var pendingLaunch: StrengthLaunch? = nil
     @State private var showDiscardAlert = false
-    @State private var pendingProgram: WorkoutProgram? = nil
     @State private var showDiscardStrengthAlert = false
     @State private var showDiscardCardioAlert = false
     @State private var cardioTypeToDiscard: CardioType? = nil
@@ -34,14 +44,15 @@ struct TrainingView: View {
                 ThinDivider().padding(.top, 8)
 
                 VStack(spacing: 0) {
-                    if !trainingPrograms.isEmpty {
-                        programSection
+                    let hasStrength = !rotations.isEmpty || !trainingPrograms.isEmpty
+                    if hasStrength {
+                        strengthSection
                         ThinDivider()
                     }
                     if !selectedCardioTypes.isEmpty {
                         cardioSection
                     }
-                    if trainingPrograms.isEmpty && selectedCardioTypes.isEmpty {
+                    if !hasStrength && selectedCardioTypes.isEmpty {
                         emptyState
                             .padding(.horizontal, 24)
                     }
@@ -52,8 +63,8 @@ struct TrainingView: View {
         }
         .softScrollEdge()
         .toolbar(.hidden, for: .navigationBar)
-        .navigationDestination(item: $activeProgram) { program in
-            StrengthView(program: program)
+        .navigationDestination(item: $activeLaunch) { launch in
+            StrengthView(program: launch.program, rotationId: launch.rotationId)
                 .enableSwipeBack()
         }
         .navigationDestination(item: $activeCardioType) { type in
@@ -64,10 +75,10 @@ struct TrainingView: View {
             Button("Delete", role: .destructive) {
                 UserDefaults.standard.saveDraft(nil)
                 hasDraft = false
-                activeProgram = pendingProgram
-                pendingProgram = nil
+                activeLaunch = pendingLaunch
+                pendingLaunch = nil
             }
-            Button("Cancel", role: .cancel) { pendingProgram = nil }
+            Button("Cancel", role: .cancel) { pendingLaunch = nil }
         }
         .alert("Discard active draft?", isPresented: $showDiscardStrengthAlert) {
             Button("Delete", role: .destructive) {
@@ -100,22 +111,28 @@ struct TrainingView: View {
             .padding(.top, 20)
     }
 
-    private var programSection: some View {
+    private var strengthSection: some View {
         VStack(spacing: 0) {
             sectionLabel(String(localized: "STRENGTH"))
                 .padding(.horizontal, 24)
+
+            ForEach(rotations) { rotation in
+                rotationRow(rotation)
+            }
+
             ForEach(trainingPrograms) { program in
                 let draftProgramId = UserDefaults.standard.loadDraft()?.programId
                 let isDraft = hasDraft && (draftProgramId == program.id.uuidString || (draftProgramId == nil && trainingPrograms.first?.id == program.id))
                 HStack(spacing: 0) {
                     Button {
+                        let launch = StrengthLaunch(program: program, rotationId: nil)
                         if isDraft {
-                            activeProgram = program
+                            activeLaunch = launch
                         } else if hasDraft {
-                            pendingProgram = program
+                            pendingLaunch = launch
                             showDiscardAlert = true
                         } else {
-                            activeProgram = program
+                            activeLaunch = launch
                         }
                     } label: {
                         HStack(spacing: 0) {
@@ -150,6 +167,60 @@ struct TrainingView: View {
                 ThinDivider()
             }
         }
+    }
+
+    @ViewBuilder
+    private func rotationRow(_ rotation: ProgramRotation) -> some View {
+        let nextId = rotation.programIds.isEmpty ? nil : rotation.programIds[rotation.nextIndex]
+        let nextProgram = programs.first { $0.id.uuidString == nextId }
+        let draftProgramId = UserDefaults.standard.loadDraft()?.programId
+        let isDraft = hasDraft && nextProgram.map { draftProgramId == $0.id.uuidString } ?? false
+
+        HStack(spacing: 0) {
+            Button {
+                guard let prog = nextProgram else { return }
+                let launch = StrengthLaunch(program: prog, rotationId: rotation.id)
+                if isDraft {
+                    activeLaunch = launch
+                } else if hasDraft {
+                    pendingLaunch = launch
+                    showDiscardAlert = true
+                } else {
+                    activeLaunch = launch
+                }
+            } label: {
+                HStack(spacing: 0) {
+                    RotationCard(rotation: rotation, allPrograms: programs, hasDraft: isDraft)
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 12)
+                    if !isDraft {
+                        Image(systemName: "chevron.right")
+                            .font(.jost(.medium, size: 10))
+                            .foregroundStyle(Color(.tertiaryLabel))
+                            .padding(.trailing, 24)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .buttonStyle(.plain)
+            .opacity(nextProgram == nil ? 0.4 : 1)
+            .disabled(nextProgram == nil)
+
+            if isDraft {
+                Button {
+                    showDiscardStrengthAlert = true
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.jost(.medium, size: 11))
+                        .foregroundStyle(Color(.tertiaryLabel))
+                        .frame(width: 44, height: 44)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Discard draft")
+                .padding(.trailing, 8)
+            }
+        }
+        ThinDivider()
     }
 
     private var cardioSection: some View {

@@ -249,13 +249,33 @@ final class ProgramExercise {
     }
 }
 
+// MARK: - Program Rotation
+
+@Model
+final class ProgramRotation {
+    var id: UUID = UUID()
+    var name: String = ""
+    var programIds: [String] = []
+    var currentIndex: Int = 0
+    var sortIndex: Int = 0
+
+    init(name: String, programIds: [String] = [], sortIndex: Int = 0) {
+        self.name = name
+        self.programIds = programIds
+        self.sortIndex = sortIndex
+    }
+
+    var nextIndex: Int { programIds.isEmpty ? 0 : currentIndex % programIds.count }
+}
+
 // MARK: - Schema versioning
 
 enum ExercisSchemaV1: VersionedSchema {
     static var versionIdentifier = Schema.Version(1, 0, 0)
     static var models: [any PersistentModel.Type] {
         [WorkoutSession.self, ExerciseLog.self, SetLog.self,
-         CardioSession.self, WorkoutProgram.self, ProgramExercise.self]
+         CardioSession.self, WorkoutProgram.self, ProgramExercise.self,
+         ProgramRotation.self]
     }
 }
 

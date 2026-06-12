@@ -7,6 +7,7 @@ private let logger = Logger(subsystem: "com.exercis", category: "SwiftData")
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
+    @Query(sort: \ProgramRotation.sortIndex) private var rotations: [ProgramRotation]
     @Query(sort: \WorkoutSession.startDate, order: .reverse) private var sessions: [WorkoutSession]
 
     @AppStorage("onboardingCompleted")     private var onboardingCompleted = true
@@ -27,6 +28,8 @@ struct SettingsView: View {
     @State private var showExportSheet = false
     @State private var editingProgram: WorkoutProgram? = nil
     @State private var showNewProgram = false
+    @State private var editingRotation: ProgramRotation? = nil
+    @State private var showNewRotation = false
     @State private var showWhatsNew = false
 
     private var appVersion: String {
@@ -44,6 +47,43 @@ struct SettingsView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
+                    sectionBlock {
+                        sectionLabel("ROTATIONS")
+                        if rotations.isEmpty {
+                            Text("A rotation lets you alternate between programs automatically — e.g. A/B/A.")
+                                .font(.jost(.regular, size: 14))
+                                .foregroundStyle(Color(.secondaryLabel))
+                                .padding(.horizontal, 24)
+                                .padding(.top, 4)
+                                .padding(.bottom, 12)
+                        } else {
+                            ForEach(rotations) { rotation in
+                                rotationRow(rotation)
+                                if rotation.id != rotations.last?.id {
+                                    ThinDivider().padding(.leading, 24)
+                                }
+                            }
+                        }
+                        Button {
+                            showNewRotation = true
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "plus")
+                                    .font(.jost(.semibold, size: 15))
+                                Text("NEW ROTATION")
+                                    .font(.jost(.semibold, size: 14))
+                                    .kerning(1.5)
+                            }
+                            .foregroundStyle(Color(.secondaryLabel))
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    ThinDivider()
+
                     sectionBlock {
                         sectionLabel("STRENGTH PROGRAMS")
                         ForEach(programs) { program in
@@ -239,6 +279,12 @@ struct SettingsView: View {
         .sheet(isPresented: $showNewProgram) {
             ProgramEditorView(program: nil)
         }
+        .sheet(item: $editingRotation) { rotation in
+            RotationEditorView(existing: rotation)
+        }
+        .sheet(isPresented: $showNewRotation) {
+            RotationEditorView()
+        }
         .sheet(isPresented: $showWhatsNew) {
             WhatsNewSheet()
         }
@@ -343,6 +389,58 @@ struct SettingsView: View {
     }
 
     // MARK: - Program row
+
+    private func rotationRow(_ rotation: ProgramRotation) -> some View {
+        let letters = ["A", "B", "C", "D", "E", "F"]
+        let sequence = rotation.programIds.enumerated().map { i, id in
+            let prog = programs.first { $0.id.uuidString == id }
+            let letter = i < letters.count ? letters[i] : "\(i + 1)"
+            return "\(letter): \(prog?.name ?? "—")"
+        }.joined(separator: " · ")
+
+        return HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(rotation.name.uppercased())
+                    .font(.jost(.semibold, size: 14))
+                    .kerning(1.5)
+                    .foregroundStyle(.primary)
+                if !sequence.isEmpty {
+                    Text(sequence)
+                        .font(.jost(.medium, size: 12))
+                        .kerning(1)
+                        .foregroundStyle(Color(.secondaryLabel))
+                        .lineLimit(2)
+                }
+            }
+
+            Spacer()
+
+            Button {
+                editingRotation = rotation
+            } label: {
+                Image(systemName: "pencil")
+                    .font(.jost(.medium, size: 15))
+                    .foregroundStyle(Color(.tertiaryLabel))
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Edit rotation \(rotation.name)")
+
+            Button {
+                context.delete(rotation)
+                try? context.save()
+            } label: {
+                Image(systemName: "trash")
+                    .font(.jost(.medium, size: 14))
+                    .foregroundStyle(Color(.tertiaryLabel))
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Delete rotation \(rotation.name)")
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 10)
+    }
 
     private func programRow(_ program: WorkoutProgram) -> some View {
         HStack(spacing: 12) {
