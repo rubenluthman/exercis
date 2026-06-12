@@ -32,8 +32,8 @@ struct SettingsView: View {
     @State private var editingRotation: ProgramRotation? = nil
     @State private var showNewRotation = false
     @State private var showWhatsNew = false
-    @State private var reorderingPrograms = false
-    @State private var reorderingCardio = false
+    @State private var showProgramReorder = false
+    @State private var showCardioReorder = false
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
@@ -67,9 +67,9 @@ struct SettingsView: View {
                             if programs.count >= 2 {
                                 Button {
                                     Haptics.selection()
-                                    reorderingPrograms.toggle()
+                                    showProgramReorder = true
                                 } label: {
-                                    Text(reorderingPrograms ? String(localized: "DONE") : String(localized: "REORDER"))
+                                    Text("REORDER")
                                         .font(.jost(.medium, size: 12))
                                         .kerning(1.5)
                                         .foregroundStyle(Color(.secondaryLabel))
@@ -79,34 +79,28 @@ struct SettingsView: View {
                                 .padding(.bottom, 8)
                             }
                         }
-                        ForEach(Array(programs.enumerated()), id: \.element.id) { idx, program in
-                            if reorderingPrograms {
-                                programReorderRow(program, index: idx)
-                            } else {
-                                programRow(program)
-                            }
+                        ForEach(programs) { program in
+                            programRow(program)
                             if program.id != programs.last?.id {
                                 ThinDivider().padding(.leading, 24)
                             }
                         }
-                        if !reorderingPrograms {
-                            Button {
-                                showNewProgram = true
-                            } label: {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "plus")
-                                        .font(.jost(.semibold, size: 15))
-                                    Text("NEW PROGRAM")
-                                        .font(.jost(.semibold, size: 14))
-                                        .kerning(1.5)
-                                }
-                                .foregroundStyle(Color(.secondaryLabel))
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 24)
-                                .padding(.vertical, 16)
+                        Button {
+                            showNewProgram = true
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "plus")
+                                    .font(.jost(.semibold, size: 15))
+                                Text("NEW PROGRAM")
+                                    .font(.jost(.semibold, size: 14))
+                                    .kerning(1.5)
                             }
-                            .buttonStyle(.plain)
+                            .foregroundStyle(Color(.secondaryLabel))
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
                         }
+                        .buttonStyle(.plain)
                     }
 
                     ThinDivider()
@@ -154,9 +148,9 @@ struct SettingsView: View {
                             Spacer()
                             Button {
                                 Haptics.selection()
-                                reorderingCardio.toggle()
+                                showCardioReorder = true
                             } label: {
-                                Text(reorderingCardio ? String(localized: "DONE") : String(localized: "REORDER"))
+                                Text("REORDER")
                                     .font(.jost(.medium, size: 12))
                                     .kerning(1.5)
                                     .foregroundStyle(Color(.secondaryLabel))
@@ -166,11 +160,7 @@ struct SettingsView: View {
                             .padding(.bottom, 8)
                         }
                         ForEach(Array(orderedAllCardioTypes.enumerated()), id: \.element) { idx, type in
-                            if reorderingCardio {
-                                cardioTypeReorderRow(type, index: idx)
-                            } else {
-                                cardioTypeRow(type)
-                            }
+                            cardioTypeRow(type)
                             if idx < orderedAllCardioTypes.count - 1 {
                                 ThinDivider().padding(.leading, 24)
                             }
@@ -342,6 +332,24 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showWhatsNew) {
             WhatsNewSheet()
+        }
+        .sheet(isPresented: $showProgramReorder) {
+            ProgramReorderSheet(programs: programs) { from, to in
+                var reordered = programs
+                reordered.move(fromOffsets: from, toOffset: to)
+                for (i, p) in reordered.enumerated() { p.sortIndex = i }
+                try? context.save()
+            }
+        }
+        .sheet(isPresented: $showCardioReorder) {
+            CardioReorderSheet(
+                orderedTypes: orderedAllCardioTypes,
+                selectedTypes: selectedTypes
+            ) { from, to in
+                var ordered = orderedAllCardioTypes
+                ordered.move(fromOffsets: from, toOffset: to)
+                cardioTypeOrderRaw = ordered.map(\.rawValue).joined(separator: ",")
+            }
         }
     }
 
@@ -538,42 +546,6 @@ struct SettingsView: View {
         .padding(.vertical, 10)
     }
 
-    private func programReorderRow(_ program: WorkoutProgram, index: Int) -> some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(program.name.uppercased())
-                    .font(.jost(.semibold, size: 14))
-                    .kerning(1.5)
-                    .foregroundStyle(.primary)
-                Text("\(program.sortedExercises.count) \(String(localized: "EXERCISES")) · \(program.sortedExercises.first?.setCount ?? 3) SET")
-                    .font(.jost(.medium, size: 12))
-                    .kerning(1.5)
-                    .foregroundStyle(Color(.secondaryLabel))
-            }
-
-            Spacer()
-
-            reorderButtons(
-                canMoveUp: index > 0,
-                canMoveDown: index < programs.count - 1,
-                moveUp: { moveProgram(at: index, direction: -1) },
-                moveDown: { moveProgram(at: index, direction: 1) }
-            )
-        }
-        .padding(.horizontal, 24)
-        .padding(.vertical, 10)
-    }
-
-    private func moveProgram(at index: Int, direction: Int) {
-        let neighbor = index + direction
-        guard neighbor >= 0 && neighbor < programs.count else { return }
-        let tmp = programs[index].sortIndex
-        programs[index].sortIndex = programs[neighbor].sortIndex
-        programs[neighbor].sortIndex = tmp
-        Haptics.selection()
-        try? context.save()
-    }
-
     // MARK: - Cardio type row
 
     private func cardioTypeRow(_ type: CardioType) -> some View {
@@ -597,57 +569,6 @@ struct SettingsView: View {
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 14)
-    }
-
-    private func cardioTypeReorderRow(_ type: CardioType, index: Int) -> some View {
-        HStack {
-            Text(type.displayName.uppercased())
-                .font(.jost(.semibold, size: 14))
-                .kerning(1.5)
-                .foregroundStyle(.primary)
-
-            Spacer()
-
-            reorderButtons(
-                canMoveUp: index > 0,
-                canMoveDown: index < orderedAllCardioTypes.count - 1,
-                moveUp: { moveCardioType(at: index, direction: -1) },
-                moveDown: { moveCardioType(at: index, direction: 1) }
-            )
-        }
-        .padding(.horizontal, 24)
-        .padding(.vertical, 14)
-    }
-
-    private func moveCardioType(at index: Int, direction: Int) {
-        var ordered = orderedAllCardioTypes.map(\.rawValue)
-        let neighbor = index + direction
-        guard neighbor >= 0 && neighbor < ordered.count else { return }
-        ordered.swapAt(index, neighbor)
-        cardioTypeOrderRaw = ordered.joined(separator: ",")
-        Haptics.selection()
-    }
-
-    private func reorderButtons(canMoveUp: Bool, canMoveDown: Bool, moveUp: @escaping () -> Void, moveDown: @escaping () -> Void) -> some View {
-        HStack(spacing: 0) {
-            Button(action: moveUp) {
-                Image(systemName: "chevron.up")
-                    .font(.jost(.medium, size: 14))
-                    .foregroundStyle(canMoveUp ? Color(.secondaryLabel) : Color(.tertiaryLabel))
-                    .frame(width: 44, height: 44)
-            }
-            .buttonStyle(.plain)
-            .disabled(!canMoveUp)
-
-            Button(action: moveDown) {
-                Image(systemName: "chevron.down")
-                    .font(.jost(.medium, size: 14))
-                    .foregroundStyle(canMoveDown ? Color(.secondaryLabel) : Color(.tertiaryLabel))
-                    .frame(width: 44, height: 44)
-            }
-            .buttonStyle(.plain)
-            .disabled(!canMoveDown)
-        }
     }
 
     // MARK: - Timer row
@@ -890,4 +811,85 @@ struct ShareSheet: UIViewControllerRepresentable {
         UIActivityViewController(activityItems: items, applicationActivities: nil)
     }
     func updateUIViewController(_ vc: UIActivityViewController, context: Context) {}
+}
+
+// MARK: - Reorder sheets
+
+private struct ProgramReorderSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let programs: [WorkoutProgram]
+    let onMove: (IndexSet, Int) -> Void
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(programs) { program in
+                    HStack(spacing: 12) {
+                        Circle()
+                            .fill(Color(program.colorName))
+                            .frame(width: 10, height: 10)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(program.name.uppercased())
+                                .font(.jost(.semibold, size: 14))
+                                .kerning(1.5)
+                                .foregroundStyle(.primary)
+                            Text("\(program.sortedExercises.count) \(String(localized: "EXERCISES")) · \(program.sortedExercises.first?.setCount ?? 3) SET")
+                                .font(.jost(.medium, size: 12))
+                                .kerning(1.5)
+                                .foregroundStyle(Color(.secondaryLabel))
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+                .onMove(perform: onMove)
+            }
+            .listStyle(.plain)
+            .environment(\.editMode, .constant(.active))
+            .navigationTitle(String(localized: "Reorder Programs"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(String(localized: "Done")) { dismiss() }
+                        .font(.jost(.semibold, size: 15))
+                }
+            }
+        }
+    }
+}
+
+private struct CardioReorderSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let orderedTypes: [CardioType]
+    let selectedTypes: Set<String>
+    let onMove: (IndexSet, Int) -> Void
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(orderedTypes, id: \.self) { type in
+                    HStack(spacing: 12) {
+                        Image(systemName: selectedTypes.contains(type.rawValue) ? "checkmark.circle.fill" : "circle")
+                            .font(.system(size: 16))
+                            .foregroundStyle(selectedTypes.contains(type.rawValue) ? Color.workoutAccent : Color(.tertiaryLabel))
+                        Text(type.displayName.uppercased())
+                            .font(.jost(.semibold, size: 14))
+                            .kerning(1.5)
+                            .foregroundStyle(.primary)
+                    }
+                    .padding(.vertical, 4)
+                }
+                .onMove(perform: onMove)
+            }
+            .listStyle(.plain)
+            .environment(\.editMode, .constant(.active))
+            .navigationTitle(String(localized: "Reorder Cardio Types"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(String(localized: "Done")) { dismiss() }
+                        .font(.jost(.semibold, size: 15))
+                }
+            }
+        }
+    }
 }
