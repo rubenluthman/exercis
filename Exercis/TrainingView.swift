@@ -18,6 +18,7 @@ struct TrainingView: View {
     @AppStorage("hasDraft") private var hasDraft = false
     @AppStorage("hasCardioDraft") private var hasCardioDraft = false
     @AppStorage("selectedCardioTypes") private var selectedCardioTypesRaw = ""
+    @AppStorage("cardioTypeOrder")     private var cardioTypeOrderRaw = ""
     @State private var activeLaunch: StrengthLaunch? = nil
     @State private var activeCardioType: CardioType? = nil
     @State private var pendingLaunch: StrengthLaunch? = nil
@@ -31,10 +32,11 @@ struct TrainingView: View {
     }
 
     private var selectedCardioTypes: [CardioType] {
-        selectedCardioTypesRaw
-            .split(separator: ",")
-            .compactMap { CardioType(rawValue: String($0)) }
-            .sorted { $0.displayName < $1.displayName }
+        let selected = Set(selectedCardioTypesRaw.split(separator: ",").map(String.init))
+        let order: [CardioType] = cardioTypeOrderRaw.isEmpty
+            ? CardioType.allCases
+            : cardioTypeOrderRaw.split(separator: ",").compactMap { CardioType(rawValue: String($0)) }
+        return order.filter { selected.contains($0.rawValue) }
     }
 
     var body: some View {

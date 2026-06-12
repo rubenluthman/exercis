@@ -535,7 +535,8 @@ Do not skip this because the change "feels small" — that judgment belongs here
 | `lockEnabled` | Bool (@AppStorage) | ExercisApp/SettingsView | Whether Face ID lock is enabled |
 | `profileName` | String (@AppStorage) | ProfileView | User's display name |
 | `restTimerSeconds` | Int (@AppStorage) | StrengthView/SettingsView | Global rest timer duration (0/30/60/90/120s, default 90) |
-| `selectedCardioTypes` | String (@AppStorage) | OnboardingView/TrainingView/SettingsView | **Ordered** comma-separated `CardioType.rawValue`s shown on the Training tab — order is preserved (not a Set). Toggle on appends to end; toggling off removes from position. Reorder in SettingsView updates this directly. Reset to `allCases` order on onboarding completion. |
+| `selectedCardioTypes` | String (@AppStorage) | OnboardingView/TrainingView/SettingsView | Comma-separated `CardioType.rawValue`s for selected types (Set semantics — order ignored). |
+| `cardioTypeOrder` | String (@AppStorage) | SettingsView/TrainingView | Comma-separated `CardioType.rawValue`s for ALL types in display order. Empty = use `allCases` order. TrainingView filters selected types from this list. Cleared on onboarding completion (reset to `allCases`). |
 | `useImperialUnits` | Bool (@AppStorage) | SettingsView + all views/cards showing weight/distance | Unit preference: KG/KM (false) or LBS/MI (true) — converted at presentation via `displayWeight`/`displayDistance` |
 | `dateLocaleIdentifier` | String (@AppStorage) | SettingsView / appLocale() in Theme.swift | Date formatting locale: `""` = system, `"sv_SE"` = Swedish, `"en_US"` = English |
 | `healthKitSyncEnabled` | Bool (@AppStorage) | SettingsView | Whether sessions are saved to Apple Health |

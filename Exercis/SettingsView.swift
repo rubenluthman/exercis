@@ -18,6 +18,7 @@ struct SettingsView: View {
     @AppStorage("healthKitWeightEnabled")  private var healthKitWeightEnabled = true
     @AppStorage("lockEnabled")             private var lockEnabled = true
     @AppStorage("selectedCardioTypes")     private var selectedCardioTypesRaw = ""
+    @AppStorage("cardioTypeOrder")         private var cardioTypeOrderRaw = ""
     @AppStorage("bodyLimitations")         private var bodyLimitationsRaw = ""
     @AppStorage("reminderEnabled")         private var reminderEnabled = false
     @AppStorage("reminderWeekdays")        private var reminderWeekdaysRaw = ""
@@ -42,15 +43,14 @@ struct SettingsView: View {
         Set(selectedCardioTypesRaw.split(separator: ",").map(String.init))
     }
 
-    private var orderedSelectedCardioTypes: [CardioType] {
-        selectedCardioTypesRaw
-            .split(separator: ",")
-            .compactMap { CardioType(rawValue: String($0)) }
-    }
-
-    private var unselectedCardioTypes: [CardioType] {
-        let selected = selectedTypes
-        return CardioType.allCases.filter { !selected.contains($0.rawValue) }
+    private var orderedAllCardioTypes: [CardioType] {
+        if cardioTypeOrderRaw.isEmpty {
+            return CardioType.allCases
+        }
+        let stored = cardioTypeOrderRaw.split(separator: ",").compactMap { CardioType(rawValue: String($0)) }
+        let storedSet = Set(stored.map(\.rawValue))
+        let missing = CardioType.allCases.filter { !storedSet.contains($0.rawValue) }
+        return stored + missing
     }
 
     var body: some View {
@@ -152,38 +152,27 @@ struct SettingsView: View {
                         HStack(alignment: .bottom) {
                             sectionLabel("CARDIO TYPES")
                             Spacer()
-                            if orderedSelectedCardioTypes.count >= 2 {
-                                Button {
-                                    Haptics.selection()
-                                    reorderingCardio.toggle()
-                                } label: {
-                                    Text(reorderingCardio ? String(localized: "DONE") : String(localized: "REORDER"))
-                                        .font(.jost(.medium, size: 12))
-                                        .kerning(1.5)
-                                        .foregroundStyle(Color(.secondaryLabel))
-                                }
-                                .buttonStyle(.plain)
-                                .padding(.trailing, 24)
-                                .padding(.bottom, 8)
+                            Button {
+                                Haptics.selection()
+                                reorderingCardio.toggle()
+                            } label: {
+                                Text(reorderingCardio ? String(localized: "DONE") : String(localized: "REORDER"))
+                                    .font(.jost(.medium, size: 12))
+                                    .kerning(1.5)
+                                    .foregroundStyle(Color(.secondaryLabel))
                             }
+                            .buttonStyle(.plain)
+                            .padding(.trailing, 24)
+                            .padding(.bottom, 8)
                         }
-                        if reorderingCardio {
-                            ForEach(Array(orderedSelectedCardioTypes.enumerated()), id: \.element) { idx, type in
+                        ForEach(Array(orderedAllCardioTypes.enumerated()), id: \.element) { idx, type in
+                            if reorderingCardio {
                                 cardioTypeReorderRow(type, index: idx)
-                                if idx < orderedSelectedCardioTypes.count - 1 {
-                                    ThinDivider().padding(.leading, 24)
-                                }
-                            }
-                        } else {
-                            ForEach(orderedSelectedCardioTypes, id: \.self) { type in
+                            } else {
                                 cardioTypeRow(type)
+                            }
+                            if idx < orderedAllCardioTypes.count - 1 {
                                 ThinDivider().padding(.leading, 24)
-                            }
-                            ForEach(unselectedCardioTypes, id: \.self) { type in
-                                cardioTypeRow(type)
-                                if type != unselectedCardioTypes.last {
-                                    ThinDivider().padding(.leading, 24)
-                                }
                             }
                         }
                     }
@@ -592,13 +581,9 @@ struct SettingsView: View {
             Toggle("", isOn: Binding(
                 get: { selectedTypes.contains(type.rawValue) },
                 set: { on in
-                    var ordered = orderedSelectedCardioTypes.map(\.rawValue)
-                    if on {
-                        ordered.append(type.rawValue)
-                    } else {
-                        ordered.removeAll { $0 == type.rawValue }
-                    }
-                    selectedCardioTypesRaw = ordered.joined(separator: ",")
+                    var types = selectedTypes
+                    if on { types.insert(type.rawValue) } else { types.remove(type.rawValue) }
+                    selectedCardioTypesRaw = types.joined(separator: ",")
                 }
             ))
             .labelsHidden()
@@ -625,7 +610,7 @@ struct SettingsView: View {
 
             reorderButtons(
                 canMoveUp: index > 0,
-                canMoveDown: index < orderedSelectedCardioTypes.count - 1,
+                canMoveDown: index < orderedAllCardioTypes.count - 1,
                 moveUp: { moveCardioType(at: index, direction: -1) },
                 moveDown: { moveCardioType(at: index, direction: 1) }
             )
@@ -635,11 +620,11 @@ struct SettingsView: View {
     }
 
     private func moveCardioType(at index: Int, direction: Int) {
-        var ordered = orderedSelectedCardioTypes.map(\.rawValue)
+        var ordered = orderedAllCardioTypes.map(\.rawValue)
         let neighbor = index + direction
         guard neighbor >= 0 && neighbor < ordered.count else { return }
         ordered.swapAt(index, neighbor)
-        selectedCardioTypesRaw = ordered.joined(separator: ",")
+        cardioTypeOrderRaw = ordered.joined(separator: ",")
         Haptics.selection()
     }
 

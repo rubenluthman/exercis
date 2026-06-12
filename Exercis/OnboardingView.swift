@@ -9,6 +9,7 @@ struct OnboardingView: View {
     @Query(sort: \WorkoutProgram.sortIndex) private var programs: [WorkoutProgram]
     @AppStorage("onboardingCompleted") private var onboardingCompleted = false
     @AppStorage("selectedCardioTypes") private var selectedCardioTypesRaw = ""
+    @AppStorage("cardioTypeOrder")     private var cardioTypeOrderRaw = ""
 
     @State private var step = 1
     @State private var selectedProgramIds: Set<UUID> = []
@@ -519,6 +520,7 @@ struct OnboardingView: View {
             .filter { selectedCardioTypes.contains($0.rawValue) }
             .map(\.rawValue)
             .joined(separator: ",")
+        cardioTypeOrderRaw = ""
         onboardingCompleted = true
     }
 
