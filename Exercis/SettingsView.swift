@@ -48,6 +48,34 @@ struct SettingsView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     sectionBlock {
+                        sectionLabel("STRENGTH PROGRAMS")
+                        ForEach(programs) { program in
+                            programRow(program)
+                            if program.id != programs.last?.id {
+                                ThinDivider().padding(.leading, 24)
+                            }
+                        }
+                        Button {
+                            showNewProgram = true
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "plus")
+                                    .font(.jost(.semibold, size: 15))
+                                Text("NEW PROGRAM")
+                                    .font(.jost(.semibold, size: 14))
+                                    .kerning(1.5)
+                            }
+                            .foregroundStyle(Color(.secondaryLabel))
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    ThinDivider()
+
+                    sectionBlock {
                         sectionLabel("ROTATIONS")
                         if rotations.isEmpty {
                             Text("A rotation lets you alternate between programs automatically — e.g. A/B/A.")
@@ -71,34 +99,6 @@ struct SettingsView: View {
                                 Image(systemName: "plus")
                                     .font(.jost(.semibold, size: 15))
                                 Text("NEW ROTATION")
-                                    .font(.jost(.semibold, size: 14))
-                                    .kerning(1.5)
-                            }
-                            .foregroundStyle(Color(.secondaryLabel))
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 24)
-                            .padding(.vertical, 16)
-                        }
-                        .buttonStyle(.plain)
-                    }
-
-                    ThinDivider()
-
-                    sectionBlock {
-                        sectionLabel("STRENGTH PROGRAMS")
-                        ForEach(programs) { program in
-                            programRow(program)
-                            if program.id != programs.last?.id {
-                                ThinDivider().padding(.leading, 24)
-                            }
-                        }
-                        Button {
-                            showNewProgram = true
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "plus")
-                                    .font(.jost(.semibold, size: 15))
-                                Text("NEW PROGRAM")
                                     .font(.jost(.semibold, size: 14))
                                     .kerning(1.5)
                             }
