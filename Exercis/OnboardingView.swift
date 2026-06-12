@@ -86,6 +86,8 @@ struct OnboardingView: View {
         }
     }
 
+    private let defaultProgramNames: Set<String> = ["Full Body", "Överkropp", "Underkropp", "Push", "Pull", "Legs", "Bodyweight"]
+
     // MARK: - Step 1: Programs
 
     private var programStep: some View {
@@ -106,6 +108,13 @@ struct OnboardingView: View {
                     }
 
                     programRow(programs.first { $0.name == "Bodyweight" })
+
+                    let customPrograms = programs.filter { !defaultProgramNames.contains($0.name) }
+                    if !customPrograms.isEmpty {
+                        ForEach(customPrograms) { program in
+                            programRow(program)
+                        }
+                    }
 
                     if !selectedProgramIds.isEmpty {
                         rotationOptIn
