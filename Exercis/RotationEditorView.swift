@@ -11,6 +11,7 @@ struct RotationEditorView: View {
     @State private var rotationName = ""
     @State private var selectedIds: [String] = []
     @State private var currentIndex = 0
+    @State private var showNewProgram = false
 
     private let letters = ["A", "B", "C", "D", "E", "F"]
 
@@ -36,6 +37,9 @@ struct RotationEditorView: View {
             .softScrollEdge()
         }
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showNewProgram) {
+            ProgramEditorView(program: nil)
+        }
         .onAppear {
             if let r = existing {
                 rotationName = r.name
@@ -164,34 +168,42 @@ struct RotationEditorView: View {
                 .padding(.horizontal, 24)
 
             let available = allPrograms.filter { !selectedIds.contains($0.id.uuidString) }
-            if available.isEmpty {
-                Text("All programs added.")
-                    .font(.jost(.regular, size: 14))
-                    .foregroundStyle(Color(.tertiaryLabel))
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 14)
-            } else {
-                ForEach(available) { program in
-                    Button {
-                        guard selectedIds.count < 6 else { return }
-                        selectedIds.append(program.id.uuidString)
-                    } label: {
-                        HStack {
-                            Text(program.name)
-                                .font(.jost(.regular, size: 15))
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            Image(systemName: "plus")
-                                .font(.jost(.medium, size: 13))
-                                .foregroundStyle(Color(program.colorName))
-                                .frame(width: 44, height: 44)
-                        }
-                        .padding(.leading, 24)
+            ForEach(available) { program in
+                Button {
+                    guard selectedIds.count < 6 else { return }
+                    selectedIds.append(program.id.uuidString)
+                } label: {
+                    HStack {
+                        Text(program.name)
+                            .font(.jost(.regular, size: 15))
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Image(systemName: "plus")
+                            .font(.jost(.medium, size: 13))
+                            .foregroundStyle(Color(program.colorName))
+                            .frame(width: 44, height: 44)
                     }
-                    .buttonStyle(.plain)
-                    ThinDivider().padding(.leading, 24)
+                    .padding(.leading, 24)
                 }
+                .buttonStyle(.plain)
+                ThinDivider().padding(.leading, 24)
             }
+            Button {
+                showNewProgram = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "plus")
+                        .font(.jost(.semibold, size: 15))
+                    Text("NEW PROGRAM")
+                        .font(.jost(.semibold, size: 14))
+                        .kerning(1.5)
+                }
+                .foregroundStyle(Color(.secondaryLabel))
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
+            }
+            .buttonStyle(.plain)
         }
     }
 
