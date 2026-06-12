@@ -22,7 +22,8 @@ struct ProgramEditorView: View {
     init(program: WorkoutProgram?) {
         self.program = program
         _name = State(initialValue: program?.name ?? "")
-        _colorName = State(initialValue: program?.colorName ?? "paletteIntenseRed")
+        let cn = program?.colorName ?? "paletteIntenseRed"
+        _colorName = State(initialValue: ProgramColor(rawValue: cn) != nil ? cn : "paletteIntenseRed")
         _constraintRaw = State(initialValue: program?.programConstraint ?? "")
         _useFixedReps = State(initialValue: program?.useFixedReps ?? false)
         let existingReps = program?.sortedExercises.first?.fixedReps ?? 0
@@ -251,7 +252,7 @@ struct ProgramEditorView: View {
             HStack(spacing: 0) {
                 setsStepper(ex: ex)
 
-                if useFixedReps {
+                if !useFixedReps {
                     repsStepper(ex: ex)
                 }
 

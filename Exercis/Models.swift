@@ -606,7 +606,7 @@ let allDefaultProgramDefs: [DefaultProgramDef] = [
         ("wger_lateral_raises",                       "Lateral Raises",                          3),
         ("wger_triceps_extensions_on_cable_with_bar", "Triceps Extensions On Cable With Bar",    3)
     ]),
-    DefaultProgramDef(name: "Pull", color: "paletteGreen", constraint: "pull", exercises: [
+    DefaultProgramDef(name: "Pull", color: "paletteSeafoam", constraint: "pull", exercises: [
         ("wger_deadlifts",                  "Deadlifts",                     3),
         ("wger_pullups",                    "Pull-Ups",                      3),
         ("wger_rowing_seated",              "Rowing, Seated",                3),

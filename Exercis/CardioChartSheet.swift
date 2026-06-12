@@ -65,7 +65,7 @@ struct CardioChartSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
-                Text(cardioType)
+                Text((CardioType(rawValue: cardioType)?.displayName ?? cardioType).uppercased())
                     .font(.jost(.bold, size: 13))
                     .kerning(2)
                     .foregroundStyle(Color.historyAccent)

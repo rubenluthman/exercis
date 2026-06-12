@@ -360,8 +360,12 @@ struct OnboardingView: View {
     private var cardioStep: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    ForEach(cardioGroups, id: \.title) { group in
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(Array(cardioGroups.enumerated()), id: \.element.title) { index, group in
+                        if index > 0 {
+                            ThinDivider()
+                                .padding(.bottom, 20)
+                        }
                         VStack(alignment: .leading, spacing: 8) {
                             Text(group.title.uppercased())
                                 .font(.jost(.medium, size: 12))
@@ -395,9 +399,10 @@ struct OnboardingView: View {
                             }
                             .padding(.horizontal, 24)
                         }
+                        .padding(.bottom, 20)
                     }
                 }
-                .padding(.vertical, 8)
+                .padding(.top, 8)
                 .padding(.bottom, 24)
             }
 

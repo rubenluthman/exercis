@@ -559,6 +559,7 @@ struct SettingsView: View {
                 }
             ))
             .labelsHidden()
+            .tint(Color.workoutAccent)
 
             Text(type.displayName.uppercased())
                 .font(.jost(.semibold, size: 14))

@@ -27,7 +27,7 @@ struct SessionTimePicker: View {
                 DatePicker("", selection: Binding(
                     get: { start },
                     set: { newStart in
-                        let duration = end.timeIntervalSince(start)
+                        let duration = max(0, end.timeIntervalSince(start))
                         start = newStart
                         end = newStart.addingTimeInterval(duration)
                     }
