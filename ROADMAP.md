@@ -84,6 +84,7 @@ The app is intentionally single-user. This section documents every change requir
 
 ## Done
 
+- ~~Program rotations — A/B/C rotation support with ProgramRotation SwiftData model; RotationCard and RotationEditorView; rotation auto-advances on session save~~
 - ~~Expand alias coverage in `exercises_def.json` — 1 261 alternative names added across all exercises via three pipeline passes (ChatGPT, Gemini, Claude Opus); aliases included in ExercisePickerView search~~
 - ~~User-controlled date language — SYSTEM / SV / EN in SettingsView, `appLocale()` replaces hardcoded `sv_SE` everywhere~~
 - ~~Onboarding — 3 steps (program grid + cardio checkboxes + Apple Health), standard programs seeded~~

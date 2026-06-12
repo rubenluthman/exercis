@@ -10,6 +10,12 @@ private struct WhatsNewEntry: Identifiable {
 
 private let entries: [WhatsNewEntry] = [
     WhatsNewEntry(
+        icon: "arrow.trianglehead.2.clockwise",
+        iconColor: .homeAccent,
+        title: "Program rotations",
+        body: "Set up an A/B or A/B/C rotation and the app tracks which program is up next — automatically advancing after each completed session."
+    ),
+    WhatsNewEntry(
         icon: "magnifyingglass",
         iconColor: .workoutAccent,
         title: "Better exercise search",

@@ -34,7 +34,7 @@ All files live flat in the `Exercis/` folder.
 ```
 ExercisApp.swift          ← @main ExercisApp + RootView + MainTabView (4 tabs)
 AuthManager.swift         ← AuthManager (Face ID / passcode)
-Models.swift              ← SwiftData models (WorkoutSession, CardioSession, WorkoutProgram, ProgramExercise, CardioType)
+Models.swift              ← SwiftData models (WorkoutSession, CardioSession, WorkoutProgram, ProgramExercise, ProgramRotation, CardioType)
 Theme.swift               ← colors, fonts, button styles, ThinDivider, enableSwipeBack, formatWeight/parseWeight, free business-logic functions
 LockView.swift            ← lock screen
 TrainingView.swift        ← home tab — selected programs + cardio types, launch a session
@@ -63,6 +63,8 @@ HealthKitManager.swift    ← saves HKWorkout to Apple Health
 ExerciseLibrary.swift     ← loads exercises_def.json, ExerciseDef struct, ExerciseLibrary singleton + BodyLimitation/ProgramConstraint/MuscleGroup enums
 ReminderManager.swift     ← UNUserNotificationCenter wrapper; schedule(weekdays:hour:minute:), cancel(), suggestedTime(from:)
 WhatsNewSheet.swift       ← release notes per version (opened from the VERSION row in SettingsView)
+RotationCard.swift        ← card for a ProgramRotation shown in TrainingView (next program, A·B breadcrumb)
+RotationEditorView.swift  ← create/edit a ProgramRotation (sequence builder, next-up picker)
 ExercisActivityAttributes.swift ← ActivityKit attributes for Live Activity (program name, accent color, exercise/set state)
 LiveActivityManager.swift ← manages start/update/end of Live Activity during a strength session
 WidgetDataStore.swift     ← writes WidgetSnapshot to App Group UserDefaults (group.rubenluthman.Exercis)
@@ -271,6 +273,21 @@ All free functions in Theme.swift are unit-tested and kept free of SwiftUI/Swift
 }
 ```
 
+**`ProgramRotation`** (SwiftData):
+```swift
+@Model class ProgramRotation {
+    var id: UUID; var name: String
+    var programIds: [String]   // ordered UUID strings of WorkoutPrograms
+    var currentIndex: Int      // index of the next-up program (wraps via % count)
+    var sortIndex: Int
+}
+```
+- `nextIndex` computed property: `currentIndex % programIds.count`
+- Shown in TrainingView above standalone programs; tapping starts the program at `nextIndex`
+- After DONE in StrengthView, `currentIndex` advances by 1 (wraps around)
+- Supports 2–6 programs (displayed as A/B/C…); drafts work per-slot via the underlying program's ID
+- Managed in Settings → ROTATIONS (create, edit, delete)
+
 **`CardioType` enum** (in Models.swift, `Identifiable`):
 
 26 cases with lowercase rawValues — grouped by category:
@@ -316,7 +333,7 @@ struct ExerciseFormData {
 **Weight input**: accepts both period and comma as decimal separator (`parseWeight`).
 **Weight display**: formatted with `formatWeight` (NumberFormatter, locale: .current).
 
-**ModelContainer** registers `[WorkoutSession.self, CardioSession.self, WorkoutProgram.self]` — related models (ExerciseLog, SetLog, ProgramExercise) are included automatically via `@Relationship`.
+**ModelContainer** registers `[WorkoutSession.self, CardioSession.self, WorkoutProgram.self]` — related models (ExerciseLog, SetLog, ProgramExercise) are included automatically via `@Relationship`. `ProgramRotation` is registered separately in `ExercisSchemaV1.models`.
 
 ---
 
