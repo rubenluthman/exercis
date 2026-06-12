@@ -12,11 +12,15 @@ struct OnboardingView: View {
 
     @State private var step = 1
     @State private var selectedProgramIds: Set<UUID> = []
+    @State private var wantsRotation = false
+    @State private var rotationIds: [String] = []
+    @State private var rotationCurrentIndex = 0
     @State private var selectedCardioTypes: Set<String> = []
     @State private var editingProgram: WorkoutProgram? = nil
     @State private var healthKitDone = false
 
-    // Cardio groups for step 2
+    private let letters = ["A", "B", "C", "D", "E", "F"]
+
     private let cardioGroups: [(title: String, types: [CardioType])] = [
         ("Maskiner", [.crosstrainer, .cyclingStationary, .rowingMachine, .treadmillRun,
                        .treadmillWalk, .stairClimber, .skiErg, .assaultBike]),
@@ -34,6 +38,8 @@ struct OnboardingView: View {
             if step == 1 {
                 programStep
             } else if step == 2 {
+                rotationStep
+            } else if step == 3 {
                 cardioStep
             } else {
                 healthStep
@@ -59,11 +65,7 @@ struct OnboardingView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 40)
 
-            Text(step == 1
-                 ? "Choose your training programs"
-                 : step == 2
-                 ? "Which cardio types do you train?"
-                 : "Connect Apple Health")
+            Text(headerSubtitle)
                 .font(.jost(.regular, size: 15))
                 .foregroundStyle(Color(.secondaryLabel))
                 .multilineTextAlignment(.center)
@@ -74,31 +76,39 @@ struct OnboardingView: View {
         .padding(.horizontal, 24)
     }
 
+    private var headerSubtitle: String {
+        switch step {
+        case 1:  return String(localized: "Choose your training programs")
+        case 2:  return String(localized: "Set up a program rotation")
+        case 3:  return String(localized: "Which cardio types do you train?")
+        default: return String(localized: "Connect Apple Health")
+        }
+    }
+
     // MARK: - Step 1: Programs
 
     private var programStep: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: 16) {
-                    // Full Body — full width
                     programRow(programs.first { $0.name == "Full Body" })
 
-                    // Överkropp + Underkropp — 2 columns
                     HStack(spacing: 12) {
                         programRow(programs.first { $0.name == "Överkropp" })
                         programRow(programs.first { $0.name == "Underkropp" })
                     }
 
-                    // Push + Pull + Legs — 3 columns
                     HStack(spacing: 8) {
                         programRow(programs.first { $0.name == "Push" })
                         programRow(programs.first { $0.name == "Pull" })
                         programRow(programs.first { $0.name == "Legs" })
                     }
 
-                    // Bodyweight — full width
                     programRow(programs.first { $0.name == "Bodyweight" })
 
+                    if !selectedProgramIds.isEmpty {
+                        rotationOptIn
+                    }
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
@@ -107,10 +117,41 @@ struct OnboardingView: View {
             bottomBar(
                 primary: "FORTSÄTT",
                 primaryEnabled: !selectedProgramIds.isEmpty,
-                primaryAction: { withAnimation { step = 2 } },
-                skipAction: { withAnimation { step = 2 } }
+                primaryAction: {
+                    withAnimation { step = wantsRotation ? 2 : 3 }
+                },
+                skipAction: { withAnimation { step = 3 } }
             )
         }
+    }
+
+    private var rotationOptIn: some View {
+        Button {
+            Haptics.selection()
+            wantsRotation.toggle()
+            if !wantsRotation { rotationIds = [] }
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: wantsRotation ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 20))
+                    .foregroundStyle(wantsRotation ? Color.homeAccent : Color(.tertiaryLabel))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Rotate programs (A/B)")
+                        .font(.jost(.regular, size: 14))
+                        .foregroundStyle(.primary)
+                    Text("Automatically alternate between selected programs")
+                        .font(.jost(.regular, size: 12))
+                        .foregroundStyle(Color(.secondaryLabel))
+                }
+
+                Spacer()
+            }
+            .padding(.vertical, 10)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .padding(.top, 8)
     }
 
     @ViewBuilder
@@ -122,6 +163,8 @@ struct OnboardingView: View {
                     Haptics.selection()
                     if isSelected {
                         selectedProgramIds.remove(program.id)
+                        rotationIds.removeAll { $0 == program.id.uuidString }
+                        if selectedProgramIds.isEmpty { wantsRotation = false }
                     } else {
                         selectedProgramIds.insert(program.id)
                     }
@@ -145,7 +188,173 @@ struct OnboardingView: View {
         }
     }
 
-    // MARK: - Step 2: Cardio
+    // MARK: - Step 2: Rotation
+
+    private var rotationStep: some View {
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    rotationSequenceSection
+                    if rotationIds.count >= 2 {
+                        ThinDivider()
+                        rotationNextUpSection
+                    }
+                    ThinDivider()
+                    rotationAddSection
+                }
+                .padding(.bottom, 40)
+            }
+            .softScrollEdge()
+
+            bottomBar(
+                primary: "FORTSÄTT",
+                primaryEnabled: rotationIds.count >= 2,
+                primaryAction: { withAnimation { step = 3 } },
+                skipAction: {
+                    rotationIds = []
+                    withAnimation { step = 3 }
+                }
+            )
+        }
+    }
+
+    private var rotationSequenceSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            rotationSectionLabel("SEQUENCE")
+                .padding(.horizontal, 24)
+
+            if rotationIds.isEmpty {
+                Text("Tap programs below to build the rotation order.")
+                    .font(.jost(.regular, size: 14))
+                    .foregroundStyle(Color(.tertiaryLabel))
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 14)
+            } else {
+                ForEach(Array(rotationIds.enumerated()), id: \.offset) { i, id in
+                    let program = programs.first { $0.id.uuidString == id }
+                    let letter = i < letters.count ? letters[i] : "\(i + 1)"
+                    let accent = program.map { Color($0.colorName) } ?? Color(.secondaryLabel)
+                    HStack(spacing: 12) {
+                        Text(letter)
+                            .font(.jost(.semibold, size: 12))
+                            .kerning(1)
+                            .foregroundStyle(accent)
+                            .frame(width: 16)
+                        Text(program?.name ?? "—")
+                            .font(.jost(.regular, size: 15))
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Button {
+                            removeFromRotation(at: i)
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.jost(.medium, size: 11))
+                                .foregroundStyle(Color(.tertiaryLabel))
+                                .frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(.leading, 24)
+                    ThinDivider().padding(.leading, 56)
+                }
+            }
+        }
+    }
+
+    private var rotationNextUpSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            rotationSectionLabel("NEXT UP")
+                .padding(.horizontal, 24)
+            Text("Which program is up first?")
+                .font(.jost(.regular, size: 14))
+                .foregroundStyle(Color(.secondaryLabel))
+                .padding(.horizontal, 24)
+                .padding(.bottom, 12)
+            HStack(spacing: 8) {
+                ForEach(Array(rotationIds.enumerated()), id: \.offset) { i, id in
+                    let prog = programs.first { $0.id.uuidString == id }
+                    let accent = prog.map { Color($0.colorName) } ?? Color(.secondaryLabel)
+                    let isSelected = (rotationCurrentIndex % max(1, rotationIds.count)) == i
+                    let letter = i < letters.count ? letters[i] : "\(i + 1)"
+                    Button {
+                        rotationCurrentIndex = i
+                    } label: {
+                        Text(letter)
+                            .font(.jost(.semibold, size: 13))
+                            .kerning(1)
+                            .foregroundStyle(isSelected ? .white : accent)
+                            .frame(width: 44, height: 36)
+                            .background(isSelected ? accent : accent.opacity(0.12))
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                    }
+                    .buttonStyle(.plain)
+                    .animation(.easeInOut(duration: 0.15), value: isSelected)
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+        }
+    }
+
+    private var rotationAddSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            rotationSectionLabel("ADD PROGRAMS")
+                .padding(.horizontal, 24)
+
+            let available = programs.filter {
+                selectedProgramIds.contains($0.id) && !rotationIds.contains($0.id.uuidString)
+            }
+            if available.isEmpty {
+                Text("All selected programs are in the rotation.")
+                    .font(.jost(.regular, size: 14))
+                    .foregroundStyle(Color(.tertiaryLabel))
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 14)
+            } else {
+                ForEach(available) { program in
+                    Button {
+                        guard rotationIds.count < 6 else { return }
+                        rotationIds.append(program.id.uuidString)
+                    } label: {
+                        HStack {
+                            Text(program.name)
+                                .font(.jost(.regular, size: 15))
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "plus")
+                                .font(.jost(.medium, size: 13))
+                                .foregroundStyle(Color(program.colorName))
+                                .frame(width: 44, height: 44)
+                        }
+                        .padding(.leading, 24)
+                    }
+                    .buttonStyle(.plain)
+                    ThinDivider().padding(.leading, 24)
+                }
+            }
+        }
+    }
+
+    private func removeFromRotation(at index: Int) {
+        rotationIds.remove(at: index)
+        if rotationIds.isEmpty {
+            rotationCurrentIndex = 0
+        } else if rotationCurrentIndex >= rotationIds.count {
+            rotationCurrentIndex = 0
+        }
+    }
+
+    private func rotationSectionLabel(_ text: String) -> some View {
+        Text(text)
+            .font(.jost(.medium, size: 12))
+            .kerning(1.5)
+            .foregroundStyle(Color(.secondaryLabel))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 20)
+            .padding(.bottom, 8)
+    }
+
+    // MARK: - Step 3: Cardio
 
     private var cardioStep: some View {
         VStack(spacing: 0) {
@@ -194,13 +403,30 @@ struct OnboardingView: View {
             bottomBar(
                 primary: "NEXT",
                 primaryEnabled: true,
-                primaryAction: { step = 3 },
-                skipAction: { step = 3 }
+                primaryAction: { step = 4 },
+                skipAction: { step = 4 }
             )
         }
     }
 
-    // MARK: - Step 3: Apple Health
+    private func cardioTypeRow(type: CardioType, isSelected: Bool) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .font(.jost(.regular, size: 16))
+                .foregroundStyle(isSelected ? Color.workoutAccent : Color(.tertiaryLabel))
+
+            Text(type.displayName)
+                .font(.jost(.regular, size: 14))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+
+            Spacer()
+        }
+        .frame(height: 44)
+        .contentShape(Rectangle())
+    }
+
+    // MARK: - Step 4: Apple Health
 
     private var healthStep: some View {
         VStack(spacing: 0) {
@@ -244,23 +470,6 @@ struct OnboardingView: View {
         }
     }
 
-    private func cardioTypeRow(type: CardioType, isSelected: Bool) -> some View {
-        HStack(spacing: 10) {
-            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                .font(.jost(.regular, size: 16))
-                .foregroundStyle(isSelected ? Color.workoutAccent : Color(.tertiaryLabel))
-
-            Text(type.displayName)
-                .font(.jost(.regular, size: 14))
-                .foregroundStyle(.primary)
-                .lineLimit(1)
-
-            Spacer()
-        }
-        .frame(height: 44)
-        .contentShape(Rectangle())
-    }
-
     // MARK: - Bottom bar
 
     private func bottomBar(primary: String, primaryEnabled: Bool,
@@ -291,6 +500,16 @@ struct OnboardingView: View {
         for program in programs {
             program.isOnTrainingPage = selectedProgramIds.contains(program.id)
         }
+
+        if rotationIds.count >= 2 {
+            let autoName = (0..<min(rotationIds.count, letters.count))
+                .map { letters[$0] }
+                .joined(separator: "/")
+            let rotation = ProgramRotation(name: autoName, programIds: rotationIds)
+            rotation.currentIndex = rotationCurrentIndex % rotationIds.count
+            context.insert(rotation)
+        }
+
         do { try context.save() } catch {
             #if DEBUG
             logger.error("context.save failed: \(error)")
