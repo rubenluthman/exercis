@@ -35,6 +35,7 @@ struct CardioView: View {
     private let altimeter = CMAltimeter()
     @State private var elevationGain: Double = 0
     @State private var lastAltitude: Double? = nil
+    @State private var distanceFromHealth = false
 
     private var elapsedString: String {
         let elapsed: TimeInterval
@@ -73,6 +74,14 @@ struct CardioView: View {
         max(1, editedEnd.timeIntervalSince(editedStart) / 60)
     }
 
+    private func fetchDistanceFromHealth() async {
+        guard distance.isEmpty || distanceFromHealth else { return }
+        guard let km = await HealthKitManager.shared.fetchDistance(start: editedStart, end: editedEnd, type: type),
+              km > 0.05 else { return }
+        distance = displayDistance(km, imperial: imperial)
+        distanceFromHealth = true
+    }
+
     var body: some View {
         ZStack {
             Color.clear
@@ -109,6 +118,9 @@ struct CardioView: View {
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.center)
                                 .focused($distanceFocused)
+                                .onChange(of: distanceFocused) { _, focused in
+                                    if focused { distanceFromHealth = false }
+                                }
                             if distance.isEmpty && !distanceFocused {
                                 Text("–")
                                     .font(.jost(.semibold, size: 72))
@@ -120,6 +132,12 @@ struct CardioView: View {
                             .font(.jost(.medium, size: 12))
                             .kerning(1.5)
                             .foregroundStyle(Color(.secondaryLabel))
+                        if distanceFromHealth {
+                            Text("FROM HEALTH")
+                                .font(.jost(.medium, size: 9))
+                                .kerning(1.5)
+                                .foregroundStyle(Color(.tertiaryLabel))
+                        }
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 24)
@@ -192,7 +210,10 @@ struct CardioView: View {
                 .animation(.linear(duration: 0), value: distanceFocused)
             }
         }
-        .sheet(isPresented: $showTimePicker, onDismiss: { hasCustomTime = true }) {
+        .sheet(isPresented: $showTimePicker, onDismiss: {
+            hasCustomTime = true
+            Task { await fetchDistanceFromHealth() }
+        }) {
             SessionTimePicker(start: $editedStart, end: $editedEnd, accent: .workoutAccent)
         }
         .toolbar(.hidden, for: .tabBar)

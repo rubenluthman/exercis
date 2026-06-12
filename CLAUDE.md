@@ -506,6 +506,7 @@ Do not skip this because the change "feels small" — that judgment belongs here
 - `healthKitID: UUID?` saved on the session object to enable deletion
 - Calories calculated via `estimatedCalories(met:bodyMass:seconds:)` — MET from `CardioType.met`, body weight read from HealthKit (fallback 75 kg)
 - **iOS 18+**: effort score saved as `HKQuantityType(.workoutEffortScore)` via `store.relateWorkoutEffortSample(_:with:activity:)` — applies to both strength and cardio sessions
+- **Read permissions**: `bodyMass`, `distanceWalkingRunning`, `distanceCycling`, `distanceSwimming`, `distanceCrossCountrySkiing` (iOS 18+) — used by `fetchDistance(start:end:type:)` to auto-fill distance in CardioView after the user sets a custom time window. Supported types: `hiking`, `running`, `walking`, `rucking` (walkingRunning), `roadCycling`, `mountainBiking` (cycling), `swimming`, `crossCountrySkiing`.
 
 ---
 

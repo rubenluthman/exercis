@@ -10,6 +10,12 @@ private struct WhatsNewEntry: Identifiable {
 
 private let entries: [WhatsNewEntry] = [
     WhatsNewEntry(
+        icon: "heart.fill",
+        iconColor: .historyAccent,
+        title: "Distance from Health",
+        body: "Log a hike or run after the fact — set the time window and the app automatically fetches the distance from Apple Health."
+    ),
+    WhatsNewEntry(
         icon: "arrow.trianglehead.2.clockwise",
         iconColor: .homeAccent,
         title: "Program rotations",

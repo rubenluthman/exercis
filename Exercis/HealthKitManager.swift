@@ -17,7 +17,15 @@ struct HealthKitManager {
         if #available(iOS 18.0, *) {
             shareTypes.insert(HKQuantityType(.workoutEffortScore))
         }
-        let readTypes: Set<HKObjectType> = [HKQuantityType(.bodyMass)]
+        var readTypes: Set<HKObjectType> = [
+            HKQuantityType(.bodyMass),
+            HKQuantityType(.distanceWalkingRunning),
+            HKQuantityType(.distanceCycling),
+            HKQuantityType(.distanceSwimming),
+        ]
+        if #available(iOS 18.0, *) {
+            readTypes.insert(HKQuantityType(.distanceCrossCountrySkiing))
+        }
         try? await store.requestAuthorization(toShare: shareTypes, read: readTypes)
     }
 
@@ -55,6 +63,36 @@ struct HealthKitManager {
             await attachEffortScore(score, to: workout, start: start, end: end)
         }
         return workout.uuid
+    }
+
+    func fetchDistance(start: Date, end: Date, type: CardioType) async -> Double? {
+        guard isAvailable else { return nil }
+        let identifier: HKQuantityTypeIdentifier
+        switch type {
+        case .roadCycling, .mountainBiking:
+            identifier = .distanceCycling
+        case .running, .walking, .hiking, .rucking:
+            identifier = .distanceWalkingRunning
+        case .swimming:
+            identifier = .distanceSwimming
+        case .crossCountrySkiing:
+            if #available(iOS 18.0, *) {
+                identifier = .distanceCrossCountrySkiing
+            } else {
+                return nil
+            }
+        default:
+            return nil
+        }
+        let quantityType = HKQuantityType(identifier)
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
+        return await withCheckedContinuation { continuation in
+            let query = HKStatisticsQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, stats, _ in
+                let meters = stats?.sumQuantity()?.doubleValue(for: .meter())
+                continuation.resume(returning: meters.map { $0 / 1000 })
+            }
+            store.execute(query)
+        }
     }
 
     func deleteWorkout(uuid: UUID) async {
