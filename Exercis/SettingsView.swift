@@ -31,6 +31,8 @@ struct SettingsView: View {
     @State private var editingRotation: ProgramRotation? = nil
     @State private var showNewRotation = false
     @State private var showWhatsNew = false
+    @State private var reorderingPrograms = false
+    @State private var reorderingCardio = false
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
@@ -38,6 +40,17 @@ struct SettingsView: View {
 
     private var selectedTypes: Set<String> {
         Set(selectedCardioTypesRaw.split(separator: ",").map(String.init))
+    }
+
+    private var orderedSelectedCardioTypes: [CardioType] {
+        selectedCardioTypesRaw
+            .split(separator: ",")
+            .compactMap { CardioType(rawValue: String($0)) }
+    }
+
+    private var unselectedCardioTypes: [CardioType] {
+        let selected = selectedTypes
+        return CardioType.allCases.filter { !selected.contains($0.rawValue) }
     }
 
     var body: some View {
@@ -48,29 +61,52 @@ struct SettingsView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     sectionBlock {
-                        sectionLabel("STRENGTH PROGRAMS")
-                        ForEach(programs) { program in
-                            programRow(program)
+                        HStack(alignment: .bottom) {
+                            sectionLabel("STRENGTH PROGRAMS")
+                            Spacer()
+                            if programs.count >= 2 {
+                                Button {
+                                    Haptics.selection()
+                                    reorderingPrograms.toggle()
+                                } label: {
+                                    Text(reorderingPrograms ? String(localized: "DONE") : String(localized: "REORDER"))
+                                        .font(.jost(.medium, size: 12))
+                                        .kerning(1.5)
+                                        .foregroundStyle(Color(.secondaryLabel))
+                                }
+                                .buttonStyle(.plain)
+                                .padding(.trailing, 24)
+                                .padding(.bottom, 8)
+                            }
+                        }
+                        ForEach(Array(programs.enumerated()), id: \.element.id) { idx, program in
+                            if reorderingPrograms {
+                                programReorderRow(program, index: idx)
+                            } else {
+                                programRow(program)
+                            }
                             if program.id != programs.last?.id {
                                 ThinDivider().padding(.leading, 24)
                             }
                         }
-                        Button {
-                            showNewProgram = true
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "plus")
-                                    .font(.jost(.semibold, size: 15))
-                                Text("NEW PROGRAM")
-                                    .font(.jost(.semibold, size: 14))
-                                    .kerning(1.5)
+                        if !reorderingPrograms {
+                            Button {
+                                showNewProgram = true
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "plus")
+                                        .font(.jost(.semibold, size: 15))
+                                    Text("NEW PROGRAM")
+                                        .font(.jost(.semibold, size: 14))
+                                        .kerning(1.5)
+                                }
+                                .foregroundStyle(Color(.secondaryLabel))
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 16)
                             }
-                            .foregroundStyle(Color(.secondaryLabel))
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 24)
-                            .padding(.vertical, 16)
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
 
                     ThinDivider()
@@ -113,11 +149,41 @@ struct SettingsView: View {
                     ThinDivider()
 
                     sectionBlock {
-                        sectionLabel("CARDIO TYPES")
-                        ForEach(CardioType.allCases, id: \.self) { type in
-                            cardioTypeRow(type)
-                            if type != CardioType.allCases.last {
+                        HStack(alignment: .bottom) {
+                            sectionLabel("CARDIO TYPES")
+                            Spacer()
+                            if orderedSelectedCardioTypes.count >= 2 {
+                                Button {
+                                    Haptics.selection()
+                                    reorderingCardio.toggle()
+                                } label: {
+                                    Text(reorderingCardio ? String(localized: "DONE") : String(localized: "REORDER"))
+                                        .font(.jost(.medium, size: 12))
+                                        .kerning(1.5)
+                                        .foregroundStyle(Color(.secondaryLabel))
+                                }
+                                .buttonStyle(.plain)
+                                .padding(.trailing, 24)
+                                .padding(.bottom, 8)
+                            }
+                        }
+                        if reorderingCardio {
+                            ForEach(Array(orderedSelectedCardioTypes.enumerated()), id: \.element) { idx, type in
+                                cardioTypeReorderRow(type, index: idx)
+                                if idx < orderedSelectedCardioTypes.count - 1 {
+                                    ThinDivider().padding(.leading, 24)
+                                }
+                            }
+                        } else {
+                            ForEach(orderedSelectedCardioTypes, id: \.self) { type in
+                                cardioTypeRow(type)
                                 ThinDivider().padding(.leading, 24)
+                            }
+                            ForEach(unselectedCardioTypes, id: \.self) { type in
+                                cardioTypeRow(type)
+                                if type != unselectedCardioTypes.last {
+                                    ThinDivider().padding(.leading, 24)
+                                }
                             }
                         }
                     }
@@ -483,6 +549,42 @@ struct SettingsView: View {
         .padding(.vertical, 10)
     }
 
+    private func programReorderRow(_ program: WorkoutProgram, index: Int) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(program.name.uppercased())
+                    .font(.jost(.semibold, size: 14))
+                    .kerning(1.5)
+                    .foregroundStyle(.primary)
+                Text("\(program.sortedExercises.count) \(String(localized: "EXERCISES")) · \(program.sortedExercises.first?.setCount ?? 3) SET")
+                    .font(.jost(.medium, size: 12))
+                    .kerning(1.5)
+                    .foregroundStyle(Color(.secondaryLabel))
+            }
+
+            Spacer()
+
+            reorderButtons(
+                canMoveUp: index > 0,
+                canMoveDown: index < programs.count - 1,
+                moveUp: { moveProgram(at: index, direction: -1) },
+                moveDown: { moveProgram(at: index, direction: 1) }
+            )
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 10)
+    }
+
+    private func moveProgram(at index: Int, direction: Int) {
+        let neighbor = index + direction
+        guard neighbor >= 0 && neighbor < programs.count else { return }
+        let tmp = programs[index].sortIndex
+        programs[index].sortIndex = programs[neighbor].sortIndex
+        programs[neighbor].sortIndex = tmp
+        Haptics.selection()
+        try? context.save()
+    }
+
     // MARK: - Cardio type row
 
     private func cardioTypeRow(_ type: CardioType) -> some View {
@@ -490,9 +592,13 @@ struct SettingsView: View {
             Toggle("", isOn: Binding(
                 get: { selectedTypes.contains(type.rawValue) },
                 set: { on in
-                    var types = selectedTypes
-                    if on { types.insert(type.rawValue) } else { types.remove(type.rawValue) }
-                    selectedCardioTypesRaw = types.joined(separator: ",")
+                    var ordered = orderedSelectedCardioTypes.map(\.rawValue)
+                    if on {
+                        ordered.append(type.rawValue)
+                    } else {
+                        ordered.removeAll { $0 == type.rawValue }
+                    }
+                    selectedCardioTypesRaw = ordered.joined(separator: ",")
                 }
             ))
             .labelsHidden()
@@ -506,6 +612,57 @@ struct SettingsView: View {
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 14)
+    }
+
+    private func cardioTypeReorderRow(_ type: CardioType, index: Int) -> some View {
+        HStack {
+            Text(type.displayName.uppercased())
+                .font(.jost(.semibold, size: 14))
+                .kerning(1.5)
+                .foregroundStyle(.primary)
+
+            Spacer()
+
+            reorderButtons(
+                canMoveUp: index > 0,
+                canMoveDown: index < orderedSelectedCardioTypes.count - 1,
+                moveUp: { moveCardioType(at: index, direction: -1) },
+                moveDown: { moveCardioType(at: index, direction: 1) }
+            )
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 14)
+    }
+
+    private func moveCardioType(at index: Int, direction: Int) {
+        var ordered = orderedSelectedCardioTypes.map(\.rawValue)
+        let neighbor = index + direction
+        guard neighbor >= 0 && neighbor < ordered.count else { return }
+        ordered.swapAt(index, neighbor)
+        selectedCardioTypesRaw = ordered.joined(separator: ",")
+        Haptics.selection()
+    }
+
+    private func reorderButtons(canMoveUp: Bool, canMoveDown: Bool, moveUp: @escaping () -> Void, moveDown: @escaping () -> Void) -> some View {
+        HStack(spacing: 0) {
+            Button(action: moveUp) {
+                Image(systemName: "chevron.up")
+                    .font(.jost(.medium, size: 14))
+                    .foregroundStyle(canMoveUp ? Color(.secondaryLabel) : Color(.tertiaryLabel))
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .disabled(!canMoveUp)
+
+            Button(action: moveDown) {
+                Image(systemName: "chevron.down")
+                    .font(.jost(.medium, size: 14))
+                    .foregroundStyle(canMoveDown ? Color(.secondaryLabel) : Color(.tertiaryLabel))
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .disabled(!canMoveDown)
+        }
     }
 
     // MARK: - Timer row

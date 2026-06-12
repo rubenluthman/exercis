@@ -515,7 +515,10 @@ struct OnboardingView: View {
             logger.error("context.save failed: \(error)")
             #endif
         }
-        selectedCardioTypesRaw = selectedCardioTypes.joined(separator: ",")
+        selectedCardioTypesRaw = CardioType.allCases
+            .filter { selectedCardioTypes.contains($0.rawValue) }
+            .map(\.rawValue)
+            .joined(separator: ",")
         onboardingCompleted = true
     }
 
