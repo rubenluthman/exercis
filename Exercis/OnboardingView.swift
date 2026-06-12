@@ -159,21 +159,28 @@ struct OnboardingView: View {
                                 .foregroundStyle(Color(.secondaryLabel))
                                 .padding(.horizontal, 24)
 
-                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())],
-                                      spacing: 8) {
-                                ForEach(group.types, id: \.rawValue) { type in
-                                    let isSelected = selectedCardioTypes.contains(type.rawValue)
-                                    Button {
-                                        Haptics.selection()
-                                        if isSelected {
-                                            selectedCardioTypes.remove(type.rawValue)
-                                        } else {
-                                            selectedCardioTypes.insert(type.rawValue)
+                            let pairs = stride(from: 0, to: group.types.count, by: 2).map {
+                                Array(group.types[$0 ..< min($0 + 2, group.types.count)])
+                            }
+                            VStack(spacing: 8) {
+                                ForEach(pairs, id: \.first!.rawValue) { pair in
+                                    HStack(spacing: 8) {
+                                        ForEach(pair, id: \.rawValue) { type in
+                                            let isSelected = selectedCardioTypes.contains(type.rawValue)
+                                            Button {
+                                                Haptics.selection()
+                                                if isSelected {
+                                                    selectedCardioTypes.remove(type.rawValue)
+                                                } else {
+                                                    selectedCardioTypes.insert(type.rawValue)
+                                                }
+                                            } label: {
+                                                cardioTypeRow(type: type, isSelected: isSelected)
+                                            }
+                                            .buttonStyle(.plain)
                                         }
-                                    } label: {
-                                        cardioTypeRow(type: type, isSelected: isSelected)
+                                        if pair.count == 1 { Spacer() }
                                     }
-                                    .buttonStyle(.plain)
                                 }
                             }
                             .padding(.horizontal, 24)
