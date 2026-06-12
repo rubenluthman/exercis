@@ -13,6 +13,7 @@ struct ProgramEditorView: View {
     @State private var colorName: String
     @State private var constraintRaw: String
     @State private var useFixedReps: Bool
+    @State private var defaultFixedReps: Int
     @State private var exercises: [ExerciseDraft]
     @State private var showPicker = false
     @State private var showDeleteAlert = false
@@ -24,6 +25,8 @@ struct ProgramEditorView: View {
         _colorName = State(initialValue: program?.colorName ?? "paletteIntenseRed")
         _constraintRaw = State(initialValue: program?.programConstraint ?? "")
         _useFixedReps = State(initialValue: program?.useFixedReps ?? false)
+        let existingReps = program?.sortedExercises.first?.fixedReps ?? 0
+        _defaultFixedReps = State(initialValue: existingReps > 0 ? existingReps : 6)
         _exercises = State(initialValue: program?.sortedExercises.map {
             ExerciseDraft(exerciseId: $0.exerciseId, exerciseName: $0.exerciseName, setCount: $0.setCount, fixedReps: $0.fixedReps)
         } ?? [])
@@ -61,8 +64,26 @@ struct ProgramEditorView: View {
                     .tint(accent)
                     .onChange(of: useFixedReps) { _, enabled in
                         if enabled {
-                            for i in exercises.indices where exercises[i].fixedReps == 0 {
-                                exercises[i].fixedReps = 8
+                            for i in exercises.indices {
+                                exercises[i].fixedReps = defaultFixedReps
+                            }
+                        }
+                    }
+                    if useFixedReps {
+                        Stepper(value: $defaultFixedReps, in: 1...25) {
+                            HStack(spacing: 6) {
+                                Text("\(defaultFixedReps)")
+                                    .font(.jost(.semibold, size: 16))
+                                    .foregroundStyle(accent)
+                                Text("reps")
+                                    .font(.jost(.regular, size: 16))
+                                    .foregroundStyle(.primary)
+                            }
+                        }
+                        .tint(accent)
+                        .onChange(of: defaultFixedReps) { _, newVal in
+                            for i in exercises.indices {
+                                exercises[i].fixedReps = newVal
                             }
                         }
                     }
