@@ -8,7 +8,6 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 ## Up next / under discussion
 
-- **App icon redesign** — simplify the icon to three stripes only (remove the outer stripes that fade into the edges). The three remaining stripes should be wider with more white space between them, and still bleed edge to edge. Needs to be done in a dedicated design tool (e.g. Figma or Sketch) — not directly in Icon Composer.
 
 - **Siri integration via App Intents** — trigger common actions (start a session, log cardio) via Siri or the Shortcuts app. `AppIntents` is the only integration path as of iOS 27 — SiriKit is formally deprecated with a ~2–3 year support window (approx. iOS 29 / fall 2028). The new Gemini-powered Siri routes exclusively through App Intents; apps without it are invisible to Siri.
 
@@ -84,6 +83,7 @@ The app is intentionally single-user. This section documents every change requir
 
 ## Done
 
+- ~~App icon redesign — three bold diagonal stripes in brand colors (#23821F green, #B73B3F red, #0078B8 blue), scaled to 65% in Icon Composer~~
 - ~~Program rotations — A/B/C rotation support with ProgramRotation SwiftData model; RotationCard and RotationEditorView; rotation auto-advances on session save~~
 - ~~Expand alias coverage in `exercises_def.json` — 1 261 alternative names added across all exercises via three pipeline passes (ChatGPT, Gemini, Claude Opus); aliases included in ExercisePickerView search~~
 - ~~User-controlled date language — SYSTEM / SV / EN in SettingsView, `appLocale()` replaces hardcoded `sv_SE` everywhere~~
