@@ -8,9 +8,6 @@ Everything planned, decided, and parked in one place. Updated continuously durin
 
 ## Up next / under discussion
 
-
-- **Siri integration via App Intents** — trigger common actions (start a session, log cardio) via Siri or the Shortcuts app. `AppIntents` is the only integration path as of iOS 27 — SiriKit is formally deprecated with a ~2–3 year support window (approx. iOS 29 / fall 2028). The new Gemini-powered Siri routes exclusively through App Intents; apps without it are invisible to Siri.
-
 ---
 
 ## Requires Apple Developer account (TestFlight + App Store)
@@ -77,6 +74,7 @@ The app is intentionally single-user. This section documents every change requir
 
 ## Long-term
 
+- **Siri integration via App Intents** — trigger common actions (start a session, log cardio) via Siri or the Shortcuts app. `AppIntents` is the only integration path as of iOS 27 — SiriKit is formally deprecated with a ~2–3 year support window (approx. iOS 29 / fall 2028). The new Gemini-powered Siri routes exclusively through App Intents; apps without it are invisible to Siri.
 - **HIIT** — structured HIIT as its own program type, distinct from strength and cardio; timer-driven with configurable intervals and rounds
 
 ---
