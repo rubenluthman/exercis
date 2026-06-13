@@ -26,9 +26,14 @@ struct TrainingView: View {
     @State private var showDiscardStrengthAlert = false
     @State private var showDiscardCardioAlert = false
     @State private var cardioTypeToDiscard: CardioType? = nil
+    @State private var expandedRotations: Set<UUID> = []
+
+    private var rotationProgramIds: Set<String> {
+        Set(rotations.flatMap { $0.programIds })
+    }
 
     private var trainingPrograms: [WorkoutProgram] {
-        programs.filter { $0.isOnTrainingPage }
+        programs.filter { $0.isOnTrainingPage && !rotationProgramIds.contains($0.id.uuidString) }
     }
 
     private var selectedCardioTypes: [CardioType] {
@@ -137,18 +142,10 @@ struct TrainingView: View {
                             activeLaunch = launch
                         }
                     } label: {
-                        HStack(spacing: 0) {
-                            ProgramCard(program: program)
-                                .padding(.horizontal, 24)
-                                .padding(.vertical, 12)
-                            if !isDraft {
-                                Image(systemName: "chevron.right")
-                                    .font(.jost(.medium, size: 10))
-                                    .foregroundStyle(Color(.tertiaryLabel))
-                                    .padding(.trailing, 24)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        ProgramCard(program: program)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.plain)
 
@@ -177,52 +174,92 @@ struct TrainingView: View {
         let nextProgram = programs.first { $0.id.uuidString == nextId }
         let draftProgramId = UserDefaults.standard.loadDraft()?.programId
         let isDraft = hasDraft && nextProgram.map { draftProgramId == $0.id.uuidString } ?? false
+        let isExpanded = expandedRotations.contains(rotation.id)
 
-        HStack(spacing: 0) {
-            Button {
-                guard let prog = nextProgram else { return }
-                let launch = StrengthLaunch(program: prog, rotationId: rotation.id)
-                if isDraft {
-                    activeLaunch = launch
-                } else if hasDraft {
-                    pendingLaunch = launch
-                    showDiscardAlert = true
-                } else {
-                    activeLaunch = launch
-                }
-            } label: {
-                HStack(spacing: 0) {
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                Button {
+                    guard let prog = nextProgram else { return }
+                    let launch = StrengthLaunch(program: prog, rotationId: rotation.id)
+                    if isDraft {
+                        activeLaunch = launch
+                    } else if hasDraft {
+                        pendingLaunch = launch
+                        showDiscardAlert = true
+                    } else {
+                        activeLaunch = launch
+                    }
+                } label: {
                     RotationCard(rotation: rotation, allPrograms: programs, hasDraft: isDraft)
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)
-                    if !isDraft {
-                        Image(systemName: "chevron.right")
-                            .font(.jost(.medium, size: 10))
-                            .foregroundStyle(Color(.tertiaryLabel))
-                            .padding(.trailing, 24)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .buttonStyle(.plain)
-            .opacity(nextProgram == nil ? 0.4 : 1)
-            .disabled(nextProgram == nil)
-
-            if isDraft {
-                Button {
-                    showDiscardStrengthAlert = true
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.jost(.medium, size: 11))
-                        .foregroundStyle(Color(.tertiaryLabel))
-                        .frame(width: 44, height: 44)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Discard draft")
-                .padding(.trailing, 8)
+                .opacity(nextProgram == nil ? 0.4 : 1)
+                .disabled(nextProgram == nil)
+
+                if isDraft {
+                    Button {
+                        showDiscardStrengthAlert = true
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.jost(.medium, size: 11))
+                            .foregroundStyle(Color(.tertiaryLabel))
+                            .frame(width: 44, height: 44)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Discard draft")
+                } else {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.22)) {
+                            if isExpanded {
+                                expandedRotations.remove(rotation.id)
+                            } else {
+                                expandedRotations.insert(rotation.id)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(Color(.tertiaryLabel))
+                            .frame(width: 44, height: 44)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(isExpanded ? "Collapse rotation" : "Expand rotation")
+                }
+                Spacer().frame(width: 8)
             }
+
+            if isExpanded {
+                VStack(spacing: 0) {
+                    ThinDivider().padding(.horizontal, 24)
+                    ForEach(Array(rotation.programIds.enumerated()), id: \.offset) { i, pid in
+                        if let prog = programs.first(where: { $0.id.uuidString == pid }) {
+                            HStack(spacing: 0) {
+                                let letters = ["A", "B", "C", "D", "E", "F"]
+                                Text(i < letters.count ? letters[i] : "\(i + 1)")
+                                    .font(.jost(.semibold, size: 11))
+                                    .kerning(1)
+                                    .foregroundStyle(Color(prog.colorName))
+                                    .frame(width: 24, alignment: .center)
+                                    .padding(.leading, 24)
+                                ProgramCard(program: prog)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 10)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            if i < rotation.programIds.count - 1 {
+                                ThinDivider().padding(.leading, 48)
+                            }
+                        }
+                    }
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
+
+            ThinDivider()
         }
-        ThinDivider()
     }
 
     private var cardioSection: some View {
@@ -236,18 +273,10 @@ struct TrainingView: View {
                     Button {
                         activeCardioType = type
                     } label: {
-                        HStack(spacing: 0) {
-                            CardioTypeCard(type: type, lastDurationMinutes: lastDuration)
-                                .padding(.horizontal, 24)
-                                .padding(.vertical, 12)
-                            if !isDraft {
-                                Image(systemName: "chevron.right")
-                                    .font(.jost(.medium, size: 10))
-                                    .foregroundStyle(Color(.tertiaryLabel))
-                                    .padding(.trailing, 24)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        CardioTypeCard(type: type, lastDurationMinutes: lastDuration)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.plain)
 
