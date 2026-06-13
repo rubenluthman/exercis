@@ -94,8 +94,10 @@ ExercisWidget.entitlements  ← App Group: group.rubenluthman.Exercis
 Adaptive icon via Icon Composer (`Exercis/exercis.icon`). Produces automatic Default/Dark/Tinted variants.
 
 **Layer setup:**
-- `foreground` layer (`foreground.png`): white stripes shape on transparent background. **Glass effect intentionally disabled** (`glass: false`) — the stripes looked better without the Liquid Glass treatment applied to the foreground.
-- Background layer: solid accent color managed by Icon Composer.
+- `foreground 3` layer (`exercis.icon/Assets/foreground 3.png`): three diagonal stripes in brand colors (#23821F green, #B73B3F red, #0078B8 blue) on transparent background, scaled to 65% in Icon Composer. **Glass effect intentionally disabled** (`glass: false`) — the stripes looked better without the Liquid Glass treatment applied to the foreground.
+- Background layer: white (light) / black (dark), managed via `fill-specializations` in `icon.json`.
+
+To replace the foreground PNG: generate a new PNG with colored stripes on transparent background, then overwrite `exercis.icon/Assets/foreground 3.png` and re-import in Icon Composer. The source PNG used to generate the current version is `screen.png` from the original design export.
 
 Do not re-enable `glass: true` on the foreground layer without testing visually — the decision to disable it was intentional.
 
