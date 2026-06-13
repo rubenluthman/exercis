@@ -154,7 +154,7 @@ struct ProgramEditorView: View {
                             exerciseId: def.id,
                             exerciseName: def.displayName,
                             setCount: 3,
-                            fixedReps: useFixedReps ? 8 : 0
+                            fixedReps: useFixedReps ? defaultFixedReps : 0
                         ))
                     },
                     programConstraint: ProgramConstraint(rawValue: constraintRaw) ?? .none
