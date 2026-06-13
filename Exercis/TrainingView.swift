@@ -320,7 +320,7 @@ struct TrainingView: View {
             .kerning(1.5)
             .foregroundStyle(Color(.secondaryLabel))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 20)
+            .padding(.top, 12)
             .padding(.bottom, 8)
     }
 }
