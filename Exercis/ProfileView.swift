@@ -126,7 +126,7 @@ struct ProfileView: View {
             statBlock(label: "STRENGTH", value: "\(workoutSessions.count)", alignment: .leading)
             statBlock(label: "VOLUME",   value: volumeText.0, unit: volumeText.1, alignment: .center)
             statBlock(label: "CARDIO",   value: "\(cardioSessions.count)", alignment: .center)
-            statBlock(label: "TID",      value: cardioTimeText.0, unit: cardioTimeText.1, alignment: .trailing)
+            statBlock(label: "TIME",     value: cardioTimeText.0, unit: cardioTimeText.1, alignment: .trailing)
         }
         .padding(.horizontal, 24)
     }
