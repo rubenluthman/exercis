@@ -123,12 +123,12 @@ struct ProfileView: View {
 
     private var statsRow: some View {
         HStack(alignment: .top, spacing: 0) {
-            statBlock(label: "STRENGTH",    value: "\(workoutSessions.count)", alignment: .center)
-            statBlock(label: "CARDIO",      value: "\(cardioSessions.count)",   alignment: .center)
-            statBlock(label: "VOLUME",      value: volumeText.0, unit: volumeText.1, alignment: .center)
-            statBlock(label: "CARDIO TIME", value: cardioTimeText.0, unit: cardioTimeText.1, alignment: .center)
+            statBlock(label: "STRENGTH", value: "\(workoutSessions.count)", alignment: .leading)
+            statBlock(label: "VOLUME",   value: volumeText.0, unit: volumeText.1, alignment: .center)
+            statBlock(label: "CARDIO",   value: "\(cardioSessions.count)", alignment: .center)
+            statBlock(label: "TID",      value: cardioTimeText.0, unit: cardioTimeText.1, alignment: .trailing)
         }
-        .padding(.horizontal, 4)
+        .padding(.horizontal, 24)
     }
 
     // MARK: - Recent PRs
