@@ -94,10 +94,10 @@ ExercisWidget.entitlements  ← App Group: group.rubenluthman.Exercis
 Adaptive icon via Icon Composer (`Exercis/exercis.icon`). Produces automatic Default/Dark/Tinted variants.
 
 **Layer setup:**
-- `foreground 3` layer (`exercis.icon/Assets/foreground 3.png`): three diagonal stripes in brand colors (#23821F green, #B73B3F red, #0078B8 blue) on transparent background, scaled to 65% in Icon Composer. **Glass effect intentionally disabled** (`glass: false`) — the stripes looked better without the Liquid Glass treatment applied to the foreground.
+- `foreground 3` layer (`exercis.icon/Assets/foreground 3.png`): three diagonal stripes in brand colors (#23821F green, #B73B3F red, #0078B8 blue) on transparent background, set to 100% scale in Icon Composer. The visual scale is baked into the PNG (1024×1024 canvas, content scaled proportionally from the 1600×1600 Stitch export). **Glass effect intentionally disabled** (`glass: false`) — the stripes looked better without the Liquid Glass treatment applied to the foreground.
 - Background layer: white (light) / black (dark), managed via `fill-specializations` in `icon.json`.
 
-To replace the foreground PNG: generate a new PNG with colored stripes on transparent background, then overwrite `exercis.icon/Assets/foreground 3.png` and re-import in Icon Composer. The source PNG used to generate the current version is `screen.png` from the original design export.
+To replace the foreground PNG: take `screen.png` from the Stitch export (1600×1600, transparent background), resize to 1024×1024 — `python3 -c "from PIL import Image; Image.open('screen.png').convert('RGBA').resize((1024,1024), Image.LANCZOS).save('foreground_1024.png')"` — then overwrite `exercis.icon/Assets/foreground 3.png`. Use 100% scale in Icon Composer.
 
 Do not re-enable `glass: true` on the foreground layer without testing visually — the decision to disable it was intentional.
 
