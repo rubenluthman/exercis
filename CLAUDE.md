@@ -355,7 +355,7 @@ Loaded from `Resources/exercises_def.json` via `ExerciseLibrary` (singleton). ~1
 - `wgerId` / `wgerBaseId` — IDs in the [wger](https://wger.de) open exercise database the data was originally imported from
 - `gifId` — numeric ID in the hasaneyldrm GIF source; matches the prefix of `gifFile` (e.g. `gifId: "0031"` → `gifFile: "0031-25GPyDY.gif"`). Useful if sourcing replacement media from the same repo.
 
-**GIF assets are not committed** (`Exercis/Resources/GIFs/` is in `.gitignore`). On a new machine, restore them by cloning the source repo and running the copy script:
+**GIF assets are not committed** (`Exercis/Resources/GIFs/` is in `.gitignore`). On a new machine, restore them by cloning the source repo and running the copy script. The script reads `exercises_def.json` dynamically — no manual update needed when GIF mappings change.
 ```bash
 git clone --depth 1 https://github.com/hasaneyldrm/exercises-dataset.git .tmp/exercises-dataset
 python3 -c "
@@ -621,6 +621,8 @@ Cross-referenced all `gifId` values in `exercises_def.json` against the hasaneyl
 | Incline Dumbbell Row | 1318 | Source: "cable incline bench row" — wrong equipment | → 0327 "dumbbell incline row" |
 
 Additional mismatches exist where no better GIF was available in the source (e.g. Bulgarian Split Squat, Crunches, Plank, Side-To-Side Push-Ups). These exercises either show no GIF or a close-enough variant.
+
+**Rule:** when a `gifFile` is added or changed in `exercises_def.json`, the restore script above does not need updating (it reads the JSON dynamically). However, the new GIF file must be copied to `Exercis/Resources/GIFs/` on the current machine — the script only runs on a fresh clone. Copy it manually from the source repo or run the full restore script.
 
 ---
 
