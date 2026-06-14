@@ -468,7 +468,7 @@ LockView → (Face ID) → MainTabView
 
 ### ProfileView (no accent color)
 - Profile photo (PhotosPicker) + editable name
-- **Top stats**: STRENGTH · CARDIO · VOLUME · CARDIO TIME in four columns
+- **Top stats**: STRENGTH · VOLUME · CARDIO · TIME in four columns (STRENGTH left-aligned, TIME right-aligned, middle two centered; 24pt horizontal padding). TIME localizes to "TID" via `sv.lproj/Localizable.strings`.
 - **Streak**: current streak as 72pt black number + BEST, 14-day dot row (blue=active, gray=rest, today has an outline)
 - **Last session**: title (program name or cardio type), subtitle (exercises/minutes), relative time + calendar date
 - **Personal records**: top-8 e1RM per exercise, ranked 1–8, e1RM in historyAccent
