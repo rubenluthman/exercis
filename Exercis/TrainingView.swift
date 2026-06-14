@@ -163,7 +163,6 @@ struct TrainingView: View {
                         .padding(.trailing, 8)
                     }
                 }
-                ThinDivider()
             }
         }
     }
@@ -258,7 +257,6 @@ struct TrainingView: View {
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
 
-            ThinDivider()
         }
     }
 
@@ -295,7 +293,6 @@ struct TrainingView: View {
                         .padding(.trailing, 8)
                     }
                 }
-                ThinDivider()
             }
         }
         .padding(.horizontal, 0)
