@@ -10,6 +10,12 @@ private struct WhatsNewEntry: Identifiable {
 
 private let entries: [WhatsNewEntry] = [
     WhatsNewEntry(
+        icon: "line.3.horizontal",
+        iconColor: Color(.secondaryLabel),
+        title: "Settings polish",
+        body: "Dividers in the Training section of Settings are now evenly spaced."
+    ),
+    WhatsNewEntry(
         icon: "heart.fill",
         iconColor: .historyAccent,
         title: "Distance from Health",

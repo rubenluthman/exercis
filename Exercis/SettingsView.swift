@@ -605,7 +605,7 @@ struct SettingsView: View {
             }
         }
         .padding(.horizontal, 24)
-        .padding(.bottom, 16)
+        .padding(.vertical, 16)
     }
 
     private var dateLocaleRow: some View {
@@ -639,7 +639,7 @@ struct SettingsView: View {
             }
         }
         .padding(.horizontal, 24)
-        .padding(.bottom, 16)
+        .padding(.vertical, 16)
     }
 
     private var timerRow: some View {
@@ -673,7 +673,7 @@ struct SettingsView: View {
             }
         }
         .padding(.horizontal, 24)
-        .padding(.bottom, 16)
+        .padding(.vertical, 16)
     }
 
     // MARK: - CSV export
