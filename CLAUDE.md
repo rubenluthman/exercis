@@ -609,6 +609,21 @@ See [ROADMAP.md](ROADMAP.md) for all planned features, decided design choices, a
 
 ---
 
+## GIF audit notes
+
+Cross-referenced all `gifId` values in `exercises_def.json` against the hasaneyldrm exercises-dataset source metadata (June 2026). The source dataset often has generic or mismatched GIFs — trust the source name as a hint, but verify visually. Known issues found and fixed:
+
+| Exercise | Old gifId | Problem | Fix |
+|---|---|---|---|
+| Lat Pulldown (Straight Back) | 2330 | GIF showed leaning-back technique, not straight back | gifFile nulled — no suitable GIF in source |
+| Pendlay Rows | 0808 | Source: "suspended row" (TRX) — completely wrong exercise | → 3017 "barbell pendlay row" |
+| Push Press | 0816 | Source: "triceps press" — wrong exercise | → 1700 "dumbbell push press" (no barbell variant in source) |
+| Incline Dumbbell Row | 1318 | Source: "cable incline bench row" — wrong equipment | → 0327 "dumbbell incline row" |
+
+Additional mismatches exist where no better GIF was available in the source (e.g. Bulgarian Split Squat, Crunches, Plank, Side-To-Side Push-Ups). These exercises either show no GIF or a close-enough variant.
+
+---
+
 ## Hard Rules
 
 1. Deployment target **iOS 17**
