@@ -54,10 +54,10 @@ struct TrainingView: View {
                     let hasStrength = !rotations.isEmpty || !trainingPrograms.isEmpty
                     if hasStrength {
                         strengthSection
-                        ThinDivider()
                     }
                     if !selectedCardioTypes.isEmpty {
                         cardioSection
+                            .padding(.top, hasStrength ? 32 : 0)
                     }
                     if !hasStrength && selectedCardioTypes.isEmpty {
                         emptyState
@@ -144,7 +144,7 @@ struct TrainingView: View {
                     } label: {
                         ProgramCard(program: program)
                             .padding(.horizontal, 24)
-                            .padding(.vertical, 12)
+                            .padding(.vertical, 16)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.plain)
@@ -191,7 +191,7 @@ struct TrainingView: View {
                 } label: {
                     RotationCard(rotation: rotation, allPrograms: programs, hasDraft: isDraft)
                         .padding(.horizontal, 24)
-                        .padding(.vertical, 12)
+                        .padding(.vertical, 16)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
@@ -273,7 +273,7 @@ struct TrainingView: View {
                     } label: {
                         CardioTypeCard(type: type, lastDurationMinutes: lastDuration)
                             .padding(.horizontal, 24)
-                            .padding(.vertical, 12)
+                            .padding(.vertical, 16)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.plain)
@@ -317,7 +317,7 @@ struct TrainingView: View {
             .kerning(1.5)
             .foregroundStyle(Color(.secondaryLabel))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 12)
-            .padding(.bottom, 8)
+            .padding(.top, 20)
+            .padding(.bottom, 12)
     }
 }
