@@ -123,6 +123,16 @@
 /* WhatsNewSheet */
 "WHAT'S NEW" = "NYHETER";
 "Close" = "Stäng";
+"Training view polish" = "Träningsvyn polerad";
+"Strength and cardio sections are now more clearly separated, with more breathing room around section labels and cards." = "Styrke- och konditionssektionerna är nu tydligare separerade med mer luft runt rubriker och kort.";
+"Settings polish" = "Inställningar polerade";
+"Dividers in the Training section of Settings are now evenly spaced." = "Avdelare i träningssektionen i Inställningar är nu jämnt fördelade.";
+"Distance from Health" = "Distans från Hälsa";
+"Log a hike or run after the fact — set the time window and the app automatically fetches the distance from Apple Health." = "Logga en vandring eller löptur i efterhand — ange tidsintervallet och appen hämtar automatiskt distansen från Apple Hälsa.";
+"Program rotations" = "Programrotationer";
+"Set up an A/B or A/B/C rotation and the app tracks which program is up next — automatically advancing after each completed session." = "Sätt upp en A/B- eller A/B/C-rotation och appen håller koll på vilket program som är näst — framstegar automatiskt efter varje avslutat pass.";
+"Better exercise search" = "Bättre övningssökning";
+"Over 1 200 alternative names added across all exercises — search now finds exercises by their common names, abbreviations, and variations." = "Över 1 200 alternativa namn tillagda för alla övningar — sökningen hittar nu övningar via deras vardagsnamn, förkortningar och varianter.";
 "Volume chart" = "Volymdiagram";
 "Tap VOL in any exercise chart to switch between estimated 1RM and total volume per session." = "Tryck på VOL i valfritt övningsdiagram för att växla mellan beräknat 1RM och total volym per pass.";
 "Apple Health at onboarding" = "Apple Hälsa vid onboarding";
@@ -153,6 +163,9 @@
 "Opens exercise animation" = "Öppnar övningsanimation";
 
 /* ProfileView */
+"RECENT RECORDS" = "SENASTE REKORD";
+"day" = "dag";
+"days" = "dagar";
 "STREAK" = "STREAK";
 "LAST SESSION" = "SENASTE PASS";
 "No sessions logged yet." = "Inga pass loggade ännu.";

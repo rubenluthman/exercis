@@ -94,10 +94,10 @@ ExercisWidget.entitlements  ← App Group: group.rubenluthman.Exercis
 Adaptive icon via Icon Composer (`Exercis/exercis.icon`). Produces automatic Default/Dark/Tinted variants.
 
 **Layer setup:**
-- `foreground 3` layer (`exercis.icon/Assets/foreground 3.png`): three diagonal stripes in brand colors (#23821F green, #B73B3F red, #0078B8 blue) on transparent background, set to 100% scale in Icon Composer. The visual scale is baked into the PNG (1024×1024 canvas, content scaled proportionally from the 1600×1600 Stitch export). **Glass effect intentionally disabled** (`glass: false`) — the stripes looked better without the Liquid Glass treatment applied to the foreground.
-- Background layer: white (light) / black (dark), managed via `fill-specializations` in `icon.json`.
+- `foreground` layer (`exercis.icon/Assets/foreground.png`): three diagonal stripes in brand colors (#23821F green, #B73B3F red, #0078B8 blue) on transparent background. Scale is baked into the PNG (1024×1024 canvas, content scaled proportionally from the 1600×1600 Stitch export) — no explicit scale set in Icon Composer (defaults to 100%). **Glass effect intentionally disabled** (`glass: false`) — the stripes looked better without the Liquid Glass treatment applied to the foreground.
+- Background layer: `"automatic"` in `fill-specializations` (system-provided adaptive background for light/dark/tinted).
 
-To replace the foreground PNG: take `screen.png` from the Stitch export (1600×1600, transparent background), resize to 1024×1024 — `python3 -c "from PIL import Image; Image.open('screen.png').convert('RGBA').resize((1024,1024), Image.LANCZOS).save('foreground_1024.png')"` — then overwrite `exercis.icon/Assets/foreground 3.png`. Use 100% scale in Icon Composer.
+To replace the foreground PNG: take `screen.png` from the Stitch export (1600×1600, transparent background), resize to 1024×1024 — `python3 -c "from PIL import Image; Image.open('screen.png').convert('RGBA').resize((1024,1024), Image.LANCZOS).save('foreground.png')"` — then overwrite `exercis.icon/Assets/foreground.png`. No explicit scale needed in Icon Composer (100% default).
 
 Do not re-enable `glass: true` on the foreground layer without testing visually — the decision to disable it was intentional.
 
@@ -427,6 +427,7 @@ LockView → (Face ID) → MainTabView
 - **PR detection**: compares e1RM against history, shows a PR indicator on DONE
 - **Progression suggestions**: badge below the set number (`→ X kg × Y reps`) in accent color; disappears once you start typing. Suggestion = best set from the previous session; +2.5 kg if INCREASE is active
 - **Keyboard toolbar**: NEXT + DONE in homeAccent
+- **Global exercise editing**: pencil icon in the session header opens `ExerciseEditSheet` — reorder, delete, and add exercises mid-session without leaving StrengthView
 - **Draft**: saved to UserDefaults (WorkoutDraft including collapse state and programId)
 - **Live Activity**: started on session begin via `LiveActivityManager.shared` — shows current exercise, set number, and progress on Dynamic Island / Lock Screen. Updated per set, ended on DONE or dismiss.
 - Date tappable → `SessionTimePicker`

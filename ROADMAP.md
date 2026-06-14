@@ -133,3 +133,4 @@ The app is intentionally single-user. This section documents every change requir
 - ~~Locked reps mode per workout program~~
 - ~~Repo renamed to `exercis` (lowercase), made public; all documentation translated to English~~
 - ~~Global exercise editing in StrengthView — pencil icon in session header opens a sheet with reorder, delete, and add exercise~~
+- ~~App review 2026-06-14 — added RECENT RECORDS + day/days localization; added sv.lproj translations for 5 WhatsNewSheet entries; renamed icon foreground layer from "foreground 3.png" to "foreground.png"; updated CLAUDE.md with ExerciseEditSheet and icon layer corrections~~
